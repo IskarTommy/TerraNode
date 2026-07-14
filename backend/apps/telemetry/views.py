@@ -13,7 +13,6 @@ class TelemetrySubmitView(generics.CreateAPIView):
     permission_classes = (IsFarmer,)
     serializer_class = TelemetryInputSerializer
 
-    @transaction.atomic
     def post(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -30,15 +29,19 @@ class TelemetrySubmitView(generics.CreateAPIView):
             soil_ph=data['soil_ph']
         )
 
+        # Use a nested atomic savepoint so a duplicate-hash IntegrityError
+        # rolls back only the insert and leaves the request transaction usable
+        # (critical on PostgreSQL; the bare decorator+catch would abort it).
         try:
-            telemetry = EnvironmentalTelemetry.objects.create(
-                farmer=farmer,
-                recorded_at=recorded_at,
-                temperature_celsius=data['temperature_celsius'],
-                soil_moisture_percentage=data['soil_moisture_percentage'],
-                soil_ph=data['soil_ph'],
-                payload_sha256=payload_hash
-            )
+            with transaction.atomic():
+                telemetry = EnvironmentalTelemetry.objects.create(
+                    farmer=farmer,
+                    recorded_at=recorded_at,
+                    temperature_celsius=data['temperature_celsius'],
+                    soil_moisture_percentage=data['soil_moisture_percentage'],
+                    soil_ph=data['soil_ph'],
+                    payload_sha256=payload_hash
+                )
         except IntegrityError:
             return Response(
                 {"error": "Duplicate telemetry record (same data already submitted)"},

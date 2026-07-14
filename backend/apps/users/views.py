@@ -7,11 +7,13 @@ from rest_framework_simplejwt.views import TokenObtainPairView
 from django.contrib.auth import get_user_model
 
 from .serializers import RegisterSerializer, ProfileSerializer, CustomTokenObtainPairSerializer
+from core.throttling import LoginRateThrottle
 
 User = get_user_model()
 
 class CustomTokenObtainPairView(TokenObtainPairView):
     serializer_class = CustomTokenObtainPairSerializer
+    throttle_classes = [LoginRateThrottle]
 
 class RegisterView(generics.CreateAPIView):
     queryset = User.objects.all()

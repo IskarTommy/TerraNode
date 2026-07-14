@@ -26,3 +26,26 @@ dist-ssr/
 
 # Pipenv
 .venv/
+
+# AI/Agent Directories & Skills
+.agents/
+.augment/
+.claude/
+.codebuddy/
+.codex/
+.continue/
+.cursor/
+.factory/
+.gemini/
+.kilocode/
+.kiro/
+.opencode/
+.qoder/
+.roo/
+.trae/
+.warp/
+.windsurf/
+
+# Docs
+*.md
+
