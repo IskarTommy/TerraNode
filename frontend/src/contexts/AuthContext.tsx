@@ -1,13 +1,15 @@
-import { createContext, useContext, useState, type ReactNode, useCallback } from "react";
-import { login, register as registerApi, logout as logoutApi } from "../api/auth";
-import type { User } from "../api/auth";
+import { createContext, useContext, useState, useEffect, type ReactNode, useCallback } from 'react';
+import { login, register as registerApi, logout as logoutApi } from '../api/auth';
+import type { User } from '../api/auth';
 
 // ─── storage keys ─────────────────────────────────────────
 const STORAGE_KEYS = {
-  ACCESS: "terranode_access",
-  REFRESH: "terranode_refresh",
-  USER: "terranode_user",
+  ACCESS: 'terranode_access',
+  REFRESH: 'terranode_refresh',
+  USER: 'terranode_user',
 } as const;
+
+const ROLE_STORAGE_KEY = 'terranode_user_role';
 
 const safeJSON = <T,>(value: string | null): T | null => {
   if (!value) return null;
@@ -29,10 +31,11 @@ interface AuthContextType {
     email: string;
     password: string;
     full_name: string;
-    role: User["role"];
+    role: User['role'];
   }) => Promise<void>;
   logout: () => Promise<void>;
   setAccessToken: (token: string) => void;
+  setRole: (role: User['role']) => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -63,7 +66,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     return response.user;
   };
 
-  const registerUser: AuthContextType["register"] = async (data) => {
+  const registerUser: AuthContextType['register'] = async (data) => {
     await registerApi(data);
     await loginUser(data.email, data.password);
   };
@@ -75,10 +78,33 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     localStorage.removeItem(STORAGE_KEYS.ACCESS);
     localStorage.removeItem(STORAGE_KEYS.REFRESH);
     localStorage.removeItem(STORAGE_KEYS.USER);
+    localStorage.removeItem(ROLE_STORAGE_KEY);
     setAccessTokenState(null);
     setRefreshToken(null);
     setUser(null);
   };
+
+  const setRole = useCallback((role: User['role']) => {
+    localStorage.setItem(ROLE_STORAGE_KEY, role);
+    if (user) {
+      const updatedUser = { ...user, role };
+      setUser(updatedUser);
+      localStorage.setItem(STORAGE_KEYS.USER, JSON.stringify(updatedUser));
+      document.documentElement.setAttribute('data-role', role);
+    }
+  }, [user]);
+
+  // Set initial role on document
+  useEffect(() => {
+    if (user) {
+      const savedRole = localStorage.getItem(ROLE_STORAGE_KEY) as User['role'] | null;
+      if (savedRole) {
+        document.documentElement.setAttribute('data-role', savedRole);
+      } else {
+        document.documentElement.setAttribute('data-role', user.role);
+      }
+    }
+  }, [user]);
 
   const value: AuthContextType = {
     user,
@@ -90,17 +116,18 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     register: registerUser,
     logout: logoutUser,
     setAccessToken,
+    setRole,
   };
 
   return (
     <AuthContext.Provider value={value}>
       {children}
-   </AuthContext.Provider>
+    </AuthContext.Provider>
   );
 };
 
 export const useAuth = () => {
   const context = useContext(AuthContext);
-  if (!context) throw new Error("useAuth must be used within an AuthProvider");
+  if (!context) throw new Error('useAuth must be used within an AuthProvider');
   return context;
 };

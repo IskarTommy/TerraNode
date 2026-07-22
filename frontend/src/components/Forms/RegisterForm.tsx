@@ -68,137 +68,139 @@ export const RegisterForm = () => {
   };
 
   return (
-    <form className="auth-form" onSubmit={handleSubmit} noValidate>
-      <h1 className="auth-form-title">Create your account</h1>
-      <p className="auth-form-subtitle">
-        Join TerraNode — choose your role to get started.
-     </p>
+    <div className="auth-form-wrapper">
+      <form className="auth-form" onSubmit={handleSubmit} noValidate>
+        <h1 className="auth-form-title">Create your account</h1>
+        <p className="auth-form-subtitle">
+          Join TerraNode — choose your role to get started.
+        </p>
 
-      <div className="form-group">
-        <label htmlFor="register-name" className="form-label">
-          Full name
-       </label>
-        <input
-          id="register-name"
-          type="text"
-          className="form-input"
-          placeholder="Jane Farmer"
-          value={form.full_name}
-          onChange={(e) => update("full_name", e.target.value)}
-          required
-          autoComplete="name"
+        <div className="form-group">
+          <label htmlFor="register-name" className="form-label">
+            Full name
+          </label>
+          <input
+            id="register-name"
+            type="text"
+            className="form-input"
+            placeholder="Jane Farmer"
+            value={form.full_name}
+            onChange={(e) => update("full_name", e.target.value)}
+            required
+            autoComplete="name"
+            disabled={isLoading}
+          />
+        </div>
+
+        <div className="form-group">
+          <label htmlFor="register-email" className="form-label">
+            Email
+          </label>
+          <input
+            id="register-email"
+            type="email"
+            className="form-input"
+            placeholder="you@farm.com"
+            value={form.email}
+            onChange={(e) => update("email", e.target.value)}
+            required
+            autoComplete="email"
+            disabled={isLoading}
+          />
+        </div>
+
+        <div className="form-group">
+          <label htmlFor="register-password" className="form-label">
+            Password
+          </label>
+          <input
+            id="register-password"
+            type="password"
+            className="form-input"
+            placeholder="At least 8 characters"
+            value={form.password}
+            onChange={(e) => update("password", e.target.value)}
+            required
+            autoComplete="new-password"
+            disabled={isLoading}
+          />
+        </div>
+
+        <div className="form-group">
+          <label htmlFor="register-confirm" className="form-label">
+            Confirm password
+          </label>
+          <input
+            id="register-confirm"
+            type="password"
+            className="form-input"
+            placeholder="Repeat your password"
+            value={form.confirmPassword}
+            onChange={(e) => update("confirmPassword", e.target.value)}
+            required
+            autoComplete="new-password"
+            disabled={isLoading}
+          />
+        </div>
+
+        <div className="form-group">
+          <span className="form-label">Role</span>
+          <div className="role-selector">
+            <label
+              className={`role-option ${
+                form.role === Role.FARMER ? "role-option--active" : ""
+              }`}
+            >
+              <input
+                type="radio"
+                name="role"
+                value={Role.FARMER}
+                checked={form.role === Role.FARMER}
+                onChange={() => update("role", Role.FARMER)}
+                disabled={isLoading}
+              />
+              <span className="role-option-title">Farmer</span>
+              <span className="role-option-desc">
+                Submit telemetry, mint batches, track provenance.
+              </span>
+            </label>
+
+            <label
+              className={`role-option ${
+                form.role === Role.LOGISTICS ? "role-option--active" : ""
+              }`}
+            >
+              <input
+                type="radio"
+                name="role"
+                value={Role.LOGISTICS}
+                checked={form.role === Role.LOGISTICS}
+                onChange={() => update("role", Role.LOGISTICS)}
+                disabled={isLoading}
+              />
+              <span className="role-option-title">Logistics</span>
+              <span className="role-option-desc">
+                Transfer and manage batch custody in transit.
+              </span>
+            </label>
+          </div>
+        </div>
+
+        <button
+          type="submit"
+          className="btn btn--primary btn--full"
           disabled={isLoading}
-        />
+        >
+          {isLoading ? "Creating account…" : "Create account"}
+        </button>
+
+        <p className="auth-form-footer">
+          Already have an account?{" "}
+          <Link to="/login" className="auth-link">
+            Sign in
+          </Link>
+        </p>
+      </form>
     </div>
-
-      <div className="form-group">
-        <label htmlFor="register-email" className="form-label">
-          Email
-       </label>
-        <input
-          id="register-email"
-          type="email"
-          className="form-input"
-          placeholder="you@farm.com"
-          value={form.email}
-          onChange={(e) => update("email", e.target.value)}
-          required
-          autoComplete="email"
-          disabled={isLoading}
-        />
-    </div>
-
-      <div className="form-group">
-        <label htmlFor="register-password" className="form-label">
-          Password
-       </label>
-        <input
-          id="register-password"
-          type="password"
-          className="form-input"
-          placeholder="At least 8 characters"
-          value={form.password}
-          onChange={(e) => update("password", e.target.value)}
-          required
-          autoComplete="new-password"
-          disabled={isLoading}
-        />
-    </div>
-
-      <div className="form-group">
-        <label htmlFor="register-confirm" className="form-label">
-          Confirm password
-       </label>
-        <input
-          id="register-confirm"
-          type="password"
-          className="form-input"
-          placeholder="Repeat your password"
-          value={form.confirmPassword}
-          onChange={(e) => update("confirmPassword", e.target.value)}
-          required
-          autoComplete="new-password"
-          disabled={isLoading}
-        />
-    </div>
-
-      <div className="form-group">
-        <span className="form-label">Role</span>
-        <div className="role-selector">
-          <label
-            className={`role-option ${
-              form.role === Role.FARMER ? "role-option--active" : ""
-            }`}
-          >
-            <input
-              type="radio"
-              name="role"
-              value={Role.FARMER}
-              checked={form.role === Role.FARMER}
-              onChange={() => update("role", Role.FARMER)}
-              disabled={isLoading}
-            />
-            <span className="role-option-title">Farmer</span>
-            <span className="role-option-desc">
-              Submit telemetry, mint batches, track provenance.
-           </span>
-        </label>
-
-          <label
-            className={`role-option ${
-              form.role === Role.LOGISTICS ? "role-option--active" : ""
-            }`}
-          >
-            <input
-              type="radio"
-              name="role"
-              value={Role.LOGISTICS}
-              checked={form.role === Role.LOGISTICS}
-              onChange={() => update("role", Role.LOGISTICS)}
-              disabled={isLoading}
-            />
-            <span className="role-option-title">Logistics</span>
-            <span className="role-option-desc">
-              Transfer and manage batch custody in transit.
-           </span>
-        </label>
-       </div>
-    </div>
-
-      <button
-        type="submit"
-        className="btn btn--primary btn--full"
-        disabled={isLoading}
-      >
-        {isLoading ? "Creating account…" : "Create account"}
-     </button>
-
-      <p className="auth-form-footer">
-        Already have an account?{" "}
-        <Link to="/login" className="auth-link">
-          Sign in
-       </Link>
-     </p>
-  </form>
   );
 };

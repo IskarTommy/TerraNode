@@ -1,0 +1,409 @@
+import { useState } from 'react';
+import { Button } from '../../components/Common/Button';
+import { Card } from '../../components/Common/Card';
+import { Input } from '../../components/Common/Input';
+import { Select } from '../../components/Common/Input';
+import { cn } from '../../utils/cn';
+
+const CROP_TYPES = [
+  { value: 'wheat', label: 'Wheat' },
+  { value: 'corn', label: 'Corn' },
+  { value: 'soybean', label: 'Soybean' },
+  { value: 'barley', label: 'Barley' },
+  { value: 'rice', label: 'Rice' },
+  { value: 'cotton', label: 'Cotton' },
+];
+
+const VARIETIES: Record<string, Array<{ value: string; label: string }>> = {
+  wheat: [
+    { value: 'hard_red_winter', label: 'Hard Red Winter' },
+    { value: 'hard_red_spring', label: 'Hard Red Spring' },
+    { value: 'soft_red_winter', label: 'Soft Red Winter' },
+    { value: 'durum', label: 'Durum' },
+  ],
+  corn: [
+    { value: 'sweet_corn', label: 'Sweet Corn' },
+    { value: 'field_corn', label: 'Field Corn' },
+    { value: 'popcorn', label: 'Popcorn' },
+  ],
+  soybean: [
+    { value: 'high_protein', label: 'High Protein' },
+    { value: 'high_oil', label: 'High Oil' },
+    { value: 'conventional', label: 'Conventional' },
+  ],
+  barley: [
+    { value: 'malting', label: 'Malting Barley' },
+    { value: 'feed', label: 'Feed Barley' },
+  ],
+  rice: [
+    { value: 'long_grain', label: 'Long Grain' },
+    { value: 'medium_grain', label: 'Medium Grain' },
+    { value: 'short_grain', label: 'Short Grain' },
+  ],
+  cotton: [
+    { value: 'upland', label: 'Upland Cotton' },
+    { value: 'pima', label: 'Pima Cotton' },
+  ],
+};
+
+export function MintBatchPage() {
+  const [step, setStep] = useState(1);
+  const [formData, setFormData] = useState({
+    cropType: '',
+    variety: '',
+    fieldId: '',
+    fieldName: '',
+    location: '',
+    area: '',
+    plantedDate: '',
+    estimatedHarvest: '',
+    quantity: '',
+    unit: 'kg',
+    qualityGrade: 'A',
+    notes: '',
+    organicCertified: false,
+    gpsCoordinates: '',
+    soilType: '',
+  });
+  const [submitting, setSubmitting] = useState(false);
+  const [walletConnected, setWalletConnected] = useState(false);
+  const [txHash, setTxHash] = useState('');
+
+  const currentCropVarieties = formData.cropType ? VARIETIES[formData.cropType] : [];
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+    const { name, value, type } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: type === 'checkbox' ? (e.target as HTMLInputElement).checked : value,
+    }));
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setSubmitting(true);
+    // Simulate minting process
+    await new Promise(resolve => setTimeout(resolve, 3000));
+    setTxHash('0x' + Math.random().toString(16).slice(2, 66));
+    setStep(4);
+    setSubmitting(false);
+  };
+
+  const nextStep = () => setStep(prev => Math.min(prev + 1, 4));
+  const prevStep = () => setStep(prev => Math.max(prev - 1, 1));
+
+  const progressSteps = [
+    { label: 'Crop Details', number: 1 },
+    { label: 'Field Info', number: 2 },
+    { label: 'Quality & Yield', number: 3 },
+    { label: 'Mint & Sign', number: 4 },
+  ];
+
+  return (
+    <div className="space-y-6" data-role="farmer">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div>
+          <h1 className="text-display-lg font-bold text-fg-primary">Mint New Batch</h1>
+          <p className="text-body text-fg-muted mt-1">Create a new blockchain-verified crop batch</p>
+        </div>
+      </div>
+
+      {/* Progress Steps */}
+      <Card variant="glass" padding="md">
+        <div className="flex items-center justify-between">
+          {progressSteps.map((stepInfo, idx) => (
+            <div key={idx} className="flex items-center">
+              <div className={cn(
+                'w-10 h-10 rounded-full flex items-center justify-center text-body-sm font-semibold transition-all duration-fast',
+                step === stepInfo.number
+                  ? 'bg-primary-bg text-primary-fg shadow-glow-primary'
+                  : step < stepInfo.number
+                    ? 'bg-emerald-500 text-white'
+                    : 'bg-bg-tertiary text-fg-muted'
+              )}>
+                {step < stepInfo.number ? (
+                  <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
+                ) : (
+                  stepInfo.number
+                )}
+              </div>
+              <span className={cn(
+                'hidden sm:block ml-2 text-body-xs font-medium',
+                step >= stepInfo.number ? 'text-fg-primary' : 'text-fg-muted'
+              )}>
+                {stepInfo.label}
+              </span>
+              {idx < progressSteps.length - 1 && (
+                <div className={cn(
+                  'hidden sm:block w-20 h-0.5 mx-2 rounded-full',
+                  step > stepInfo.number ? 'bg-emerald-500' : 'bg-border-primary'
+                )} />
+              )}
+            </div>
+          ))}
+        </div>
+      </Card>
+
+      {/* Form Steps */}
+      <Card variant="glass" padding="lg">
+        {step === 1 && (
+          <form onSubmit={(e) => { e.preventDefault(); nextStep(); }} className="space-y-6">
+            <h3 className="text-heading-sm font-semibold text-fg-primary">Crop Details</h3>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <Select
+                label="Crop Type *"
+                error={!formData.cropType && step > 1 ? 'Required' : undefined}
+                value={formData.cropType}
+                onChange={handleChange}
+                name="cropType"
+                placeholder="Select crop type"
+                options={CROP_TYPES}
+                required
+              />
+              <Select
+                label="Variety *"
+                error={!formData.variety && step > 1 ? 'Required' : undefined}
+                value={formData.variety}
+                onChange={handleChange}
+                name="variety"
+                placeholder="Select variety"
+                options={currentCropVarieties}
+                required
+                disabled={!formData.cropType}
+              />
+              <Input
+                label="Field ID *"
+                error={!formData.fieldId && step > 1 ? 'Required' : undefined}
+                value={formData.fieldId}
+                onChange={handleChange}
+                name="fieldId"
+                placeholder="e.g., FIELD-001"
+                required
+              />
+              <Input
+                label="Field Name"
+                value={formData.fieldName}
+                onChange={handleChange}
+                name="fieldName"
+                placeholder="e.g., North Field Section A"
+              />
+            </div>
+            <div className="flex justify-end">
+              <Button type="submit" variant="primary">Next</Button>
+            </div>
+          </form>
+        )}
+
+        {step === 2 && (
+          <form onSubmit={(e) => { e.preventDefault(); nextStep(); }} className="space-y-6">
+            <h3 className="text-heading-sm font-semibold text-fg-primary">Field Information</h3>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <Input
+                label="Location *"
+                error={!formData.location && step > 2 ? 'Required' : undefined}
+                value={formData.location}
+                onChange={handleChange}
+                name="location"
+                placeholder="e.g., County, State, Country"
+                required
+              />
+              <Input
+                label="Area (hectares) *"
+                type="number"
+                step="0.01"
+                min="0.01"
+                error={!formData.area && step > 2 ? 'Required' : undefined}
+                value={formData.area}
+                onChange={handleChange}
+                name="area"
+                placeholder="e.g., 5.5"
+                required
+              />
+              <Input
+                label="GPS Coordinates"
+                value={formData.gpsCoordinates}
+                onChange={handleChange}
+                name="gpsCoordinates"
+                placeholder="e.g., 40.7128°N, 74.0060°W"
+                helperText="Optional: Latitude, Longitude"
+              />
+              <Select
+                label="Soil Type"
+                value={formData.soilType}
+                onChange={handleChange}
+                name="soilType"
+                placeholder="Select soil type"
+                options={[
+                  { value: 'loam', label: 'Loam' },
+                  { value: 'clay', label: 'Clay' },
+                  { value: 'sandy', label: 'Sandy' },
+                  { value: 'silt', label: 'Silt' },
+                  { value: 'peaty', label: 'Peaty' },
+                  { value: 'chalky', label: 'Chalky' },
+                ]}
+              />
+              <Input
+                label="Planted Date *"
+                type="date"
+                error={!formData.plantedDate && step > 2 ? 'Required' : undefined}
+                value={formData.plantedDate}
+                onChange={handleChange}
+                name="plantedDate"
+                required
+                max={new Date().toISOString().split('T')[0]}
+              />
+              <Input
+                label="Estimated Harvest *"
+                type="date"
+                error={!formData.estimatedHarvest && step > 2 ? 'Required' : undefined}
+                value={formData.estimatedHarvest}
+                onChange={handleChange}
+                name="estimatedHarvest"
+                required
+                min={formData.plantedDate || undefined}
+              />
+            </div>
+            <div className="flex justify-between">
+              <Button type="button" variant="ghost" onClick={prevStep}>Previous</Button>
+              <Button type="submit" variant="primary">Next</Button>
+            </div>
+          </form>
+        )}
+
+        {step === 3 && (
+          <form onSubmit={(e) => { e.preventDefault(); nextStep(); }} className="space-y-6">
+            <h3 className="text-heading-sm font-semibold text-fg-primary">Quality & Yield Estimate</h3>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <Input
+                label="Expected Quantity *"
+                type="number"
+                step="0.1"
+                min="0"
+                error={!formData.quantity && step > 3 ? 'Required' : undefined}
+                value={formData.quantity}
+                onChange={handleChange}
+                name="quantity"
+                placeholder="e.g., 5000"
+                required
+              />
+              <Select
+                label="Unit"
+                value={formData.unit}
+                onChange={handleChange}
+                name="unit"
+                options={[
+                  { value: 'kg', label: 'Kilograms (kg)' },
+                  { value: 'tonnes', label: 'Tonnes (t)' },
+                  { value: 'bushels', label: 'Bushels (bu)' },
+                  { value: 'pounds', label: 'Pounds (lb)' },
+                ]}
+              />
+              <Select
+                label="Quality Grade *"
+                error={!formData.qualityGrade && step > 3 ? 'Required' : undefined}
+                value={formData.qualityGrade}
+                onChange={handleChange}
+                name="qualityGrade"
+                options={[
+                  { value: 'A', label: 'Grade A - Premium' },
+                  { value: 'B', label: 'Grade B - Standard' },
+                  { value: 'C', label: 'Grade C - Economy' },
+                ]}
+                required
+              />
+              <div className="flex items-start gap-3">
+                <Input
+                  type="checkbox"
+                  name="organicCertified"
+                  checked={formData.organicCertified}
+                  onChange={handleChange}
+                  id="organicCertified"
+                  className="mt-8"
+                />
+                <label htmlFor="organicCertified" className="text-body-sm text-fg-secondary cursor-pointer mt-1">
+                  Organically Certified
+                </label>
+              </div>
+            </div>
+            <div>
+              <label className="block text-body-sm text-fg-secondary mb-1">Notes</label>
+              <textarea
+                name="notes"
+                value={formData.notes}
+                onChange={handleChange}
+                rows={4}
+                className="w-full bg-input-bg border-input-border text-input-fg placeholder-transparent rounded-input transition-all duration-fast p-3 text-body-sm focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-primary-bg resize-y min-h-[100px]"
+                placeholder="Additional notes about this batch..."
+              />
+            </div>
+            <div className="flex justify-between">
+              <Button type="button" variant="ghost" onClick={prevStep}>Previous</Button>
+              <Button type="submit" variant="primary">Next</Button>
+            </div>
+          </form>
+        )}
+
+        {step === 4 && (
+          <div className="space-y-6 text-center">
+            {!txHash ? (
+              <>
+                <div className="w-20 h-20 mx-auto mb-6 rounded-full bg-primary-bg/20 flex items-center justify-center">
+                  <svg className="h-10 w-10 text-primary-fg" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" /></svg>
+                </div>
+                <h3 className="text-heading-sm font-semibold text-fg-primary mb-2">Wallet Signature Required</h3>
+                <p className="text-body text-fg-muted mb-6 max-w-md mx-auto">
+                  To mint this batch on the Sui blockchain, you'll need to sign the transaction with your connected wallet.
+                </p>
+                {!walletConnected ? (
+                  <Button
+                    variant="primary"
+                    size="lg"
+                    leftIcon={<svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" /></svg>}
+                    onClick={() => setWalletConnected(true)}
+                  >
+                    Connect Wallet to Sign
+                  </Button>
+                ) : (
+                  <Button
+                    variant="primary"
+                    size="lg"
+                    onClick={handleSubmit}
+                    loading={submitting}
+                    leftIcon={!submitting && <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M5 13l4 4L19 7" /></svg>}
+                  >
+                    {submitting ? 'Signing Transaction...' : 'Sign & Mint Batch'}
+                  </Button>
+                )}
+              </>
+            ) : (
+              <>
+                <div className="w-20 h-20 mx-auto mb-6 rounded-full bg-emerald-500/20 flex items-center justify-center">
+                  <svg className="h-10 w-10 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
+                </div>
+                <h3 className="text-heading-sm font-semibold text-fg-primary mb-2">Batch Minted Successfully!</h3>
+                <p className="text-body text-fg-muted mb-4">Your crop batch has been recorded on the Sui blockchain.</p>
+                <div className="bg-bg-tertiary/50 border border-border-primary rounded-xl p-4 text-left max-w-md mx-auto">
+                  <p className="text-body-xs text-fg-muted mb-1">Transaction Hash</p>
+                  <p className="font-mono text-body-sm text-fg-primary break-all">{txHash}</p>
+                  <div className="flex items-center gap-2 mt-3">
+                    <Button variant="ghost" size="icon" leftIcon={<svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>} />
+                    <Button variant="ghost" size="icon" leftIcon={<svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.766 15.225a.75.75 0 01.044 1.052l-4.5 4.5a.75.75 0 01-1.06-.052l-2.25-2.25a.75.75 0 011.06-1.06l1.72 1.72 3.5-3.5a.75.75 0 111.06 1.06l-2.25 2.25z" /></svg>} />
+                    <Button variant="ghost" size="icon" leftIcon={<svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" /></svg>} />
+                  </div>
+                </div>
+                <div className="flex justify-center gap-3 mt-6">
+                  <Button variant="outline" onClick={() => { setStep(1); setTxHash(''); setFormData({ cropType: '', variety: '', fieldId: '', fieldName: '', location: '', area: '', plantedDate: '', estimatedHarvest: '', quantity: '', unit: 'kg', qualityGrade: 'A', notes: '', organicCertified: false, gpsCoordinates: '', soilType: '' }); }}>
+                    Mint Another Batch
+                  </Button>
+                  <Button variant="primary" onClick={() => { setStep(1); setTxHash(''); }}>Back to Dashboard</Button>
+                </div>
+              </>
+            )}
+          </div>
+        )}
+      </Card>
+    </div>
+  );
+}
+
+MintBatchPage.displayName = 'MintBatchPage';

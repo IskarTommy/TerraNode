@@ -1,0 +1,127 @@
+/* ─── Atmosphere — shared ambient bg (landing + auth) ─────────────── */
+
+[data-atmosphere] {
+  position: relative;
+  z-index: 0;
+}
+
+[data-atmosphere] > .atm-layer {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+/* ─── Radial glow (base) ────────────────────────────────────────────── */
+[data-atmosphere] .atm-glow {
+  background:
+    radial-gradient(ellipse 60% 50% at 18% 15%, rgba(34, 211, 238, 0.10) 0%, transparent 55%),
+    radial-gradient(ellipse 55% 45% at 82% 70%, rgba(6, 182, 212, 0.09) 0%, transparent 55%),
+    radial-gradient(ellipse 70% 55% at 50% 100%, rgba(251, 191, 36, 0.05) 0%, transparent 50%);
+  z-index: 1;
+}
+
+/* ─── Grid ──────────────────────────────────────────────────────────── */
+[data-atmosphere] .atm-grid {
+  z-index: 2;
+  opacity: 0.3;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
+  background-size: 64px 64px;
+  mask-image: radial-gradient(ellipse 70% 70% at 50% 40%, black 0%, transparent 100%);
+  -webkit-mask-image: radial-gradient(ellipse 70% 70% at 50% 40%, black 0%, transparent 100%);
+}
+
+/* ─── Orb keyframes (5 orbs, drift + pulse) ───────────────────────── */
+@keyframes drift-1 {
+  0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.50; }
+  25%      { transform: translate(55px, 35px) scale(1.06); opacity: 0.60; }
+  50%      { transform: translate(-18px, 65px) scale(1); opacity: 0.42; }
+  75%      { transform: translate(-45px, -15px) scale(0.96); opacity: 0.55; }
+}
+@keyframes drift-2 {
+  0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.45; }
+  30%      { transform: translate(-40px, -25px) scale(1.05); opacity: 0.55; }
+  60%      { transform: translate(25px, -50px) scale(0.95); opacity: 0.38; }
+  85%      { transform: translate(48px, 18px) scale(1.03); opacity: 0.50; }
+}
+@keyframes drift-3 {
+  0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.38; }
+  40%      { transform: translate(35px, -30px) scale(1.08); opacity: 0.52; }
+  70%      { transform: translate(-30px, 20px) scale(0.94); opacity: 0.30; }
+}
+@keyframes drift-4 {
+  0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.40; }
+  50%      { transform: translate(-50px, 40px) scale(1.04); opacity: 0.48; }
+}
+@keyframes drift-5 {
+  0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.35; }
+  35%      { transform: translate(40px, 50px) scale(1.07); opacity: 0.45; }
+  65%      { transform: translate(-55px, -20px) scale(0.97); opacity: 0.32; }
+}
+
+/* ─── Orbs ──────────────────────────────────────────────────────────── */
+[data-atmosphere] .atm-orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(90px);
+  will-change: transform, opacity;
+}
+
+[data-atmosphere] .atm-orb-1 {
+  width: 520px; height: 520px;
+  background: radial-gradient(circle, rgba(34, 211, 238, 0.35) 0%, rgba(6, 182, 212, 0.12) 45%, transparent 70%);
+  top: -8%; left: -6%;
+  animation: drift-1 18s ease-in-out infinite;
+}
+[data-atmosphere] .atm-orb-2 {
+  width: 440px; height: 440px;
+  background: radial-gradient(circle, rgba(251, 191, 36, 0.22) 0%, rgba(245, 158, 11, 0.06) 45%, transparent 70%);
+  bottom: -10%; right: -5%;
+  animation: drift-2 22s ease-in-out infinite;
+}
+[data-atmosphere] .atm-orb-3 {
+  width: 380px; height: 380px;
+  background: radial-gradient(circle, rgba(6, 182, 212, 0.28) 0%, rgba(34, 211, 238, 0.08) 45%, transparent 70%);
+  top: 38%; right: 22%;
+  animation: drift-3 20s ease-in-out infinite;
+}
+[data-atmosphere] .atm-orb-4 {
+  width: 300px; height: 300px;
+  background: radial-gradient(circle, rgba(251, 191, 36, 0.18) 0%, rgba(245, 158, 11, 0.05) 45%, transparent 70%);
+  bottom: 25%; left: 12%;
+  animation: drift-4 25s ease-in-out infinite;
+}
+[data-atmosphere] .atm-orb-5 {
+  width: 260px; height: 260px;
+  background: radial-gradient(circle, rgba(20, 184, 166, 0.22) 0%, rgba(34, 211, 238, 0.06) 45%, transparent 70%);
+  top: 8%; right: 30%;
+  animation: drift-5 19s ease-in-out infinite;
+}
+
+@media (max-width: 768px) {
+  [data-atmosphere] .atm-orb { filter: blur(60px); }
+  [data-atmosphere] .atm-orb-1 { width: 260px; height: 260px; }
+  [data-atmosphere] .atm-orb-2 { width: 220px; height: 220px; }
+  [data-atmosphere] .atm-orb-3 { width: 200px; height: 200px; }
+  [data-atmosphere] .atm-orb-4 { width: 180px; height: 180px; }
+  [data-atmosphere] .atm-orb-5 { width: 160px; height: 160px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-atmosphere] .atm-orb { animation: none !important; }
+}
+
+/* ─── Particle canvas ──────────────────────────────────────────────── */
+[data-atmosphere] canvas {
+  z-index: 3;
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.45;
+}
+@media (max-width: 768px) {
+  [data-atmosphere] canvas { opacity: 0.25; }
+}

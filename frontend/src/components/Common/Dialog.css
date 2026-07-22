@@ -1,0 +1,194 @@
+.dialog-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-modal);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-4);
+  background: var(--modal-overlay, rgba(2, 6, 23, 0.8));
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  animation: fade-in var(--duration-fast) var(--ease-out);
+}
+
+.dialog-content {
+  position: relative;
+  width: 100%;
+  max-height: calc(100vh - var(--space-8));
+  overflow: hidden;
+  background: var(--modal-bg, var(--color-bg-elevated));
+  border: 1px solid var(--modal-border, var(--color-border-primary));
+  border-radius: var(--radius-component-xl);
+  box-shadow: var(--shadow-elevated);
+  display: flex;
+  flex-direction: column;
+  animation: scale-in var(--duration-normal) var(--ease-spring);
+  will-change: transform, opacity;
+}
+
+.dialog-content--sm { max-width: 24rem; }
+.dialog-content--md { max-width: 32rem; }
+.dialog-content--lg { max-width: 48rem; }
+.dialog-content--xl { max-width: 64rem; }
+.dialog-content--full {
+  max-width: calc(100vw - var(--space-8));
+  max-height: calc(100vh - var(--space-8));
+  border-radius: var(--radius-component-lg);
+}
+
+.dialog-content--default { }
+.dialog-content--alert {
+  max-width: 32rem;
+}
+.dialog-content--form { }
+
+.dialog-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-4);
+  padding: var(--space-6) var(--space-6) var(--space-4);
+  border-bottom: 1px solid var(--color-border-primary);
+  flex-shrink: 0;
+}
+
+.dialog-title {
+  margin: 0;
+  font-size: var(--font-size-heading);
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--line-height-snug);
+  color: var(--color-fg-primary);
+  flex: 1;
+}
+
+.dialog-description {
+  margin: var(--space-1) 0 0;
+  font-size: var(--font-size-body-sm);
+  line-height: var(--line-height-normal);
+  color: var(--color-fg-secondary);
+}
+
+.dialog-close {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: var(--radius-full);
+  background: transparent;
+  border: 1px solid transparent;
+  color: var(--color-fg-muted);
+  cursor: pointer;
+  transition: all var(--duration-fast) var(--ease-out);
+}
+
+.dialog-close:hover {
+  background: var(--color-bg-tertiary);
+  color: var(--color-fg-primary);
+  border-color: var(--color-border-primary);
+}
+
+.dialog-close:focus-visible {
+  outline: none;
+  box-shadow: var(--shadow-focus);
+}
+
+.dialog-body {
+  padding: var(--space-6);
+  overflow-y: auto;
+  flex: 1;
+}
+
+.dialog-footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--space-3);
+  padding: var(--space-4) var(--space-6) var(--space-6);
+  border-top: 1px solid var(--color-border-primary);
+  flex-shrink: 0;
+}
+
+/* Variants */
+.dialog-content--alert .dialog-header {
+  border-bottom: none;
+  padding-bottom: var(--space-2);
+}
+
+.dialog-content--alert .dialog-body {
+  padding-top: var(--space-4);
+}
+
+/* Animation keyframes (defined in global CSS, but here for reference) */
+/*
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes scale-in {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+*/
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .dialog-overlay,
+  .dialog-content {
+    animation: none !important;
+  }
+}
+
+/* High contrast mode */
+@media (prefers-contrast: high) {
+  .dialog-content {
+    border-width: 2px;
+  }
+  .dialog-close {
+    border-width: 1px;
+  }
+}
+
+/* Mobile adjustments */
+@media (max-width: 480px) {
+  .dialog-overlay {
+    padding: 0;
+    align-items: flex-end;
+  }
+  .dialog-content {
+    max-height: 85vh;
+    border-radius: var(--radius-component-xl) var(--radius-component-xl) 0 0;
+  }
+  .dialog-content--sm,
+  .dialog-content--md,
+  .dialog-content--lg,
+  .dialog-content--xl {
+    max-width: 100%;
+  }
+}
+
+/* Scrollbar styling for dialog body */
+.dialog-body::-webkit-scrollbar {
+  width: 6px;
+}
+.dialog-body::-webkit-scrollbar-track {
+  background: transparent;
+}
+.dialog-body::-webkit-scrollbar-thumb {
+  background: var(--color-border-primary);
+  border-radius: var(--radius-full);
+  border: 2px solid transparent;
+  background-clip: content-box;
+}
+.dialog-body::-webkit-scrollbar-thumb:hover {
+  background: var(--color-border-secondary);
+}
+
+/* Focus visible for the dialog content itself */
+.dialog-content:focus-visible {
+  outline: none;
+  box-shadow: var(--shadow-focus);
+}

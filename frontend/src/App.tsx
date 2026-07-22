@@ -1,117 +1,119 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider } from "./contexts/AuthContext";
+import { WalletProvider } from "./contexts/WalletContext";
 import { ToastProvider } from "./components/Common/Toast";
-import { RoleGuard, AuthGuard } from "./guards/RoleGuard";
+import { RoleGuard } from "./guards/RoleGuard";
 import { DashboardLayout } from "./components/Layout/DashboardLayout";
 import { Role } from "./utils/constants";
+import { useAuth } from "./contexts/AuthContext";
+import { useWallet } from "./contexts/WalletContext";
 
-// Auth pages
-import { LoginPage } from "./pages/LoginPage";
-import { RegisterPage } from "./pages/RegisterPage";
+import { FarmerDashboard } from "./pages/FarmerDashboard";
+import { TelemetryPage } from "./pages/farmer/TelemetryPage";
+import { MintBatchPage } from "./pages/farmer/MintBatchPage";
+import { YieldPredictionPage } from "./pages/farmer/YieldPredictionPage";
+import { BatchesPage } from "./pages/farmer/BatchesPage";
+import { AlertsPage } from "./pages/farmer/AlertsPage";
+import { LogisticsDashboard } from "./pages/logistics/LogisticsDashboard";
+import { TransferPage } from "./pages/logistics/TransferPage";
+import { ShipmentsPage } from "./pages/logistics/ShipmentsPage";
+import { TrackingPage } from "./pages/logistics/TrackingPage";
+import { AdminDashboard } from "./pages/admin/AdminDashboard";
+import { UsersPage } from "./pages/admin/UsersPage";
+import { AuditLogsPage } from "./pages/admin/AuditLogsPage";
+import { SystemHealthPage } from "./pages/admin/SystemHealthPage";
+import { SettingsPage } from "./pages/common/SettingsPage";
 
-// Farmer pages
-import FarmerDashboard from "./pages/farmer/FarmerDashboard";
+import HomePage from "./pages/HomePage";
+import LoginPage from "./pages/LoginPage";
+import RegisterPage from "./pages/RegisterPage";
 
-// Logistics pages
-import LogisticsDashboard from "./pages/logistics/LogisticsDashboard";
+function AppRoutes() {
+ const { user: apiUser, isAuthenticated } = useAuth();
+ const { connect: connectWallet, disconnect: disconnectWallet, connecting } = useWallet();
 
-// Admin pages
-import AdminDashboard from "./pages/admin/AdminDashboard";
+ const user = apiUser ? {
+ address: apiUser.sui_public_key || "0x0000000000000000000000000000000000000000",
+ name: apiUser.full_name || apiUser.email?.split("@")[0] || "User",
+ role: apiUser.role?.toLowerCase() as "farmer" | "logistics" | "admin" || "farmer",
+ avatar: undefined,
+ } : null;
+
+ return (
+ <BrowserRouter>
+ <Routes>
+ {/* Public pages */}
+ <Route path="/" element={<HomePage />} />
+ <Route path="/login" element={<LoginPage />} />
+ <Route path="/register" element={<RegisterPage />} />
+
+ {/* Farmer routes */}
+ <Route path="/farmer/*" element={
+ <RoleGuard allowedRoles={[Role.FARMER]}>
+ <DashboardLayout user={user} onConnectWallet={connectWallet} onDisconnectWallet={disconnectWallet} isConnecting={connecting}>
+ <Routes>
+ <Route path="dashboard" element={<FarmerDashboard />} />
+ <Route path="telemetry" element={<TelemetryPage />} />
+ <Route path="mint-batch" element={<MintBatchPage />} />
+ <Route path="yield-prediction" element={<YieldPredictionPage />} />
+ <Route path="batches" element={<BatchesPage />} />
+ <Route path="batches/:id" element={<BatchesPage />} />
+ <Route path="alerts" element={<AlertsPage />} />
+ <Route path="settings" element={<SettingsPage />} />
+ <Route path="*" element={<Navigate to="dashboard" replace />} />
+ </Routes>
+ </DashboardLayout>
+ </RoleGuard>
+ } />
+
+ {/* Logistics routes */}
+ <Route path="/logistics/*" element={
+ <RoleGuard allowedRoles={[Role.LOGISTICS]}>
+ <DashboardLayout user={user} onConnectWallet={connectWallet} onDisconnectWallet={disconnectWallet} isConnecting={connecting}>
+ <Routes>
+ <Route path="dashboard" element={<LogisticsDashboard />} />
+ <Route path="transfer" element={<TransferPage />} />
+ <Route path="shipments" element={<ShipmentsPage />} />
+ <Route path="tracking" element={<TrackingPage />} />
+ <Route path="settings" element={<SettingsPage />} />
+ <Route path="*" element={<Navigate to="dashboard" replace />} />
+ </Routes>
+ </DashboardLayout>
+ </RoleGuard>
+ } />
+
+ {/* Admin routes */}
+ <Route path="/admin/*" element={
+ <RoleGuard allowedRoles={[Role.ADMIN]}>
+ <DashboardLayout user={user} onConnectWallet={connectWallet} onDisconnectWallet={disconnectWallet} isConnecting={connecting}>
+ <Routes>
+ <Route path="dashboard" element={<AdminDashboard />} />
+ <Route path="users" element={<UsersPage />} />
+ <Route path="audit-logs" element={<AuditLogsPage />} />
+ <Route path="system-health" element={<SystemHealthPage />} />
+ <Route path="settings" element={<SettingsPage />} />
+ <Route path="*" element={<Navigate to="dashboard" replace />} />
+ </Routes>
+ </DashboardLayout>
+ </RoleGuard>
+ } />
+
+ <Route path="*" element={<Navigate to="/" replace />} />
+ </Routes>
+ </BrowserRouter>
+ );
+}
 
 function App() {
-  return (
-    <ToastProvider>
-      <AuthProvider>
-        <BrowserRouter>
-          <Routes>
-            {/* Public routes — authenticated users are redirected to their dashboard */}
-            <Route
-              path="/login"
-              element={
-                <AuthGuard>
-                  <LoginPage />
-               </AuthGuard>
-              }
-            />
-            <Route
-              path="/register"
-              element={
-                <AuthGuard>
-                  <RegisterPage />
-               </AuthGuard>
-              }
-            />
-
-            {/* Farmer routes */}
-            <Route
-              path="/farmer/*"
-              element={
-                <RoleGuard allowedRoles={[Role.FARMER]}>
-                  <DashboardLayout>
-                    <Routes>
-                      <Route path="dashboard" element={<FarmerDashboard />} />
-                      <Route
-                        path="telemetry"
-                        element={<FarmerDashboard />}
-                      />
-                      <Route path="mint" element={<FarmerDashboard />} />
-                      <Route
-                        path="*"
-                        element={<Navigate to="dashboard" replace />}
-                      />
-                   </Routes>
-                 </DashboardLayout>
-               </RoleGuard>
-              }
-            />
-
-            {/* Logistics routes */}
-            <Route
-              path="/logistics/*"
-              element={
-                <RoleGuard allowedRoles={[Role.LOGISTICS]}>
-                  <DashboardLayout>
-                    <Routes>
-                      <Route path="dashboard" element={<LogisticsDashboard />} />
-                      <Route path="transfer" element={<LogisticsDashboard />} />
-                      <Route
-                        path="*"
-                        element={<Navigate to="dashboard" replace />}
-                      />
-                   </Routes>
-                 </DashboardLayout>
-               </RoleGuard>
-              }
-            />
-
-            {/* Admin routes */}
-            <Route
-              path="/admin/*"
-              element={
-                <RoleGuard allowedRoles={[Role.ADMIN]}>
-                  <DashboardLayout>
-                    <Routes>
-                      <Route path="dashboard" element={<AdminDashboard />} />
-                      <Route path="users" element={<AdminDashboard />} />
-                      <Route path="audit" element={<AdminDashboard />} />
-                      <Route
-                        path="*"
-                        element={<Navigate to="dashboard" replace />}
-                      />
-                   </Routes>
-                 </DashboardLayout>
-               </RoleGuard>
-              }
-            />
-
-            {/* Root + catch-all */}
-            <Route path="/" element={<Navigate to="/login" replace />} />
-            <Route path="*" element={<Navigate to="/login" replace />} />
-         </Routes>
-       </BrowserRouter>
-     </AuthProvider>
-   </ToastProvider>
-  );
+ return (
+ <ToastProvider>
+ <AuthProvider>
+ <WalletProvider>
+ <AppRoutes />
+ </WalletProvider>
+ </AuthProvider>
+ </ToastProvider>
+ );
 }
 
 export default App;

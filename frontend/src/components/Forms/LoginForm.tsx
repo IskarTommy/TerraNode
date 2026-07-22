@@ -39,60 +39,62 @@ export const LoginForm = () => {
   };
 
   return (
-    <form className="auth-form" onSubmit={handleSubmit} noValidate>
-      <h1 className="auth-form-title">Sign in</h1>
-      <p className="auth-form-subtitle">
-        Welcome back to TerraNode. Enter your credentials to access your dashboard.
-     </p>
+    <div className="auth-form-wrapper">
+      <form className="auth-form" onSubmit={handleSubmit} noValidate>
+        <h1 className="auth-form-title">Sign in</h1>
+        <p className="auth-form-subtitle">
+          Welcome back to TerraNode. Enter your credentials to access your dashboard.
+        </p>
 
-      <div className="form-group">
-        <label htmlFor="login-email" className="form-label">
-          Email
-       </label>
-        <input
-          id="login-email"
-          type="email"
-          className="form-input"
-          placeholder="you@farm.com"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-          autoComplete="email"
+        <div className="form-group">
+          <label htmlFor="login-email" className="form-label">
+            Email
+          </label>
+          <input
+            id="login-email"
+            type="email"
+            className="form-input"
+            placeholder="you@farm.com"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+            autoComplete="email"
+            disabled={isLoading}
+          />
+        </div>
+
+        <div className="form-group">
+          <label htmlFor="login-password" className="form-label">
+            Password
+          </label>
+          <input
+            id="login-password"
+            type="password"
+            className="form-input"
+            placeholder="••••••••"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+            autoComplete="current-password"
+            disabled={isLoading}
+          />
+        </div>
+
+        <button
+          type="submit"
+          className="btn btn--primary btn--full"
           disabled={isLoading}
-        />
+        >
+          {isLoading ? "Signing in…" : "Sign in"}
+        </button>
+
+        <p className="auth-form-footer">
+          Don't have an account?{" "}
+          <Link to="/register" className="auth-link">
+            Create one
+          </Link>
+        </p>
+      </form>
     </div>
-
-      <div className="form-group">
-        <label htmlFor="login-password" className="form-label">
-          Password
-       </label>
-        <input
-          id="login-password"
-          type="password"
-          className="form-input"
-          placeholder="••••••••"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-          autoComplete="current-password"
-          disabled={isLoading}
-        />
-    </div>
-
-      <button
-        type="submit"
-        className="btn btn--primary btn--full"
-        disabled={isLoading}
-      >
-        {isLoading ? "Signing in…" : "Sign in"}
-     </button>
-
-      <p className="auth-form-footer">
-        Don't have an account?{" "}
-        <Link to="/register" className="auth-link">
-          Create one
-       </Link>
-     </p>
-  </form>
   );
 };

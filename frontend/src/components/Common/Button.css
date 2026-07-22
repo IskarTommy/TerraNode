@@ -1,0 +1,168 @@
+/* ============================================================================
+ * Button component CSS — uses design system tokens
+ * ============================================================================ */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  font-family: var(--font-family-sans);
+  border-radius: var(--radius-md);
+  border: 1px solid transparent;
+  cursor: pointer;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background var(--duration-fast) var(--ease-out),
+              color var(--duration-fast) var(--ease-out),
+              border-color var(--duration-fast) var(--ease-out),
+              box-shadow var(--duration-fast) var(--ease-out),
+              opacity var(--duration-fast) var(--ease-out),
+              transform 80ms var(--ease-out);
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  outline: none;
+  position: relative;
+  height: var(--btn-height, 2.5rem);
+  padding: 0 var(--space-4);
+}
+
+.btn:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+.btn:focus-visible {
+  box-shadow: 0 0 0 3px var(--color-primary-bg);
+}
+
+.btn:disabled,
+.btn[aria-disabled="true"] {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* ─── Sizes ────────────────────────────────────────────────────────────────── */
+.btn--sm {
+  height: 2rem;
+  padding: 0 var(--space-3);
+  font-size: var(--font-size-xs);
+  border-radius: var(--radius-sm);
+  gap: 6px;
+}
+
+.btn--lg {
+  height: 3rem;
+  padding: 0 var(--space-6);
+  font-size: var(--font-size-base);
+  border-radius: var(--radius-lg);
+}
+
+.btn--icon {
+  width: 2.5rem;
+  height: 2.5rem;
+  padding: 0;
+  border-radius: var(--radius-md);
+  gap: 0;
+}
+
+.btn--icon.btn--sm {
+  width: 2rem;
+  height: 2rem;
+}
+
+.btn--full {
+  width: 100%;
+}
+
+/* ─── Variants ─────────────────────────────────────────────────────────────── */
+.btn--primary {
+  background: var(--color-primary);
+  color: var(--color-primary-fg);
+  border-color: transparent;
+  box-shadow: var(--shadow-glow-primary);
+}
+.btn--primary:hover:not(:disabled) {
+  background: var(--color-primary-hover);
+  box-shadow: var(--shadow-glow-primary-strong);
+}
+.btn--primary:active:not(:disabled) {
+  background: var(--color-primary-active);
+}
+
+.btn--secondary {
+  background: var(--color-secondary);
+  color: var(--color-secondary-fg);
+  border-color: transparent;
+  box-shadow: var(--shadow-glow-secondary);
+}
+.btn--secondary:hover:not(:disabled) {
+  background: var(--color-secondary-hover);
+}
+
+.btn--outline {
+  background: transparent;
+  color: var(--color-fg-primary);
+  border-color: var(--color-border-primary);
+}
+.btn--outline:hover:not(:disabled) {
+  background: var(--color-bg-tertiary);
+  border-color: var(--color-border-secondary);
+}
+
+.btn--ghost {
+  background: transparent;
+  color: var(--color-fg-secondary);
+  border-color: transparent;
+}
+.btn--ghost:hover:not(:disabled) {
+  background: var(--color-bg-tertiary);
+  color: var(--color-fg-primary);
+}
+
+.btn--destructive {
+  background: var(--color-error);
+  color: #fff;
+  border-color: transparent;
+  box-shadow: var(--shadow-glow-error);
+}
+.btn--destructive:hover:not(:disabled) {
+  background: var(--color-red-600);
+}
+
+.btn--success {
+  background: var(--color-success);
+  color: var(--color-primary-fg);
+  border-color: transparent;
+  box-shadow: var(--shadow-glow-primary);
+}
+.btn--success:hover:not(:disabled) {
+  background: var(--color-emerald-600);
+}
+
+.btn--role {
+  background: var(--role-accent-bg, var(--color-primary-bg));
+  color: var(--role-accent, var(--color-primary));
+  border-color: var(--role-accent-border, var(--color-primary-border));
+}
+.btn--role:hover:not(:disabled) {
+  opacity: 0.85;
+}
+
+/* ─── Spinner ──────────────────────────────────────────────────────────────── */
+.btn-spinner {
+  animation: spin 700ms linear infinite;
+  width: 16px;
+  height: 16px;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+.btn-content--hidden {
+  opacity: 0;
+}
