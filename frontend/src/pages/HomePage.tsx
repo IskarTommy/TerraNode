@@ -1,206 +1,284 @@
-import { useState, useEffect, useRef } from "react";
+import { useEffect, useRef, type ReactNode } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 import { Button } from "../components/Common/Button";
+import { Logo } from "../components/Logo";
+import { CanvasBackground } from "../components/CanvasBackground";
 import { Sprout, Cpu, Network, Handshake, Brain, ShieldCheck } from "lucide-react";
 
-// ── Fade-in with fallback ────────────────────────────────────────────────────
-function FadeIn({ children, delay = 0, y = 20 }: { children: React.ReactNode; delay?: number; y?: number }) {
+// ── Types ─────────────────────────────────────────────────────────────────────
+
+interface FadeInProps {
+  children: ReactNode;
+  delay?: number;
+  y?: number;
+}
+
+interface AnimatedNumProps {
+  target: number;
+  suffix?: string;
+  dur?: number;
+}
+
+interface FeatureItem {
+  title: string;
+  desc: string;
+  icon: typeof Sprout;
+  tag: string;
+  color: string;
+}
+
+interface StepItem {
+  n: string;
+  title: string;
+  desc: string;
+}
+
+interface RoleItem {
+  role: string;
+  color: string;
+  items: string[];
+}
+
+interface StatItem {
+  value: number;
+  suffix: string;
+  label: string;
+}
+
+// ── Data ──────────────────────────────────────────────────────────────────────
+
+const FEATURES: FeatureItem[] = [
+  { title: "Crop Provenance", desc: "Every harvest batch stamped with origin data — variety, soil health, and yield — tied to an on-chain NFT.", icon: Sprout, tag: "100% traceable", color: "#10b981" },
+  { title: "Custody Transfers", desc: "Handoffs happen in one on-chain transaction. Every ownership change is timestamped and auditable.", icon: Handshake, tag: "Sub-second finality", color: "#06b6d4" },
+  { title: "IoT Telemetry", desc: "Temperature, humidity, and pH streamed live from LoRa sensors with SHA-256-hashed payloads.", icon: Cpu, tag: "Live monitoring", color: "#22d3ee" },
+  { title: "Sui Blockchain", desc: "Built on Sui object-centric model. Each batch is a unique dynamic object with ownership and events.", icon: Network, tag: "L1 performance", color: "#6366f1" },
+  { title: "AI Yield Forecast", desc: "Weighted moving averages over 90 days of sensor data produce confidence-weighted harvest forecasts.", icon: Brain, tag: "ML-powered", color: "#f59e0b" },
+  { title: "ZK Privacy", desc: "Zero-knowledge proofs let logistics partners verify cargo condition without revealing sensitive data.", icon: ShieldCheck, tag: "Privacy-first", color: "#8b5cf6" },
+];
+
+const STEPS: StepItem[] = [
+  { n: "01", title: "Register", desc: "Create a TerraNode account and link your Sui wallet. Choose your role." },
+  { n: "02", title: "Submit", desc: "Log soil readings, temperature, and pH. Each record is SHA-256 hashed and stored immutably." },
+  { n: "03", title: "Mint", desc: "Bundle your harvest into a batch, sign on-chain, and receive a verifiable NFT proof-of-origin." },
+  { n: "04", title: "Verify", desc: "Every custodian handoff and admin audit re-validates the hash against the Sui ledger end-to-end." },
+];
+
+const ROLES: RoleItem[] = [
+  { role: "Farmer", color: "#10b981", items: ["Submit environmental readings", "Mint NFT batch tokens", "View yield predictions", "Monitor batch status"] },
+  { role: "Logistics", color: "#06b6d4", items: ["View open transfer requests", "Accept & execute transfers", "Scan QR batch codes", "Update shipment status"] },
+  { role: "Admin", color: "#8b5cf6", items: ["Manage all user accounts", "Run hash verification", "View system health", "Access full audit logs"] },
+];
+
+const STATS: StatItem[] = [
+  { value: 12480, suffix: "", label: "Total Batches" },
+  { value: 847, suffix: "", label: "Farmers Online" },
+  { value: 3291, suffix: "", label: "Transfers Today" },
+  { value: 99.97, suffix: "%", label: "Uptime" },
+];
+
+// ── Animation Components ──────────────────────────────────────────────────────
+
+function FadeIn({ children, delay = 0, y = 18 }: FadeInProps): React.ReactElement {
   const ref = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
+
     el.style.opacity = "0";
     el.style.transform = `translateY(${y}px)`;
-    el.style.transition =
-      `opacity 0.7s cubic-bezier(.16,1,.3,1) ${delay}ms, transform 0.7s cubic-bezier(.16,1,.3,1) ${delay}ms`;
+    el.style.transition = `opacity 0.7s cubic-bezier(.16,1,.3,1) ${delay}ms, transform 0.7s cubic-bezier(.16,1,.3,1) ${delay}ms`;
+
     let done = false;
-    const reveal = () => {
+    const reveal = (): void => {
       if (done) return;
       done = true;
       el.style.opacity = "1";
       el.style.transform = "translateY(0)";
     };
-    const obs = new IntersectionObserver(
-      ([e]) => { if (e.isIntersecting) { reveal(); obs.disconnect(); } },
-      { threshold: 0.05, rootMargin: "0px 0px -30px 0px" }
-    );
-    obs.observe(el);
-    const t = window.setTimeout(reveal, 2200);
-    return () => { obs.disconnect(); window.clearTimeout(t); };
+
+    const observer = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting) { reveal(); observer.disconnect(); }
+    }, { threshold: 0.05, rootMargin: "0px 0px -30px 0px" });
+    observer.observe(el);
+    const fallback = window.setTimeout(reveal, 2200);
+
+    return () => { observer.disconnect(); window.clearTimeout(fallback); };
   }, [delay, y]);
+
   return <div ref={ref}>{children}</div>;
 }
 
-// ── Animated counter ─────────────────────────────────────────────────────────
-function AnimatedNum({ target, suffix = "", dur = 2200 }: { target: number; suffix?: string; dur?: number }) {
+function AnimatedNum({ target, suffix = "", dur = 2200 }: AnimatedNumProps): React.ReactElement {
   const ref = useRef<HTMLSpanElement>(null);
+
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
+
     let done = false;
-    const obs = new IntersectionObserver(
-      ([e]) => {
-        if (!e.isIntersecting || done) return;
-        done = true;
-        obs.disconnect();
-        const t0 = performance.now();
-        const tick = (now: number) => {
-          const p = Math.min((now - t0) / dur, 1);
-          const eased = 1 - Math.pow(1 - p, 4);
-          const cur = target * eased;
-          el.textContent =
-            suffix === "%" ? cur.toFixed(1) + suffix : Math.floor(cur).toLocaleString() + suffix;
-          if (p < 1) requestAnimationFrame(tick);
-        };
-        requestAnimationFrame(tick);
-      },
-      { threshold: 0.3 }
-    );
-    obs.observe(el);
-    return () => obs.disconnect();
+    let frameId = 0;
+
+    const observer = new IntersectionObserver(([entry]) => {
+      if (!entry.isIntersecting || done) return;
+      done = true;
+      observer.disconnect();
+
+      const t0 = performance.now();
+      const tick = (now: number): void => {
+        const progress = Math.min((now - t0) / dur, 1);
+        const eased = 1 - Math.pow(1 - progress, 4);
+        const current = target * eased;
+        const text = suffix === "%"
+          ? `${current.toFixed(1)}${suffix}`
+          : `${Math.floor(current).toLocaleString()}${suffix}`;
+        el.textContent = text;
+        if (progress < 1) { frameId = requestAnimationFrame(tick); }
+      };
+      frameId = requestAnimationFrame(tick);
+    }, { threshold: 0.3 });
+
+    observer.observe(el);
+    return () => { observer.disconnect(); if (frameId) cancelAnimationFrame(frameId); };
   }, [target, suffix, dur]);
-  return <span ref={ref} style={{ fontVariantNumeric: "tabular-nums" }}>{suffix === "%" ? "0.0%" : "0" + suffix}</span>;
+
+  return <span ref={ref} className="tabular-nums" aria-live="polite">{suffix === "%" ? "0.0%" : `0${suffix}`}</span>;
 }
 
-// ── Data ─────────────────────────────────────────────────────────────────────
-const FEATURES = [
-  { title: "Crop Provenance",  desc: "Every harvest batch stamped with origin data — variety, soil health, and yield — tied to an on-chain NFT.", icon: Sprout,  tag: "100% traceable",    color: "#10b981" },
-  { title: "Custody Transfers", desc: "Handoffs happen in one on-chain transaction. Every ownership change is timestamped and auditable.",            icon: Handshake, tag: "Sub-second finality", color: "#06b6d4" },
-  { title: "IoT Telemetry",    desc: "Temperature, humidity, and pH streamed live from LoRa sensors with SHA-256-hashed payloads.",                  icon: Cpu,      tag: "Live monitoring",    color: "#22d3ee" },
-  { title: "Sui Blockchain",   desc: "Built on Sui's object-centric model. Each batch is a unique dynamic object with ownership and events.",                icon: Network,  tag: "L1 performance",     color: "#6366f1" },
-  { title: "AI Yield Forecast",desc: "Weighted moving averages over 90 days of sensor data produce confidence-weighted harvest forecasts.",               icon: Brain,    tag: "ML-powered",         color: "#f59e0b" },
-  { title: "ZK Privacy",       desc: "Zero-knowledge proofs let logistics partners verify cargo condition without revealing sensitive data.",                  icon: ShieldCheck, tag: "Privacy-first",    color: "#8b5cf6" },
-];
+// ── Landing Page ──────────────────────────────────────────────────────────────
 
-const STEPS = [
-  { n: "01", title: "Register", desc: "Create a TerraNode account and link your Sui wallet. Choose your role." },
-  { n: "02", title: "Submit",   desc: "Log soil readings, temperature, and pH. Each record is SHA-256 hashed and stored immutably." },
-  { n: "03", title: "Mint",     desc: "Bundle your harvest into a batch, sign on-chain, receive a verifiable NFT proof-of-origin." },
-  { n: "04", title: "Verify",   desc: "Every custodian handoff and admin audit re-validates the hash against the Sui ledger end-to-end." },
-];
-
-const ROLES = [
-  { role: "Farmer",    color: "#10b981", items: ["Submit environmental readings", "Mint NFT batch tokens", "View yield predictions", "Monitor batch status"] },
-  { role: "Logistics", color: "#06b6d4", items: ["View open transfer requests", "Accept & execute transfers", "Scan QR batch codes", "Update shipment status"] },
-  { role: "Admin",     color: "#8b5cf6", items: ["Manage all user accounts", "Run hash verification", "View system health", "Access full audit logs"] },
-];
-
-// ── Page ─────────────────────────────────────────────────────────────────────
-export default function HomePage() {
+export default function HomePage(): React.ReactElement {
   const { user } = useAuth();
 
   return (
     <div
-      style={{
-        position: "relative",
-        minHeight: "100vh",
-        background: "#0a0f1a",
-        color: "#f1f5f9",
-        fontFamily: "'Outfit', system-ui, sans-serif",
-      }}
+      className="relative min-h-screen overflow-hidden"
+      style={{ background: "#0a0f1a", color: "#f1f5f9", fontFamily: "'Outfit', system-ui, sans-serif" }}
     >
-      {/* Ambient glow blobs — using inline styles so they work without className */}
-      <div
-        style={{
-          position: "absolute", top: 0, left: 0,
-          width: 600, height: 600,
-          borderRadius: "50%",
-          background: "rgba(34,211,238,0.10)",
-          filter: "blur(120px)",
-          zIndex: -10, pointerEvents: "none",
-        }}
-      />
-      <div
-        style={{
-          position: "absolute", bottom: 0, right: 0,
-          width: 600, height: 600,
-          borderRadius: "50%",
-          background: "rgba(251,191,36,0.10)",
-          filter: "blur(120px)",
-          zIndex: -10, pointerEvents: "none",
-        }}
-      />
+<CanvasBackground />
 
       <style>{`
-        @keyframes pulse-dot {
-          0%, 100% { opacity: 1; }
-          50% { opacity: 0.4; }
+        @keyframes tn-pulse-dot {
+          0%, 100% { opacity: 1; transform: scale(1); }
+          50% { opacity: 0.4; transform: scale(0.85); }
+        }
+        @keyframes tn-float-orb {
+          0%, 100% { transform: translate(0, 0); }
+          33% { transform: translate(30px, -25px); }
+          66% { transform: translate(-20px, 15px); }
+        }
+        @keyframes tn-reveal-up {
+          from { opacity: 0; transform: translateY(18px); }
+          to { opacity: 1; transform: translateY(0); }
         }
       `}</style>
 
-      {/* ══════════════════════ HERO ══════════════════════ */}
+      {/* ── Ambient glow orbs ───────────────────────────────────────── */}
+      <div className="absolute inset-0 pointer-events-none overflow-hidden" aria-hidden="true">
+        <div className="absolute rounded-full" style={{ width: 700, height: 700, background: "radial-gradient(circle, rgba(34,211,238,0.10) 0%, transparent 70%)", top: "-25%", left: "5%", filter: "blur(60px)", animation: "tn-float-orb 14s ease-in-out infinite" }} />
+        <div className="absolute rounded-full" style={{ width: 500, height: 500, background: "radial-gradient(circle, rgba(251,191,36,0.07) 0%, transparent 70%)", bottom: "-20%", right: "5%", filter: "blur(50px)", animation: "tn-float-orb 18s ease-in-out infinite 4s" }} />
+        <div className="absolute rounded-full" style={{ width: 400, height: 400, background: "radial-gradient(circle, rgba(16,185,129,0.06) 0%, transparent 70%)", top: "40%", left: "55%", filter: "blur(80px)", animation: "tn-float-orb 20s ease-in-out infinite 8s" }} />
+      </div>
+
+      {/* ═══════════════════════════════════════════════════════════════
+          NAVIGATION HEADER
+         ═══════════════════════════════════════════════════════════════ */}
+      <header
+        className="fixed top-0 left-0 right-0 z-50"
+        style={{ background: "rgba(10,15,26,0.75)", backdropFilter: "blur(14px)", borderBottom: "1px solid rgba(51,65,85,0.2)" }}
+        role="banner"
+      >
+        <nav
+          className="mx-auto flex items-center justify-between"
+          style={{ maxWidth: 1200, padding: "0.85rem 1.5rem" }}
+          aria-label="Main navigation"
+        >
+          {/* Logo */}
+          <Link to="/" className="inline-flex items-center gap-2 no-underline" aria-label="TerraNode home">
+  <Logo size={28} showText={true} />
+</Link>
+
+          {/* Nav links */}
+          <div className="hidden sm:flex items-center gap-7">
+            {[
+              { label: "Features", href: "#features" },
+              { label: "How it works", href: "#how-it-works" },
+              { label: "Roles", href: "#roles" },
+            ].map((link) => (
+              <a
+                key={link.label}
+                href={link.href}
+                className="transition-colors duration-200"
+                style={{ fontSize: 14, fontWeight: 500, color: "rgba(203,213,225,0.7)", textDecoration: "none" }}
+                onMouseEnter={(e) => (e.currentTarget.style.color = "#f1f5f9")}
+                onMouseLeave={(e) => (e.currentTarget.style.color = "rgba(203,213,225,0.7)")}
+              >
+                {link.label}
+              </a>
+            ))}
+            <Link
+              to="/login"
+              className="px-4 py-2 rounded-lg transition-all duration-200"
+              style={{ fontSize: 14, fontWeight: 600, color: "#f1f5f9", background: "rgba(16,185,129,0.12)", border: "1px solid rgba(16,185,129,0.25)", textDecoration: "none" }}
+              onMouseEnter={(e) => { e.currentTarget.style.background = "rgba(16,185,129,0.2)"; e.currentTarget.style.borderColor = "rgba(16,185,129,0.4)"; }}
+              onMouseLeave={(e) => { e.currentTarget.style.background = "rgba(16,185,129,0.12)"; e.currentTarget.style.borderColor = "rgba(16,185,129,0.25)"; }}
+            >
+              Launch App
+            </Link>
+          </div>
+        </nav>
+      </header>
+
+      {/* ═══════════════════════════════════════════════════════════════
+          HERO
+         ═══════════════════════════════════════════════════════════════ */}
       <FadeIn>
         <section
-          style={{
-            position: "relative", zIndex: 2,
-            padding: "clamp(5rem, 14vw, 9rem) 1.5rem clamp(3rem, 8vw, 5rem)",
-            textAlign: "center", overflow: "hidden",
-          }}
+          className="relative z-10 flex flex-col items-center text-center"
+          style={{ padding: "clamp(6rem, 14vw, 9rem) 1.5rem clamp(3rem, 8vw, 5rem)" }}
+          aria-labelledby="hero-heading"
         >
           {/* Live badge */}
-          <div style={{ marginBottom: "1.75rem" }}>
+          <div className="mb-7">
             <span
-              style={{
-                display: "inline-flex", alignItems: "center", gap: "0.5rem",
-                padding: "0.35rem 1rem", borderRadius: 9999,
-                background: "rgba(16,185,129,0.08)", border: "1px solid rgba(16,185,129,0.18)",
-                fontSize: "0.72rem", fontFamily: "'JetBrains Mono', monospace",
-                color: "#34d399", letterSpacing: "0.05em",
-              }}
+              className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full"
+              style={{ background: "rgba(16,185,129,0.08)", border: "1px solid rgba(16,185,129,0.18)", fontSize: "0.72rem", fontFamily: "'JetBrains Mono', monospace", color: "#34d399", letterSpacing: "0.05em" }}
             >
-              <span
-                style={{
-                  width: 7, height: 7, borderRadius: "50%", background: "#34d399",
-                  boxShadow: "0 0 8px rgba(52,211,153,0.5)",
-                  animation: "pulse-dot 2s ease-in-out infinite",
-                }}
-              />
+              <span className="inline-block rounded-full" aria-hidden="true" style={{ width: 7, height: 7, background: "#34d399", boxShadow: "0 0 8px rgba(52,211,153,0.5)", animation: "tn-pulse-dot 2s ease-in-out infinite" }} />
               LIVE ON SUI TESTNET · Block #14,832,561
             </span>
           </div>
 
           {/* Headline */}
           <h1
-            style={{
-              fontFamily: "'Space Grotesk', sans-serif",
-              fontSize: "clamp(2.4rem, 6.5vw, 4.2rem)",
-              fontWeight: 800, lineHeight: 1.06, letterSpacing: "-0.035em",
-              maxWidth: 920, margin: "0 auto 1.25rem",
-            }}
+            id="hero-heading"
+            className="text-center mx-auto max-w-3xl leading-[1.06]"
+            style={{ fontFamily: "'Space Grotesk', sans-serif", fontSize: "clamp(2.4rem, 6.5vw, 4.2rem)", fontWeight: 800, letterSpacing: "-0.035em", marginBottom: "1.25rem" }}
           >
             <span style={{ color: "#f1f5f9" }}>Farm-to-table provenance, </span>
             <br />
-            <span
-              style={{
-                background: "linear-gradient(135deg, #fbbf24 0%, #22d3ee 50%, #3b82f6 100%)",
-                backgroundClip: "text", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent",
-              }}
-            >
+            <span style={{ background: "linear-gradient(135deg, #fbbf24 0%, #22d3ee 50%, #3b82f6 100%)", backgroundClip: "text", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>
               on-chain.
             </span>
           </h1>
 
-          {/* Sub headline */}
+          {/* Sub-headline */}
           <p
-            style={{
-              maxWidth: 580, margin: "0 auto 2.25rem", lineHeight: 1.7,
-              fontSize: "clamp(0.95rem, 1.8vw, 1.1rem)",
-              color: "rgba(148,163,184,0.8)",
-            }}
+            className="text-center mx-auto max-w-2xl leading-relaxed"
+            style={{ fontSize: "clamp(0.95rem, 1.8vw, 1.1rem)", color: "rgba(203,213,225,0.85)", marginBottom: "2.25rem" }}
           >
-            TerraNode links every harvest batch to an immutable Sui ledger.
-            From IoT telemetry to yield predictions to custody handoffs — the whole supply chain, verified.
+            TerraNode links every harvest batch to an immutable Sui ledger. From IoT telemetry to yield predictions to custody handoffs — the whole supply chain, verified.
           </p>
 
-          {/* CTAs */}
-          <div style={{ display: "flex", gap: "0.875rem", justifyContent: "center", flexWrap: "wrap" }}>
+          {/* CTA buttons */}
+          <div className="flex flex-wrap justify-center gap-4">
             <Link to="/register">
               <Button variant="primary" size="lg" style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 600 }}>
                 Start minting batches →
               </Button>
             </Link>
-            <a href="#features" style={{ textDecoration: "none" }}>
+            <a href="#features" className="no-underline">
               <Button variant="outline" size="lg" style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 600 }}>
                 See how it works
               </Button>
@@ -208,16 +286,10 @@ export default function HomePage() {
           </div>
 
           {/* Trust indicators */}
-          <div
-            style={{
-              display: "flex", alignItems: "center", justifyContent: "center",
-              gap: "2rem", flexWrap: "wrap", marginTop: "2.5rem",
-              fontSize: "0.78rem", color: "rgba(148,163,184,0.5)",
-            }}
-          >
+          <div className="flex flex-wrap items-center justify-center gap-6 mt-10" style={{ fontSize: "0.78rem", color: "rgba(148,163,184,0.7)" }} aria-label="Platform guarantees">
             {["SHA-256 Hashed", "Non-custodial", "~200ms finality", "Testnet · Free"].map((t) => (
-              <span key={t} style={{ display: "inline-flex", alignItems: "center", gap: "0.35rem" }}>
-                <svg width={12} height={12} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round">
+              <span key={t} className="inline-flex items-center gap-1.5">
+                <svg width={13} height={13} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                   <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
                 </svg>
                 {t}
@@ -227,242 +299,97 @@ export default function HomePage() {
         </section>
       </FadeIn>
 
-      {/* ══════════════════════ FEATURES ══════════════════════ */}
+      {/* ═══════════════════════════════════════════════════════════════
+          FEATURES
+         ═══════════════════════════════════════════════════════════════ */}
       <section
         id="features"
-        style={{
-          position: "relative", zIndex: 10,
-          padding: "clamp(3rem, 8vw, 6rem) clamp(1rem, 4vw, 3rem)",
-          background: "linear-gradient(180deg, rgba(34,211,238,0.02) 0%, transparent 50%)",
-        }}
+        className="relative z-10 flex flex-col items-center text-center"
+        style={{ padding: "clamp(3rem, 8vw, 6rem) clamp(1rem, 4vw, 3rem)", background: "linear-gradient(180deg, rgba(34,211,238,0.02) 0%, transparent 50%)" }}
+        aria-labelledby="features-heading"
       >
-        <div style={{ maxWidth: 1200, margin: "0 auto" }}>
-          {/* Section header */}
+        <div className="mx-auto" style={{ maxWidth: 1200 }}>
+          {/* Section header — stays centered */}
           <FadeIn delay={80}>
-            <div style={{ textAlign: "center", marginBottom: 52 }}>
+            <div className="text-center mb-14">
               <span
-                style={{
-                  display: "inline-block", padding: "5px 14px", borderRadius: 9999,
-                  background: "rgba(34,211,238,0.07)", border: "1px solid rgba(34,211,238,0.15)",
-                  fontSize: 12, fontWeight: 600, color: "#67e8f9",
-                  fontFamily: "'JetBrains Mono', monospace", letterSpacing: "0.04em", marginBottom: 16,
-                }}
+                className="inline-block px-3.5 py-1 rounded-full mb-4"
+                style={{ background: "rgba(34,211,238,0.07)", border: "1px solid rgba(34,211,238,0.15)", fontSize: 12, fontWeight: 600, color: "#67e8f9", fontFamily: "'JetBrains Mono', monospace", letterSpacing: "0.04em" }}
               >
                 Core Capabilities
               </span>
               <h2
-                style={{
-                  fontFamily: "'Space Grotesk', sans-serif",
-                  fontSize: "clamp(1.6rem, 4vw, 2.6rem)", fontWeight: 700,
-                  letterSpacing: "-0.025em", color: "#f1f5f9", marginBottom: 12, lineHeight: 1.2,
-                }}
+                id="features-heading"
+                className="leading-tight mb-3"
+                style={{ fontFamily: "'Space Grotesk', sans-serif", fontSize: "clamp(1.6rem, 4vw, 2.6rem)", fontWeight: 700, letterSpacing: "-0.025em", color: "#f1f5f9" }}
               >
                 Everything you need to{" "}
-                <span
-                  style={{
-                    background: "linear-gradient(90deg, #fbbf24, #22d3ee, #3b82f6)",
-                    backgroundClip: "text", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent",
-                  }}
-                >
+                <span style={{ background: "linear-gradient(90deg, #fbbf24, #22d3ee, #3b82f6)", backgroundClip: "text", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>
                   verify your supply chain
                 </span>
               </h2>
-              <p
-                style={{
-                  fontSize: 15, color: "rgba(148,163,184,0.8)",
-                  maxWidth: 520, margin: "0 auto", lineHeight: 1.6,
-                }}
-              >
+              <p className="mx-auto max-w-130 leading-relaxed" style={{ fontSize: 15, color: "rgba(203,213,225,0.8)" }}>
                 Built on Sui for speed and security. Every feature serves farmers, logistics providers, and auditors.
               </p>
             </div>
           </FadeIn>
 
-          {/* Feature cards */}
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
-              gap: 18,
-            }}
-          >
-            {FEATURES.map((f, i) => {
-              const IconComp = f.icon;
-              const c = f.color;
-              return (
-                <FadeIn key={f.title} delay={i * 100} y={18}>
-                  <div
-                    style={{
-                      position: "relative",
-                      padding: "28px 26px 24px",
-                      borderRadius: 18,
-                      background: "linear-gradient(150deg, rgba(30,41,59,0.55) 0%, rgba(15,23,42,0.65) 100%)",
-                      backdropFilter: "blur(10px)",
-                      border: "1px solid rgba(51,65,85,0.55)",
-                      transition: "transform 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease",
-                      overflow: "hidden", cursor: "default", height: "100%",
-                    }}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.transform = "translateY(-6px)";
-                      e.currentTarget.style.borderColor = `${c}55`;
-                      e.currentTarget.style.boxShadow = `0 20px 50px -16px ${c}30, inset 0 0 0 1px ${c}10`;
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.transform = "translateY(0)";
-                      e.currentTarget.style.borderColor = "rgba(51,65,85,0.55)";
-                      e.currentTarget.style.boxShadow = "none";
-                    }}
-                  >
-                    {/* Top glow line */}
-                    <div
-                      style={{
-                        position: "absolute", top: 0, left: "50%",
-                        transform: "translateX(-50%)", width: "55%", height: 1,
-                        background: `linear-gradient(90deg, transparent, ${c}55, transparent)`,
-                        opacity: 0, transition: "opacity 0.4s ease",
-                      }}
-                      onMouseEnter={(e) => ((e.target as HTMLElement).style.opacity = "1")}
-                      onMouseLeave={(e) => ((e.target as HTMLElement).style.opacity = "0")}
-                    />
-
-                    {/* Icon */}
-                    <div
-                      style={{
-                        width: 44, height: 44, borderRadius: 12,
-                        background: `${c}14`, border: `1px solid ${c}28`,
-                        display: "flex", alignItems: "center", justifyContent: "center",
-                        marginBottom: 16,
-                      }}
-                    >
-                      <IconComp size={22} strokeWidth={1.75} color={c} style={{ filter: `drop-shadow(0 0 10px ${c}55)` }} />
-                    </div>
-
-                    {/* Text */}
-                    <h3
-                      style={{
-                        fontFamily: "'Space Grotesk', sans-serif",
-                        fontSize: 17, fontWeight: 600,
-                        color: "#f1f5f9", marginBottom: 8, letterSpacing: "-0.01em",
-                      }}
-                    >
-                      {f.title}
-                    </h3>
-                    <p
-                      style={{
-                        fontSize: 13.5, lineHeight: 1.6, color: "rgba(148,163,184,0.75)",
-                        marginBottom: 16, flexGrow: 1,
-                      }}
-                    >
-                      {f.desc}
-                    </p>
-                    <span
-                      style={{
-                        display: "inline-block", padding: "3px 10px", borderRadius: 9999,
-                        background: `${c}0d`, border: `1px solid ${c}1a`,
-                        fontSize: 11, fontWeight: 600, color: c,
-                        fontFamily: "'JetBrains Mono', monospace", letterSpacing: "0.02em",
-                      }}
-                    >
-                      {f.tag}
-                    </span>
-                  </div>
-                </FadeIn>
-              );
-            })}
-          </div>
-        </div>
-      </section>
-
-      {/* ══════════════════════ HOW IT WORKS ══════════════════════ */}
-      <section
-        id="how-it-works"
-        style={{
-          position: "relative", zIndex: 10,
-          padding: "clamp(3rem, 8vw, 6rem) clamp(1rem, 4vw, 3rem)",
-          background: "linear-gradient(180deg, transparent 0%, rgba(251,191,36,0.015) 50%, transparent 100%)",
-        }}
-      >
-        <div style={{ maxWidth: 1050, margin: "0 auto" }}>
-          <FadeIn delay={0}>
-            <div style={{ textAlign: "center", marginBottom: 48 }}>
-              <span
-                style={{
-                  display: "inline-block", padding: "5px 14px", borderRadius: 9999,
-                  background: "rgba(251,191,36,0.07)", border: "1px solid rgba(251,191,36,0.15)",
-                  fontSize: 12, fontWeight: 600, color: "#fbbf24",
-                  fontFamily: "'JetBrains Mono', monospace", letterSpacing: "0.04em", marginBottom: 16,
-                }}
-              >
-                How it works
-              </span>
-              <h2
-                style={{
-                  fontFamily: "'Space Grotesk', sans-serif",
-                  fontSize: "clamp(1.6rem, 4vw, 2.6rem)", fontWeight: 700,
-                  letterSpacing: "-0.025em", color: "#f1f5f9", marginBottom: 12,
-                }}
-              >
-                From seed to shelf in <span style={{ color: "#22d3ee" }}>four steps.</span>
-              </h2>
-              <p
-                style={{
-                  fontSize: 15, color: "rgba(148,163,184,0.8)",
-                  maxWidth: 500, margin: "0 auto", lineHeight: 1.6,
-                }}
-              >
-                Every step is verified on-chain. No middlemen, no paperwork — just cryptographic proof.
-              </p>
-            </div>
-          </FadeIn>
-
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(4, 1fr)",
-              gap: 18,
-            }}
-          >
-            {STEPS.map((s, i) => (
-              <FadeIn key={s.n} delay={120 + i * 100} y={14}>
+          {/* Feature cards — 3-column grid, right-aligned within container */}
+          <div className="grid gap-5 ml-auto" style={{ gridTemplateColumns: "repeat(3, 1fr)", maxWidth: 1050, placeItems: "center" }}>
+            {FEATURES.map((f, i) => (
+              <FadeIn key={f.title} delay={i * 100} y={18}>
                 <div
+                  className="group relative rounded-2xl overflow-hidden text-center"
                   style={{
-                    padding: "1.75rem 1.25rem", borderRadius: 14, textAlign: "center",
-                    background: "rgba(15,23,42,0.5)",
-                    border: "1px solid rgba(251,191,36,0.18)",
-                    transition: "transform 0.3s ease, box-shadow 0.3s ease",
+                    padding: i === 0 ? "36px 30px 30px" : "30px",
+                    background: "linear-gradient(150deg, rgba(30,41,59,0.55) 0%, rgba(15,23,42,0.65) 100%)",
+                    backdropFilter: "blur(10px)",
+                    border: "1px solid rgba(51,65,85,0.55)",
+                    transition: "transform 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease",
+                    cursor: "default",
+                    width: "100%",
                   }}
                   onMouseEnter={(e) => {
-                    e.currentTarget.style.transform = "translateY(-4px)";
-                    e.currentTarget.style.boxShadow = "0 14px 32px -12px rgba(251,191,36,0.15)";
+                    e.currentTarget.style.transform = "translateY(-6px)";
+                    e.currentTarget.style.borderColor = `${f.color}55`;
+                    e.currentTarget.style.boxShadow = `0 20px 50px -16px ${f.color}30, inset 0 0 0 1px ${f.color}10`;
                   }}
                   onMouseLeave={(e) => {
                     e.currentTarget.style.transform = "translateY(0)";
+                    e.currentTarget.style.borderColor = "rgba(51,65,85,0.55)";
                     e.currentTarget.style.boxShadow = "none";
                   }}
+                  role="article"
+                  aria-label={f.title}
                 >
-                  <span
-                    style={{
-                      display: "inline-block",
-                      fontFamily: "'JetBrains Mono', monospace", fontSize: "0.65rem",
-                      letterSpacing: "0.06em", padding: "0.18rem 0.5rem", borderRadius: 9999,
-                      background: "rgba(16,185,129,0.08)", border: "1px solid rgba(16,185,129,0.18)",
-                      color: "#34d399", marginBottom: "0.85rem",
-                    }}
+                  {/* Top glow accent */}
+                  <div
+                    className="absolute top-0 left-1/2 -translate-x-1/2 h-px w-[55%] transition-opacity duration-400 opacity-0 group-hover:opacity-100"
+                    style={{ background: `linear-gradient(90deg, transparent, ${f.color}55, transparent)` }}
+                    aria-hidden="true"
+                  />
+
+                  {/* Icon */}
+                  <div
+                    className="flex items-center justify-center mx-auto mb-4 rounded-xl"
+                    style={{ width: 46, height: 46, background: `${f.color}14`, border: `1px solid ${f.color}28` }}
                   >
-                    {s.n}
-                  </span>
-                  <h3
-                    style={{
-                      fontFamily: "'Space Grotesk', sans-serif",
-                      fontSize: "1.05rem", fontWeight: 600,
-                      color: "#f1f5f9", marginBottom: "0.5rem",
-                    }}
-                  >
-                    {s.title}
+                    <f.icon size={23} strokeWidth={1.75} color={f.color} style={{ filter: `drop-shadow(0 0 10px ${f.color}55)` }} aria-hidden="true" />
+                  </div>
+
+                  {/* Text */}
+                  <h3 className="mb-2" style={{ fontFamily: "'Space Grotesk', sans-serif", fontSize: i === 0 ? 20 : 18, fontWeight: 600, color: "#f1f5f9", letterSpacing: "-0.01em" }}>
+                    {f.title}
                   </h3>
-                  <p style={{ fontSize: "0.82rem", color: "rgba(148,163,184,0.75)", lineHeight: 1.6 }}>
-                    {s.desc}
+                  <p className="mb-5 leading-relaxed" style={{ fontSize: 13.5, color: "rgba(203,213,225,0.75)", maxWidth: 280, marginLeft: "auto", marginRight: "auto" }}>
+                    {f.desc}
                   </p>
+                  <span
+                    className="inline-block px-2.5 py-0.5 rounded-full"
+                    style={{ background: `${f.color}0d`, border: `1px solid ${f.color}1a`, fontSize: 11, fontWeight: 600, color: f.color, fontFamily: "'JetBrains Mono', monospace", letterSpacing: "0.02em" }}
+                  >
+                    {f.tag}
+                  </span>
                 </div>
               </FadeIn>
             ))}
@@ -470,51 +397,113 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ══════════════════════ ROLES ══════════════════════ */}
+      {/* ═══════════════════════════════════════════════════════════════
+          HOW IT WORKS
+         ═══════════════════════════════════════════════════════════════ */}
       <section
-        style={{
-          position: "relative", zIndex: 10,
-          padding: "clamp(3rem, 8vw, 6rem) clamp(1rem, 4vw, 3rem)",
-        }}
+        id="how-it-works"
+        className="relative z-10 flex flex-col items-center text-center"
+        style={{ padding: "clamp(3rem, 8vw, 6rem) clamp(1rem, 4vw, 3rem)", background: "linear-gradient(180deg, transparent 0%, rgba(251,191,36,0.015) 50%, transparent 100%)" }}
+        aria-labelledby="how-heading"
       >
-        <div style={{ maxWidth: 1050, margin: "0 auto" }}>
+        <div className="mx-auto" style={{ maxWidth: 1200 }}>
           <FadeIn delay={0}>
-            <div style={{ textAlign: "center", marginBottom: 44 }}>
+            <div className="text-center mb-12">
+              <span
+                className="inline-block px-3.5 py-1 rounded-full mb-4"
+                style={{ background: "rgba(251,191,36,0.07)", border: "1px solid rgba(251,191,36,0.15)", fontSize: 12, fontWeight: 600, color: "#fbbf24", fontFamily: "'JetBrains Mono', monospace", letterSpacing: "0.04em" }}
+              >
+                How it works
+              </span>
               <h2
-                style={{
-                  fontFamily: "'Space Grotesk', sans-serif",
-                  fontSize: "clamp(1.6rem, 4vw, 2.6rem)", fontWeight: 700,
-                  letterSpacing: "-0.025em", color: "#f1f5f9", marginBottom: 12,
-                }}
+                id="how-heading"
+                className="mb-3"
+                style={{ fontFamily: "'Space Grotesk', sans-serif", fontSize: "clamp(1.6rem, 4vw, 2.6rem)", fontWeight: 700, letterSpacing: "-0.025em", color: "#f1f5f9" }}
+              >
+                From seed to shelf in <span style={{ color: "#22d3ee" }}>four steps.</span>
+              </h2>
+              <p className="mx-auto max-w-125 leading-relaxed" style={{ fontSize: 15, color: "rgba(203,213,225,0.8)" }}>
+                Every step is verified on-chain. No middlemen, no paperwork — just cryptographic proof.
+              </p>
+            </div>
+          </FadeIn>
+
+          {/* Steps — right-aligned 4-column grid */}
+          <div className="grid gap-5 ml-auto" style={{ gridTemplateColumns: "repeat(4, 1fr)", maxWidth: 1050 }}>
+            {STEPS.map((s, i) => (
+              <FadeIn key={s.n} delay={120 + i * 100} y={14}>
+                <div
+                  className="text-center rounded-xl"
+                  style={{
+                    padding: "1.75rem 1.25rem",
+                    background: "rgba(15,23,42,0.5)",
+                    border: "1px solid rgba(51,65,85,0.4)",
+                    transition: "transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease",
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.transform = "translateY(-4px)";
+                    e.currentTarget.style.borderColor = "rgba(251,191,36,0.25)";
+                    e.currentTarget.style.boxShadow = "0 14px 32px -12px rgba(251,191,36,0.15)";
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.transform = "translateY(0)";
+                    e.currentTarget.style.borderColor = "rgba(51,65,85,0.4)";
+                    e.currentTarget.style.boxShadow = "none";
+                  }}
+                >
+                  <span
+                    className="inline-block mb-3"
+                    style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: "0.65rem", letterSpacing: "0.06em", padding: "0.18rem 0.5rem", borderRadius: 9999, background: "rgba(16,185,129,0.08)", border: "1px solid rgba(16,185,129,0.18)", color: "#34d399" }}
+                  >
+                    {s.n}
+                  </span>
+                  <h3 className="mb-2" style={{ fontFamily: "'Space Grotesk', sans-serif", fontSize: "1.05rem", fontWeight: 600, color: "#f1f5f9" }}>
+                    {s.title}
+                  </h3>
+                  <p style={{ fontSize: "0.82rem", color: "rgba(203,213,225,0.75)", lineHeight: 1.6 }}>{s.desc}</p>
+                </div>
+              </FadeIn>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ═══════════════════════════════════════════════════════════════
+          ROLES
+         ═══════════════════════════════════════════════════════════════ */}
+      <section
+        className="relative z-10 flex flex-col items-center text-center"
+        style={{ padding: "clamp(3rem, 8vw, 6rem) clamp(1rem, 4vw, 3rem)" }}
+        aria-labelledby="roles-heading"
+      >
+        <div className="mx-auto" style={{ maxWidth: 1200 }}>
+          <FadeIn delay={0}>
+            <div className="text-center mb-12">
+              <h2
+                id="roles-heading"
+                className="mb-3"
+                style={{ fontFamily: "'Space Grotesk', sans-serif", fontSize: "clamp(1.6rem, 4vw, 2.6rem)", fontWeight: 700, letterSpacing: "-0.025em", color: "#f1f5f9" }}
               >
                 One platform, <span style={{ color: "#fbbf24" }}>three roles.</span>
               </h2>
-              <p
-                style={{
-                  fontSize: 15, color: "rgba(148,163,184,0.8)",
-                  maxWidth: 480, margin: "0 auto", lineHeight: 1.6,
-                }}
-              >
+              <p className="mx-auto max-w-120 leading-relaxed" style={{ fontSize: 15, color: "rgba(203,213,225,0.8)" }}>
                 Every participant in the supply chain gets a tailored experience.
               </p>
             </div>
           </FadeIn>
 
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(3, 1fr)",
-              gap: 18,
-            }}
-          >
+          {/* Role cards — right-aligned 3-column grid */}
+          <div className="grid gap-5 ml-auto" style={{ gridTemplateColumns: "repeat(3, 1fr)", maxWidth: 1050, placeItems: "center" }}>
             {ROLES.map((r) => (
               <FadeIn key={r.role} delay={100} y={12}>
                 <div
+                  className="rounded-xl text-center"
                   style={{
-                    padding: "1.75rem", borderRadius: 14,
+                    padding: "1.75rem",
                     background: "rgba(15,23,42,0.5)",
                     border: `1px solid ${r.color}20`,
                     transition: "transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease",
+                    width: "100%",
                   }}
                   onMouseEnter={(e) => {
                     e.currentTarget.style.transform = "translateY(-4px)";
@@ -527,30 +516,13 @@ export default function HomePage() {
                     e.currentTarget.style.boxShadow = "none";
                   }}
                 >
-                  <h3
-                    style={{
-                      fontFamily: "'Space Grotesk', sans-serif",
-                      fontSize: "1.1rem", fontWeight: 600,
-                      color: "#f1f5f9", marginBottom: "0.85rem",
-                    }}
-                  >
+                  <h3 className="mb-4" style={{ fontFamily: "'Space Grotesk', sans-serif", fontSize: "1.1rem", fontWeight: 600, color: "#f1f5f9" }}>
                     {r.role}
                   </h3>
-                  <ul
-                    style={{
-                      listStyle: "none", margin: 0, padding: 0,
-                      display: "flex", flexDirection: "column", gap: "0.5rem",
-                    }}
-                  >
+                  <ul className="flex flex-col gap-2.5 list-none m-0 p-0" style={{ fontSize: "0.82rem", color: "rgba(203,213,225,0.8)" }}>
                     {r.items.map((item) => (
-                      <li
-                        key={item}
-                        style={{
-                          display: "flex", alignItems: "center", gap: "0.5rem",
-                          fontSize: "0.82rem", color: "rgba(148,163,184,0.8)",
-                        }}
-                      >
-                        <span style={{ color: r.color, flexShrink: 0 }}>✓</span>
+                      <li key={item} className="flex items-center justify-center gap-2">
+                        <span className="shrink-0" style={{ color: r.color }} aria-hidden="true">✓</span>
                         {item}
                       </li>
                     ))}
@@ -562,91 +534,66 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ══════════════════════ STATS ══════════════════════ */}
+      {/* ═══════════════════════════════════════════════════════════════
+          STATS BAND
+         ═══════════════════════════════════════════════════════════════ */}
       <section
+        className="relative z-10 flex flex-col items-center text-center"
         style={{
-          position: "relative", zIndex: 10,
           padding: "2.5rem clamp(1rem, 4vw, 3rem)",
           borderTop: "1px solid rgba(51,65,85,0.25)",
           borderBottom: "1px solid rgba(51,65,85,0.25)",
           background: "rgba(4,13,28,0.4)",
         }}
+        aria-label="Platform statistics"
       >
-        <div
-          style={{
-            maxWidth: 960, margin: "0 auto",
-            display: "grid", gridTemplateColumns: "repeat(4, 1fr)",
-            gap: 24, textAlign: "center",
-          }}
-        >
-          {[
-            { value: 12480, suffix: "", label: "Total Batches" },
-            { value: 847, suffix: "", label: "Farmers Online" },
-            { value: 3291, suffix: "", label: "Transfers Today" },
-            { value: 99.97, suffix: "%", label: "Uptime" },
-          ].map((s) => (
+        <div className="mx-auto grid gap-8" style={{ maxWidth: 960, gridTemplateColumns: "repeat(4, 1fr)" }}>
+          {STATS.map((s) => (
             <FadeIn key={s.label} delay={0} y={8}>
               <div>
                 <div
-                  style={{
-                    fontFamily: "'Space Grotesk', sans-serif",
-                    fontSize: "clamp(1.5rem, 3vw, 2rem)", fontWeight: 700,
-                    color: "#22d3ee", letterSpacing: "-0.02em",
-                  }}
+                  className="mb-1"
+                  style={{ fontFamily: "'Space Grotesk', sans-serif", fontSize: "clamp(1.5rem, 3vw, 2rem)", fontWeight: 700, color: "#22d3ee", letterSpacing: "-0.02em" }}
                 >
                   <AnimatedNum target={s.value} suffix={s.suffix} dur={2400} />
                 </div>
-                <div style={{ fontSize: "0.75rem", color: "rgba(148,163,184,0.5)", marginTop: 4 }}>
-                  {s.label}
-                </div>
+                <div style={{ fontSize: "0.78rem", color: "rgba(203,213,225,0.6)" }}>{s.label}</div>
               </div>
             </FadeIn>
           ))}
         </div>
       </section>
 
-      {/* ══════════════════════ CTA ══════════════════════ */}
+      {/* ═══════════════════════════════════════════════════════════════
+          CTA BANNER
+         ═══════════════════════════════════════════════════════════════ */}
       <FadeIn delay={0}>
         <section
-          style={{
-            position: "relative", zIndex: 10,
-            padding: "clamp(4rem, 10vw, 7rem) clamp(1rem, 4vw, 3rem)",
-            textAlign: "center", overflow: "hidden",
-          }}
+          className="relative z-10 flex flex-col items-center text-center"
+          style={{ padding: "clamp(4rem, 10vw, 7rem) clamp(1rem, 4vw, 3rem)", overflow: "hidden" }}
+          aria-labelledby="cta-heading"
         >
           <div
+            className="absolute inset-0 pointer-events-none"
             style={{
-              position: "absolute", inset: 0, pointerEvents: "none",
-              background:
-                "radial-gradient(ellipse 55% 55% at 50% 110%, rgba(16,185,129,0.10) 0%, transparent 60%), " +
-                "radial-gradient(ellipse 45% 45% at 50% -5%, rgba(6,182,212,0.08) 0%, transparent 50%)",
+              background: "radial-gradient(ellipse 55% 55% at 50% 110%, rgba(16,185,129,0.10) 0%, transparent 60%), radial-gradient(ellipse 45% 45% at 50% -5%, rgba(6,182,212,0.08) 0%, transparent 50%)",
             }}
+            aria-hidden="true"
           />
-          <div style={{ position: "relative", maxWidth: 640, margin: "0 auto" }}>
-            <h2
-              style={{
-                fontFamily: "'Space Grotesk', sans-serif",
-                fontSize: "clamp(1.6rem, 4vw, 2.5rem)", fontWeight: 700,
-                letterSpacing: "-0.025em", color: "#f1f5f9", marginBottom: "1rem",
-              }}
-            >
+          <div className="relative mx-auto" style={{ maxWidth: 640 }}>
+            <h2 id="cta-heading" className="mb-4" style={{ fontFamily: "'Space Grotesk', sans-serif", fontSize: "clamp(1.6rem, 4vw, 2.5rem)", fontWeight: 700, letterSpacing: "-0.025em", color: "#f1f5f9" }}>
               Ready to go <span style={{ color: "#34d399" }}>on-chain?</span>
             </h2>
-            <p
-              style={{
-                fontSize: 15, color: "rgba(148,163,184,0.8)",
-                lineHeight: 1.7, marginBottom: "2rem",
-              }}
-            >
+            <p className="mx-auto mb-8 leading-relaxed" style={{ fontSize: 15, color: "rgba(203,213,225,0.8)", maxWidth: 480 }}>
               Join hundreds of farmers and logistics partners already proving provenance with TerraNode.
             </p>
-            <div style={{ display: "flex", gap: "0.875rem", justifyContent: "center", flexWrap: "wrap" }}>
+            <div className="flex flex-wrap justify-center gap-4">
               <Link to="/register">
                 <Button variant="primary" size="lg" style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 600 }}>
                   Start minting batches →
                 </Button>
               </Link>
-              <a href="#how-it-works" style={{ textDecoration: "none" }}>
+              <a href="#how-it-works" className="no-underline">
                 <Button variant="outline" size="lg" style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 600 }}>
                   See how it works
                 </Button>
@@ -656,40 +603,34 @@ export default function HomePage() {
         </section>
       </FadeIn>
 
-      {/* ══════════════════════ FOOTER ══════════════════════ */}
+      {/* ═══════════════════════════════════════════════════════════════
+          FOOTER
+         ═══════════════════════════════════════════════════════════════ */}
       <footer
-        style={{
-          position: "relative", zIndex: 10,
-          borderTop: "1px solid rgba(51,65,85,0.2)",
-          padding: "1.75rem 1rem", background: "rgba(10,15,26,0.9)",
-        }}
+        className="relative z-10"
+        style={{ borderTop: "1px solid rgba(51,65,85,0.2)", padding: "1.75rem 1rem", background: "rgba(10,15,26,0.9)" }}
+        role="contentinfo"
       >
-        <div
-          style={{
-            maxWidth: 1200, margin: "0 auto",
-            display: "flex", flexWrap: "wrap", justifyContent: "space-between",
-            alignItems: "center", gap: 14,
-          }}
-        >
-          <p style={{ fontSize: 12.5, color: "rgba(100,116,139,0.4)", margin: 0 }}>
+        <div className="mx-auto flex flex-wrap items-center justify-between gap-4" style={{ maxWidth: 1200 }}>
+          <p style={{ fontSize: 13, color: "rgba(148,163,184,0.6)", margin: 0, fontFamily: "'Outfit', system-ui, sans-serif" }}>
             © 2026 TerraNode. Built on Sui.
           </p>
-          <div style={{ display: "flex", alignItems: "center", gap: 20 }}>
-            {["Stack", "Docs", "GitHub"].map((l) => (
-              <a
-                key={l}
-                href="#"
-                style={{
-                  fontSize: 12.5, color: "rgba(100,116,139,0.4)",
-                  textDecoration: "none",
-                }}
-                onMouseEnter={(e) => (e.currentTarget.style.color = "#94a3b8")}
-                onMouseLeave={(e) => (e.currentTarget.style.color = "rgba(100,116,139,0.4)")}
-              >
-                {l}
-              </a>
-            ))}
-          </div>
+          <nav aria-label="Footer navigation">
+            <div className="flex items-center gap-5">
+              {["Stack", "Docs", "GitHub"].map((link) => (
+                <a
+                  key={link}
+                  href="#"
+                  className="transition-colors duration-200"
+                  style={{ fontSize: 13, color: "rgba(203,213,225,0.5)", textDecoration: "none" }}
+                  onMouseEnter={(e) => (e.currentTarget.style.color = "#e2e8f0")}
+                  onMouseLeave={(e) => (e.currentTarget.style.color = "rgba(203,213,225,0.5)")}
+                >
+                  {link}
+                </a>
+              ))}
+            </div>
+          </nav>
         </div>
       </footer>
     </div>

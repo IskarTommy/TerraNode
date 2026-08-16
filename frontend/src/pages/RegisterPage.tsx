@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { ShieldCheck, Wifi, ArrowRightLeft, ScanSearch } from "lucide-react";
 import { useAuth } from "../contexts/AuthContext";
+import { Logo } from "../components/Logo";
 
 /* ═══════════════════════════════════════════════════════════════════════════════
    STYLES
@@ -119,18 +120,9 @@ export default function RegisterPage() {
             radial-gradient(ellipse 55% 55% at 40% 35%, rgba(34,211,238,0.04) 0%, transparent 60%)`,
           overflowY: "auto",
         }}>
- <Link to="/" style={{
-  position: "absolute", top: 20, left: 22, zIndex: 30,
-  fontFamily: "'Space Grotesk', sans-serif", fontSize: 19, fontWeight: 700,
-  color: "#22d3ee", textDecoration: "none", letterSpacing: "-0.02em",
-  display: "inline-flex", alignItems: "center", gap: 9,
- }}>
-  <svg width="26" height="26" viewBox="0 0 32 32" fill="none">
-   <path d="M16 2L4 8v8c0 7.7 5.1 14.9 12 17 6.9-2.1 12-9.3 12-17V8L16 2z" stroke="#22d3ee" strokeWidth="1.8"/>
-   <path d="M12 16l3 3 6-6" stroke="#22d3ee" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-  </svg>
-  TerraNode
- </Link>
+ <Link to="/" className="inline-flex items-center gap-2 no-underline" style={{ position: "absolute", top: 20, left: 22, zIndex: 30 }}>
+  <Logo size={26} showText={true} />
+</Link>
           {/* Glow accent line on top */}
           <div aria-hidden="true" style={{
             position: "absolute", top: 0, left: "50%", transform: "translateX(-50%)",

@@ -39,7 +39,7 @@ const TIME_RANGE_LABELS = {
 } as const;
 
 /* ── Inline styles for chart (no CSS variable dependency) ─────────────────── */
-const AXIS_TICK = { fill: '#64748b', fontSize: 12, fontFamily: "'JetBrains Mono', monospace" };
+const AXIS_TICK = { fill: '#94a3b8', fontSize: 12, fontFamily: "'JetBrains Mono', monospace" };
 const AXIS_LINE = { stroke: '#1e293b' };
 const GRID_STROKE = '#1e293b';
 const TOOLTIP_STYLE: React.CSSProperties = {
@@ -47,7 +47,7 @@ const TOOLTIP_STYLE: React.CSSProperties = {
   padding: '12px 14px', boxShadow: '0 25px 50px -12px rgba(0,0,0,0.6)',
 };
 const TOOLTIP_LABEL: React.CSSProperties = {
-  fontSize: 11, color: '#64748b', fontFamily: "'JetBrains Mono', monospace", marginBottom: 8,
+  fontSize: 11, color: '#94a3b8', fontFamily: "'JetBrains Mono', monospace", marginBottom: 8,
 };
 const TOOLTIP_ROW: React.CSSProperties = {
   fontSize: 13, color: '#e2e8f0', display: 'flex', alignItems: 'center', gap: 8, padding: '2px 0',
@@ -72,7 +72,7 @@ function CustomTooltip({ active, payload, label }: {
           </span>
           <span style={TOOLTIP_VAL}>
             {typeof entry.value === 'number' ? entry.value.toFixed(2) : entry.value}
-            <span style={{ fontWeight: 400, color: '#64748b', marginLeft: 3 }}>
+            <span style={{ fontWeight: 400, color: '#94a3b8', marginLeft: 3 }}>
               {METRIC_CONFIG[entry.name as keyof typeof METRIC_CONFIG]?.unit || ''}
             </span>
           </span>
@@ -109,7 +109,7 @@ function RangeBtn({ label, active, onClick }: { label: string; active: boolean; 
       fontFamily: "'Space Grotesk', sans-serif", letterSpacing: '0.02em',
       border: 'none', cursor: 'pointer', transition: 'all 0.2s ease',
       background: active ? '#22d3ee' : 'rgba(15,35,71,0.7)',
-      color: active ? '#0a0f1a' : '#64748b',
+      color: active ? '#0a0f1a' : '#94a3b8',
     }}>
       {label}
     </button>
@@ -148,11 +148,11 @@ export function TelemetryChart({
         </div>
         <div className="flex items-center justify-center" style={{ height }}>
           <div className="text-center">
-            <svg className="mx-auto mb-3" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#64748b" strokeWidth="1.2">
+            <svg className="mx-auto mb-3" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" strokeWidth="1.2">
               <path strokeLinecap="round" strokeLinejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 002 2v6a2 2 0 002-2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
             </svg>
             <p style={{ fontSize: 14, color: '#94a3b8', fontFamily: "'Outfit', sans-serif" }}>No telemetry data available</p>
-            <p style={{ fontSize: 12, color: '#64748b', marginTop: 4 }}>Connect sensors to start monitoring</p>
+            <p style={{ fontSize: 12, color: '#94a3b8', marginTop: 4 }}>Connect sensors to start monitoring</p>
           </div>
         </div>
       </Card>
@@ -215,7 +215,7 @@ export function TelemetryChart({
               <span style={{ fontSize: 12, color: '#94a3b8', fontWeight: 500, fontFamily: "'Outfit', sans-serif" }}>{cfg.label}</span>
               <span style={{ fontSize: 13, color: '#f1f5f9', fontWeight: 700, fontFamily: "'JetBrains Mono', monospace" }}>
                 {typeof latest === 'number' ? latest.toFixed(1) : latest}
-                <span style={{ fontWeight: 400, color: '#64748b', marginLeft: 2 }}>{cfg.unit}</span>
+                <span style={{ fontWeight: 400, color: '#94a3b8', marginLeft: 2 }}>{cfg.unit}</span>
               </span>
             </div>
           );

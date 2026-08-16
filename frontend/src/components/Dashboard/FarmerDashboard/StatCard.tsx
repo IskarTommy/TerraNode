@@ -53,65 +53,45 @@ export function StatCard({
 
   if (loading) {
     return (
-      <Card variant="glass" padding="md" className={cn(className)}>
-        <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 12 }}>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 8, flex: 1 }}>
-            <div style={{ height: 12, width: '60%', borderRadius: 6, background: 'rgba(15,35,71,0.7)' }} />
-            <div style={{ height: 32, width: '45%', borderRadius: 8, background: 'rgba(15,35,71,0.7)' }} />
-            <div style={{ height: 10, width: '70%', borderRadius: 5, background: 'rgba(15,35,71,0.5)' }} />
+      <Card variant="glass" padding="none" className={cn(className)}>
+        <div className="p-6 flex items-start justify-between gap-4">
+          <div className="flex-1 flex flex-col gap-3">
+            <div className="h-3 w-3/5 rounded bg-slate-700/60 animate-pulse" />
+            <div className="h-9 w-2/5 rounded-lg bg-slate-700/60 animate-pulse" />
+            <div className="h-2.5 w-3/4 rounded bg-slate-700/40 animate-pulse" />
           </div>
-          <div style={{ width: 44, height: 44, borderRadius: 14, background: 'rgba(15,35,71,0.7)' }} />
+          <div className="w-11 h-11 rounded-xl bg-slate-700/60 animate-pulse shrink-0" />
         </div>
       </Card>
     );
   }
 
   return (
-    <Card
-      variant="glass"
-      padding="md"
-      className={cn('transition-all duration-300', className)}
-      style={{
-        border: `1px solid ${s.border}`,
-        position: 'relative',
-        overflow: 'hidden',
-      }}
-    >
-      {/* Subtle gradient overlay */}
-      <div style={{
-        position: 'absolute', inset: 0, borderRadius: 'inherit',
-        background: `linear-gradient(135deg, ${s.iconBg} 0%, transparent 60%)`,
-        pointerEvents: 'none',
-      }} />
+    <Card variant="glass" padding="none"
+      className={cn('relative overflow-hidden', {
+        'border-l-2': variant === 'primary',
+        'border-l-2 border-l-emerald-500/40!': variant === 'success',
+        'border-l-2 border-l-amber-500/40!': variant === 'warning',
+        'border-l-2 border-l-red-500/40!': variant === 'error',
+      }, className)}>
 
-      <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 12, position: 'relative' }}>
-        <div style={{ flex: 1, minWidth: 0 }}>
-          <p style={{
-            fontSize: 12, fontWeight: 600, color: '#64748b', letterSpacing: '0.05em',
-            textTransform: 'uppercase', margin: '0 0 4px',
-            fontFamily: "'Space Grotesk', sans-serif",
-            whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis',
-          }}>
+      {/* Subtle gradient overlay */}
+      <div className="absolute inset-0 rounded-[inherit] pointer-events-none"
+        style={{ background: `linear-gradient(135deg, ${s.iconBg} 0%, transparent 60%)` }} />
+
+      <div className="flex items-start justify-between gap-4 relative z-10 p-6">
+        <div className="flex-1 min-w-0 flex flex-col gap-1.5">
+          <p className="text-[10px] sm:text-xs font-semibold text-slate-400 tracking-wider uppercase font-display truncate leading-tight">
             {title}
           </p>
-          <p style={{
-            fontSize: 'clamp(1.4rem, 2.2vw, 2rem)', fontWeight: 800,
-            color: '#f1f5f9', letterSpacing: '-0.03em',
-            fontFamily: "'Space Grotesk', sans-serif",
-            lineHeight: 1.15, margin: 0,
-            whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis',
-          }}>
+          <p className="text-xl sm:text-2xl font-extrabold text-slate-100 font-display leading-none tracking-tight">
             {value}
           </p>
           {changeLabel && <TrendIndicator trend={trend} change={change} changeLabel={changeLabel} />}
         </div>
         {icon && (
-          <div style={{
-            width: 44, height: 44, borderRadius: 14,
-            background: s.iconBg, color: s.iconColor,
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            flexShrink: 0, border: `1px solid ${s.border}`,
-          }}>
+          <div className="w-11 h-11 rounded-xl flex items-center justify-center shrink-0"
+            style={{ background: s.iconBg, color: s.iconColor, border: `1px solid ${s.border}` }}>
             {icon}
           </div>
         )}

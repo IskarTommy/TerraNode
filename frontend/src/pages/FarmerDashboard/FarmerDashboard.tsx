@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { StatCard, TelemetryChart, YieldPredictionChart } from '../../components/Dashboard/FarmerDashboard';
+import { Wheat } from 'lucide-react';
+import { TelemetryChart, YieldPredictionChart } from '../../components/Dashboard/FarmerDashboard';
 import { Button } from '../../components/Common/Button';
 import { Card } from '../../components/Common/Card';
 import { cn } from '../../utils/cn';
@@ -142,12 +143,18 @@ function QuickActionButton({ icon, label, href, variant = 'outline' }: {
   variant?: 'primary' | 'outline' | 'ghost';
 }) {
   return (
-    <Link to={href}>
-      <Button variant={variant} fullWidth className="h-20 flex-col gap-2 p-4 text-left">
-        <div className="w-10 h-10 rounded-xl bg-bg-tertiary/50 flex items-center justify-center text-fg-secondary">
+    <Link to={href} className="block group">
+      <Button
+        variant={variant}
+        fullWidth
+        className="!h-auto min-h-[104px] !p-4 !flex-col !items-start !justify-between gap-3 text-left !whitespace-normal"
+      >
+        <div className="w-10 h-10 rounded-xl bg-bg-tertiary/60 border border-border-primary/50 flex items-center justify-center text-fg-secondary group-hover:text-primary group-hover:border-primary/40 transition-colors shrink-0">
           {icon}
         </div>
-        <span className="text-body-sm font-medium text-fg-primary">{label}</span>
+        <span className="text-body-sm font-semibold text-fg-primary leading-snug break-words">
+          {label}
+        </span>
       </Button>
     </Link>
   );
@@ -229,46 +236,66 @@ export function FarmerDashboard() {
       </div>
 
       {/* Stats Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4" role="region" aria-label="Key metrics">
-        <StatCard
-          title="Total Batches"
-          value={data?.stats.totalBatches ?? '—'}
-          change={12.5}
-          changeLabel="vs last month"
-          trend="up"
-          icon={<svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" /></svg>}
-          variant="primary"
-          loading={loading}
-        />
-        <StatCard
-          title="Total Yield"
-          value={`${(data?.stats.totalYield ?? 0).toFixed(1)} t/ha`}
-          change={8.2}
-          changeLabel="vs last season"
-          trend="up"
-          icon={<svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" /></svg>}
-          variant="success"
-          loading={loading}
-        />
-        <StatCard
-          title="Active Sensors"
-          value={data?.stats.activeSensors ?? '—'}
-          change={0}
-          changeLabel="all online"
-          trend="neutral"
-          icon={<svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" /></svg>}
-          loading={loading}
-        />
-        <StatCard
-          title="Minted Batches"
-          value={data?.stats.mintedBatches ?? '—'}
-          change={-5.3}
-          changeLabel="pending verification"
-          trend="down"
-          icon={<svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" /></svg>}
-          variant="primary"
-          loading={loading}
-        />
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6" role="region" aria-label="Key metrics">
+        {/* Total Batches */}
+        <div className="bg-[#0B1120] border border-slate-800 p-6 rounded-2xl flex justify-between items-start shadow-lg">
+          <div className="flex flex-col">
+            <span className="text-xs font-semibold text-slate-400 tracking-wider uppercase">Total Batches</span>
+            <span className="text-4xl font-bold text-white mt-2">{loading ? '—' : data?.stats.totalBatches ?? '—'}</span>
+            <div className="mt-3 inline-flex items-center gap-1.5 bg-emerald-500/10 text-emerald-400 px-2.5 py-1 rounded-md text-xs font-medium w-fit">
+              <span>↑ 12.5%</span>
+              <span className="text-slate-400 font-normal">vs last month</span>
+            </div>
+          </div>
+          <div className="w-12 h-12 rounded-xl bg-teal-500/10 text-teal-400 flex items-center justify-center shrink-0">
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>
+          </div>
+        </div>
+
+        {/* Total Yield */}
+        <div className="bg-[#0B1120] border border-slate-800 p-6 rounded-2xl flex justify-between items-start shadow-lg">
+          <div className="flex flex-col">
+            <span className="text-xs font-semibold text-slate-400 tracking-wider uppercase">Total Yield</span>
+            <span className="text-4xl font-bold text-white mt-2">{loading ? '—' : `${(data?.stats.totalYield ?? 0).toFixed(1)} t/ha`}</span>
+            <div className="mt-3 inline-flex items-center gap-1.5 bg-emerald-500/10 text-emerald-400 px-2.5 py-1 rounded-md text-xs font-medium w-fit">
+              <span>↑ 8.2%</span>
+              <span className="text-slate-400 font-normal">vs last season</span>
+            </div>
+          </div>
+          <div className="w-12 h-12 rounded-xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center shrink-0">
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+          </div>
+        </div>
+
+        {/* Active Sensors */}
+        <div className="bg-[#0B1120] border border-slate-800 p-6 rounded-2xl flex justify-between items-start shadow-lg">
+          <div className="flex flex-col">
+            <span className="text-xs font-semibold text-slate-400 tracking-wider uppercase">Active Sensors</span>
+            <span className="text-4xl font-bold text-white mt-2">{loading ? '—' : data?.stats.activeSensors ?? '—'}</span>
+            <div className="mt-3 inline-flex items-center gap-1.5 bg-slate-500/10 text-slate-400 px-2.5 py-1 rounded-md text-xs font-medium w-fit">
+              <span>— 0%</span>
+              <span className="text-slate-500 font-normal">all online</span>
+            </div>
+          </div>
+          <div className="w-12 h-12 rounded-xl bg-cyan-500/10 text-cyan-400 flex items-center justify-center shrink-0">
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+          </div>
+        </div>
+
+        {/* Minted Batches */}
+        <div className="bg-[#0B1120] border border-slate-800 p-6 rounded-2xl flex justify-between items-start shadow-lg">
+          <div className="flex flex-col">
+            <span className="text-xs font-semibold text-slate-400 tracking-wider uppercase">Minted Batches</span>
+            <span className="text-4xl font-bold text-white mt-2">{loading ? '—' : data?.stats.mintedBatches ?? '—'}</span>
+            <div className="mt-3 inline-flex items-center gap-1.5 bg-red-500/10 text-red-400 px-2.5 py-1 rounded-md text-xs font-medium w-fit">
+              <span>↓ 5.3%</span>
+              <span className="text-slate-400 font-normal">pending verification</span>
+            </div>
+          </div>
+          <div className="w-12 h-12 rounded-xl bg-amber-500/10 text-amber-400 flex items-center justify-center shrink-0">
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+          </div>
+        </div>
       </div>
 
       {/* Main Content Grid */}
@@ -332,7 +359,7 @@ export function FarmerDashboard() {
           {/* Quick Actions */}
           <Card variant="glass" padding="md">
             <h3 className="text-body font-semibold text-fg-primary mb-4">Quick Actions</h3>
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
               <QuickActionButton
                 icon={<svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 4v16m8-8H4" /></svg>}
                 label="Record Telemetry"
@@ -364,46 +391,63 @@ export function FarmerDashboard() {
           <Card variant="glass" padding="none" className="overflow-hidden">
             <div className="p-4 border-b border-border-primary flex items-center justify-between">
               <h3 className="text-body font-semibold text-fg-primary">Recent Batches</h3>
-              <Link to="/farmer/batches" className="text-body-xs text-primary-fg hover:text-primary hover:underline font-medium">
+              <Link to="/farmer/batches" className="text-body-xs text-primary hover:underline font-medium">
                 View all
               </Link>
             </div>
-            <div className="divide-y divide-border-primary">
+            {/* Desktop table header */}
+            <div className="hidden md:grid grid-cols-[1.2fr_1.2fr_1.8fr_1.2fr_auto] gap-4 px-4 py-2.5 bg-slate-900/60 border-b border-border-primary text-xs font-bold text-slate-400 uppercase tracking-wider">
+              <span>Batch ID</span>
+              <span>Crop & Variety</span>
+              <span>Planted / Harvest</span>
+              <span>Yield & Quality</span>
+              <span>Status</span>
+            </div>
+            <div className="divide-y divide-border-primary/60">
               {data?.recentBatches.map((batch) => (
                 <Link
                   key={batch.id}
                   to={`/farmer/batches/${batch.id}`}
-                  className="p-4 flex items-center gap-4 hover:bg-bg-tertiary/50 transition-colors"
+                  className="p-4 block hover:bg-bg-tertiary/50 transition-colors group"
                 >
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2 mb-1">
-                      <span className="text-body-sm font-semibold text-fg-primary truncate block">{batch.id}</span>
+                  <div className="grid grid-cols-[1.2fr_1.2fr_1.8fr_1.2fr_auto] gap-4 items-center">
+                    {/* Column 1: Batch ID */}
+                    <div className="flex items-center gap-2 min-w-0">
+                      <div className="w-8 h-8 rounded-lg bg-amber-500/10 border border-amber-500/20 flex items-center justify-center shrink-0">
+                        <Wheat className="h-4 w-4 text-amber-400" strokeWidth={1.8} />
+                      </div>
+                      <span className="font-mono text-body-sm font-bold text-fg-primary tracking-tight truncate group-hover:text-primary transition-colors">
+                        {batch.id}
+                      </span>
+                    </div>
+                    {/* Column 2: Crop & Variety */}
+                    <div className="min-w-0">
+                      <span className="text-sm text-slate-300 truncate block">{batch.cropType}</span>
+                      <span className="text-xs text-slate-400 truncate block">{batch.variety}</span>
+                    </div>
+                    {/* Column 3: Dates */}
+                    <div className="text-xs text-slate-400 font-mono flex flex-wrap gap-2">
+                      <span>{formatDate(batch.plantedDate)}</span>
+                      <span className="text-slate-500">&rarr;</span>
+                      <span>{formatDate(batch.estimatedHarvest)}</span>
+                    </div>
+                    {/* Column 4: Yield & Quality */}
+                    <div className="text-xs flex flex-wrap gap-2">
+                      {batch.yieldEstimate && (
+                        <span className="font-mono text-emerald-400 font-medium">
+                          {batch.yieldEstimate.toFixed(1)} t/ha
+                        </span>
+                      )}
+                      {batch.qualityScore !== undefined && (
+                        <span className="font-mono text-amber-400 font-medium">
+                          Q:{batch.qualityScore}/100
+                        </span>
+                      )}
+                    </div>
+                    {/* Column 5: Status */}
+                    <div className="shrink-0 flex justify-end">
                       <StatusBadge status={batch.status} />
                     </div>
-                    <p className="text-body-xs text-fg-muted">{batch.cropType} • {batch.variety}</p>
-                    <div className="flex items-center gap-3 mt-1.5 text-body-xs text-fg-muted">
-                      <span className="flex items-center gap-1">
-                        <svg className="h-3 w-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
-                        Planted: {formatDate(batch.plantedDate)}
-                      </span>
-                      <span className="flex items-center gap-1">
-                        <svg className="h-3 w-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-                        Harvest: {formatDate(batch.estimatedHarvest)}
-                      </span>
-                    </div>
-                  </div>
-                  <div className="text-right flex-shrink-0">
-                    {batch.yieldEstimate && (
-                      <p className="text-body-sm font-semibold text-fg-primary tabular-nums">
-                        {batch.yieldEstimate.toFixed(1)} t/ha
-                      </p>
-                    )}
-                    {batch.qualityScore !== undefined && (
-                      <p className="text-body-xs text-emerald-500 font-medium flex items-center gap-1 justify-end">
-                        <svg className="h-3 w-3" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" /></svg>
-                        {batch.qualityScore}
-                      </p>
-                    )}
                   </div>
                 </Link>
               ))}
