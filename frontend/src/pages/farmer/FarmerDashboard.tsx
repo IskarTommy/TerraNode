@@ -1,343 +1,385 @@
-import { useState } from "react";
-import { StatCard } from "../../components/Dashboard/FarmerDashboard";
-import "./DashboardPlaceholder.css";
+import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import { 
+  Wheat, 
+  Layers, 
+  Sprout, 
+  Radio, 
+  Gem, 
+  PlusCircle, 
+  LineChart, 
+  BellRing, 
+  Activity,
+  ArrowUpRight,
+  ArrowDownRight,
+  Truck,
+  ArrowRight
+} from 'lucide-react';
+import { TelemetryChart, YieldPredictionChart } from '../../components/Dashboard/FarmerDashboard';
+import { Button } from '../../components/Common/Button';
+import { cn } from '../../utils/cn';
 
-// ── Design tokens ─────────────────────────────────────────────────────────────
-const FONT_DISPLAY = "'Space Grotesk', sans-serif";
-const FONT_BODY = "'Outfit', system-ui, sans-serif";
-const FONT_MONO = "'JetBrains Mono', monospace";
-const TITLE_COLOR = "#f1f5f9";
-const TEXT_COLOR = "#e2e8f0";
-const MUTED_COLOR = "#94a3b8"; // min-contrast secondary text
-const DIM_COLOR = "#64748b"; // dim labels only
-const BG_CARD = "#0c1e3a";
-const BG_ELEVATED = "#0f2347";
-const BG_HOVER = "rgba(15,35,71,0.5)";
-const BORDER = "#1e293b";
-const BORDER_MID = "rgba(51,65,85,0.6)";
-
-const HEADING: React.CSSProperties = {
-  fontFamily: FONT_DISPLAY, fontSize: 15, fontWeight: 600,
-  color: TITLE_COLOR, letterSpacing: "-0.01em", lineHeight: 1.4, margin: 0,
-};
-
-const badge = (bg: string, fg: string, border: string) => ({
-  display: "inline-flex", alignItems: "center", padding: "4px 10px",
-  borderRadius: 100, background: bg, border: `1px solid ${border}`,
-  fontFamily: FONT_DISPLAY, fontSize: 11, fontWeight: 600, color: fg,
-  letterSpacing: "0.03em", whiteSpace: "nowrap" as const,
-});
-
-// ── Mock data ─────────────────────────────────────────────────────────────────
-const MOCK_BATCHES = [
-  { id: "BTH-0047", crop: "Tomatoes", status: "minted" as const, date: "2026-07-20", temp: "4.2°C" },
-  { id: "BTH-0046", crop: "Wheat", status: "in_transit" as const, date: "2026-07-18", temp: "—" },
-  { id: "BTH-0045", crop: "Maize", status: "delivered" as const, date: "2026-07-15", temp: "3.8°C" },
-  { id: "BTH-0044", crop: "Soybeans", status: "pending" as const, date: "2026-07-12", temp: "—" },
-];
-
-const MOCK_ALERTS = [
-  { id: 1, type: "warning" as const, msg: "Batch BTH-0046 temperature exceeded 8°C threshold", time: "2h ago" },
-  { id: 2, type: "info" as const, msg: "New shipment SHP-2024-004 awaiting pickup at collection hub", time: "4h ago" },
-  { id: 3, type: "success" as const, msg: "Batch BTH-0045 delivered — all freshness checks passed", time: "1d ago" },
-];
-
-const FORECAST = [
-  { day: "Today", icon: "sun", high: 32, low: 22, rain: 5, wind: 12 },
-  { day: "Tue", icon: "partly-cloud", high: 29, low: 20, rain: 20, wind: 15 },
-  { day: "Wed", icon: "cloud-rain", high: 25, low: 19, rain: 75, wind: 22 },
-  { day: "Thu", icon: "cloud", high: 27, low: 20, rain: 40, wind: 18 },
-  { day: "Fri", icon: "sun", high: 33, low: 23, rain: 0, wind: 10 },
-];
-
-const STATUS_META: Record<string, { label: string; bg: string; fg: string; border: string }> = {
-  minted: { label: "Minted", bg: "rgba(16,185,129,0.12)", fg: "#6ee7b7", border: "rgba(16,185,129,0.28)" },
-  in_transit: { label: "In Transit", bg: "rgba(6,182,212,0.12)", fg: "#67e8f9", border: "rgba(6,182,212,0.28)" },
-  delivered: { label: "Delivered", bg: "rgba(34,211,238,0.1)", fg: "#22d3ee", border: "rgba(34,211,238,0.22)" },
-  pending: { label: "Pending", bg: "rgba(245,158,11,0.12)", fg: "#fcd34d", border: "rgba(245,158,11,0.28)" },
-};
-
-// ── SVG helpers ──────────────────────────────────────────────────────────────
-function WeatherIcon({ type, size = 20 }: { type: string; size?: number }) {
-  const s = 1.6;
-  const common = { width: size, height: size, fill: "none", stroke: "currentColor", strokeWidth: s, strokeLinecap: "round" as const, strokeLinejoin: "round" as const };
-  switch (type) {
-    case "sun":
-      return <svg {...common} viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><path d="M12 1v2m0 20v2M4.22 4.22l1.42 1.42m12.72 12.72l1.42 1.42M1 12h2m20 0h2M4.22 19.78l1.41-1.41m12.72-12.72l1.41-1.41"/></svg>;
-    case "partly-cloud":
-      return <svg {...common} viewBox="0 0 24 24"><path d="M12 2v2m0 16v2M4.93 4.93l1.41 1.41m11.32 11.32l1.41 1.41M2 12h2m16 0h2M4.93 19.07l1.41-1.41m11.32-11.32l1.41-1.41"/><path d="M17 18a4 4 0 00-8 0 4 4 0 001.5 7.5A4 4 0 0017 18z" opacity=".5"/></svg>;
-    case "cloud-rain":
-      return <svg {...common} viewBox="0 0 24 24"><path d="M16 13V21m-8-4v6m4-10v10M20 16.58A5 5 0 0018 7h-1.26A8 8 0 104 15.58"/></svg>;
-    case "cloud":
-      return <svg {...common} viewBox="0 0 24 24"><path d="M18 10h-1.26A8 8 0 109 20h9a5 5 0 000-10z"/></svg>;
-    default:
-      return <svg {...common} viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/></svg>;
-  }
+export interface TelemetryDataPoint {
+  timestamp: string;
+  temperature?: number;
+  humidity?: number;
+  ph?: number;
+  soilMoisture?: number;
+  lightIntensity?: number;
+  co2?: number;
 }
 
-function ArrowRight() {
-  return <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 18 15 12 9 6"/></svg>;
+export interface YieldPredictionDataPoint {
+  year: string;
+  predicted: number;
+  actual?: number;
+  lowerBound?: number;
+  upperBound?: number;
+  confidence?: number;
 }
 
-// ── Weather Forecast (API-ready — replace FORECAST with a fetch call) ─────────
-function ForecastRow({ detail }: { detail: boolean }) {
+export interface BatchSummary {
+  id: string;
+  cropType: string;
+  variety: string;
+  plantedDate: string;
+  estimatedHarvest: string;
+  status: 'growing' | 'harvested' | 'minted' | 'shipped';
+  yieldEstimate?: number;
+  qualityScore?: number;
+}
+
+export interface FarmerDashboardData {
+  stats: {
+    totalBatches: number;
+    totalYield: number;
+    activeSensors: number;
+    mintedBatches: number;
+  };
+  telemetry: TelemetryDataPoint[];
+  yieldPredictions: YieldPredictionDataPoint[];
+  recentBatches: BatchSummary[];
+}
+
+const MOCK_TELEMETRY: TelemetryDataPoint[] = Array.from({ length: 48 }, (_, i) => ({
+  timestamp: new Date(Date.now() - (47 - i) * 30 * 60 * 1000).toISOString(),
+  temperature: 20 + Math.sin(i * 0.3) * 5 + Math.random() * 2,
+  humidity: 60 + Math.sin(i * 0.2) * 15 + Math.random() * 5,
+  ph: 6.5 + Math.sin(i * 0.15) * 0.5 + Math.random() * 0.3,
+  soilMoisture: 45 + Math.sin(i * 0.25) * 10 + Math.random() * 3,
+  lightIntensity: 30000 + Math.sin(i * 0.4) * 15000 + Math.random() * 5000,
+  co2: 400 + Math.sin(i * 0.1) * 50 + Math.random() * 20,
+}));
+
+const MOCK_YIELD_PREDICTIONS: YieldPredictionDataPoint[] = [
+  { year: '2020', predicted: 6.2, actual: 6.0, confidence: 85 },
+  { year: '2021', predicted: 6.8, actual: 7.1, confidence: 88 },
+  { year: '2022', predicted: 7.3, actual: 7.0, confidence: 90 },
+  { year: '2023', predicted: 7.8, actual: 8.0, confidence: 92 },
+  { year: '2024', predicted: 8.2, actual: 8.1, confidence: 91 },
+  { year: '2025', predicted: 8.7, confidence: 89, lowerBound: 8.0, upperBound: 9.4 },
+  { year: '2026', predicted: 9.1, confidence: 87, lowerBound: 8.3, upperBound: 9.9 },
+];
+
+const MOCK_BATCHES: BatchSummary[] = [
+  { id: 'BATCH-2024-001', cropType: 'Wheat', variety: 'Hard Red Winter', plantedDate: '2024-10-15', estimatedHarvest: '2025-06-20', status: 'growing', yieldEstimate: 8.5, qualityScore: 92 },
+  { id: 'BATCH-2024-002', cropType: 'Corn', variety: 'Sweet Corn Hybrid', plantedDate: '2024-05-01', estimatedHarvest: '2024-09-15', status: 'harvested', yieldEstimate: 12.3, qualityScore: 95 },
+  { id: 'BATCH-2024-003', cropType: 'Soybean', variety: 'High Protein', plantedDate: '2024-06-10', estimatedHarvest: '2024-10-25', status: 'minted', yieldEstimate: 4.2, qualityScore: 88 },
+  { id: 'BATCH-2024-004', cropType: 'Barley', variety: 'Malting Barley', plantedDate: '2024-03-20', estimatedHarvest: '2024-07-15', status: 'shipped', yieldEstimate: 6.8, qualityScore: 90 },
+];
+
+const STATUS_CONFIG = {
+  growing: { label: 'Growing', color: 'text-emerald-400', dot: 'bg-emerald-400' },
+  harvested: { label: 'Harvested', color: 'text-amber-400', dot: 'bg-amber-400' },
+  minted: { label: 'Minted', color: 'text-cyan-400', dot: 'bg-cyan-400' },
+  shipped: { label: 'Shipped', color: 'text-violet-400', dot: 'bg-violet-400' },
+} as const;
+
+function formatDate(dateString: string) {
+  return new Date(dateString).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+}
+
+function StatusBadge({ status }: { status: BatchSummary['status'] }) {
+  const config = STATUS_CONFIG[status];
   return (
-    <div>
-      <div style={{
-        padding: "20px 24px", display: "flex", flexWrap: "wrap", alignItems: "center", gap: 20,
-        background: "linear-gradient(135deg, rgba(34,211,238,0.06) 0%, rgba(6,182,212,0.02) 100%)",
-        borderBottom: `1px solid ${BORDER}`,
-      }}>
-        <WeatherIcon type="sun" size={48} />
+    <span className="inline-flex items-center gap-2 text-xs font-medium text-slate-300">
+      <span className={cn("w-1.5 h-1.5 rounded-full", config.dot)} />
+      {config.label}
+    </span>
+  );
+}
+
+// --- High-End Reusable Stat Card (Centered Numbers) ---
+interface StatCardProps {
+  icon: React.ElementType;
+  label: string;
+  value: string | number;
+  unit?: string;
+  trend: { type: 'up' | 'down'; value: string };
+  trendLabel: string;
+  loading: boolean;
+}
+
+function StatCard({ icon: Icon, label, value, unit, trend, trendLabel, loading }: StatCardProps) {
+  return (
+    <div className="bg-[#0b0f17] border border-slate-800/80 rounded-2xl p-6 flex flex-col gap-6 transition-colors hover:border-slate-700 group">
+      <div className="flex justify-between items-center">
+        <span className="text-xs font-medium text-slate-500 uppercase tracking-wider">
+          {label}
+        </span>
+        <div className="w-8 h-8 rounded-lg bg-slate-800/50 flex items-center justify-center text-slate-400 group-hover:text-slate-200 transition-colors">
+          <Icon className="w-4 h-4" strokeWidth={1.5} />
+        </div>
+      </div>
+      
+      {/* Centered numbers and trend */}
+      <div className="flex flex-col gap-2 items-center justify-center text-center">
+        <div className="flex items-baseline gap-1.5 justify-center">
+          {loading ? (
+            <div className="w-24 h-8 bg-slate-800/60 rounded animate-pulse" />
+          ) : (
+            <>
+              <span className="text-3xl font-semibold text-white tracking-tight tabular-nums">
+                {value}
+              </span>
+              {unit && <span className="text-xs font-medium text-slate-500">{unit}</span>}
+            </>
+          )}
+        </div>
+        
+        <div className="flex items-center gap-2 text-xs justify-center">
+          <span className={cn(
+            "inline-flex items-center gap-1 font-medium",
+            trend.type === 'up' ? "text-emerald-400" : "text-red-400"
+          )}>
+            {trend.type === 'up' ? <ArrowUpRight className="w-3 h-3" /> : <ArrowDownRight className="w-3 h-3" />}
+            {trend.value}
+          </span>
+          <span className="text-slate-600">•</span>
+          <span className="text-slate-500">{trendLabel}</span>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// --- High-End Reusable Quick Action ---
+interface QuickActionCardProps {
+  icon: React.ElementType;
+  label: string;
+  href: string;
+  variant: 'primary' | 'outline';
+}
+
+function QuickActionCard({ icon: Icon, label, href, variant }: QuickActionCardProps) {
+  const isPrimary = variant === 'primary';
+  return (
+    <Link
+      to={href}
+      className={cn(
+        "group flex items-center justify-between p-4 rounded-xl border transition-all duration-200 hover:-translate-y-0.5",
+        isPrimary
+          ? "bg-emerald-500/10 border-emerald-500/20 hover:bg-emerald-500/15"
+          : "bg-[#0b0f17] border-slate-800/80 hover:border-slate-700"
+      )}
+    >
+      <div className="flex items-center gap-3">
+        <div className={cn(
+          "flex items-center justify-center w-9 h-9 rounded-lg transition-colors",
+          isPrimary ? "bg-emerald-500/20 text-emerald-300" : "bg-slate-800/50 text-slate-400 group-hover:text-slate-200"
+        )}>
+          <Icon className="w-4 h-4" strokeWidth={1.5} />
+        </div>
+        <span className={cn(
+          "text-sm font-medium",
+          isPrimary ? "text-emerald-100" : "text-slate-200"
+        )}>
+          {label}
+        </span>
+      </div>
+      <ArrowRight className="w-4 h-4 text-slate-600 group-hover:text-slate-400 group-hover:translate-x-0.5 transition-all" />
+    </Link>
+  );
+}
+
+export function FarmerDashboard() {
+  const [timeRange, setTimeRange] = useState<'1h' | '24h' | '7d' | '30d'>('24h');
+  const [telemetryMetrics, setTelemetryMetrics] = useState<
+    Array<'temperature' | 'humidity' | 'ph' | 'soilMoisture' | 'lightIntensity' | 'co2'>
+  >(['temperature', 'humidity', 'soilMoisture', 'ph']);
+  const [data, setData] = useState<FarmerDashboardData | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setData({
+        stats: { totalBatches: 24, totalYield: 156.8, activeSensors: 12, mintedBatches: 8 },
+        telemetry: MOCK_TELEMETRY,
+        yieldPredictions: MOCK_YIELD_PREDICTIONS,
+        recentBatches: MOCK_BATCHES,
+      });
+      setLoading(false);
+    }, 800);
+    return () => clearTimeout(timer);
+  }, []);
+
+  const filteredTelemetry = data?.telemetry.slice(-(
+    timeRange === '1h' ? 12 : timeRange === '24h' ? 48 : timeRange === '7d' ? 168 : 720
+  ));
+
+  return (
+    <div className="space-y-8 max-w-[1400px] mx-auto" data-role="farmer">
+      {/* Minimalist Status Banner */}
+      <div className="flex flex-wrap items-center justify-between gap-4 px-4 py-2 text-xs font-mono text-slate-500">
+        <div className="flex items-center gap-4">
+          <span className="flex items-center gap-2 text-slate-300 font-semibold">
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+            SUI TESTNET LIVE
+          </span>
+          <span className="hidden sm:inline">Block #14,832,561</span>
+          <span className="hidden md:inline">Latency 182ms</span>
+          <span className="hidden md:inline text-cyan-400">Sensors 12/12</span>
+        </div>
+        <div className="flex items-center gap-2">
+          <span className="w-1.5 h-1.5 rounded-full bg-cyan-400" />
+          <span>Auto-Sync: 15s</span>
+        </div>
+      </div>
+
+      {/* Page Header */}
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6">
         <div>
-          <div style={{ display: "flex", alignItems: "baseline", gap: 10 }}>
-            <span style={{
-              fontFamily: FONT_DISPLAY, fontSize: "2.6rem", fontWeight: 700,
-              color: TITLE_COLOR, letterSpacing: "-0.03em", lineHeight: 1,
-            }}>32°C</span>
-            <span style={{ fontSize: 13, color: MUTED_COLOR }}>H:34° L:22°</span>
-          </div>
-          <p style={{ fontSize: 13.5, color: MUTED_COLOR, marginTop: 5 }}>
-            Clear skies — good conditions for field operations
+          <h1 className="text-2xl font-semibold text-white tracking-tight">
+            Farmer Workspace
+          </h1>
+          <p className="text-slate-500 text-sm mt-1.5 font-light">
+            Real-time IoT telemetry, AI yield models, and Sui NFT batch provenance.
           </p>
         </div>
-        <div className="hidden sm:flex" style={{ marginLeft: "auto", alignItems: "center", gap: 18, fontSize: 12, color: MUTED_COLOR, fontFamily: FONT_MONO }}>
-          <span>Humidity 45%</span>
-          <span>Wind 12 km/h</span>
-          <span>UV 7 High</span>
+        <div className="flex items-center gap-3">
+          <Link to="/farmer/telemetry">
+            <Button variant="outline" size="md">Live Sensor Stream</Button>
+          </Link>
+          <Link to="/farmer/mint-batch">
+            <Button variant="primary" size="md">+ Mint Harvest Batch</Button>
+          </Link>
         </div>
       </div>
 
-      <div style={{ padding: "14px 16px", display: "flex", gap: 10, overflowX: "auto" }}>
-        {FORECAST.map((d) => (
-          <div key={d.day} style={{
-            flex: "1 1 100px", minWidth: 96, padding: "14px 10px",
-            borderRadius: 14, background: BG_HOVER, textAlign: "center",
-            display: "flex", flexDirection: "column", alignItems: "center", gap: 6,
-          }}>
-            <span style={{ fontSize: 12, fontWeight: 600, color: MUTED_COLOR, fontFamily: FONT_DISPLAY }}>{d.day}</span>
-            <WeatherIcon type={d.icon} size={22} />
-            <span style={{ fontFamily: FONT_MONO, fontSize: 15, fontWeight: 700, color: TITLE_COLOR, lineHeight: 1 }}>{d.high}°</span>
-            <span style={{ fontFamily: FONT_MONO, fontSize: 11, color: DIM_COLOR }}>{d.low}°</span>
-            <span style={{ fontSize: 10, color: "#22d3ee", fontFamily: FONT_MONO, display: "flex", alignItems: "center", gap: 3 }}>
-              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M12 2.69l5.66 5.66a8 8 0 11-11.31 0z"/></svg>
-              {d.rain}%
-            </span>
-          </div>
-        ))}
+      {/* Stats Grid */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6" role="region" aria-label="Key metrics">
+        <StatCard icon={Layers} label="Total Batches" value={data?.stats.totalBatches ?? 0} trend={{ type: 'up', value: '12.5%' }} trendLabel="vs last month" loading={loading} />
+        <StatCard icon={Sprout} label="Total Yield" value={(data?.stats.totalYield ?? 0).toFixed(1)} unit="t/ha" trend={{ type: 'up', value: '8.2%' }} trendLabel="vs last season" loading={loading} />
+        <StatCard icon={Radio} label="Active Sensors" value={data?.stats.activeSensors ?? 0} trend={{ type: 'up', value: '100%' }} trendLabel="all online" loading={loading} />
+        <StatCard icon={Gem} label="Minted Batches" value={data?.stats.mintedBatches ?? 0} trend={{ type: 'down', value: '5.3%' }} trendLabel="pending verif." loading={loading} />
       </div>
 
-      {detail && (
-        <div style={{
-          padding: 20, borderTop: `1px solid ${BORDER}`, background: BG_ELEVATED,
-        }}>
-          <h3 style={{ ...HEADING, margin: "0 0 14px" }}>5-Day Forecast — Agakhawn Region</h3>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(210px, 1fr))", gap: 12 }}>
-            {FORECAST.map((d) => (
-              <div key={d.day} style={{ padding: 18, borderRadius: 14, background: BG_CARD, border: `1px solid ${BORDER}` }}>
-                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 12 }}>
-                  <span style={{ fontSize: 14, fontWeight: 600, color: TITLE_COLOR, fontFamily: FONT_DISPLAY }}>{d.day}</span>
-                  <WeatherIcon type={d.icon} size={20} />
-                </div>
-                <div style={{ display: "flex", alignItems: "baseline", gap: 6, marginBottom: 10 }}>
-                  <span style={{ fontFamily: FONT_MONO, fontSize: "1.6rem", fontWeight: 700, color: TITLE_COLOR, lineHeight: 1 }}>{d.high}°</span>
-                  <span style={{ fontFamily: FONT_MONO, fontSize: 12, color: MUTED_COLOR }}>/ {d.low}°</span>
-                </div>
-                <div style={{ display: "flex", justifyContent: "space-between", fontSize: 11.5, color: MUTED_COLOR, fontFamily: FONT_MONO }}>
-                  <span>Wind {d.wind} km/h</span>
-                  <span>Humidity 72%</span>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
-    </div>
-  );
-}
-
-// ── Dashboard page ────────────────────────────────────────────────────────────
-export default function FarmerDashboard() {
-  const [forecast] = useState(FORECAST);
-  const [showWeatherDetail, setShowWeatherDetail] = useState(false);
-
-  return (
-    <div className="dashboard-placeholder-page" data-role="farmer">
-      {/* Page Header */}
-      <header style={{ marginBottom: 28 }}>
-        <div style={{ display: "flex", flexWrap: "wrap", alignItems: "flex-end", justifyContent: "space-between", gap: 16 }}>
-          <div>
-            <h1 style={{
-              fontFamily: FONT_DISPLAY, fontSize: "clamp(1.5rem, 2.5vw, 2rem)",
-              fontWeight: 700, color: TITLE_COLOR, letterSpacing: "-0.03em",
-              lineHeight: 1.1, margin: "0 0 6px",
-            }}>Farmer Workspace</h1>
-            <p style={{ fontSize: 14, color: MUTED_COLOR, fontFamily: FONT_BODY, margin: 0, lineHeight: 1.5 }}>
-              Monitor batches, sensor telemetry, and field conditions.
-            </p>
-          </div>
-          <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-            <button
-              onClick={() => setShowWeatherDetail((v) => !v)}
-              style={{
-                display: "inline-flex", alignItems: "center", gap: 8,
-                padding: "8px 16px", borderRadius: 14,
-                background: "rgba(12,30,58,0.6)",
-                border: `1px solid ${BORDER_MID}`, color: MUTED_COLOR,
-                fontFamily: FONT_DISPLAY, fontSize: 13, fontWeight: 500,
-                cursor: "pointer", transition: "border-color 0.25s, color 0.25s",
-                backdropFilter: "blur(12px)", whiteSpace: "nowrap",
-              }}
-              onMouseEnter={(e) => { e.currentTarget.style.borderColor = "#22d3ee"; e.currentTarget.style.color = TEXT_COLOR; }}
-              onMouseLeave={(e) => { e.currentTarget.style.borderColor = BORDER_MID; e.currentTarget.style.color = MUTED_COLOR; }}
-            >
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M17.5 19H9a7 7 0 110-14h8.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
-              </svg>
-              Weather Forecast
-              <span style={{ display: "inline-flex", transition: "transform 0.25s", transform: showWeatherDetail ? "rotate(180deg)" : "rotate(0deg)" }}>
-                <ArrowRight />
-              </span>
-            </button>
-            <span style={{
-              ...badge("rgba(16,185,129,0.12)", "#6ee7b7", "rgba(16,185,129,0.28)"),
-            }}>
-              <span style={{
-                width: 6, height: 6, borderRadius: "50%", background: "#10b981",
-                boxShadow: "0 0 8px #10b981",
-                animation: "dot-pulse 2s ease-in-out infinite",
-              }} />
-              Live
-            </span>
-          </div>
-        </div>
-      </header>
-
-      {/* Stat Cards */}
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: 16, marginBottom: 28 }}>
-        <StatCard title="Active Batches" value="12" change={3} changeLabel="this week" trend="up" variant="primary" />
-        <StatCard title="Minted on Sui" value="48" change={12} changeLabel="total minted" trend="up" variant="success" />
-        <StatCard title="Pending Pickup" value="3" change={-1} changeLabel="vs last week" trend="down" variant="warning" />
-        <StatCard title="Avg. Transit" value="18.5h" change={-0.5} changeLabel="improving" trend="up" variant="info" />
-      </div>
-
-      {/* Weather + Quick Actions */}
-      <div style={{ display: "grid", gridTemplateColumns: "1fr", gap: 20, marginBottom: 28 }} className="lg:grid-cols-3">
-        <div style={{ background: BG_CARD, border: `1px solid ${BORDER}`, borderRadius: 18, overflow: "hidden" }} className="lg:col-span-2">
-          <ForecastRow detail={showWeatherDetail} />
-        </div>
-
-        <div style={{
-          background: BG_CARD, border: `1px solid ${BORDER}`, borderRadius: 18,
-          padding: 22, display: "flex", flexDirection: "column", gap: 14,
-        }}>
-          <h3 style={{ fontFamily: FONT_DISPLAY, fontSize: 16, fontWeight: 700, color: TITLE_COLOR, letterSpacing: "-0.02em", margin: 0 }}>
-            Quick Actions
-          </h3>
-          <div style={{ display: "grid", gap: 10 }}>
-            {[
-              { label: "Mint New Batch", href: "/farmer/mint-batch", accent: "#22d3ee" },
-              { label: "My Batches", href: "/farmer/batches", accent: "#3b82f6" },
-              { label: "Telemetry", href: "/farmer/telemetry", accent: "#fbbf24" },
-              { label: "Yield Forecast", href: "/farmer/yield-prediction", accent: "#8b5cf6" },
-            ].map(({ label, href, accent }) => (
-              <a key={href} href={href} style={{
-                display: "flex", alignItems: "center", gap: 12,
-                padding: "14px 16px", borderRadius: 14,
-                background: BG_HOVER, border: "1px solid transparent",
-                color: MUTED_COLOR, textDecoration: "none",
-                fontFamily: FONT_BODY, fontSize: 14, fontWeight: 500, lineHeight: 1.35,
-                transition: "border-color 0.2s, background 0.2s, color 0.2s",
-              }}
-                onMouseEnter={(e) => { e.currentTarget.style.borderColor = accent; e.currentTarget.style.background = "rgba(15,35,71,0.85)"; e.currentTarget.style.color = TITLE_COLOR; }}
-                onMouseLeave={(e) => { e.currentTarget.style.borderColor = "transparent"; e.currentTarget.style.background = BG_HOVER; e.currentTarget.style.color = MUTED_COLOR; }}
-              >
-                <span style={{
-                  width: 34, height: 34, borderRadius: 10,
-                  background: `${accent}18`, color: accent,
-                  display: "inline-flex", alignItems: "center", justifyContent: "center", flexShrink: 0,
-                }}>
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8"><circle cx="12" cy="12" r="3"/><path d="M12 1v4m0 14v4m11-11h-4M5 12H1m17.07-7.07l-2.83 2.83M8.76 15.24l-2.83 2.83m15.14 0l-2.83-2.83M8.76 8.76L5.93 5.93"/></svg>
-                </span>
-                <span style={{ flex: 1 }}>{label}</span>
-                <span style={{ opacity: 0.35 }}><ArrowRight /></span>
-              </a>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      {/* Recent Batches */}
-      <div style={{ background: BG_CARD, border: `1px solid ${BORDER}`, borderRadius: 18, overflow: "hidden", marginBottom: 28 }}>
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "18px 22px", borderBottom: `1px solid ${BORDER}` }}>
-          <h3 style={{ ...HEADING, fontSize: 16, fontWeight: 700, letterSpacing: "-0.02em", margin: 0 }}>Recent Batches</h3>
-          <a href="/farmer/batches" style={{ fontSize: 13, color: "#22d3ee", textDecoration: "none", fontWeight: 600, fontFamily: FONT_DISPLAY, transition: "color 0.2s" }}
-            onMouseEnter={(e) => (e.currentTarget.style.color = "#67e8f9")}
-            onMouseLeave={(e) => (e.currentTarget.style.color = "#22d3ee")}
-          >View All →</a>
-        </div>
-
-        <div className="hidden sm:grid" style={{ gridTemplateColumns: "1.4fr 1fr 1fr 1fr 0.8fr", padding: "10px 22px", background: BG_ELEVATED, borderBottom: `1px solid ${BORDER}`, fontSize: 11, fontWeight: 700, color: DIM_COLOR, fontFamily: FONT_DISPLAY, letterSpacing: "0.06em", textTransform: "uppercase", gap: 12 }}>
-          <span>Batch ID</span><span>Crop</span><span>Status</span><span>Date</span><span>Temp</span>
-        </div>
-
-        {MOCK_BATCHES.map((b) => {
-          const st = STATUS_META[b.status];
-          return (
-            <div key={b.id} className="hidden sm:grid items-center" style={{
-              gridTemplateColumns: "1.4fr 1fr 1fr 1fr 0.8fr",
-              padding: "14px 22px", borderBottom: `1px solid ${BORDER}`,
-              fontSize: 13.5, color: TEXT_COLOR, fontFamily: FONT_BODY, gap: 12,
-              transition: "background 0.15s",
-            }}
-              onMouseEnter={(e) => (e.currentTarget.style.background = BG_HOVER)}
-              onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}
-            >
-              <span style={{ fontFamily: FONT_MONO, fontWeight: 600, color: TITLE_COLOR }}>{b.id}</span>
-              <span>{b.crop}</span>
-              <span><span style={badge(st.bg, st.fg, st.border)}>{st.label}</span></span>
-              <span style={{ fontFamily: FONT_MONO, fontSize: 12, color: MUTED_COLOR }}>{b.date}</span>
-              <span style={{ fontFamily: FONT_MONO, fontSize: 12, color: MUTED_COLOR }}>{b.temp}</span>
+      {/* Main Content Grid */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {/* Left Column */}
+        <div className="lg:col-span-2 space-y-6">
+          {/* Telemetry Chart Card */}
+          <div className="bg-[#0b0f17] border border-slate-800/80 rounded-2xl p-6">
+            <div className="flex flex-wrap items-center justify-between gap-4 mb-6">
+               <div>
+                 <h3 className="text-sm font-medium text-slate-200">Sensor Telemetry</h3>
+                 <p className="text-xs text-slate-500 mt-1">Real-time IoT data streams</p>
+               </div>
             </div>
-          );
-        })}
+            <TelemetryChart
+              data={filteredTelemetry || []}
+              metrics={telemetryMetrics}
+              timeRange={timeRange}
+              onTimeRangeChange={setTimeRange}
+              loading={loading}
+              height={320}
+              showLegend
+            />
+          </div>
 
-        <div className="sm:hidden" style={{ display: "flex", flexDirection: "column" }}>
-          {MOCK_BATCHES.map((b) => {
-            const st = STATUS_META[b.status];
-            return (
-              <div key={b.id} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "14px 22px", borderBottom: `1px solid ${BORDER}`, fontFamily: FONT_BODY }}>
-                <div>
-                  <span style={{ fontFamily: FONT_MONO, fontWeight: 700, color: TITLE_COLOR, fontSize: 13.5, display: "block", marginBottom: 3 }}>{b.id}</span>
-                  <span style={{ fontSize: 12.5, color: MUTED_COLOR }}>{b.crop} · {b.date}</span>
-                </div>
-                <span style={{ ...badge(st.bg, st.fg, st.border), fontSize: 10.5, padding: "3px 9px" }}>{st.label}</span>
-              </div>
-            );
-          })}
+          {/* Yield Prediction Card */}
+          <div className="bg-[#0b0f17] border border-slate-800/80 rounded-2xl p-6">
+             <div className="mb-6">
+               <h3 className="text-sm font-medium text-slate-200">Yield Prediction</h3>
+               <p className="text-xs text-slate-500 mt-1">AI model forecast vs actual historical yield</p>
+             </div>
+             <YieldPredictionChart
+               data={data?.yieldPredictions || []}
+               loading={loading}
+               height={320}
+               showConfidenceInterval
+             />
+          </div>
         </div>
-      </div>
 
-      {/* Recent Alerts */}
-      <div style={{ background: BG_CARD, border: `1px solid ${BORDER}`, borderRadius: 18, padding: 22 }}>
-        <h3 style={{ ...HEADING, fontSize: 16, fontWeight: 700, letterSpacing: "-0.02em", margin: "0 0 14px" }}>Recent Alerts</h3>
-        <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-          {MOCK_ALERTS.map((a) => {
-            const colors = a.type === "warning"
-              ? { bg: "rgba(245,158,11,0.1)", fg: "#fcd34d", border: "rgba(245,158,11,0.25)" }
-              : { bg: "rgba(6,182,212,0.1)", fg: "#67e8f9", border: "rgba(6,182,212,0.25)" };
-            return (
-              <div key={a.id} style={{ display: "flex", alignItems: "flex-start", gap: 12, padding: "14px 16px", borderRadius: 14, background: BG_HOVER, border: `1px solid ${colors.border}` }}>
-                <span style={{ width: 8, height: 8, borderRadius: "50%", background: colors.fg, boxShadow: `0 0 8px ${colors.fg}50`, marginTop: 5, flexShrink: 0 }} />
-                <div style={{ flex: 1, minWidth: 0 }}>
-                  <p style={{ fontSize: 13.5, color: TEXT_COLOR, fontFamily: FONT_BODY, margin: 0, lineHeight: 1.5 }}>{a.msg}</p>
-                  <span style={{ fontSize: 11.5, color: MUTED_COLOR, marginTop: 4, display: "block", fontFamily: FONT_MONO }}>{a.time}</span>
-                </div>
-              </div>
-            );
-          })}
+        {/* Right Column */}
+        <div className="space-y-6">
+          {/* Quick Actions */}
+          <div className="bg-[#0b0f17] border border-slate-800/80 rounded-2xl p-6">
+            <div className="flex items-center justify-between mb-5">
+              <h3 className="text-sm font-medium text-slate-200">Quick Actions</h3>
+              <span className="text-xs text-slate-600 font-medium">Shortcuts</span>
+            </div>
+            <div className="grid grid-cols-1 gap-3">
+              <QuickActionCard icon={PlusCircle} label="Mint Batch" href="/farmer/mint-batch" variant="primary" />
+              <QuickActionCard icon={Activity} label="Record Telemetry" href="/farmer/telemetry" variant="outline" />
+              <QuickActionCard icon={LineChart} label="Yield Forecast" href="/farmer/yield-prediction" variant="outline" />
+              <QuickActionCard icon={BellRing} label="Sensor Alerts" href="/farmer/alerts" variant="outline" />
+            </div>
+          </div>
+
+          {/* Recent Batches Table */}
+          <div className="bg-[#0b0f17] border border-slate-800/80 rounded-2xl overflow-hidden">
+            <div className="p-6 border-b border-slate-800/80 flex items-center justify-between">
+              <h3 className="text-sm font-medium text-slate-200">Recent Batches</h3>
+              <Link to="/farmer/batches" className="text-xs text-slate-400 hover:text-slate-200 transition-colors font-medium flex items-center gap-1">
+                View all <ArrowRight className="w-3 h-3" />
+              </Link>
+            </div>
+            
+            <div className="divide-y divide-slate-800/60">
+              {data?.recentBatches.map((batch) => (
+                <Link
+                  key={batch.id}
+                  to={`/farmer/batches/${batch.id}`}
+                  className="block p-6 hover:bg-slate-800/30 transition-colors group"
+                >
+                  <div className="flex items-center justify-between gap-4 mb-3">
+                    <div className="flex items-center gap-3 min-w-0">
+                       <span className="font-mono text-sm font-medium text-slate-200 group-hover:text-white transition-colors">
+                         {batch.id}
+                       </span>
+                    </div>
+                    <StatusBadge status={batch.status} />
+                  </div>
+                  
+                  <div className="flex items-end justify-between gap-4">
+                    <div>
+                      <p className="text-sm text-slate-300 mb-1">{batch.cropType}</p>
+                      <p className="text-xs text-slate-500">{batch.variety}</p>
+                    </div>
+                    <div className="text-right">
+                      <p className="text-xs text-slate-500 mb-1">
+                        {formatDate(batch.plantedDate)} → {formatDate(batch.estimatedHarvest)}
+                      </p>
+                      <div className="flex items-center gap-3 justify-end text-xs font-medium">
+                        {batch.yieldEstimate && (
+                          <span className="text-emerald-400">{batch.yieldEstimate.toFixed(1)} t/ha</span>
+                        )}
+                        {batch.qualityScore !== undefined && (
+                          <span className="text-amber-400">Q: {batch.qualityScore}</span>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </div>
         </div>
       </div>
     </div>
   );
 }
+
+FarmerDashboard.displayName = 'FarmerDashboard';

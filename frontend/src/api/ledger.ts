@@ -36,13 +36,13 @@ export const ledgerApi = {
     farmer_id?: string;
     custodian_id?: string;
   }): Promise<BatchListResponse> => {
-    const response = await apiClient.get<BatchListResponse>('/ledger/batches/', { params });
+    const response = await apiClient.get<BatchListResponse>('/ledger/list/', { params });
     return response.data;
   },
 
   /** Get a single batch by ID */
   getById: async (batchId: string): Promise<ProduceBatch> => {
-    const response = await apiClient.get<ProduceBatch>(`/ledger/batches/${batchId}/`);
+    const response = await apiClient.get<ProduceBatch>(`/ledger/list/${batchId}/`);
     return response.data;
   },
 
