@@ -21,12 +21,18 @@ export interface RegisterPayload {
   password: string;
   full_name: string;
   role: "FARMER" | "LOGISTICS" | "ADMIN";
+  sui_public_key?: string;
 }
 
 // ─── API Calls ────────────────────────────────────
 export const login = async (data: { email: string; password: string }) => {
   // Custom token obtain returns { access, refresh, user } (see serializers.py)
   const response = await apiClient.post<LoginResponse>("/auth/login/", data);
+  return response.data;
+};
+
+export const walletLogin = async (data: { sui_public_key: string; message: string; signature: string }) => {
+  const response = await apiClient.post<LoginResponse>("/auth/wallet-login/", data);
   return response.data;
 };
 

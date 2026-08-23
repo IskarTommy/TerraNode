@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, useEffect, type ReactNode, useCallback } from 'react';
-import { login, register as registerApi, logout as logoutApi } from '../api/auth';
+import { login, register as registerApi, logout as logoutApi, walletLogin as walletLoginApi } from '../api/auth';
 import type { User } from '../api/auth';
 
 // ─── storage keys ─────────────────────────────────────────
@@ -27,11 +27,13 @@ interface AuthContextType {
   isAuthenticated: boolean;
   isInitialized: boolean;
   login: (email: string, password: string) => Promise<User>;
+  walletLogin: (sui_public_key: string, message: string, signature: string) => Promise<User>;
   register: (data: {
     email: string;
     password: string;
     full_name: string;
     role: User['role'];
+    sui_public_key?: string;
   }) => Promise<void>;
   logout: () => Promise<void>;
   setAccessToken: (token: string) => void;
@@ -58,6 +60,16 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const loginUser = async (email: string, password: string) => {
     const response = await login({ email, password });
+    setAccessToken(response.access);
+    localStorage.setItem(STORAGE_KEYS.REFRESH, response.refresh);
+    setRefreshToken(response.refresh);
+    localStorage.setItem(STORAGE_KEYS.USER, JSON.stringify(response.user));
+    setUser(response.user);
+    return response.user;
+  };
+
+  const walletLoginUser = async (sui_public_key: string, message: string, signature: string) => {
+    const response = await walletLoginApi({ sui_public_key, message, signature });
     setAccessToken(response.access);
     localStorage.setItem(STORAGE_KEYS.REFRESH, response.refresh);
     setRefreshToken(response.refresh);
@@ -113,6 +125,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     isAuthenticated: !!accessToken && !!user,
     isInitialized: true,
     login: loginUser,
+    walletLogin: walletLoginUser,
     register: registerUser,
     logout: logoutUser,
     setAccessToken,

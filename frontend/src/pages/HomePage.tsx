@@ -219,14 +219,22 @@ export default function HomePage(): React.ReactElement {
             ))}
             <Link
               to="/login"
-              className="px-4 py-2 rounded-lg transition-all duration-200"
-              style={{ fontSize: 14, fontWeight: 600, color: "#f1f5f9", background: "rgba(16,185,129,0.12)", border: "1px solid rgba(16,185,129,0.25)", textDecoration: "none" }}
+              className="rounded-lg transition-all duration-200"
+              style={{ padding: "8px 16px", fontSize: 14, fontWeight: 600, color: "#f1f5f9", background: "rgba(16,185,129,0.12)", border: "1px solid rgba(16,185,129,0.25)", textDecoration: "none" }}
               onMouseEnter={(e) => { e.currentTarget.style.background = "rgba(16,185,129,0.2)"; e.currentTarget.style.borderColor = "rgba(16,185,129,0.4)"; }}
               onMouseLeave={(e) => { e.currentTarget.style.background = "rgba(16,185,129,0.12)"; e.currentTarget.style.borderColor = "rgba(16,185,129,0.25)"; }}
             >
               Launch App
             </Link>
           </div>
+          {/* Mobile menu button */}
+          <button className="sm:hidden p-2 text-slate-400 hover:text-slate-200 transition-colors" aria-label="Open menu">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <line x1="3" y1="12" x2="21" y2="12"></line>
+              <line x1="3" y1="6" x2="21" y2="6"></line>
+              <line x1="3" y1="18" x2="21" y2="18"></line>
+            </svg>
+          </button>
         </nav>
       </header>
 
@@ -242,8 +250,8 @@ export default function HomePage(): React.ReactElement {
           {/* Live badge */}
           <div className="mb-7">
             <span
-              className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full"
-              style={{ background: "rgba(16,185,129,0.08)", border: "1px solid rgba(16,185,129,0.18)", fontSize: "0.72rem", fontFamily: "'JetBrains Mono', monospace", color: "#34d399", letterSpacing: "0.05em" }}
+              className="inline-flex items-center gap-2 rounded-full"
+              style={{ padding: "6px 16px", background: "rgba(16,185,129,0.08)", border: "1px solid rgba(16,185,129,0.18)", fontSize: "0.72rem", fontFamily: "'JetBrains Mono', monospace", color: "#34d399", letterSpacing: "0.05em" }}
             >
               <span className="inline-block rounded-full" aria-hidden="true" style={{ width: 7, height: 7, background: "#34d399", boxShadow: "0 0 8px rgba(52,211,153,0.5)", animation: "tn-pulse-dot 2s ease-in-out infinite" }} />
               LIVE ON SUI TESTNET · Block #14,832,561
@@ -313,8 +321,8 @@ export default function HomePage(): React.ReactElement {
           <FadeIn delay={80}>
             <div className="text-center mb-14">
               <span
-                className="inline-block px-3.5 py-1 rounded-full mb-4"
-                style={{ background: "rgba(34,211,238,0.07)", border: "1px solid rgba(34,211,238,0.15)", fontSize: 12, fontWeight: 600, color: "#67e8f9", fontFamily: "'JetBrains Mono', monospace", letterSpacing: "0.04em" }}
+                className="inline-block rounded-full mb-4"
+                style={{ padding: "4px 14px", background: "rgba(34,211,238,0.07)", border: "1px solid rgba(34,211,238,0.15)", fontSize: 12, fontWeight: 600, color: "#67e8f9", fontFamily: "'JetBrains Mono', monospace", letterSpacing: "0.04em" }}
               >
                 Core Capabilities
               </span>
@@ -334,8 +342,8 @@ export default function HomePage(): React.ReactElement {
             </div>
           </FadeIn>
 
-          {/* Feature cards — 3-column grid, right-aligned within container */}
-          <div className="grid gap-5 ml-auto" style={{ gridTemplateColumns: "repeat(3, 1fr)", maxWidth: 1050, placeItems: "center" }}>
+          {/* Feature cards */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mx-auto w-full" style={{ maxWidth: 1050, placeItems: "center" }}>
             {FEATURES.map((f, i) => (
               <FadeIn key={f.title} delay={i * 100} y={18}>
                 <div
@@ -385,8 +393,8 @@ export default function HomePage(): React.ReactElement {
                     {f.desc}
                   </p>
                   <span
-                    className="inline-block px-2.5 py-0.5 rounded-full"
-                    style={{ background: `${f.color}0d`, border: `1px solid ${f.color}1a`, fontSize: 11, fontWeight: 600, color: f.color, fontFamily: "'JetBrains Mono', monospace", letterSpacing: "0.02em" }}
+                    className="inline-block rounded-full"
+                    style={{ padding: "2px 10px", background: `${f.color}0d`, border: `1px solid ${f.color}1a`, fontSize: 11, fontWeight: 600, color: f.color, fontFamily: "'JetBrains Mono', monospace", letterSpacing: "0.02em" }}
                   >
                     {f.tag}
                   </span>
@@ -410,8 +418,8 @@ export default function HomePage(): React.ReactElement {
           <FadeIn delay={0}>
             <div className="text-center mb-12">
               <span
-                className="inline-block px-3.5 py-1 rounded-full mb-4"
-                style={{ background: "rgba(251,191,36,0.07)", border: "1px solid rgba(251,191,36,0.15)", fontSize: 12, fontWeight: 600, color: "#fbbf24", fontFamily: "'JetBrains Mono', monospace", letterSpacing: "0.04em" }}
+                className="inline-block rounded-full mb-4"
+                style={{ padding: "4px 14px", background: "rgba(251,191,36,0.07)", border: "1px solid rgba(251,191,36,0.15)", fontSize: 12, fontWeight: 600, color: "#fbbf24", fontFamily: "'JetBrains Mono', monospace", letterSpacing: "0.04em" }}
               >
                 How it works
               </span>
@@ -428,8 +436,8 @@ export default function HomePage(): React.ReactElement {
             </div>
           </FadeIn>
 
-          {/* Steps — right-aligned 4-column grid */}
-          <div className="grid gap-5 ml-auto" style={{ gridTemplateColumns: "repeat(4, 1fr)", maxWidth: 1050 }}>
+          {/* Steps */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mx-auto w-full" style={{ maxWidth: 1050 }}>
             {STEPS.map((s, i) => (
               <FadeIn key={s.n} delay={120 + i * 100} y={14}>
                 <div
@@ -472,6 +480,7 @@ export default function HomePage(): React.ReactElement {
           ROLES
          ═══════════════════════════════════════════════════════════════ */}
       <section
+        id="roles"
         className="relative z-10 flex flex-col items-center text-center"
         style={{ padding: "clamp(3rem, 8vw, 6rem) clamp(1rem, 4vw, 3rem)" }}
         aria-labelledby="roles-heading"
@@ -492,8 +501,8 @@ export default function HomePage(): React.ReactElement {
             </div>
           </FadeIn>
 
-          {/* Role cards — right-aligned 3-column grid */}
-          <div className="grid gap-5 ml-auto" style={{ gridTemplateColumns: "repeat(3, 1fr)", maxWidth: 1050, placeItems: "center" }}>
+          {/* Role cards */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mx-auto w-full" style={{ maxWidth: 1050, placeItems: "center" }}>
             {ROLES.map((r) => (
               <FadeIn key={r.role} delay={100} y={12}>
                 <div

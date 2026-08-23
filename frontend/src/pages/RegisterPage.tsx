@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { ShieldCheck, Wifi, ArrowRightLeft, ScanSearch } from "lucide-react";
 import { useAuth } from "../contexts/AuthContext";
 import { Logo } from "../components/Logo";
+import { ConnectModal, useCurrentAccount } from '@mysten/dapp-kit';
 
 /* ═══════════════════════════════════════════════════════════════════════════════
    STYLES
@@ -36,16 +37,28 @@ function GlobalStyles() {
    PAGE
    ═══════════════════════════════════════════════════════════════════════════════ */
 export default function RegisterPage() {
+  const location = useLocation();
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [role, setRole] = useState("farmer");
+  const [role, setRole] = useState("FARMER");
+  const [suiPublicKey, setSuiPublicKey] = useState(location.state?.sui_public_key || "");
   const [agree, setAgree] = useState(false);
   const [loading, setLoading] = useState(false);
   const [showPw, setShowPw] = useState(false);
   const [error, setError] = useState("");
+  const [isConnectOpen, setIsConnectOpen] = useState(false);
+  
+  const currentAccount = useCurrentAccount();
   const { register } = useAuth();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (currentAccount?.address) {
+      setSuiPublicKey(currentAccount.address);
+      setIsConnectOpen(false);
+    }
+  }, [currentAccount]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -54,7 +67,7 @@ export default function RegisterPage() {
     setError("");
     setLoading(true);
     try {
-      await register({ full_name: fullName, email, password, role: role as "FARMER" | "LOGISTICS" | "ADMIN" });
+      await register({ full_name: fullName, email, password, role: role as "FARMER" | "LOGISTICS" | "ADMIN", sui_public_key: suiPublicKey || undefined });
       navigate("/farmer/dashboard");
     } catch (err) {
       setError(err instanceof Error ? err.message : "Registration failed. Please try again.");
@@ -229,6 +242,21 @@ export default function RegisterPage() {
             )}
 
             <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+              {suiPublicKey && (
+                <div style={{
+                  padding: "10px 14px", borderRadius: 10,
+                  background: "rgba(34,211,238,0.1)", border: "1px solid rgba(34,211,238,0.2)",
+                  display: "flex", alignItems: "center", gap: 10,
+                }}>
+                  <div style={{ width: 8, height: 8, borderRadius: "50%", background: "#22d3ee", boxShadow: "0 0 8px #22d3ee" }} />
+                  <span style={{ fontSize: 13.5, color: "#e2e8f0", fontFamily: "'Space Grotesk', sans-serif" }}>
+                    Wallet linked: <span style={{ color: "#22d3ee" }}>{suiPublicKey.slice(0, 6)}...{suiPublicKey.slice(-4)}</span>
+                  </span>
+                  <button type="button" onClick={() => setSuiPublicKey("")} style={{
+                    background: "none", border: "none", color: "#94a3b8", cursor: "pointer", marginLeft: "auto",
+                  }}>×</button>
+                </div>
+              )}
               {/* Full name */}
               <InputField label="Full name" id="fullName" type="text"
                 value={fullName} onChange={setFullName} placeholder="Jane Doe" autoComplete="name" />
@@ -272,9 +300,9 @@ export default function RegisterPage() {
                       e.currentTarget.style.boxShadow = "none";
                     }}
                   >
-                    <option value="farmer">Farmer</option>
-                    <option value="logistics">Logistics Provider</option>
-                    <option value="admin">Administrator</option>
+                    <option value="FARMER">Farmer</option>
+                    <option value="LOGISTICS">Logistics Provider</option>
+                    <option value="ADMIN">Administrator</option>
                   </select>
                   <div style={{
                     position: "absolute", right: 14, top: "50%", transform: "translateY(-50%)",
@@ -346,15 +374,28 @@ export default function RegisterPage() {
               <div style={{ flex: 1, height: 1, background: "rgba(51,65,85,0.5)" }} />
             </div>
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
-              <button type="button" style={socialBtnBase()}
-                onMouseEnter={socialEnter} onMouseLeave={socialLeave}
-              >
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                  <path d="M4.5 12.5l7-7 7 7-7 7z" fill="#22d3ee"/>
-                  <path d="M11.5 5.5l7 7-7 7-7-7z" fill="#06b6d4" opacity="0.7"/>
-                </svg>
-                Sui Wallet
-              </button>
+              {!suiPublicKey && (
+                <>
+                  <button type="button" style={socialBtnBase()}
+                    onClick={() => setIsConnectOpen(true)}
+                    onMouseEnter={socialEnter} onMouseLeave={socialLeave}
+                  >
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                      <path d="M4.5 12.5l7-7 7 7-7 7z" fill="#22d3ee"/>
+                      <path d="M11.5 5.5l7 7-7 7-7-7z" fill="#06b6d4" opacity="0.7"/>
+                    </svg>
+                    Sui Wallet
+                  </button>
+                  <ConnectModal
+                    trigger={<span style={{ display: 'none' }} />}
+                    open={isConnectOpen}
+                    onOpenChange={(isOpen) => setIsConnectOpen(isOpen)}
+                  />
+                </>
+              )}
+              {suiPublicKey && (
+                <div style={{ visibility: "hidden" }} />
+              )}
               <GoogleButton />
             </div>
 

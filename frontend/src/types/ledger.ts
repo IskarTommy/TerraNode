@@ -21,16 +21,19 @@ export interface ProduceBatch {
 export interface BatchPrepareRequest {
   crop_type: string;
   weight_kg: number;
-  origin_telemetry_id: string;
+  origin_telemetry_id?: string;
 }
 
 export interface BatchPrepareResponse {
-  batch_id: string;
-  batch: ProduceBatch;
+  id: string;
+  crop_type: string;
+  weight_kg: number;
+  status: BatchStatus;
+  data_integrity_hash: string;
+  created_at: string;
 }
 
 export interface BatchConfirmRequest {
-  batch_id: string;
   sui_object_id: string;
   sui_tx_digest: string;
 }

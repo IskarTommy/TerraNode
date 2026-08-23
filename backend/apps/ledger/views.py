@@ -15,13 +15,16 @@ class BatchPrepareView(generics.CreateAPIView):
     def perform_create(self, serializer):
         farmer = self.request.user
         telemetry = serializer.validated_data.get('origin_telemetry')
-        data_integrity_hash = generate_telemetry_hash(
-            farmer_id=farmer.id,
-            recorded_at=telemetry.recorded_at,
-            temperature=telemetry.temperature_celsius,
-            soil_moisture=telemetry.soil_moisture_percentage,
-            soil_ph=telemetry.soil_ph,
-        )
+        if telemetry:
+            data_integrity_hash = generate_telemetry_hash(
+                farmer_id=farmer.id,
+                recorded_at=telemetry.recorded_at,
+                temperature=telemetry.temperature_celsius,
+                soil_moisture=telemetry.soil_moisture_percentage,
+                soil_ph=telemetry.soil_ph,
+            )
+        else:
+            data_integrity_hash = "no-telemetry-hash"
         serializer.save(
             farmer=farmer,
             current_custodian=farmer,

@@ -4,6 +4,7 @@ import { ledgerApi } from '../api/ledger';
 import { analyticsApi } from '../api/analytics';
 import { usersApi } from '../api/users';
 import { auditApi } from '../api/audit';
+import type { BatchStatus } from '../types/ledger';
 
 /* ============================================================================
  * Farmer Hooks
@@ -37,7 +38,7 @@ export function useLatestTelemetry() {
 export function useBatches(params?: {
   page?: number;
   page_size?: number;
-  status?: string;
+  status?: BatchStatus;
   farmer_id?: string;
 }) {
   return useQuery({
@@ -93,7 +94,7 @@ export function useTransferHistory(batchId: string | undefined) {
 export function useShipments(params?: {
   page?: number;
   page_size?: number;
-  status?: string;
+  status?: BatchStatus;
   custodian_id?: string;
 }) {
   return useQuery({

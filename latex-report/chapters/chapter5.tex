@@ -1,0 +1,49 @@
+\chapter{SUMMARY, CONCLUSION, AND RECOMMENDATIONS}
+
+\section{Summary of Findings}
+
+This project set out to design and implement a secure, analytics-driven agricultural data management system using blockchain technology. The work was guided by four specific objectives, each of which has been addressed through the design, implementation, and evaluation presented in the preceding chapters.
+
+\textbf{Objective (i) --- Web-Based Agricultural Data Management Platform:} A modular web interface was designed and implemented using React and TypeScript for the frontend and Django REST Framework for the backend. The platform captures environmental telemetry data, including temperature in degrees Celsius, soil moisture percentage, and soil pH, through validated input forms. The data is stored in a PostgreSQL database and visualized through role-specific dashboards tailored to the needs of farmers, logistics handlers, and system administrators. The interface supports both credential-based and Sui wallet-based authentication, accommodating users with varying levels of blockchain familiarity.
+
+\textbf{Objective (ii) --- Analytics Module for Agricultural Forecasting:} A predictive analytics engine was developed and integrated into the backend. The engine applies a weighted moving average model to historical telemetry data, computing yield forecasts based on the mean values of temperature, soil moisture, and soil pH. The prediction formula accounts for moisture availability as a positive factor and penalizes deviations from an optimal growing temperature of 22 degrees Celsius. A confidence score is computed based on the number of available data points, and contextual recommendations are generated to guide the farmer's decision-making. Results are cached in Redis to ensure responsive performance.
+
+\textbf{Objective (iii) --- Blockchain-Based Security Mechanisms:} Data integrity is ensured through a multi-layered approach. Every telemetry record is protected by a SHA-256 hash computed from a canonical JSON representation of its core fields. Produce batch records are minted as programmable objects on the Sui blockchain using a Move smart contract, which records the crop type, weight, originating farmer, current custodian, and the telemetry integrity hash on-chain. Custody transfers between stakeholders are enforced by the smart contract, which verifies that only the current custodian can initiate a transfer. The blockchain anchoring creates a tamper-resistant audit trail that links each on-chain asset to its off-chain data source.
+
+\textbf{Objective (iv) --- Performance Evaluation:} The system was evaluated across multiple dimensions. Functional testing confirmed that all ten functional requirements are satisfied. Security evaluation verified the effectiveness of Argon2id password hashing, JWT token lifecycle management, rate limiting, and data integrity hash verification. Blockchain performance testing on the Sui Testnet showed average minting latency of approximately 1.2 seconds and transfer latency of approximately 0.9 seconds, with 100 percent success rates and minimal gas costs. Prediction accuracy was assessed through consistency and sensitivity analysis, confirming that the model responds correctly to variations in input conditions and produces deterministic results.
+
+\section{Conclusion}
+
+The TerraNode project demonstrates that it is technically feasible to build an integrated agricultural data management platform that unifies secure data storage, blockchain-based immutability, supply chain traceability, and predictive analytics within a single, cohesive architecture. The literature review in Chapter Two revealed that existing systems typically address only one or two of these capabilities in isolation. TerraNode bridges this gap by making blockchain verification a prerequisite for analytical processing, ensuring that yield predictions are derived from data whose integrity can be mathematically verified.
+
+The choice of the Sui blockchain proved to be well-suited for this application. Unlike traditional public blockchains that impose high transaction fees and long confirmation times, Sui's delegated proof-of-stake consensus and object-centric data model enabled low-cost, sub-second transaction finality for both batch minting and custody transfer operations. The Move programming language's linear type system provided additional safety guarantees at the smart contract level, preventing common vulnerabilities such as double-spending of batch objects.
+
+The three-tier architecture, separating the React frontend, Django backend, and Sui blockchain into distinct layers, facilitated a clean separation of concerns and allowed each component to be developed and tested independently. The role-based access control system ensures that each stakeholder type interacts only with the functionality relevant to their role, reducing complexity and potential security risks.
+
+While the current analytics engine uses a simplified weighted moving average model, the architecture is designed to accommodate more sophisticated prediction algorithms in the future. The modular service layer can be extended to incorporate machine learning models trained on larger datasets without requiring changes to the API interface or the frontend.
+
+In summary, TerraNode contributes a working prototype that addresses a genuine gap in the agricultural technology landscape. It shows that the combination of modern web technologies, a next-generation blockchain platform, and data-driven analytics can produce a system that is both technically robust and practically accessible to the smallholder farming communities it is intended to serve.
+
+\section{Recommendations for Future Work}
+
+Based on the experience gained during the development and evaluation of TerraNode, the following recommendations are made for future enhancements:
+
+\begin{enumerate}
+    \item \textbf{IoT Sensor Integration:} The current system relies on manually entered telemetry data. Future iterations should integrate directly with physical IoT sensors deployed in agricultural fields, enabling automated and continuous data collection. This would eliminate the potential for human error in data entry and increase the volume and frequency of telemetry records available for analytics.
+
+    \item \textbf{Advanced Machine Learning Models:} The weighted moving average model provides a functional starting point, but more sophisticated approaches such as Random Forests, Long Short-Term Memory (LSTM) networks, or the CNN-RNN framework proposed by \textcite{khaki2019cnn} could significantly improve prediction accuracy. Training these models on larger, geographically diverse datasets would also enhance their generalizability.
+
+    \item \textbf{Sui Mainnet Deployment:} The current implementation operates on the Sui Testnet, which does not carry real economic value. Deploying the smart contract on the Sui Mainnet would enable genuine asset tracking and could facilitate integration with decentralized finance (DeFi) protocols for agricultural lending and insurance.
+
+    \item \textbf{Mobile Application:} Developing a mobile companion application for Android and iOS would improve accessibility for farmers who primarily access the internet through smartphones. The mobile application could also leverage device sensors (GPS, camera) to augment telemetry data with location and visual crop condition information.
+
+    \item \textbf{Multi-Language Support:} The current interface is available only in English, which limits its accessibility in regions where English is not the primary language. Adding support for local languages would significantly broaden the potential user base.
+
+    \item \textbf{Storage Optimization:} As the volume of on-chain data grows, storage optimization techniques such as the Storage Light Node model proposed by \textcite{sun2025storage} could be adopted to reduce the resource requirements for nodes participating in the TerraNode network.
+
+    \item \textbf{Interoperability Standards:} Future work should explore the adoption of standardized agricultural data formats and APIs to enable TerraNode to interoperate with other agricultural information systems, weather services, and market platforms.
+\end{enumerate}
+
+\section{Chapter Summary}
+
+This chapter summarized the findings of the TerraNode project against its four specific objectives, drew conclusions about the technical contributions and practical implications of the work, and outlined seven concrete recommendations for future development. The project has successfully demonstrated that blockchain-secured agricultural data management, combined with predictive analytics and role-based web interfaces, can be realized within a unified platform built on modern web technologies and the Sui blockchain.

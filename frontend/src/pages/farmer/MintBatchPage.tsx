@@ -4,6 +4,10 @@ import { Card } from '../../components/Common/Card';
 import { Input } from '../../components/Common/Input';
 import { Select } from '../../components/Common/Input';
 import { cn } from '../../utils/cn';
+import { Transaction } from '@mysten/sui/transactions';
+import { useWallet } from '../../contexts/WalletContext';
+import { ledgerApi } from '../../api/ledger';
+import { ConnectButton } from '@mysten/dapp-kit';
 
 const CROP_TYPES = [
   { value: 'wheat', label: 'Wheat' },
@@ -66,7 +70,7 @@ export function MintBatchPage() {
     soilType: '',
   });
   const [submitting, setSubmitting] = useState(false);
-  const [walletConnected, setWalletConnected] = useState(false);
+  const { connected, signAndExecute } = useWallet();
   const [txHash, setTxHash] = useState('');
 
   const currentCropVarieties = formData.cropType ? VARIETIES[formData.cropType] : [];
@@ -82,11 +86,44 @@ export function MintBatchPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setSubmitting(true);
-    // Simulate minting process
-    await new Promise(resolve => setTimeout(resolve, 3000));
-    setTxHash('0x' + Math.random().toString(16).slice(2, 66));
-    setStep(4);
-    setSubmitting(false);
+    
+    try {
+      // 1. Prepare batch on backend
+      const prepareRes = await ledgerApi.prepare({
+        crop_type: formData.cropType,
+        weight_kg: Number(formData.quantity) || 0,
+      });
+
+      // 2. Build Sui Transaction
+      const tx = new Transaction();
+      const PACKAGE_ID = "0x12d791039ab75e08f41140ccb9be4ce80b917f3eb2b52dab150831bc29afb92f";
+      
+      tx.moveCall({
+        target: `${PACKAGE_ID}::agri_ledger::mint_batch`,
+        arguments: [
+          tx.pure.string(formData.cropType),
+          tx.pure.u64(Number(formData.quantity) || 0),
+          tx.pure.vector('u8', Array.from(new TextEncoder().encode(prepareRes.data_integrity_hash || "no-telemetry-hash")))
+        ],
+      });
+
+      // 3. Sign and execute
+      const { digest } = await signAndExecute(tx);
+      setTxHash(digest);
+      
+      // 4. Confirm to backend
+      await ledgerApi.confirm(prepareRes.id, {
+        sui_object_id: digest, // Using digest as fallback object ID for now
+        sui_tx_digest: digest,
+      });
+
+      setStep(4);
+    } catch (err) {
+      console.error(err);
+      alert('Transaction failed');
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   const nextStep = () => setStep(prev => Math.min(prev + 1, 4));
@@ -354,15 +391,10 @@ export function MintBatchPage() {
                 <p className="text-body text-fg-muted mb-6 max-w-md mx-auto">
                   To mint this batch on the Sui blockchain, you'll need to sign the transaction with your connected wallet.
                 </p>
-                {!walletConnected ? (
-                  <Button
-                    variant="primary"
-                    size="lg"
-                    leftIcon={<svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" /></svg>}
-                    onClick={() => setWalletConnected(true)}
-                  >
-                    Connect Wallet to Sign
-                  </Button>
+                {!connected ? (
+                  <div className="flex justify-center">
+                    <ConnectButton />
+                  </div>
                 ) : (
                   <Button
                     variant="primary"

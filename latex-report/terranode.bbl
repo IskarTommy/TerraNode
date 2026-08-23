@@ -1,0 +1,2015 @@
+% $ biblatex auxiliary file $
+% $ biblatex bbl format version 3.3 $
+% Do not modify the above lines!
+%
+% This is an auxiliary file used by the 'biblatex' package.
+% This file may safely be deleted. It will be recreated by
+% biber as required.
+%
+\begingroup
+\makeatletter
+\@ifundefined{ver@biblatex.sty}
+  {\@latex@error
+     {Missing 'biblatex' package}
+     {The bibliography requires the 'biblatex' package.}
+      \aftergroup\endinput}
+  {}
+\endgroup
+
+
+\refsection{0}
+  \datalist[entry]{apa/apasortcite//global/global/global}
+    \entry{agtrust2026framework}{article}{}{}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=0097f31b22dd7ad10d00bc27fbd0799a}{%
+           family={{AgTrust Consortium}},
+           familyi={A\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {IEEE}%
+      }
+      \strng{namehash}{0097f31b22dd7ad10d00bc27fbd0799a}
+      \strng{fullhash}{0097f31b22dd7ad10d00bc27fbd0799a}
+      \strng{fullhashraw}{0097f31b22dd7ad10d00bc27fbd0799a}
+      \strng{bibnamehash}{0097f31b22dd7ad10d00bc27fbd0799a}
+      \strng{authorbibnamehash}{0097f31b22dd7ad10d00bc27fbd0799a}
+      \strng{authornamehash}{0097f31b22dd7ad10d00bc27fbd0799a}
+      \strng{authorfullhash}{0097f31b22dd7ad10d00bc27fbd0799a}
+      \strng{authorfullhashraw}{0097f31b22dd7ad10d00bc27fbd0799a}
+      \field{sortinit}{A}
+      \field{sortinithash}{2f401846e2029bad6b3ecc16d50031e2}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{IEEE Access}
+      \field{title}{AgTrust: Framework for Securing Critical Agriculture Technology and Emerging Solutions}
+      \field{volume}{14}
+      \field{year}{2026}
+      \field{pages}{1\bibrangedash 16}
+      \range{pages}{16}
+    \endentry
+    \entry{layek2025secured}{article}{}{}
+      \name{author}{3}{}{%
+        {{un=0,uniquepart=base,hash=1773dfe7e09cb6beb54b5e081271eed5}{%
+           family={Al\bibnamedelima Layek},
+           familyi={A\bibinitperiod\bibinitdelim L\bibinitperiod},
+           given={M.\bibnamedelimi A.},
+           giveni={M\bibinitperiod\bibinitdelim A\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=1f992a6329b3d5bebd921d98a276c672}{%
+           family={Kamal},
+           familyi={K\bibinitperiod},
+           given={M.\bibnamedelimi S.},
+           giveni={M\bibinitperiod\bibinitdelim S\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=b9fe3733638d1796f160ac346db096f9}{%
+           family={Hasan},
+           familyi={H\bibinitperiod},
+           given={M.\bibnamedelimi F.},
+           giveni={M\bibinitperiod\bibinitdelim F\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{0cd7713e238e6794fdd24ab213722a41}
+      \strng{fullhash}{ee47d578b8fbf94ac3e65b5676a59000}
+      \strng{fullhashraw}{ee47d578b8fbf94ac3e65b5676a59000}
+      \strng{bibnamehash}{ee47d578b8fbf94ac3e65b5676a59000}
+      \strng{authorbibnamehash}{ee47d578b8fbf94ac3e65b5676a59000}
+      \strng{authornamehash}{0cd7713e238e6794fdd24ab213722a41}
+      \strng{authorfullhash}{ee47d578b8fbf94ac3e65b5676a59000}
+      \strng{authorfullhashraw}{ee47d578b8fbf94ac3e65b5676a59000}
+      \field{sortinit}{A}
+      \field{sortinithash}{2f401846e2029bad6b3ecc16d50031e2}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{arXiv preprint arXiv:2505.01196}
+      \field{title}{A Secured Triad of IoT, Machine Learning, and Blockchain for Crop Forecasting in Agriculture}
+      \field{year}{2025}
+    \endentry
+    \entry{alabsi2023blockchain}{article}{}{}
+      \name{author}{3}{}{%
+        {{un=0,uniquepart=base,hash=5632c304e5a3b075f4cdb6bc489ff2d6}{%
+           family={Al-Absi},
+           familyi={A\bibinithyphendelim A\bibinitperiod},
+           given={A.\bibnamedelimi A.},
+           giveni={A\bibinitperiod\bibinitdelim A\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=a84850d9c7116e4bf32c45ba066f4d0c}{%
+           family={Al-Absi},
+           familyi={A\bibinithyphendelim A\bibinitperiod},
+           given={M.\bibnamedelimi A.},
+           giveni={M\bibinitperiod\bibinitdelim A\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=a38fe2282e0ae708270c02346a36d08f}{%
+           family={Lee},
+           familyi={L\bibinitperiod},
+           given={J.},
+           giveni={J\bibinitperiod},
+           givenun=0}}%
+      }
+      \list{publisher}{1}{%
+        {MDPI}%
+      }
+      \strng{namehash}{7ceeedcb791da6ea0f2872e9fa9c660d}
+      \strng{fullhash}{476939da02f7d6960b8436cddc590b86}
+      \strng{fullhashraw}{476939da02f7d6960b8436cddc590b86}
+      \strng{bibnamehash}{476939da02f7d6960b8436cddc590b86}
+      \strng{authorbibnamehash}{476939da02f7d6960b8436cddc590b86}
+      \strng{authornamehash}{7ceeedcb791da6ea0f2872e9fa9c660d}
+      \strng{authorfullhash}{476939da02f7d6960b8436cddc590b86}
+      \strng{authorfullhashraw}{476939da02f7d6960b8436cddc590b86}
+      \field{sortinit}{A}
+      \field{sortinithash}{2f401846e2029bad6b3ecc16d50031e2}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Sensors}
+      \field{number}{18}
+      \field{title}{Blockchain-Based Smart Farm Security Framework for the Internet of Things}
+      \field{volume}{23}
+      \field{year}{2023}
+      \field{pages}{7992}
+      \range{pages}{1}
+    \endentry
+    \entry{caro2018blockchain}{article}{}{}
+      \name{author}{4}{}{%
+        {{un=0,uniquepart=base,hash=d73dded591122c7839a14095803cd55c}{%
+           family={Caro},
+           familyi={C\bibinitperiod},
+           given={M.\bibnamedelimi P.},
+           giveni={M\bibinitperiod\bibinitdelim P\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=bb61634a81465a2519da0336231bcb59}{%
+           family={Ali},
+           familyi={A\bibinitperiod},
+           given={M.\bibnamedelimi S.},
+           giveni={M\bibinitperiod\bibinitdelim S\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=2dcbc0b34154b2d6fe398d4715cf51c3}{%
+           family={Vecchio},
+           familyi={V\bibinitperiod},
+           given={M.},
+           giveni={M\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=65045ecc1511ceeb100a6a620ab3128c}{%
+           family={Giaffreda},
+           familyi={G\bibinitperiod},
+           given={R.},
+           giveni={R\bibinitperiod},
+           givenun=0}}%
+      }
+      \list{organization}{1}{%
+        {IEEE}%
+      }
+      \strng{namehash}{40e1d68dfafeabc07be0eef2b5acecba}
+      \strng{fullhash}{525a8e68f13e75e7fb4f0fa2a9804c83}
+      \strng{fullhashraw}{525a8e68f13e75e7fb4f0fa2a9804c83}
+      \strng{bibnamehash}{525a8e68f13e75e7fb4f0fa2a9804c83}
+      \strng{authorbibnamehash}{525a8e68f13e75e7fb4f0fa2a9804c83}
+      \strng{authornamehash}{40e1d68dfafeabc07be0eef2b5acecba}
+      \strng{authorfullhash}{525a8e68f13e75e7fb4f0fa2a9804c83}
+      \strng{authorfullhashraw}{525a8e68f13e75e7fb4f0fa2a9804c83}
+      \field{sortinit}{C}
+      \field{sortinithash}{4d103a86280481745c9c897c925753c0}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{2018 IoT Vertical and Topical Summit on Agriculture -- Tuscany (IOT Tuscany)}
+      \field{title}{Blockchain-based Traceability in Agri-Food Supply Chain Management: A Practical Implementation}
+      \field{year}{2018}
+      \field{pages}{1\bibrangedash 4}
+      \range{pages}{4}
+      \verb{doi}
+      \verb 10.1109/IOT-TUSCANY.2018.8373021
+      \endverb
+    \endentry
+    \entry{chauhan2025blockchain}{article}{}{}
+      \name{author}{8}{}{%
+        {{un=0,uniquepart=base,hash=23b7667414a68359be6d37bee432fbaa}{%
+           family={Chauhan},
+           familyi={C\bibinitperiod},
+           given={V.},
+           giveni={V\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=ce7f3f51eb2cd7cea50aa80b9e4d3b87}{%
+           family={Jain},
+           familyi={J\bibinitperiod},
+           given={N.},
+           giveni={N\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=95cc6f26e9663b00d6c2b41b48913d9f}{%
+           family={Waghmare},
+           familyi={W\bibinitperiod},
+           given={M.},
+           giveni={M\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=ae20ee5ed1acfadfb22a14498edeb785}{%
+           family={Parmar},
+           familyi={P\bibinitperiod},
+           given={A.},
+           giveni={A\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=e9a6b6a98dd2b971eeb670c72c6c3ec9}{%
+           family={Nandeha},
+           familyi={N\bibinitperiod},
+           given={N.},
+           giveni={N\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=a6d68078137647e12ad80b62221f84db}{%
+           family={Trivedi},
+           familyi={T\bibinitperiod},
+           given={A.},
+           giveni={A\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=923411aeca8dfb22dcf6d63bc22d04f7}{%
+           family={Sharma},
+           familyi={S\bibinitperiod},
+           given={N.},
+           giveni={N\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=c18b20beda9f8811fda1d2465c59cb43}{%
+           family={Rahman},
+           familyi={R\bibinitperiod},
+           given={S.\bibnamedelimi W.},
+           giveni={S\bibinitperiod\bibinitdelim W\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{3f3dd85d93c61c1c1464d25112f51129}
+      \strng{fullhash}{9daa17be959cc0f778cbdfd47d722e83}
+      \strng{fullhashraw}{9daa17be959cc0f778cbdfd47d722e83}
+      \strng{bibnamehash}{9daa17be959cc0f778cbdfd47d722e83}
+      \strng{authorbibnamehash}{9daa17be959cc0f778cbdfd47d722e83}
+      \strng{authornamehash}{3f3dd85d93c61c1c1464d25112f51129}
+      \strng{authorfullhash}{9daa17be959cc0f778cbdfd47d722e83}
+      \strng{authorfullhashraw}{9daa17be959cc0f778cbdfd47d722e83}
+      \field{sortinit}{C}
+      \field{sortinithash}{4d103a86280481745c9c897c925753c0}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Journal of Experimental Agriculture International}
+      \field{number}{11}
+      \field{title}{Blockchain and Big Data Analytics in Agriculture: A Review of Digital Innovations}
+      \field{volume}{47}
+      \field{year}{2025}
+      \field{pages}{58\bibrangedash 68}
+      \range{pages}{11}
+      \verb{doi}
+      \verb 10.9734/jeai/2025/v47i113849
+      \endverb
+    \endentry
+    \entry{cocco2021blockchain}{article}{}{}
+      \name{author}{3}{}{%
+        {{un=0,uniquepart=base,hash=30f0bb8709ce60d6ac1ed0805c7ae544}{%
+           family={Cocco},
+           familyi={C\bibinitperiod},
+           given={L.},
+           giveni={L\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=3c46855e4caa11737fb37fe55aff7ddb}{%
+           family={Tonelli},
+           familyi={T\bibinitperiod},
+           given={R.},
+           giveni={R\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=bdb5ef3462e4e8d92a7f04bd2b30d13a}{%
+           family={Marchesi},
+           familyi={M\bibinitperiod},
+           given={M.},
+           giveni={M\bibinitperiod},
+           givenun=0}}%
+      }
+      \list{publisher}{1}{%
+        {MDPI}%
+      }
+      \strng{namehash}{73d4f4f688736f8f94a7de1537d54b01}
+      \strng{fullhash}{6f96a2a520d8ef53d6db67a7c605c77b}
+      \strng{fullhashraw}{6f96a2a520d8ef53d6db67a7c605c77b}
+      \strng{bibnamehash}{6f96a2a520d8ef53d6db67a7c605c77b}
+      \strng{authorbibnamehash}{6f96a2a520d8ef53d6db67a7c605c77b}
+      \strng{authornamehash}{73d4f4f688736f8f94a7de1537d54b01}
+      \strng{authorfullhash}{6f96a2a520d8ef53d6db67a7c605c77b}
+      \strng{authorfullhashraw}{6f96a2a520d8ef53d6db67a7c605c77b}
+      \field{sortinit}{C}
+      \field{sortinithash}{4d103a86280481745c9c897c925753c0}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Future Internet}
+      \field{number}{12}
+      \field{title}{Blockchain and Self Sovereign Identity to Support Quality in the Food Supply Chain}
+      \field{volume}{13}
+      \field{year}{2021}
+      \field{pages}{301}
+      \range{pages}{1}
+    \endentry
+    \entry{dzreke2025securing}{article}{}{}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=38b04f642620a318d730a7e4be368b6e}{%
+           family={Dzreke},
+           familyi={D\bibinitperiod},
+           given={S.\bibnamedelimi S.},
+           giveni={S\bibinitperiod\bibinitdelim S\bibinitperiod},
+           givenun=0}}%
+      }
+      \list{publisher}{1}{%
+        {Fair East Publishers}%
+      }
+      \strng{namehash}{38b04f642620a318d730a7e4be368b6e}
+      \strng{fullhash}{38b04f642620a318d730a7e4be368b6e}
+      \strng{fullhashraw}{38b04f642620a318d730a7e4be368b6e}
+      \strng{bibnamehash}{38b04f642620a318d730a7e4be368b6e}
+      \strng{authorbibnamehash}{38b04f642620a318d730a7e4be368b6e}
+      \strng{authornamehash}{38b04f642620a318d730a7e4be368b6e}
+      \strng{authorfullhash}{38b04f642620a318d730a7e4be368b6e}
+      \strng{authorfullhashraw}{38b04f642620a318d730a7e4be368b6e}
+      \field{sortinit}{D}
+      \field{sortinithash}{6f385f66841fb5e82009dc833c761848}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Engineering Science \& Technology Journal}
+      \field{number}{11}
+      \field{title}{Securing the Connected Farm: Cyber Threats and Resilient Architectures for the Internet of AgriThings}
+      \field{volume}{6}
+      \field{year}{2025}
+      \field{pages}{642\bibrangedash 659}
+      \range{pages}{18}
+    \endentry
+    \entry{garg2018crop}{article}{}{}
+      \name{author}{3}{}{%
+        {{un=0,uniquepart=base,hash=8eba12d7690f90ecb00c7ea43760b367}{%
+           family={Garg},
+           familyi={G\bibinitperiod},
+           given={B.},
+           giveni={B\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=2408d73988ed8b41918bc452726792e5}{%
+           family={Aggarwal},
+           familyi={A\bibinitperiod},
+           given={S.},
+           giveni={S\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=600b4360f89c61890b2635b7614dad2e}{%
+           family={Sokhal},
+           familyi={S\bibinitperiod},
+           given={J.},
+           giveni={J\bibinitperiod},
+           givenun=0}}%
+      }
+      \list{publisher}{1}{%
+        {Elsevier}%
+      }
+      \strng{namehash}{3b55c69834ab78713432c8142ad2b060}
+      \strng{fullhash}{55a01ab44ca7d6837186a11e17c70705}
+      \strng{fullhashraw}{55a01ab44ca7d6837186a11e17c70705}
+      \strng{bibnamehash}{55a01ab44ca7d6837186a11e17c70705}
+      \strng{authorbibnamehash}{55a01ab44ca7d6837186a11e17c70705}
+      \strng{authornamehash}{3b55c69834ab78713432c8142ad2b060}
+      \strng{authorfullhash}{55a01ab44ca7d6837186a11e17c70705}
+      \strng{authorfullhashraw}{55a01ab44ca7d6837186a11e17c70705}
+      \field{sortinit}{G}
+      \field{sortinithash}{32d67eca0634bf53703493fb1090a2e8}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Computers and Electrical Engineering}
+      \field{title}{Crop yield forecasting using fuzzy logic and regression model}
+      \field{volume}{67}
+      \field{year}{2018}
+      \field{pages}{383\bibrangedash 403}
+      \range{pages}{21}
+      \verb{doi}
+      \verb 10.1016/j.compeleceng.2017.11.015
+      \endverb
+    \endentry
+    \entry{khaki2019cnn}{article}{}{}
+      \name{author}{3}{}{%
+        {{un=0,uniquepart=base,hash=e84726291a06d3463a36d9cfa957033e}{%
+           family={Khaki},
+           familyi={K\bibinitperiod},
+           given={S.},
+           giveni={S\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=9a75ee293f2555f40976345739087998}{%
+           family={Wang},
+           familyi={W\bibinitperiod},
+           given={L.},
+           giveni={L\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=467b2d11a8a720bc144767533bfa1a8d}{%
+           family={Archontoulis},
+           familyi={A\bibinitperiod},
+           given={S.\bibnamedelimi V.},
+           giveni={S\bibinitperiod\bibinitdelim V\bibinitperiod},
+           givenun=0}}%
+      }
+      \list{publisher}{1}{%
+        {Frontiers}%
+      }
+      \strng{namehash}{c4c2031bdb82f941463abca63c6fe6a7}
+      \strng{fullhash}{9bcb7df520f1665710f6e609d5486ab8}
+      \strng{fullhashraw}{9bcb7df520f1665710f6e609d5486ab8}
+      \strng{bibnamehash}{9bcb7df520f1665710f6e609d5486ab8}
+      \strng{authorbibnamehash}{9bcb7df520f1665710f6e609d5486ab8}
+      \strng{authornamehash}{c4c2031bdb82f941463abca63c6fe6a7}
+      \strng{authorfullhash}{9bcb7df520f1665710f6e609d5486ab8}
+      \strng{authorfullhashraw}{9bcb7df520f1665710f6e609d5486ab8}
+      \field{sortinit}{K}
+      \field{sortinithash}{c02bf6bff1c488450c352b40f5d853ab}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Frontiers in Plant Science}
+      \field{title}{A CNN-RNN Framework for Crop Yield Prediction}
+      \field{volume}{10}
+      \field{year}{2019}
+      \field{pages}{1750}
+      \range{pages}{1}
+      \verb{doi}
+      \verb 10.3389/fpls.2019.01750
+      \endverb
+    \endentry
+    \entry{ktari2022agricultural}{article}{}{}
+      \name{author}{5}{}{%
+        {{un=0,uniquepart=base,hash=7979d9da27ebb2972a7cfaf46faf169c}{%
+           family={Ktari},
+           familyi={K\bibinitperiod},
+           given={J.},
+           giveni={J\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=8f06c3ce7f90096ccea2902870e01f4c}{%
+           family={Frikha},
+           familyi={F\bibinitperiod},
+           given={T.},
+           giveni={T\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=0425f98a92598eca676c760128abe088}{%
+           family={Chaabane},
+           familyi={C\bibinitperiod},
+           given={F.},
+           giveni={F\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=c797bf7f1abd9e13cbc51d231a4dfb34}{%
+           family={Hamdi},
+           familyi={H\bibinitperiod},
+           given={M.},
+           giveni={M\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=a5090e103708afe6dec33276e183ea21}{%
+           family={Hamam},
+           familyi={H\bibinitperiod},
+           given={H.},
+           giveni={H\bibinitperiod},
+           givenun=0}}%
+      }
+      \list{publisher}{1}{%
+        {MDPI}%
+      }
+      \strng{namehash}{7bfd1fd368d77a2aad5df5e2ee7737b2}
+      \strng{fullhash}{0f8dd9e681753b0d115ca395396310ce}
+      \strng{fullhashraw}{0f8dd9e681753b0d115ca395396310ce}
+      \strng{bibnamehash}{0f8dd9e681753b0d115ca395396310ce}
+      \strng{authorbibnamehash}{0f8dd9e681753b0d115ca395396310ce}
+      \strng{authornamehash}{7bfd1fd368d77a2aad5df5e2ee7737b2}
+      \strng{authorfullhash}{0f8dd9e681753b0d115ca395396310ce}
+      \strng{authorfullhashraw}{0f8dd9e681753b0d115ca395396310ce}
+      \field{sortinit}{K}
+      \field{sortinithash}{c02bf6bff1c488450c352b40f5d853ab}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Electronics}
+      \field{number}{20}
+      \field{title}{Agricultural Lightweight Embedded Blockchain System: A Case Study in Olive Oil}
+      \field{volume}{11}
+      \field{year}{2022}
+      \field{pages}{3394}
+      \range{pages}{1}
+      \verb{doi}
+      \verb 10.3390/electronics11203394
+      \endverb
+    \endentry
+    \entry{lin2017blockchain}{article}{}{}
+      \name{author}{7}{}{%
+        {{un=0,uniquepart=base,hash=dbb0dc2419d997c1cd23b85fcc2d5442}{%
+           family={Lin},
+           familyi={L\bibinitperiod},
+           given={Y.-P.},
+           giveni={Y\bibinithyphendelim P\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=d58734f347def314299e2560cf15e237}{%
+           family={Petway},
+           familyi={P\bibinitperiod},
+           given={J.\bibnamedelimi R.},
+           giveni={J\bibinitperiod\bibinitdelim R\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=bdae57c59afa67931f95e71a13a6d5e5}{%
+           family={Anthony},
+           familyi={A\bibinitperiod},
+           given={J.},
+           giveni={J\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=0f4158973169d95fc2bf5e2310b4f989}{%
+           family={Mukhtar},
+           familyi={M\bibinitperiod},
+           given={H.},
+           giveni={H\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=21cc17665213c739d0193d78bdf02a70}{%
+           family={Liao},
+           familyi={L\bibinitperiod},
+           given={S.-W.},
+           giveni={S\bibinithyphendelim W\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=c0da14c2ead1d53f14c5577ddda5fbf5}{%
+           family={Chou},
+           familyi={C\bibinitperiod},
+           given={C.-F.},
+           giveni={C\bibinithyphendelim F\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=e2c29654a8bb95263ce2a439a591e963}{%
+           family={Ho},
+           familyi={H\bibinitperiod},
+           given={Y.-F.},
+           giveni={Y\bibinithyphendelim F\bibinitperiod},
+           givenun=0}}%
+      }
+      \list{publisher}{1}{%
+        {MDPI}%
+      }
+      \strng{namehash}{41f9f1c798b5e4ba84276ecdfca720ab}
+      \strng{fullhash}{4f709a7f7ddfcc00562fbb95200a9652}
+      \strng{fullhashraw}{4f709a7f7ddfcc00562fbb95200a9652}
+      \strng{bibnamehash}{4f709a7f7ddfcc00562fbb95200a9652}
+      \strng{authorbibnamehash}{4f709a7f7ddfcc00562fbb95200a9652}
+      \strng{authornamehash}{41f9f1c798b5e4ba84276ecdfca720ab}
+      \strng{authorfullhash}{4f709a7f7ddfcc00562fbb95200a9652}
+      \strng{authorfullhashraw}{4f709a7f7ddfcc00562fbb95200a9652}
+      \field{sortinit}{L}
+      \field{sortinithash}{7c47d417cecb1f4bd38d1825c427a61a}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Environments}
+      \field{number}{3}
+      \field{title}{Blockchain: The Evolutionary Next Step for ICT E-Agriculture}
+      \field{volume}{4}
+      \field{year}{2017}
+      \field{pages}{50}
+      \range{pages}{1}
+      \verb{doi}
+      \verb 10.3390/environments4030050
+      \endverb
+    \endentry
+    \entry{liu2021blockchain}{article}{}{}
+      \name{author}{3}{}{%
+        {{un=0,uniquepart=base,hash=7bb074c37d04e2fb30a473aa12102ae1}{%
+           family={Liu},
+           familyi={L\bibinitperiod},
+           given={J.},
+           giveni={J\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=32e563370422457790db030ab2c13183}{%
+           family={Zhang},
+           familyi={Z\bibinitperiod},
+           given={H.},
+           giveni={H\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=1d667cf5655c780c7198239f9c038a69}{%
+           family={Zhen},
+           familyi={Z\bibinitperiod},
+           given={L.},
+           giveni={L\bibinitperiod},
+           givenun=0}}%
+      }
+      \list{publisher}{1}{%
+        {Taylor \& Francis}%
+      }
+      \strng{namehash}{2c4910df36bec2da172306358e36f666}
+      \strng{fullhash}{e0985313ea334f9fbc840bbcb326d51d}
+      \strng{fullhashraw}{e0985313ea334f9fbc840bbcb326d51d}
+      \strng{bibnamehash}{e0985313ea334f9fbc840bbcb326d51d}
+      \strng{authorbibnamehash}{e0985313ea334f9fbc840bbcb326d51d}
+      \strng{authornamehash}{2c4910df36bec2da172306358e36f666}
+      \strng{authorfullhash}{e0985313ea334f9fbc840bbcb326d51d}
+      \strng{authorfullhashraw}{e0985313ea334f9fbc840bbcb326d51d}
+      \field{sortinit}{L}
+      \field{sortinithash}{7c47d417cecb1f4bd38d1825c427a61a}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{International Journal of Production Research}
+      \field{number}{11}
+      \field{title}{Blockchain technology in maritime supply chains: Applications, architecture and challenges}
+      \field{volume}{61}
+      \field{year}{2021}
+      \field{pages}{3547\bibrangedash 3563}
+      \range{pages}{17}
+      \verb{doi}
+      \verb 10.1080/00207543.2021.1930239
+      \endverb
+    \endentry
+    \entry{mirabelli2020blockchain}{article}{}{}
+      \name{author}{2}{}{%
+        {{un=0,uniquepart=base,hash=a6992f7a3a853b370d646fb14852a714}{%
+           family={Mirabelli},
+           familyi={M\bibinitperiod},
+           given={G.},
+           giveni={G\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=7328178268ba1c1345fb69219e949cbc}{%
+           family={Ferraro},
+           familyi={F\bibinitperiod},
+           given={V.},
+           giveni={V\bibinitperiod},
+           givenun=0}}%
+      }
+      \list{publisher}{1}{%
+        {Elsevier}%
+      }
+      \strng{namehash}{3a9a06982e050ed498fa9587a5a3938d}
+      \strng{fullhash}{3a9a06982e050ed498fa9587a5a3938d}
+      \strng{fullhashraw}{3a9a06982e050ed498fa9587a5a3938d}
+      \strng{bibnamehash}{3a9a06982e050ed498fa9587a5a3938d}
+      \strng{authorbibnamehash}{3a9a06982e050ed498fa9587a5a3938d}
+      \strng{authornamehash}{3a9a06982e050ed498fa9587a5a3938d}
+      \strng{authorfullhash}{3a9a06982e050ed498fa9587a5a3938d}
+      \strng{authorfullhashraw}{3a9a06982e050ed498fa9587a5a3938d}
+      \field{sortinit}{M}
+      \field{sortinithash}{4625c616857f13d17ce56f7d4f97d451}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Procedia Manufacturing}
+      \field{title}{Blockchain and agricultural supply chains traceability: Research trends and future challenges}
+      \field{volume}{42}
+      \field{year}{2020}
+      \field{pages}{414\bibrangedash 421}
+      \range{pages}{8}
+      \verb{doi}
+      \verb 10.1016/j.promfg.2020.02.054
+      \endverb
+    \endentry
+    \entry{sui2024documentation}{misc}{}{}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=17cea6263a97718aae9af38b79bc50dd}{%
+           family={{Mysten Labs}},
+           familyi={M\bibinitperiod}}}%
+      }
+      \strng{namehash}{17cea6263a97718aae9af38b79bc50dd}
+      \strng{fullhash}{17cea6263a97718aae9af38b79bc50dd}
+      \strng{fullhashraw}{17cea6263a97718aae9af38b79bc50dd}
+      \strng{bibnamehash}{17cea6263a97718aae9af38b79bc50dd}
+      \strng{authorbibnamehash}{17cea6263a97718aae9af38b79bc50dd}
+      \strng{authornamehash}{17cea6263a97718aae9af38b79bc50dd}
+      \strng{authorfullhash}{17cea6263a97718aae9af38b79bc50dd}
+      \strng{authorfullhashraw}{17cea6263a97718aae9af38b79bc50dd}
+      \field{sortinit}{M}
+      \field{sortinithash}{4625c616857f13d17ce56f7d4f97d451}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{howpublished}{\url{https://docs.sui.io}}
+      \field{note}{Accessed: 2026-07-15}
+      \field{title}{Sui Blockchain Documentation: Architecture and Move Programming}
+      \field{year}{2024}
+    \endentry
+    \entry{padhiary2025emerging}{article}{}{}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=2c0c4dfb54d0242a1e0c16537b00e1e7}{%
+           family={Padhiary},
+           familyi={P\bibinitperiod},
+           given={M.},
+           giveni={M\bibinitperiod},
+           givenun=0}}%
+      }
+      \list{publisher}{1}{%
+        {Springer}%
+      }
+      \strng{namehash}{2c0c4dfb54d0242a1e0c16537b00e1e7}
+      \strng{fullhash}{2c0c4dfb54d0242a1e0c16537b00e1e7}
+      \strng{fullhashraw}{2c0c4dfb54d0242a1e0c16537b00e1e7}
+      \strng{bibnamehash}{2c0c4dfb54d0242a1e0c16537b00e1e7}
+      \strng{authorbibnamehash}{2c0c4dfb54d0242a1e0c16537b00e1e7}
+      \strng{authornamehash}{2c0c4dfb54d0242a1e0c16537b00e1e7}
+      \strng{authorfullhash}{2c0c4dfb54d0242a1e0c16537b00e1e7}
+      \strng{authorfullhashraw}{2c0c4dfb54d0242a1e0c16537b00e1e7}
+      \field{sortinit}{P}
+      \field{sortinithash}{ff3bcf24f47321b42cb156c2cc8a8422}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Discover Robotics}
+      \field{number}{6}
+      \field{title}{Emerging technologies for smart and sustainable precision agriculture}
+      \field{volume}{1}
+      \field{year}{2025}
+      \verb{doi}
+      \verb 10.1007/s44430-025-00006-0
+      \endverb
+    \endentry
+    \entry{rahman2025enhancing}{article}{}{}
+      \name{author}{7}{}{%
+        {{un=0,uniquepart=base,hash=a4781ccc16115de87807407c20a1e0cd}{%
+           family={Rahman},
+           familyi={R\bibinitperiod},
+           given={M.\bibnamedelimi S.},
+           giveni={M\bibinitperiod\bibinitdelim S\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=fa5daeb1e0bdb30204807f9f710f8532}{%
+           family={Hossain},
+           familyi={H\bibinitperiod},
+           given={M.\bibnamedelimi S.},
+           giveni={M\bibinitperiod\bibinitdelim S\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=027e1c4f16095ab2b15b453a707b9342}{%
+           family={Rahman},
+           familyi={R\bibinitperiod},
+           given={M.\bibnamedelimi K.},
+           giveni={M\bibinitperiod\bibinitdelim K\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=dda80d11141404ae99205e27bb67ffb7}{%
+           family={Islam},
+           familyi={I\bibinitperiod},
+           given={M.\bibnamedelimi R.},
+           giveni={M\bibinitperiod\bibinitdelim R\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=f9f3544f94732504e33e525da7172781}{%
+           family={Sumon},
+           familyi={S\bibinitperiod},
+           given={M.\bibnamedelimi F.\bibnamedelimi I.},
+           giveni={M\bibinitperiod\bibinitdelim F\bibinitperiod\bibinitdelim I\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=458066de6b7f254fb5561c795f596ec2}{%
+           family={Siam},
+           familyi={S\bibinitperiod},
+           given={M.\bibnamedelimi A.},
+           giveni={M\bibinitperiod\bibinitdelim A\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=110e37d83d4d5466720bdbb57b12030e}{%
+           family={Debnath},
+           familyi={D\bibinitperiod},
+           given={P.},
+           giveni={P\bibinitperiod},
+           givenun=0}}%
+      }
+      \list{publisher}{2}{%
+        {Al-Kindi Centre for Research}%
+        {Development}%
+      }
+      \strng{namehash}{387f9ee7873e7970ba61f2d384d3b1c1}
+      \strng{fullhash}{526fd47e7f6ef9ddf62e1970a3467714}
+      \strng{fullhashraw}{526fd47e7f6ef9ddf62e1970a3467714}
+      \strng{bibnamehash}{526fd47e7f6ef9ddf62e1970a3467714}
+      \strng{authorbibnamehash}{526fd47e7f6ef9ddf62e1970a3467714}
+      \strng{authornamehash}{387f9ee7873e7970ba61f2d384d3b1c1}
+      \strng{authorfullhash}{526fd47e7f6ef9ddf62e1970a3467714}
+      \strng{authorfullhashraw}{526fd47e7f6ef9ddf62e1970a3467714}
+      \field{sortinit}{R}
+      \field{sortinithash}{5e1c39a9d46ffb6bebd8f801023a9486}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Journal of Business and Management Studies}
+      \field{number}{4}
+      \field{title}{Enhancing Supply Chain Transparency with Blockchain: A Data-Driven Analysis of Distributed Ledger Applications}
+      \field{volume}{7}
+      \field{year}{2025}
+      \field{pages}{59\bibrangedash 77}
+      \range{pages}{19}
+      \verb{doi}
+      \verb 10.32996/jbms
+      \endverb
+    \endentry
+    \entry{raj2022survey}{article}{}{}
+      \name{author}{7}{}{%
+        {{un=0,uniquepart=base,hash=66f21cfc395a2745a344399c3057a238}{%
+           family={Raj},
+           familyi={R\bibinitperiod},
+           given={M.},
+           giveni={M\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=1774a1f1ad14dc83fbedb7ce144b2603}{%
+           family={Gupta},
+           familyi={G\bibinitperiod},
+           given={S.},
+           giveni={S\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=a6d11af8838b98b27a5bac127d92b535}{%
+           family={Chamola},
+           familyi={C\bibinitperiod},
+           given={V.},
+           giveni={V\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=c518d2cbb990613699b70ada8abed962}{%
+           family={Elhence},
+           familyi={E\bibinitperiod},
+           given={A.},
+           giveni={A\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=4e3da405b7f32a3da241ff36af37a6d3}{%
+           family={Garg},
+           familyi={G\bibinitperiod},
+           given={T.},
+           giveni={T\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=5501169992fe7593d29c0bcd04b02205}{%
+           family={Atiquzzaman},
+           familyi={A\bibinitperiod},
+           given={M.},
+           giveni={M\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=2ad9f325f3c7ba1d6ea24a44005f197a}{%
+           family={Niyato},
+           familyi={N\bibinitperiod},
+           given={D.},
+           giveni={D\bibinitperiod},
+           givenun=0}}%
+      }
+      \list{publisher}{1}{%
+        {IEEE}%
+      }
+      \strng{namehash}{891c98164dda95fdf0078bb738787d25}
+      \strng{fullhash}{a5edc94febff305f1395573bf3068d8c}
+      \strng{fullhashraw}{a5edc94febff305f1395573bf3068d8c}
+      \strng{bibnamehash}{a5edc94febff305f1395573bf3068d8c}
+      \strng{authorbibnamehash}{a5edc94febff305f1395573bf3068d8c}
+      \strng{authornamehash}{891c98164dda95fdf0078bb738787d25}
+      \strng{authorfullhash}{a5edc94febff305f1395573bf3068d8c}
+      \strng{authorfullhashraw}{a5edc94febff305f1395573bf3068d8c}
+      \field{sortinit}{R}
+      \field{sortinithash}{5e1c39a9d46ffb6bebd8f801023a9486}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{IEEE Access}
+      \field{title}{A Survey on Smart Agriculture: Development Modes, Technologies, and Security and Privacy Challenges}
+      \field{volume}{10}
+      \field{year}{2022}
+      \field{pages}{4719\bibrangedash 4732}
+      \range{pages}{14}
+      \verb{doi}
+      \verb 10.1109/ACCESS.2021.3137083
+      \endverb
+    \endentry
+    \entry{sharma2023blockchain}{article}{}{}
+      \name{author}{4}{}{%
+        {{un=0,uniquepart=base,hash=a3fd4f0ea9e0c4ee7050feb90555899e}{%
+           family={Sharma},
+           familyi={S\bibinitperiod},
+           given={A.},
+           giveni={A\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=a3fd4f0ea9e0c4ee7050feb90555899e}{%
+           family={Sharma},
+           familyi={S\bibinitperiod},
+           given={A.},
+           giveni={A\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=c6273bd715852fcdb8172247896a42f7}{%
+           family={Bhatia},
+           familyi={B\bibinitperiod},
+           given={T.},
+           giveni={T\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=f73200ded762b8806e06b523bc757afe}{%
+           family={Singh},
+           familyi={S\bibinitperiod},
+           given={R.\bibnamedelimi K.},
+           giveni={R\bibinitperiod\bibinitdelim K\bibinitperiod},
+           givenun=0}}%
+      }
+      \list{publisher}{1}{%
+        {Springer}%
+      }
+      \strng{namehash}{0244a8a37f160ab981a23f8c14a1440a}
+      \strng{fullhash}{2ffac156e0e69a48a0134287391ff3e1}
+      \strng{fullhashraw}{2ffac156e0e69a48a0134287391ff3e1}
+      \strng{bibnamehash}{2ffac156e0e69a48a0134287391ff3e1}
+      \strng{authorbibnamehash}{2ffac156e0e69a48a0134287391ff3e1}
+      \strng{authornamehash}{0244a8a37f160ab981a23f8c14a1440a}
+      \strng{authorfullhash}{2ffac156e0e69a48a0134287391ff3e1}
+      \strng{authorfullhashraw}{2ffac156e0e69a48a0134287391ff3e1}
+      \field{sortinit}{S}
+      \field{sortinithash}{b164b07b29984b41daf1e85279fbc5ab}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Operations Management Research}
+      \field{number}{3}
+      \field{title}{Blockchain enabled food supply chain management: A systematic literature review and bibliometric analysis}
+      \field{volume}{16}
+      \field{year}{2023}
+      \field{pages}{1594\bibrangedash 1618}
+      \range{pages}{25}
+    \endentry
+    \entry{sun2025storage}{article}{}{}
+      \name{author}{7}{}{%
+        {{un=0,uniquepart=base,hash=7e2e360827548f3aedfa687c27ddbdc3}{%
+           family={Sun},
+           familyi={S\bibinitperiod},
+           given={M.},
+           giveni={M\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=bd92eec05092f50cd5f2b25a4ff6c7a2}{%
+           family={Luo},
+           familyi={L\bibinitperiod},
+           given={N.},
+           giveni={N\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=6ac1a9c7ff803089945d692cddfb230b}{%
+           family={Bin},
+           familyi={B\bibinitperiod},
+           given={X.},
+           giveni={X\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=4e6fe5946a342625d61c1d8e3370d779}{%
+           family={Chen},
+           familyi={C\bibinitperiod},
+           given={F.},
+           giveni={F\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=c47eb4bdf7506788ca8df6c79ad68a37}{%
+           family={Liu},
+           familyi={L\bibinitperiod},
+           given={Q.},
+           giveni={Q\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=4b44bba1743c2ad874f7d960887af663}{%
+           family={Liu},
+           familyi={L\bibinitperiod},
+           given={X.},
+           giveni={X\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=d05cd8de98015332c6658b1dbe4df962}{%
+           family={Sun},
+           familyi={S\bibinitperiod},
+           given={C.},
+           giveni={C\bibinitperiod},
+           givenun=0}}%
+      }
+      \list{publisher}{1}{%
+        {Nature Publishing Group}%
+      }
+      \strng{namehash}{7c9b58cc237c50188d18947a6edae7c5}
+      \strng{fullhash}{42cc115eb81e1c84c271558af918f307}
+      \strng{fullhashraw}{42cc115eb81e1c84c271558af918f307}
+      \strng{bibnamehash}{42cc115eb81e1c84c271558af918f307}
+      \strng{authorbibnamehash}{42cc115eb81e1c84c271558af918f307}
+      \strng{authornamehash}{7c9b58cc237c50188d18947a6edae7c5}
+      \strng{authorfullhash}{42cc115eb81e1c84c271558af918f307}
+      \strng{authorfullhashraw}{42cc115eb81e1c84c271558af918f307}
+      \field{sortinit}{S}
+      \field{sortinithash}{b164b07b29984b41daf1e85279fbc5ab}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Scientific Reports}
+      \field{title}{Data storage and query optimization for Blockchain-based agricultural supply chains using storage light nodes}
+      \field{volume}{15}
+      \field{year}{2025}
+      \field{pages}{17258}
+      \range{pages}{1}
+      \verb{doi}
+      \verb 10.1038/s41598-025-17258-w
+      \endverb
+    \endentry
+  \enddatalist
+  \datalist[entry]{apa/global//global/global/global}
+    \entry{agtrust2026framework}{article}{}{}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=0097f31b22dd7ad10d00bc27fbd0799a}{%
+           family={{AgTrust Consortium}},
+           familyi={A\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {IEEE}%
+      }
+      \strng{namehash}{0097f31b22dd7ad10d00bc27fbd0799a}
+      \strng{fullhash}{0097f31b22dd7ad10d00bc27fbd0799a}
+      \strng{fullhashraw}{0097f31b22dd7ad10d00bc27fbd0799a}
+      \strng{bibnamehash}{0097f31b22dd7ad10d00bc27fbd0799a}
+      \strng{authorbibnamehash}{0097f31b22dd7ad10d00bc27fbd0799a}
+      \strng{authornamehash}{0097f31b22dd7ad10d00bc27fbd0799a}
+      \strng{authorfullhash}{0097f31b22dd7ad10d00bc27fbd0799a}
+      \strng{authorfullhashraw}{0097f31b22dd7ad10d00bc27fbd0799a}
+      \field{sortinit}{A}
+      \field{sortinithash}{2f401846e2029bad6b3ecc16d50031e2}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{IEEE Access}
+      \field{title}{AgTrust: Framework for Securing Critical Agriculture Technology and Emerging Solutions}
+      \field{volume}{14}
+      \field{year}{2026}
+      \field{pages}{1\bibrangedash 16}
+      \range{pages}{16}
+    \endentry
+    \entry{layek2025secured}{article}{}{}
+      \name{author}{3}{}{%
+        {{un=0,uniquepart=base,hash=1773dfe7e09cb6beb54b5e081271eed5}{%
+           family={Al\bibnamedelima Layek},
+           familyi={A\bibinitperiod\bibinitdelim L\bibinitperiod},
+           given={M.\bibnamedelimi A.},
+           giveni={M\bibinitperiod\bibinitdelim A\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=1f992a6329b3d5bebd921d98a276c672}{%
+           family={Kamal},
+           familyi={K\bibinitperiod},
+           given={M.\bibnamedelimi S.},
+           giveni={M\bibinitperiod\bibinitdelim S\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=b9fe3733638d1796f160ac346db096f9}{%
+           family={Hasan},
+           familyi={H\bibinitperiod},
+           given={M.\bibnamedelimi F.},
+           giveni={M\bibinitperiod\bibinitdelim F\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{0cd7713e238e6794fdd24ab213722a41}
+      \strng{fullhash}{ee47d578b8fbf94ac3e65b5676a59000}
+      \strng{fullhashraw}{ee47d578b8fbf94ac3e65b5676a59000}
+      \strng{bibnamehash}{ee47d578b8fbf94ac3e65b5676a59000}
+      \strng{authorbibnamehash}{ee47d578b8fbf94ac3e65b5676a59000}
+      \strng{authornamehash}{0cd7713e238e6794fdd24ab213722a41}
+      \strng{authorfullhash}{ee47d578b8fbf94ac3e65b5676a59000}
+      \strng{authorfullhashraw}{ee47d578b8fbf94ac3e65b5676a59000}
+      \field{sortinit}{A}
+      \field{sortinithash}{2f401846e2029bad6b3ecc16d50031e2}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{arXiv preprint arXiv:2505.01196}
+      \field{title}{A Secured Triad of IoT, Machine Learning, and Blockchain for Crop Forecasting in Agriculture}
+      \field{year}{2025}
+    \endentry
+    \entry{alabsi2023blockchain}{article}{}{}
+      \name{author}{3}{}{%
+        {{un=0,uniquepart=base,hash=5632c304e5a3b075f4cdb6bc489ff2d6}{%
+           family={Al-Absi},
+           familyi={A\bibinithyphendelim A\bibinitperiod},
+           given={A.\bibnamedelimi A.},
+           giveni={A\bibinitperiod\bibinitdelim A\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=a84850d9c7116e4bf32c45ba066f4d0c}{%
+           family={Al-Absi},
+           familyi={A\bibinithyphendelim A\bibinitperiod},
+           given={M.\bibnamedelimi A.},
+           giveni={M\bibinitperiod\bibinitdelim A\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=a38fe2282e0ae708270c02346a36d08f}{%
+           family={Lee},
+           familyi={L\bibinitperiod},
+           given={J.},
+           giveni={J\bibinitperiod},
+           givenun=0}}%
+      }
+      \list{publisher}{1}{%
+        {MDPI}%
+      }
+      \strng{namehash}{7ceeedcb791da6ea0f2872e9fa9c660d}
+      \strng{fullhash}{476939da02f7d6960b8436cddc590b86}
+      \strng{fullhashraw}{476939da02f7d6960b8436cddc590b86}
+      \strng{bibnamehash}{476939da02f7d6960b8436cddc590b86}
+      \strng{authorbibnamehash}{476939da02f7d6960b8436cddc590b86}
+      \strng{authornamehash}{7ceeedcb791da6ea0f2872e9fa9c660d}
+      \strng{authorfullhash}{476939da02f7d6960b8436cddc590b86}
+      \strng{authorfullhashraw}{476939da02f7d6960b8436cddc590b86}
+      \field{sortinit}{A}
+      \field{sortinithash}{2f401846e2029bad6b3ecc16d50031e2}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Sensors}
+      \field{number}{18}
+      \field{title}{Blockchain-Based Smart Farm Security Framework for the Internet of Things}
+      \field{volume}{23}
+      \field{year}{2023}
+      \field{pages}{7992}
+      \range{pages}{1}
+    \endentry
+    \entry{caro2018blockchain}{article}{}{}
+      \name{author}{4}{}{%
+        {{un=0,uniquepart=base,hash=d73dded591122c7839a14095803cd55c}{%
+           family={Caro},
+           familyi={C\bibinitperiod},
+           given={M.\bibnamedelimi P.},
+           giveni={M\bibinitperiod\bibinitdelim P\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=bb61634a81465a2519da0336231bcb59}{%
+           family={Ali},
+           familyi={A\bibinitperiod},
+           given={M.\bibnamedelimi S.},
+           giveni={M\bibinitperiod\bibinitdelim S\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=2dcbc0b34154b2d6fe398d4715cf51c3}{%
+           family={Vecchio},
+           familyi={V\bibinitperiod},
+           given={M.},
+           giveni={M\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=65045ecc1511ceeb100a6a620ab3128c}{%
+           family={Giaffreda},
+           familyi={G\bibinitperiod},
+           given={R.},
+           giveni={R\bibinitperiod},
+           givenun=0}}%
+      }
+      \list{organization}{1}{%
+        {IEEE}%
+      }
+      \strng{namehash}{40e1d68dfafeabc07be0eef2b5acecba}
+      \strng{fullhash}{525a8e68f13e75e7fb4f0fa2a9804c83}
+      \strng{fullhashraw}{525a8e68f13e75e7fb4f0fa2a9804c83}
+      \strng{bibnamehash}{525a8e68f13e75e7fb4f0fa2a9804c83}
+      \strng{authorbibnamehash}{525a8e68f13e75e7fb4f0fa2a9804c83}
+      \strng{authornamehash}{40e1d68dfafeabc07be0eef2b5acecba}
+      \strng{authorfullhash}{525a8e68f13e75e7fb4f0fa2a9804c83}
+      \strng{authorfullhashraw}{525a8e68f13e75e7fb4f0fa2a9804c83}
+      \field{sortinit}{C}
+      \field{sortinithash}{4d103a86280481745c9c897c925753c0}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{2018 IoT Vertical and Topical Summit on Agriculture -- Tuscany (IOT Tuscany)}
+      \field{title}{Blockchain-based Traceability in Agri-Food Supply Chain Management: A Practical Implementation}
+      \field{year}{2018}
+      \field{pages}{1\bibrangedash 4}
+      \range{pages}{4}
+      \verb{doi}
+      \verb 10.1109/IOT-TUSCANY.2018.8373021
+      \endverb
+    \endentry
+    \entry{chauhan2025blockchain}{article}{}{}
+      \name{author}{8}{}{%
+        {{un=0,uniquepart=base,hash=23b7667414a68359be6d37bee432fbaa}{%
+           family={Chauhan},
+           familyi={C\bibinitperiod},
+           given={V.},
+           giveni={V\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=ce7f3f51eb2cd7cea50aa80b9e4d3b87}{%
+           family={Jain},
+           familyi={J\bibinitperiod},
+           given={N.},
+           giveni={N\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=95cc6f26e9663b00d6c2b41b48913d9f}{%
+           family={Waghmare},
+           familyi={W\bibinitperiod},
+           given={M.},
+           giveni={M\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=ae20ee5ed1acfadfb22a14498edeb785}{%
+           family={Parmar},
+           familyi={P\bibinitperiod},
+           given={A.},
+           giveni={A\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=e9a6b6a98dd2b971eeb670c72c6c3ec9}{%
+           family={Nandeha},
+           familyi={N\bibinitperiod},
+           given={N.},
+           giveni={N\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=a6d68078137647e12ad80b62221f84db}{%
+           family={Trivedi},
+           familyi={T\bibinitperiod},
+           given={A.},
+           giveni={A\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=923411aeca8dfb22dcf6d63bc22d04f7}{%
+           family={Sharma},
+           familyi={S\bibinitperiod},
+           given={N.},
+           giveni={N\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=c18b20beda9f8811fda1d2465c59cb43}{%
+           family={Rahman},
+           familyi={R\bibinitperiod},
+           given={S.\bibnamedelimi W.},
+           giveni={S\bibinitperiod\bibinitdelim W\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{3f3dd85d93c61c1c1464d25112f51129}
+      \strng{fullhash}{9daa17be959cc0f778cbdfd47d722e83}
+      \strng{fullhashraw}{9daa17be959cc0f778cbdfd47d722e83}
+      \strng{bibnamehash}{9daa17be959cc0f778cbdfd47d722e83}
+      \strng{authorbibnamehash}{9daa17be959cc0f778cbdfd47d722e83}
+      \strng{authornamehash}{3f3dd85d93c61c1c1464d25112f51129}
+      \strng{authorfullhash}{9daa17be959cc0f778cbdfd47d722e83}
+      \strng{authorfullhashraw}{9daa17be959cc0f778cbdfd47d722e83}
+      \field{sortinit}{C}
+      \field{sortinithash}{4d103a86280481745c9c897c925753c0}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Journal of Experimental Agriculture International}
+      \field{number}{11}
+      \field{title}{Blockchain and Big Data Analytics in Agriculture: A Review of Digital Innovations}
+      \field{volume}{47}
+      \field{year}{2025}
+      \field{pages}{58\bibrangedash 68}
+      \range{pages}{11}
+      \verb{doi}
+      \verb 10.9734/jeai/2025/v47i113849
+      \endverb
+    \endentry
+    \entry{cocco2021blockchain}{article}{}{}
+      \name{author}{3}{}{%
+        {{un=0,uniquepart=base,hash=30f0bb8709ce60d6ac1ed0805c7ae544}{%
+           family={Cocco},
+           familyi={C\bibinitperiod},
+           given={L.},
+           giveni={L\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=3c46855e4caa11737fb37fe55aff7ddb}{%
+           family={Tonelli},
+           familyi={T\bibinitperiod},
+           given={R.},
+           giveni={R\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=bdb5ef3462e4e8d92a7f04bd2b30d13a}{%
+           family={Marchesi},
+           familyi={M\bibinitperiod},
+           given={M.},
+           giveni={M\bibinitperiod},
+           givenun=0}}%
+      }
+      \list{publisher}{1}{%
+        {MDPI}%
+      }
+      \strng{namehash}{73d4f4f688736f8f94a7de1537d54b01}
+      \strng{fullhash}{6f96a2a520d8ef53d6db67a7c605c77b}
+      \strng{fullhashraw}{6f96a2a520d8ef53d6db67a7c605c77b}
+      \strng{bibnamehash}{6f96a2a520d8ef53d6db67a7c605c77b}
+      \strng{authorbibnamehash}{6f96a2a520d8ef53d6db67a7c605c77b}
+      \strng{authornamehash}{73d4f4f688736f8f94a7de1537d54b01}
+      \strng{authorfullhash}{6f96a2a520d8ef53d6db67a7c605c77b}
+      \strng{authorfullhashraw}{6f96a2a520d8ef53d6db67a7c605c77b}
+      \field{sortinit}{C}
+      \field{sortinithash}{4d103a86280481745c9c897c925753c0}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Future Internet}
+      \field{number}{12}
+      \field{title}{Blockchain and Self Sovereign Identity to Support Quality in the Food Supply Chain}
+      \field{volume}{13}
+      \field{year}{2021}
+      \field{pages}{301}
+      \range{pages}{1}
+    \endentry
+    \entry{dzreke2025securing}{article}{}{}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=38b04f642620a318d730a7e4be368b6e}{%
+           family={Dzreke},
+           familyi={D\bibinitperiod},
+           given={S.\bibnamedelimi S.},
+           giveni={S\bibinitperiod\bibinitdelim S\bibinitperiod},
+           givenun=0}}%
+      }
+      \list{publisher}{1}{%
+        {Fair East Publishers}%
+      }
+      \strng{namehash}{38b04f642620a318d730a7e4be368b6e}
+      \strng{fullhash}{38b04f642620a318d730a7e4be368b6e}
+      \strng{fullhashraw}{38b04f642620a318d730a7e4be368b6e}
+      \strng{bibnamehash}{38b04f642620a318d730a7e4be368b6e}
+      \strng{authorbibnamehash}{38b04f642620a318d730a7e4be368b6e}
+      \strng{authornamehash}{38b04f642620a318d730a7e4be368b6e}
+      \strng{authorfullhash}{38b04f642620a318d730a7e4be368b6e}
+      \strng{authorfullhashraw}{38b04f642620a318d730a7e4be368b6e}
+      \field{sortinit}{D}
+      \field{sortinithash}{6f385f66841fb5e82009dc833c761848}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Engineering Science \& Technology Journal}
+      \field{number}{11}
+      \field{title}{Securing the Connected Farm: Cyber Threats and Resilient Architectures for the Internet of AgriThings}
+      \field{volume}{6}
+      \field{year}{2025}
+      \field{pages}{642\bibrangedash 659}
+      \range{pages}{18}
+    \endentry
+    \entry{garg2018crop}{article}{}{}
+      \name{author}{3}{}{%
+        {{un=0,uniquepart=base,hash=8eba12d7690f90ecb00c7ea43760b367}{%
+           family={Garg},
+           familyi={G\bibinitperiod},
+           given={B.},
+           giveni={B\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=2408d73988ed8b41918bc452726792e5}{%
+           family={Aggarwal},
+           familyi={A\bibinitperiod},
+           given={S.},
+           giveni={S\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=600b4360f89c61890b2635b7614dad2e}{%
+           family={Sokhal},
+           familyi={S\bibinitperiod},
+           given={J.},
+           giveni={J\bibinitperiod},
+           givenun=0}}%
+      }
+      \list{publisher}{1}{%
+        {Elsevier}%
+      }
+      \strng{namehash}{3b55c69834ab78713432c8142ad2b060}
+      \strng{fullhash}{55a01ab44ca7d6837186a11e17c70705}
+      \strng{fullhashraw}{55a01ab44ca7d6837186a11e17c70705}
+      \strng{bibnamehash}{55a01ab44ca7d6837186a11e17c70705}
+      \strng{authorbibnamehash}{55a01ab44ca7d6837186a11e17c70705}
+      \strng{authornamehash}{3b55c69834ab78713432c8142ad2b060}
+      \strng{authorfullhash}{55a01ab44ca7d6837186a11e17c70705}
+      \strng{authorfullhashraw}{55a01ab44ca7d6837186a11e17c70705}
+      \field{sortinit}{G}
+      \field{sortinithash}{32d67eca0634bf53703493fb1090a2e8}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Computers and Electrical Engineering}
+      \field{title}{Crop yield forecasting using fuzzy logic and regression model}
+      \field{volume}{67}
+      \field{year}{2018}
+      \field{pages}{383\bibrangedash 403}
+      \range{pages}{21}
+      \verb{doi}
+      \verb 10.1016/j.compeleceng.2017.11.015
+      \endverb
+    \endentry
+    \entry{khaki2019cnn}{article}{}{}
+      \name{author}{3}{}{%
+        {{un=0,uniquepart=base,hash=e84726291a06d3463a36d9cfa957033e}{%
+           family={Khaki},
+           familyi={K\bibinitperiod},
+           given={S.},
+           giveni={S\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=9a75ee293f2555f40976345739087998}{%
+           family={Wang},
+           familyi={W\bibinitperiod},
+           given={L.},
+           giveni={L\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=467b2d11a8a720bc144767533bfa1a8d}{%
+           family={Archontoulis},
+           familyi={A\bibinitperiod},
+           given={S.\bibnamedelimi V.},
+           giveni={S\bibinitperiod\bibinitdelim V\bibinitperiod},
+           givenun=0}}%
+      }
+      \list{publisher}{1}{%
+        {Frontiers}%
+      }
+      \strng{namehash}{c4c2031bdb82f941463abca63c6fe6a7}
+      \strng{fullhash}{9bcb7df520f1665710f6e609d5486ab8}
+      \strng{fullhashraw}{9bcb7df520f1665710f6e609d5486ab8}
+      \strng{bibnamehash}{9bcb7df520f1665710f6e609d5486ab8}
+      \strng{authorbibnamehash}{9bcb7df520f1665710f6e609d5486ab8}
+      \strng{authornamehash}{c4c2031bdb82f941463abca63c6fe6a7}
+      \strng{authorfullhash}{9bcb7df520f1665710f6e609d5486ab8}
+      \strng{authorfullhashraw}{9bcb7df520f1665710f6e609d5486ab8}
+      \field{sortinit}{K}
+      \field{sortinithash}{c02bf6bff1c488450c352b40f5d853ab}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Frontiers in Plant Science}
+      \field{title}{A CNN-RNN Framework for Crop Yield Prediction}
+      \field{volume}{10}
+      \field{year}{2019}
+      \field{pages}{1750}
+      \range{pages}{1}
+      \verb{doi}
+      \verb 10.3389/fpls.2019.01750
+      \endverb
+    \endentry
+    \entry{ktari2022agricultural}{article}{}{}
+      \name{author}{5}{}{%
+        {{un=0,uniquepart=base,hash=7979d9da27ebb2972a7cfaf46faf169c}{%
+           family={Ktari},
+           familyi={K\bibinitperiod},
+           given={J.},
+           giveni={J\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=8f06c3ce7f90096ccea2902870e01f4c}{%
+           family={Frikha},
+           familyi={F\bibinitperiod},
+           given={T.},
+           giveni={T\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=0425f98a92598eca676c760128abe088}{%
+           family={Chaabane},
+           familyi={C\bibinitperiod},
+           given={F.},
+           giveni={F\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=c797bf7f1abd9e13cbc51d231a4dfb34}{%
+           family={Hamdi},
+           familyi={H\bibinitperiod},
+           given={M.},
+           giveni={M\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=a5090e103708afe6dec33276e183ea21}{%
+           family={Hamam},
+           familyi={H\bibinitperiod},
+           given={H.},
+           giveni={H\bibinitperiod},
+           givenun=0}}%
+      }
+      \list{publisher}{1}{%
+        {MDPI}%
+      }
+      \strng{namehash}{7bfd1fd368d77a2aad5df5e2ee7737b2}
+      \strng{fullhash}{0f8dd9e681753b0d115ca395396310ce}
+      \strng{fullhashraw}{0f8dd9e681753b0d115ca395396310ce}
+      \strng{bibnamehash}{0f8dd9e681753b0d115ca395396310ce}
+      \strng{authorbibnamehash}{0f8dd9e681753b0d115ca395396310ce}
+      \strng{authornamehash}{7bfd1fd368d77a2aad5df5e2ee7737b2}
+      \strng{authorfullhash}{0f8dd9e681753b0d115ca395396310ce}
+      \strng{authorfullhashraw}{0f8dd9e681753b0d115ca395396310ce}
+      \field{sortinit}{K}
+      \field{sortinithash}{c02bf6bff1c488450c352b40f5d853ab}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Electronics}
+      \field{number}{20}
+      \field{title}{Agricultural Lightweight Embedded Blockchain System: A Case Study in Olive Oil}
+      \field{volume}{11}
+      \field{year}{2022}
+      \field{pages}{3394}
+      \range{pages}{1}
+      \verb{doi}
+      \verb 10.3390/electronics11203394
+      \endverb
+    \endentry
+    \entry{lin2017blockchain}{article}{}{}
+      \name{author}{7}{}{%
+        {{un=0,uniquepart=base,hash=dbb0dc2419d997c1cd23b85fcc2d5442}{%
+           family={Lin},
+           familyi={L\bibinitperiod},
+           given={Y.-P.},
+           giveni={Y\bibinithyphendelim P\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=d58734f347def314299e2560cf15e237}{%
+           family={Petway},
+           familyi={P\bibinitperiod},
+           given={J.\bibnamedelimi R.},
+           giveni={J\bibinitperiod\bibinitdelim R\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=bdae57c59afa67931f95e71a13a6d5e5}{%
+           family={Anthony},
+           familyi={A\bibinitperiod},
+           given={J.},
+           giveni={J\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=0f4158973169d95fc2bf5e2310b4f989}{%
+           family={Mukhtar},
+           familyi={M\bibinitperiod},
+           given={H.},
+           giveni={H\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=21cc17665213c739d0193d78bdf02a70}{%
+           family={Liao},
+           familyi={L\bibinitperiod},
+           given={S.-W.},
+           giveni={S\bibinithyphendelim W\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=c0da14c2ead1d53f14c5577ddda5fbf5}{%
+           family={Chou},
+           familyi={C\bibinitperiod},
+           given={C.-F.},
+           giveni={C\bibinithyphendelim F\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=e2c29654a8bb95263ce2a439a591e963}{%
+           family={Ho},
+           familyi={H\bibinitperiod},
+           given={Y.-F.},
+           giveni={Y\bibinithyphendelim F\bibinitperiod},
+           givenun=0}}%
+      }
+      \list{publisher}{1}{%
+        {MDPI}%
+      }
+      \strng{namehash}{41f9f1c798b5e4ba84276ecdfca720ab}
+      \strng{fullhash}{4f709a7f7ddfcc00562fbb95200a9652}
+      \strng{fullhashraw}{4f709a7f7ddfcc00562fbb95200a9652}
+      \strng{bibnamehash}{4f709a7f7ddfcc00562fbb95200a9652}
+      \strng{authorbibnamehash}{4f709a7f7ddfcc00562fbb95200a9652}
+      \strng{authornamehash}{41f9f1c798b5e4ba84276ecdfca720ab}
+      \strng{authorfullhash}{4f709a7f7ddfcc00562fbb95200a9652}
+      \strng{authorfullhashraw}{4f709a7f7ddfcc00562fbb95200a9652}
+      \field{sortinit}{L}
+      \field{sortinithash}{7c47d417cecb1f4bd38d1825c427a61a}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Environments}
+      \field{number}{3}
+      \field{title}{Blockchain: The Evolutionary Next Step for ICT E-Agriculture}
+      \field{volume}{4}
+      \field{year}{2017}
+      \field{pages}{50}
+      \range{pages}{1}
+      \verb{doi}
+      \verb 10.3390/environments4030050
+      \endverb
+    \endentry
+    \entry{liu2021blockchain}{article}{}{}
+      \name{author}{3}{}{%
+        {{un=0,uniquepart=base,hash=7bb074c37d04e2fb30a473aa12102ae1}{%
+           family={Liu},
+           familyi={L\bibinitperiod},
+           given={J.},
+           giveni={J\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=32e563370422457790db030ab2c13183}{%
+           family={Zhang},
+           familyi={Z\bibinitperiod},
+           given={H.},
+           giveni={H\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=1d667cf5655c780c7198239f9c038a69}{%
+           family={Zhen},
+           familyi={Z\bibinitperiod},
+           given={L.},
+           giveni={L\bibinitperiod},
+           givenun=0}}%
+      }
+      \list{publisher}{1}{%
+        {Taylor \& Francis}%
+      }
+      \strng{namehash}{2c4910df36bec2da172306358e36f666}
+      \strng{fullhash}{e0985313ea334f9fbc840bbcb326d51d}
+      \strng{fullhashraw}{e0985313ea334f9fbc840bbcb326d51d}
+      \strng{bibnamehash}{e0985313ea334f9fbc840bbcb326d51d}
+      \strng{authorbibnamehash}{e0985313ea334f9fbc840bbcb326d51d}
+      \strng{authornamehash}{2c4910df36bec2da172306358e36f666}
+      \strng{authorfullhash}{e0985313ea334f9fbc840bbcb326d51d}
+      \strng{authorfullhashraw}{e0985313ea334f9fbc840bbcb326d51d}
+      \field{sortinit}{L}
+      \field{sortinithash}{7c47d417cecb1f4bd38d1825c427a61a}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{International Journal of Production Research}
+      \field{number}{11}
+      \field{title}{Blockchain technology in maritime supply chains: Applications, architecture and challenges}
+      \field{volume}{61}
+      \field{year}{2021}
+      \field{pages}{3547\bibrangedash 3563}
+      \range{pages}{17}
+      \verb{doi}
+      \verb 10.1080/00207543.2021.1930239
+      \endverb
+    \endentry
+    \entry{mirabelli2020blockchain}{article}{}{}
+      \name{author}{2}{}{%
+        {{un=0,uniquepart=base,hash=a6992f7a3a853b370d646fb14852a714}{%
+           family={Mirabelli},
+           familyi={M\bibinitperiod},
+           given={G.},
+           giveni={G\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=7328178268ba1c1345fb69219e949cbc}{%
+           family={Ferraro},
+           familyi={F\bibinitperiod},
+           given={V.},
+           giveni={V\bibinitperiod},
+           givenun=0}}%
+      }
+      \list{publisher}{1}{%
+        {Elsevier}%
+      }
+      \strng{namehash}{3a9a06982e050ed498fa9587a5a3938d}
+      \strng{fullhash}{3a9a06982e050ed498fa9587a5a3938d}
+      \strng{fullhashraw}{3a9a06982e050ed498fa9587a5a3938d}
+      \strng{bibnamehash}{3a9a06982e050ed498fa9587a5a3938d}
+      \strng{authorbibnamehash}{3a9a06982e050ed498fa9587a5a3938d}
+      \strng{authornamehash}{3a9a06982e050ed498fa9587a5a3938d}
+      \strng{authorfullhash}{3a9a06982e050ed498fa9587a5a3938d}
+      \strng{authorfullhashraw}{3a9a06982e050ed498fa9587a5a3938d}
+      \field{sortinit}{M}
+      \field{sortinithash}{4625c616857f13d17ce56f7d4f97d451}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Procedia Manufacturing}
+      \field{title}{Blockchain and agricultural supply chains traceability: Research trends and future challenges}
+      \field{volume}{42}
+      \field{year}{2020}
+      \field{pages}{414\bibrangedash 421}
+      \range{pages}{8}
+      \verb{doi}
+      \verb 10.1016/j.promfg.2020.02.054
+      \endverb
+    \endentry
+    \entry{sui2024documentation}{misc}{}{}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=17cea6263a97718aae9af38b79bc50dd}{%
+           family={{Mysten Labs}},
+           familyi={M\bibinitperiod}}}%
+      }
+      \strng{namehash}{17cea6263a97718aae9af38b79bc50dd}
+      \strng{fullhash}{17cea6263a97718aae9af38b79bc50dd}
+      \strng{fullhashraw}{17cea6263a97718aae9af38b79bc50dd}
+      \strng{bibnamehash}{17cea6263a97718aae9af38b79bc50dd}
+      \strng{authorbibnamehash}{17cea6263a97718aae9af38b79bc50dd}
+      \strng{authornamehash}{17cea6263a97718aae9af38b79bc50dd}
+      \strng{authorfullhash}{17cea6263a97718aae9af38b79bc50dd}
+      \strng{authorfullhashraw}{17cea6263a97718aae9af38b79bc50dd}
+      \field{sortinit}{M}
+      \field{sortinithash}{4625c616857f13d17ce56f7d4f97d451}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{howpublished}{\url{https://docs.sui.io}}
+      \field{note}{Accessed: 2026-07-15}
+      \field{title}{Sui Blockchain Documentation: Architecture and Move Programming}
+      \field{year}{2024}
+    \endentry
+    \entry{padhiary2025emerging}{article}{}{}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=2c0c4dfb54d0242a1e0c16537b00e1e7}{%
+           family={Padhiary},
+           familyi={P\bibinitperiod},
+           given={M.},
+           giveni={M\bibinitperiod},
+           givenun=0}}%
+      }
+      \list{publisher}{1}{%
+        {Springer}%
+      }
+      \strng{namehash}{2c0c4dfb54d0242a1e0c16537b00e1e7}
+      \strng{fullhash}{2c0c4dfb54d0242a1e0c16537b00e1e7}
+      \strng{fullhashraw}{2c0c4dfb54d0242a1e0c16537b00e1e7}
+      \strng{bibnamehash}{2c0c4dfb54d0242a1e0c16537b00e1e7}
+      \strng{authorbibnamehash}{2c0c4dfb54d0242a1e0c16537b00e1e7}
+      \strng{authornamehash}{2c0c4dfb54d0242a1e0c16537b00e1e7}
+      \strng{authorfullhash}{2c0c4dfb54d0242a1e0c16537b00e1e7}
+      \strng{authorfullhashraw}{2c0c4dfb54d0242a1e0c16537b00e1e7}
+      \field{sortinit}{P}
+      \field{sortinithash}{ff3bcf24f47321b42cb156c2cc8a8422}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Discover Robotics}
+      \field{number}{6}
+      \field{title}{Emerging technologies for smart and sustainable precision agriculture}
+      \field{volume}{1}
+      \field{year}{2025}
+      \verb{doi}
+      \verb 10.1007/s44430-025-00006-0
+      \endverb
+    \endentry
+    \entry{rahman2025enhancing}{article}{}{}
+      \name{author}{7}{}{%
+        {{un=0,uniquepart=base,hash=a4781ccc16115de87807407c20a1e0cd}{%
+           family={Rahman},
+           familyi={R\bibinitperiod},
+           given={M.\bibnamedelimi S.},
+           giveni={M\bibinitperiod\bibinitdelim S\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=fa5daeb1e0bdb30204807f9f710f8532}{%
+           family={Hossain},
+           familyi={H\bibinitperiod},
+           given={M.\bibnamedelimi S.},
+           giveni={M\bibinitperiod\bibinitdelim S\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=027e1c4f16095ab2b15b453a707b9342}{%
+           family={Rahman},
+           familyi={R\bibinitperiod},
+           given={M.\bibnamedelimi K.},
+           giveni={M\bibinitperiod\bibinitdelim K\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=dda80d11141404ae99205e27bb67ffb7}{%
+           family={Islam},
+           familyi={I\bibinitperiod},
+           given={M.\bibnamedelimi R.},
+           giveni={M\bibinitperiod\bibinitdelim R\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=f9f3544f94732504e33e525da7172781}{%
+           family={Sumon},
+           familyi={S\bibinitperiod},
+           given={M.\bibnamedelimi F.\bibnamedelimi I.},
+           giveni={M\bibinitperiod\bibinitdelim F\bibinitperiod\bibinitdelim I\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=458066de6b7f254fb5561c795f596ec2}{%
+           family={Siam},
+           familyi={S\bibinitperiod},
+           given={M.\bibnamedelimi A.},
+           giveni={M\bibinitperiod\bibinitdelim A\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=110e37d83d4d5466720bdbb57b12030e}{%
+           family={Debnath},
+           familyi={D\bibinitperiod},
+           given={P.},
+           giveni={P\bibinitperiod},
+           givenun=0}}%
+      }
+      \list{publisher}{2}{%
+        {Al-Kindi Centre for Research}%
+        {Development}%
+      }
+      \strng{namehash}{387f9ee7873e7970ba61f2d384d3b1c1}
+      \strng{fullhash}{526fd47e7f6ef9ddf62e1970a3467714}
+      \strng{fullhashraw}{526fd47e7f6ef9ddf62e1970a3467714}
+      \strng{bibnamehash}{526fd47e7f6ef9ddf62e1970a3467714}
+      \strng{authorbibnamehash}{526fd47e7f6ef9ddf62e1970a3467714}
+      \strng{authornamehash}{387f9ee7873e7970ba61f2d384d3b1c1}
+      \strng{authorfullhash}{526fd47e7f6ef9ddf62e1970a3467714}
+      \strng{authorfullhashraw}{526fd47e7f6ef9ddf62e1970a3467714}
+      \field{sortinit}{R}
+      \field{sortinithash}{5e1c39a9d46ffb6bebd8f801023a9486}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Journal of Business and Management Studies}
+      \field{number}{4}
+      \field{title}{Enhancing Supply Chain Transparency with Blockchain: A Data-Driven Analysis of Distributed Ledger Applications}
+      \field{volume}{7}
+      \field{year}{2025}
+      \field{pages}{59\bibrangedash 77}
+      \range{pages}{19}
+      \verb{doi}
+      \verb 10.32996/jbms
+      \endverb
+    \endentry
+    \entry{raj2022survey}{article}{}{}
+      \name{author}{7}{}{%
+        {{un=0,uniquepart=base,hash=66f21cfc395a2745a344399c3057a238}{%
+           family={Raj},
+           familyi={R\bibinitperiod},
+           given={M.},
+           giveni={M\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=1774a1f1ad14dc83fbedb7ce144b2603}{%
+           family={Gupta},
+           familyi={G\bibinitperiod},
+           given={S.},
+           giveni={S\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=a6d11af8838b98b27a5bac127d92b535}{%
+           family={Chamola},
+           familyi={C\bibinitperiod},
+           given={V.},
+           giveni={V\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=c518d2cbb990613699b70ada8abed962}{%
+           family={Elhence},
+           familyi={E\bibinitperiod},
+           given={A.},
+           giveni={A\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=4e3da405b7f32a3da241ff36af37a6d3}{%
+           family={Garg},
+           familyi={G\bibinitperiod},
+           given={T.},
+           giveni={T\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=5501169992fe7593d29c0bcd04b02205}{%
+           family={Atiquzzaman},
+           familyi={A\bibinitperiod},
+           given={M.},
+           giveni={M\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=2ad9f325f3c7ba1d6ea24a44005f197a}{%
+           family={Niyato},
+           familyi={N\bibinitperiod},
+           given={D.},
+           giveni={D\bibinitperiod},
+           givenun=0}}%
+      }
+      \list{publisher}{1}{%
+        {IEEE}%
+      }
+      \strng{namehash}{891c98164dda95fdf0078bb738787d25}
+      \strng{fullhash}{a5edc94febff305f1395573bf3068d8c}
+      \strng{fullhashraw}{a5edc94febff305f1395573bf3068d8c}
+      \strng{bibnamehash}{a5edc94febff305f1395573bf3068d8c}
+      \strng{authorbibnamehash}{a5edc94febff305f1395573bf3068d8c}
+      \strng{authornamehash}{891c98164dda95fdf0078bb738787d25}
+      \strng{authorfullhash}{a5edc94febff305f1395573bf3068d8c}
+      \strng{authorfullhashraw}{a5edc94febff305f1395573bf3068d8c}
+      \field{sortinit}{R}
+      \field{sortinithash}{5e1c39a9d46ffb6bebd8f801023a9486}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{IEEE Access}
+      \field{title}{A Survey on Smart Agriculture: Development Modes, Technologies, and Security and Privacy Challenges}
+      \field{volume}{10}
+      \field{year}{2022}
+      \field{pages}{4719\bibrangedash 4732}
+      \range{pages}{14}
+      \verb{doi}
+      \verb 10.1109/ACCESS.2021.3137083
+      \endverb
+    \endentry
+    \entry{sharma2023blockchain}{article}{}{}
+      \name{author}{4}{}{%
+        {{un=0,uniquepart=base,hash=a3fd4f0ea9e0c4ee7050feb90555899e}{%
+           family={Sharma},
+           familyi={S\bibinitperiod},
+           given={A.},
+           giveni={A\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=a3fd4f0ea9e0c4ee7050feb90555899e}{%
+           family={Sharma},
+           familyi={S\bibinitperiod},
+           given={A.},
+           giveni={A\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=c6273bd715852fcdb8172247896a42f7}{%
+           family={Bhatia},
+           familyi={B\bibinitperiod},
+           given={T.},
+           giveni={T\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=f73200ded762b8806e06b523bc757afe}{%
+           family={Singh},
+           familyi={S\bibinitperiod},
+           given={R.\bibnamedelimi K.},
+           giveni={R\bibinitperiod\bibinitdelim K\bibinitperiod},
+           givenun=0}}%
+      }
+      \list{publisher}{1}{%
+        {Springer}%
+      }
+      \strng{namehash}{0244a8a37f160ab981a23f8c14a1440a}
+      \strng{fullhash}{2ffac156e0e69a48a0134287391ff3e1}
+      \strng{fullhashraw}{2ffac156e0e69a48a0134287391ff3e1}
+      \strng{bibnamehash}{2ffac156e0e69a48a0134287391ff3e1}
+      \strng{authorbibnamehash}{2ffac156e0e69a48a0134287391ff3e1}
+      \strng{authornamehash}{0244a8a37f160ab981a23f8c14a1440a}
+      \strng{authorfullhash}{2ffac156e0e69a48a0134287391ff3e1}
+      \strng{authorfullhashraw}{2ffac156e0e69a48a0134287391ff3e1}
+      \field{sortinit}{S}
+      \field{sortinithash}{b164b07b29984b41daf1e85279fbc5ab}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Operations Management Research}
+      \field{number}{3}
+      \field{title}{Blockchain enabled food supply chain management: A systematic literature review and bibliometric analysis}
+      \field{volume}{16}
+      \field{year}{2023}
+      \field{pages}{1594\bibrangedash 1618}
+      \range{pages}{25}
+    \endentry
+    \entry{sun2025storage}{article}{}{}
+      \name{author}{7}{}{%
+        {{un=0,uniquepart=base,hash=7e2e360827548f3aedfa687c27ddbdc3}{%
+           family={Sun},
+           familyi={S\bibinitperiod},
+           given={M.},
+           giveni={M\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=bd92eec05092f50cd5f2b25a4ff6c7a2}{%
+           family={Luo},
+           familyi={L\bibinitperiod},
+           given={N.},
+           giveni={N\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=6ac1a9c7ff803089945d692cddfb230b}{%
+           family={Bin},
+           familyi={B\bibinitperiod},
+           given={X.},
+           giveni={X\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=4e6fe5946a342625d61c1d8e3370d779}{%
+           family={Chen},
+           familyi={C\bibinitperiod},
+           given={F.},
+           giveni={F\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=c47eb4bdf7506788ca8df6c79ad68a37}{%
+           family={Liu},
+           familyi={L\bibinitperiod},
+           given={Q.},
+           giveni={Q\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=4b44bba1743c2ad874f7d960887af663}{%
+           family={Liu},
+           familyi={L\bibinitperiod},
+           given={X.},
+           giveni={X\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=d05cd8de98015332c6658b1dbe4df962}{%
+           family={Sun},
+           familyi={S\bibinitperiod},
+           given={C.},
+           giveni={C\bibinitperiod},
+           givenun=0}}%
+      }
+      \list{publisher}{1}{%
+        {Nature Publishing Group}%
+      }
+      \strng{namehash}{7c9b58cc237c50188d18947a6edae7c5}
+      \strng{fullhash}{42cc115eb81e1c84c271558af918f307}
+      \strng{fullhashraw}{42cc115eb81e1c84c271558af918f307}
+      \strng{bibnamehash}{42cc115eb81e1c84c271558af918f307}
+      \strng{authorbibnamehash}{42cc115eb81e1c84c271558af918f307}
+      \strng{authornamehash}{7c9b58cc237c50188d18947a6edae7c5}
+      \strng{authorfullhash}{42cc115eb81e1c84c271558af918f307}
+      \strng{authorfullhashraw}{42cc115eb81e1c84c271558af918f307}
+      \field{sortinit}{S}
+      \field{sortinithash}{b164b07b29984b41daf1e85279fbc5ab}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Scientific Reports}
+      \field{title}{Data storage and query optimization for Blockchain-based agricultural supply chains using storage light nodes}
+      \field{volume}{15}
+      \field{year}{2025}
+      \field{pages}{17258}
+      \range{pages}{1}
+      \verb{doi}
+      \verb 10.1038/s41598-025-17258-w
+      \endverb
+    \endentry
+  \enddatalist
+\endrefsection
+\endinput
+

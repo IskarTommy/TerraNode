@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 import { Logo } from "../components/Logo";
+import { ConnectModal, useCurrentAccount, useSignPersonalMessage } from '@mysten/dapp-kit';
 
 /* ═══════════════════════════════════════════════════════════════════════════════
    KEYFRAMES & GLOBAL STYLES
@@ -495,31 +496,85 @@ function brandBtnBase(extra: Record<string, string> = {}) {
 }
 
 function SuiWalletButton() {
+  const [open, setOpen] = useState(false);
+  const currentAccount = useCurrentAccount();
+  const { mutateAsync: signPersonalMessage } = useSignPersonalMessage();
+  const { walletLogin } = useAuth();
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
+
+  const handleWalletLogin = async () => {
+    if (!currentAccount) {
+      setOpen(true);
+      return;
+    }
+
+    try {
+      setLoading(true);
+      const message = `Login to TerraNode with ${currentAccount.address}`;
+      const signatureResult = await signPersonalMessage({
+        message: new TextEncoder().encode(message),
+      });
+      
+      await walletLogin(currentAccount.address, message, signatureResult.signature);
+      navigate("/farmer/dashboard");
+    } catch (err: any) {
+      console.error(err);
+      if (err.response?.status === 404) {
+        // Wallet not registered, redirect to register
+        navigate("/register", { state: { sui_public_key: currentAccount.address } });
+      } else {
+        alert("Wallet login failed: " + (err.response?.data?.error || err.message));
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    // If the modal was opened and the user connected, automatically trigger login
+    if (currentAccount && open) {
+      setOpen(false);
+      handleWalletLogin();
+    }
+  }, [currentAccount, open]);
+
   return (
-    <button
-      type="button"
-      style={brandBtnBase()}
-      onMouseEnter={(e) => {
-        const el = e.currentTarget;
-        el.style.borderColor = "#22d3ee";
-        el.style.background = "rgba(34,211,238,0.06)";
-        el.style.transform = "translateY(-1px)";
-        el.style.boxShadow = "0 4px 16px -6px rgba(34,211,238,0.2)";
-      }}
-      onMouseLeave={(e) => {
-        const el = e.currentTarget;
-        el.style.borderColor = "rgba(51,65,85,0.55)";
-        el.style.background = "rgba(30,41,59,0.35)";
-        el.style.transform = "translateY(0)";
-        el.style.boxShadow = "none";
-      }}
-    >
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-        <path d="M4.5 12.5l7-7 7 7-7 7z" fill="#22d3ee"/>
-        <path d="M11.5 5.5l7 7-7 7-7-7z" fill="#06b6d4" opacity="0.7"/>
-      </svg>
-      Sui Wallet
-    </button>
+    <>
+      <button
+        type="button"
+        style={brandBtnBase({ opacity: loading ? "0.6" : "1", cursor: loading ? "wait" : "pointer" })}
+        disabled={loading}
+        onClick={handleWalletLogin}
+        onMouseEnter={(e) => {
+          if (loading) return;
+          const el = e.currentTarget;
+          el.style.borderColor = "#22d3ee";
+          el.style.background = "rgba(34,211,238,0.06)";
+          el.style.transform = "translateY(-1px)";
+          el.style.boxShadow = "0 4px 16px -6px rgba(34,211,238,0.2)";
+        }}
+        onMouseLeave={(e) => {
+          if (loading) return;
+          const el = e.currentTarget;
+          el.style.borderColor = "rgba(51,65,85,0.55)";
+          el.style.background = "rgba(30,41,59,0.35)";
+          el.style.transform = "translateY(0)";
+          el.style.boxShadow = "none";
+        }}
+      >
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M4.5 12.5l7-7 7 7-7 7z" fill="#22d3ee"/>
+          <path d="M11.5 5.5l7 7-7 7-7-7z" fill="#06b6d4" opacity="0.7"/>
+        </svg>
+        {loading ? "Signing..." : "Sui Wallet"}
+      </button>
+      <ConnectModal
+        trigger={<span style={{ display: 'none' }} />}
+        open={open}
+        onOpenChange={(isOpen) => setOpen(isOpen)}
+      />
+    </>
   );
 }
 
