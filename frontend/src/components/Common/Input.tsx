@@ -1,6 +1,10 @@
 import {
   forwardRef,
   useId,
+  useState,
+  useRef,
+  useEffect,
+  useCallback,
   type InputHTMLAttributes,
   type TextareaHTMLAttributes,
   type LabelHTMLAttributes,
@@ -40,44 +44,30 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
     const helperId = `${id}-helper`;
     const hasError = !!error;
 
+    const labelClasses = cn(
+      'absolute left-3 text-body-sm text-fg-muted pointer-events-none select-none',
+      'transition-all duration-fast origin-left',
+      'top-3', // resting position: centered with input text
+      // peer selectors fire on elements AFTER the peer (input comes first in DOM)
+      hasError && 'peer-focus:text-error peer-focus-within:text-error',
+      'peer-focus:text-primary peer-focus:-translate-y-7 peer-focus:scale-85',
+      'peer-focus-within:text-primary peer-focus-within:-translate-y-7 peer-focus-within:scale-85',
+      'peer-data-[has-value=true]:text-primary peer-data-[has-value=true]:-translate-y-7 peer-data-[has-value=true]:scale-85'
+    );
+
     return (
       <div className={cn('relative', fullWidth && 'w-full')}>
-        {label && (
-          <label
-            htmlFor={id}
-            className={cn(
-              'absolute left-3 top-3 text-fg-muted pointer-events-none',
-              'transition-all duration-fast origin-left',
-              'peer-placeholder-shown:text-body-sm peer-placeholder-shown:text-fg-muted',
-              'peer-focus:text-primary peer-focus:scale-85 peer-focus:-translate-y-2.5',
-              'peer-focus-within:text-primary peer-focus-within:scale-85 peer-focus-within:-translate-y-2.5',
-              'peer-[:not(:placeholder-shown)]:text-primary peer-[:not(:placeholder-shown)]:scale-85 peer-[:not(:placeholder-shown)]:-translate-y-2.5',
-              'peer-data-[has-value]:text-primary peer-data-[has-value]:scale-85 peer-data-[has-value]:-translate-y-2.5',
-              hasError && 'peer-focus:text-error peer-focus-within:text-error'
-            )}
-          >
-            {label}
-            {required && <span className="text-error ml-0.5" aria-hidden="true">*</span>}
-          </label>
-        )}
         <div className="relative">
-          {leftIcon && (
-            <div
-              className="absolute left-3 top-1/2 -translate-y-1/2 text-fg-muted pointer-events-none"
-              aria-hidden="true"
-            >
-              {leftIcon}
-            </div>
-          )}
+          {/* Input must come BEFORE label in DOM so peer sibling selectors fire */}
           <input
             ref={ref}
             id={id}
             className={cn(
-              'w-full bg-input-bg border-input-border text-input-fg placeholder-transparent',
+              'peer w-full bg-input-bg border-input-border text-input-fg placeholder-transparent',
               'rounded-input transition-all duration-fast',
               'focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-primary-bg',
               'disabled:bg-input-disabled-bg disabled:text-input-disabled-fg disabled:cursor-not-allowed',
-              'input-padding',
+              'px-3 py-2.5',
               leftIcon && 'pl-10',
               rightIcon && 'pr-10',
               hasError
@@ -89,12 +79,26 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
             required={required}
             aria-invalid={hasError}
             aria-describedby={hasError ? errorId : helperText ? helperId : undefined}
-            data-has-value={props.value || props.defaultValue ? 'true' : 'false'}
+            data-has-value={String(!!(props.value || props.defaultValue))}
             {...props}
           />
+          {label && (
+            <label htmlFor={id} className={labelClasses}>
+              {label}
+              {required && <span className="text-error ml-0.5" aria-hidden="true">*</span>}
+            </label>
+          )}
+          {leftIcon && (
+            <div
+              className="absolute left-3 top-1/2 -translate-y-1/2 text-fg-muted pointer-events-none z-[1]"
+              aria-hidden="true"
+            >
+              {leftIcon}
+            </div>
+          )}
           {rightIcon && (
             <div
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-fg-muted pointer-events-none"
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-fg-muted pointer-events-none z-[1]"
               aria-hidden="true"
             >
               {rightIcon}
@@ -180,7 +184,7 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
           ref={ref}
           id={id}
           className={cn(
-            'w-full bg-input-bg border-input-border text-input-fg placeholder-transparent',
+            'peer w-full bg-input-bg border-input-border text-input-fg placeholder-transparent',
             'rounded-input transition-all duration-fast resize-y',
             'focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-primary-bg',
             'disabled:bg-input-disabled-bg disabled:text-input-disabled-fg disabled:cursor-not-allowed',
@@ -261,95 +265,251 @@ export const Label = forwardRef<HTMLLabelElement, LabelProps>(
 
 Label.displayName = 'Label';
 
-// ─── Select Component ─────────────────────────────────────────────────────
-export interface SelectProps extends InputHTMLAttributes<HTMLSelectElement> {
+// ─── Select Component (custom div-based dropdown) ─────────────────────────
+export interface SelectOption {
+  value: string;
+  label: string;
+}
+
+export interface SelectProps {
   label?: string;
   error?: string;
   helperText?: string;
   fullWidth?: boolean;
   placeholder?: string;
-  options: Array<{ value: string; label: string }>;
+  options: SelectOption[];
+  value?: string;
+  defaultValue?: string;
+  onChange?: (value: string) => void;
+  disabled?: boolean;
+  required?: boolean;
+  className?: string;
+  id?: string;
 }
 
-export const Select = forwardRef<HTMLSelectElement, SelectProps>(
-  (
-    {
-      label,
-      error,
-      helperText,
-      fullWidth = true,
-      placeholder,
-      options,
-      className,
-      id: providedId,
-      disabled,
-      required,
-      ...props
-    },
-    ref
-  ) => {
+export const Select = ({
+  label,
+  error,
+  helperText,
+  fullWidth = true,
+  placeholder,
+  options,
+  value,
+  defaultValue,
+  onChange,
+  disabled,
+  required,
+  className,
+  id: providedId,
+}: SelectProps) => {
     const generatedId = useId();
     const id = providedId || generatedId;
     const errorId = `${id}-error`;
     const helperId = `${id}-helper`;
     const hasError = !!error;
+    const [isOpen, setIsOpen] = useState(false);
+    const [activeIndex, setActiveIndex] = useState(-1);
+
+    const hasValue = Boolean(value || defaultValue);
+    const selectedOption = options.find(o => o.value === value);
+
+    // ── Label is ALWAYS a small caption inside the button, stacked above the
+    // value in normal document flow. No absolute positioning, no background
+    // "cutout" patch, so it can never overlap the value text and never
+    // mismatches the surrounding card's background (the bug that produced
+    // the black box — bg-bg-primary vs. the card's actual bg-secondary/glass
+    // surface).
+    const labelActive = isOpen || hasValue;
+    const labelClasses = cn(
+      'block text-[11px] font-medium leading-none select-none transition-colors duration-fast',
+      labelActive ? 'text-primary' : 'text-fg-muted',
+      hasError && 'text-error-fg',
+    );
+
+    const close = useCallback(() => {
+      setIsOpen(false);
+      setActiveIndex(-1);
+    }, []);
+
+    const handleSelect = (optionValue: string) => {
+      onChange?.(optionValue);
+      close();
+    };
+
+    const handleKeyDown = (e: React.KeyboardEvent) => {
+      if (!isOpen) {
+        if (e.key === 'Enter' || e.key === ' ' || e.key === 'ArrowDown') {
+          e.preventDefault();
+          setIsOpen(true);
+          setActiveIndex(options.findIndex(o => o.value === value) ?? 0);
+        }
+        return;
+      }
+
+      switch (e.key) {
+        case 'ArrowDown':
+          e.preventDefault();
+          setActiveIndex(prev =>
+            prev < options.length - 1 ? prev + 1 : 0
+          );
+          break;
+        case 'ArrowUp':
+          e.preventDefault();
+          setActiveIndex(prev =>
+            prev > 0 ? prev - 1 : options.length - 1
+          );
+          break;
+        case 'Enter':
+          e.preventDefault();
+          if (activeIndex >= 0 && activeIndex < options.length) {
+            handleSelect(options[activeIndex].value);
+          }
+          break;
+        case 'Escape':
+          e.preventDefault();
+          close();
+          break;
+        case 'Tab':
+          close();
+          break;
+      }
+    };
+
+    // Click-outside to close
+    useEffect(() => {
+      if (!isOpen) return;
+
+      const handleClick = (e: MouseEvent) => {
+        const target = e.target as Node;
+        const trigger = document.getElementById(`${id}-trigger`);
+        const listbox = document.getElementById(`${id}-listbox`);
+        if (trigger?.contains(target) || listbox?.contains(target)) return;
+        close();
+      };
+
+      const timer = setTimeout(() => {
+        document.addEventListener('mousedown', handleClick);
+      }, 0);
+
+      return () => {
+        clearTimeout(timer);
+        document.removeEventListener('mousedown', handleClick);
+      };
+    }, [isOpen, close, id]);
 
     return (
       <div className={cn('relative', fullWidth && 'w-full')}>
-        {label && (
-          <label
-            htmlFor={id}
-            className={cn(
-              'absolute left-3 top-3 text-fg-muted pointer-events-none',
-              'transition-all duration-fast origin-left',
-              'peer-focus:text-primary peer-focus:scale-85 peer-focus:-translate-y-2.5',
-              'peer-focus-within:text-primary peer-focus-within:scale-85 peer-focus-within:-translate-y-2.5',
-              'peer-[:not([value=""])]:text-primary peer-[:not([value=""])]:scale-85 peer-[:not([value=""])]:-translate-y-2.5',
-              hasError && 'peer-focus:text-error peer-focus-within:text-error'
+        {/* Hidden native select for form semantics */}
+        <select
+          id={id}
+          tabIndex={-1}
+          aria-hidden="true"
+          className="sr-only"
+          disabled={disabled}
+          required={required}
+          value={value}
+          defaultValue={defaultValue}
+        >
+          {placeholder && <option value="" disabled>{placeholder}</option>}
+          {options.map(option => (
+            <option key={option.value} value={option.value}>{option.label}</option>
+          ))}
+        </select>
+
+        {/* Custom trigger button */}
+        <button
+          id={`${id}-trigger`}
+          type="button"
+          role="combobox"
+          aria-haspopup="listbox"
+          aria-expanded={isOpen}
+          aria-controls={`${id}-listbox`}
+          aria-labelledby={label ? `${id}-label` : undefined}
+          disabled={disabled}
+          className={cn(
+            'relative w-full bg-input-bg border-input-border text-input-fg',
+            'rounded-input transition-all duration-fast text-left',
+            'focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-primary-bg',
+            'disabled:bg-input-disabled-bg disabled:text-input-disabled-fg disabled:cursor-not-allowed',
+            label ? 'px-3 pt-1.5 pb-2 pr-10' : 'px-3 py-2.5 pr-10',
+            hasError
+              ? 'border-input-error-border focus-visible:ring-input-error-ring'
+              : '',
+            className
+          )}
+          onClick={() => !disabled && setIsOpen(prev => !prev)}
+          onKeyDown={handleKeyDown}
+        >
+          <span className="flex flex-col items-start gap-0.5 min-w-0">
+            {label && (
+              <span id={`${id}-label`} className={labelClasses}>
+                {label} {required && <span className="text-error ml-0.5" aria-hidden="true">*</span>}
+              </span>
             )}
+            <span className={cn(
+              'block truncate w-full leading-tight',
+              !selectedOption ? 'text-fg-muted' : 'text-input-fg'
+            )}>
+              {selectedOption ? selectedOption.label : (placeholder || 'Select an option')}
+            </span>
+          </span>
+        </button>
+
+        {/* Chevron icon */}
+        <div className="absolute right-3 top-1/2 -translate-y-1/2 text-fg-muted pointer-events-none z-[1]" aria-hidden="true">
+          <svg
+            className={cn('h-4 w-4 transition-transform duration-fast', isOpen && 'rotate-180')}
+            viewBox="0 0 20 20"
+            fill="currentColor"
           >
-            {label}
-            {required && <span className="text-error ml-0.5" aria-hidden="true">*</span>}
-          </label>
-        )}
-        <div className="relative">
-          <select
-            ref={ref}
-            id={id}
-            className={cn(
-              'w-full bg-input-bg border-input-border text-input-fg',
-              'rounded-input transition-all duration-fast appearance-none',
-              'focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-primary-bg',
-              'disabled:bg-input-disabled-bg disabled:text-input-disabled-fg disabled:cursor-not-allowed',
-              'input-padding pr-10',
-              hasError
-                ? 'border-input-error-border focus-visible:ring-input-error-ring'
-                : '',
-              className
-            )}
-            disabled={disabled}
-            required={required}
-            aria-invalid={hasError}
-            aria-describedby={hasError ? errorId : helperText ? helperId : undefined}
-            {...props}
-          >
-            {placeholder && (
-              <option value="" disabled>
-                {placeholder}
-              </option>
-            )}
-            {options.map((option) => (
-              <option key={option.value} value={option.value}>
-                {option.label}
-              </option>
-            ))}
-          </select>
-          <div className="absolute right-3 top-1/2 -translate-y-1/2 text-fg-muted pointer-events-none" aria-hidden="true">
-            <svg className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-              <path fillRule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clipRule="evenodd" />
-            </svg>
-          </div>
+            <path fillRule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clipRule="evenodd" />
+          </svg>
         </div>
+
+        {/* Dropdown list — absolute inside relative parent, no portal */}
+        {isOpen && (
+          <div
+            id={`${id}-listbox`}
+            role="listbox"
+            aria-label={label}
+            className="absolute left-0 right-0 top-full mt-1 z-50 max-h-60 overflow-y-auto rounded-lg border border-border-primary bg-bg-primary shadow-xl shadow-black/40"
+          >
+            {options.map((option, index) => {
+              const isSelected = option.value === value;
+              const isActive = index === activeIndex;
+              return (
+                <div
+                  key={option.value}
+                  role="option"
+                  aria-selected={isSelected}
+                  className={cn(
+                    'flex items-center gap-2 px-3 py-2.5 cursor-pointer transition-colors duration-fast',
+                    'text-body-sm',
+                    isActive || isSelected
+                      ? 'bg-primary-bg/20 text-primary'
+                      : 'text-fg-primary hover:bg-bg-tertiary',
+                    isSelected && 'font-medium'
+                  )}
+                  onClick={() => handleSelect(option.value)}
+                  onMouseEnter={() => setActiveIndex(index)}
+                >
+                  <span className="flex-1 truncate">{option.label}</span>
+                  {isSelected && (
+                    <svg className="h-4 w-4 text-emerald-500 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                      <path fillRule="evenodd" d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z" clipRule="evenodd" />
+                    </svg>
+                  )}
+                </div>
+              );
+            })}
+            {options.length === 0 && (
+              <div className="px-3 py-2.5 text-body-sm text-fg-muted">
+                No options available
+              </div>
+            )}
+          </div>
+        )}
+
         {hasError && (
           <p
             id={errorId}
@@ -370,11 +530,9 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(
       </div>
     );
   }
-);
 
 Select.displayName = 'Select';
 
-// ─── Checkbox Component ───────────────────────────────────────────────────
 export interface CheckboxProps extends InputHTMLAttributes<HTMLInputElement> {
   label?: string;
   description?: string;

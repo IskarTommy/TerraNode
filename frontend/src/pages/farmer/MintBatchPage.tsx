@@ -1,8 +1,7 @@
 import { useState } from 'react';
 import { Button } from '../../components/Common/Button';
 import { Card } from '../../components/Common/Card';
-import { Input } from '../../components/Common/Input';
-import { Select } from '../../components/Common/Input';
+import { Input, Select, Textarea } from '../../components/Common/Input';
 import { cn } from '../../utils/cn';
 import { Transaction } from '@mysten/sui/transactions';
 import { useWallet } from '../../contexts/WalletContext';
@@ -83,6 +82,10 @@ export function MintBatchPage() {
     }));
   };
 
+  const handleSelectChange = (field: string) => (newValue: string) => {
+    setFormData(prev => ({ ...prev, [field]: newValue }));
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setSubmitting(true);
@@ -137,8 +140,8 @@ export function MintBatchPage() {
   ];
 
   return (
-    <div className="space-y-6" data-role="farmer">
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+    <div className="space-y-5" data-role="farmer">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-5">
         <div>
           <h1 className="text-display-lg font-bold text-fg-primary">Mint New Batch</h1>
           <p className="text-body text-fg-muted mt-1">Create a new blockchain-verified crop batch</p>
@@ -184,32 +187,30 @@ export function MintBatchPage() {
       {/* Form Steps */}
       <Card variant="glass" padding="lg">
         {step === 1 && (
-          <form onSubmit={(e) => { e.preventDefault(); nextStep(); }} className="space-y-6">
+          <form onSubmit={(e) => { e.preventDefault(); nextStep(); }} className="space-y-5">
             <h3 className="text-heading-sm font-semibold text-fg-primary">Crop Details</h3>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
               <Select
-                label="Crop Type *"
+                label="Crop Type"
                 error={!formData.cropType && step > 1 ? 'Required' : undefined}
                 value={formData.cropType}
-                onChange={handleChange}
-                name="cropType"
+                onChange={handleSelectChange('cropType')}
                 placeholder="Select crop type"
                 options={CROP_TYPES}
                 required
               />
               <Select
-                label="Variety *"
+                label="Variety"
                 error={!formData.variety && step > 1 ? 'Required' : undefined}
                 value={formData.variety}
-                onChange={handleChange}
-                name="variety"
+                onChange={handleSelectChange('variety')}
                 placeholder="Select variety"
                 options={currentCropVarieties}
                 required
                 disabled={!formData.cropType}
               />
               <Input
-                label="Field ID *"
+                label="Field ID"
                 error={!formData.fieldId && step > 1 ? 'Required' : undefined}
                 value={formData.fieldId}
                 onChange={handleChange}
@@ -232,11 +233,11 @@ export function MintBatchPage() {
         )}
 
         {step === 2 && (
-          <form onSubmit={(e) => { e.preventDefault(); nextStep(); }} className="space-y-6">
+          <form onSubmit={(e) => { e.preventDefault(); nextStep(); }} className="space-y-5">
             <h3 className="text-heading-sm font-semibold text-fg-primary">Field Information</h3>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
               <Input
-                label="Location *"
+                label="Location"
                 error={!formData.location && step > 2 ? 'Required' : undefined}
                 value={formData.location}
                 onChange={handleChange}
@@ -245,7 +246,7 @@ export function MintBatchPage() {
                 required
               />
               <Input
-                label="Area (hectares) *"
+                label="Area (hectares)"
                 type="number"
                 step="0.01"
                 min="0.01"
@@ -267,8 +268,7 @@ export function MintBatchPage() {
               <Select
                 label="Soil Type"
                 value={formData.soilType}
-                onChange={handleChange}
-                name="soilType"
+                onChange={handleSelectChange('soilType')}
                 placeholder="Select soil type"
                 options={[
                   { value: 'loam', label: 'Loam' },
@@ -280,7 +280,7 @@ export function MintBatchPage() {
                 ]}
               />
               <Input
-                label="Planted Date *"
+                label="Planted Date"
                 type="date"
                 error={!formData.plantedDate && step > 2 ? 'Required' : undefined}
                 value={formData.plantedDate}
@@ -290,7 +290,7 @@ export function MintBatchPage() {
                 max={new Date().toISOString().split('T')[0]}
               />
               <Input
-                label="Estimated Harvest *"
+                label="Estimated Harvest"
                 type="date"
                 error={!formData.estimatedHarvest && step > 2 ? 'Required' : undefined}
                 value={formData.estimatedHarvest}
@@ -308,11 +308,11 @@ export function MintBatchPage() {
         )}
 
         {step === 3 && (
-          <form onSubmit={(e) => { e.preventDefault(); nextStep(); }} className="space-y-6">
+          <form onSubmit={(e) => { e.preventDefault(); nextStep(); }} className="space-y-5">
             <h3 className="text-heading-sm font-semibold text-fg-primary">Quality & Yield Estimate</h3>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
               <Input
-                label="Expected Quantity *"
+                label="Expected Quantity"
                 type="number"
                 step="0.1"
                 min="0"
@@ -326,8 +326,7 @@ export function MintBatchPage() {
               <Select
                 label="Unit"
                 value={formData.unit}
-                onChange={handleChange}
-                name="unit"
+                onChange={handleSelectChange('unit')}
                 options={[
                   { value: 'kg', label: 'Kilograms (kg)' },
                   { value: 'tonnes', label: 'Tonnes (t)' },
@@ -336,11 +335,10 @@ export function MintBatchPage() {
                 ]}
               />
               <Select
-                label="Quality Grade *"
+                label="Quality Grade"
                 error={!formData.qualityGrade && step > 3 ? 'Required' : undefined}
                 value={formData.qualityGrade}
-                onChange={handleChange}
-                name="qualityGrade"
+                onChange={handleSelectChange('qualityGrade')}
                 options={[
                   { value: 'A', label: 'Grade A - Premium' },
                   { value: 'B', label: 'Grade B - Standard' },
@@ -348,29 +346,31 @@ export function MintBatchPage() {
                 ]}
                 required
               />
-              <div className="flex items-start gap-3">
-                <Input
+              </div>
+            <div className="col-span-1 sm:col-span-2">
+              <div className="flex items-center gap-3">
+                <input
                   type="checkbox"
+                  id="organicCertified"
                   name="organicCertified"
                   checked={formData.organicCertified}
                   onChange={handleChange}
-                  id="organicCertified"
-                  className="mt-8"
+                  className="h-5 w-5 rounded-sm border-checkbox-border bg-checkbox-bg text-checkbox-checked-fg appearance-none cursor-pointer transition-all duration-fast focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-primary-bg checked:bg-emerald-500 checked:border-emerald-500 disabled:cursor-not-allowed disabled:opacity-50"
                 />
-                <label htmlFor="organicCertified" className="text-body-sm text-fg-secondary cursor-pointer mt-1">
+                <label htmlFor="organicCertified" className="text-body-sm text-fg-primary cursor-pointer select-none">
                   Organically Certified
                 </label>
               </div>
             </div>
-            <div>
-              <label className="block text-body-sm text-fg-secondary mb-1">Notes</label>
-              <textarea
+            <div className="col-span-1 sm:col-span-2">
+              <Textarea
+                label="Notes"
                 name="notes"
                 value={formData.notes}
                 onChange={handleChange}
                 rows={4}
-                className="w-full bg-input-bg border-input-border text-input-fg placeholder-transparent rounded-input transition-all duration-fast p-3 text-body-sm focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-primary-bg resize-y min-h-[100px]"
                 placeholder="Additional notes about this batch..."
+                helperText="Optional"
               />
             </div>
             <div className="flex justify-between">
@@ -381,7 +381,7 @@ export function MintBatchPage() {
         )}
 
         {step === 4 && (
-          <div className="space-y-6 text-center">
+          <div className="space-y-5 text-center">
             {!txHash ? (
               <>
                 <div className="w-20 h-20 mx-auto mb-6 rounded-full bg-primary-bg/20 flex items-center justify-center">
