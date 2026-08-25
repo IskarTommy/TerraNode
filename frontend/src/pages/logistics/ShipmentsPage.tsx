@@ -140,10 +140,10 @@ export function ShipmentsPage() {
               className="pl-10"
             />
           </div>
-          <div className="flex-1 min-w-0 space-x-2">
+          <div className="flex-1 min-w-0 flex gap-2">
             <Select
               value={statusFilter}
-              onChange={(e) => setStatusFilter(e.target.value as any)}
+              onChange={(val) => setStatusFilter(val as any)}
               options={[
                 { value: 'all', label: 'All' },
                 { value: 'pending', label: 'Pending' },
@@ -157,7 +157,7 @@ export function ShipmentsPage() {
             />
             <Select
               value={dateRange}
-              onChange={(e) => setDateRange(e.target.value as any)}
+              onChange={(val) => setDateRange(val as any)}
               options={[
                 { value: 'all', label: 'All Time' },
                 { value: 'today', label: 'Today' },
