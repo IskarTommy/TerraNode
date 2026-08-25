@@ -24,8 +24,9 @@ dist-ssr/
 *.swo
 .DS_Store
 
-# Pipenv
+# Virtual Environments
 .venv/
+venv/
 
 # AI/Agent Directories & Skills
 .agents/
