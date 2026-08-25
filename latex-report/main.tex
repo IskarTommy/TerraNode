@@ -6,6 +6,7 @@
 \addbibresource{references.bib}
 \usepackage{graphicx}
 \usepackage{caption}
+\captionsetup{font=normalsize}
 \usepackage{titlesec}
 \usepackage{geometry}
 \geometry{a4paper, margin=1in}
@@ -24,13 +25,13 @@
 
 % ─── Code listing style (black and white friendly) ───────────
 \lstset{
-  basicstyle=\ttfamily\small,
+  basicstyle=\ttfamily\normalsize,
   keywordstyle=\bfseries,
   commentstyle=\itshape,
   breaklines=true,
   frame=single,
   numbers=left,
-  numberstyle=\tiny,
+  numberstyle=\normalsize,
   tabsize=4,
   captionpos=b,
   showstringspaces=false
@@ -44,8 +45,19 @@
   \ifcase#1\or ONE\or TWO\or THREE\or FOUR\or FIVE\or SIX\fi
 }
 \titleformat{\chapter}[display]
-  {\normalfont\Large\centering}
-  {\MakeUppercase{\chaptername}~\wordchapter{\thechapter}}{20pt}{\Large\MakeUppercase}
+  {\normalfont\normalsize\centering}
+  {\MakeUppercase{\chaptername}~\wordchapter{\thechapter}}{20pt}{\normalsize\MakeUppercase}
+
+% Section headings at 12pt (normalsize), not bolded for ALL CAPS, bold for mixed-case
+\titleformat{\section}
+  {\normalfont\normalsize\bfseries}
+  {\thesection}{1em}{}
+\titleformat{\subsection}
+  {\normalfont\normalsize\bfseries}
+  {\thesubsection}{1em}{}
+\titleformat{\subsubsection}
+  {\normalfont\normalsize\bfseries}
+  {\thesubsubsection}{1em}{}
 
 \begin{document}
 
@@ -54,43 +66,43 @@
     \centering
     \vspace*{1cm}
     
-    {\fontsize{18pt}{27pt}\selectfont TERRANODE: A BLOCKCHAIN-BASED SMART FARM SECURITY FRAMEWORK\par}
+    {\fontsize{12pt}{18pt}\selectfont TERRANODE: A BLOCKCHAIN-BASED SMART FARM SECURITY FRAMEWORK\par}
     
     \vspace{2cm}
     
-    {\fontsize{14pt}{21pt}\selectfont A PROJECT REPORT\par}
+    {\fontsize{12pt}{18pt}\selectfont A PROJECT REPORT\par}
     
     \vspace{1.5cm}
     
-    {\fontsize{14pt}{21pt}\selectfont\textit{Submitted by}\par}
+    {\fontsize{12pt}{18pt}\selectfont\textit{Submitted by}\par}
     
     \vspace{0.5cm}
     
-    {\fontsize{16pt}{24pt}\selectfont \textbf{KASSIM ISKANDA DEISHINI (20230404113)}\par}
+    {\fontsize{12pt}{18pt}\selectfont KASSIM ISKANDA DEISHINI (20230404113)\par}
     
     \vspace{2cm}
     
-    {\fontsize{14pt}{21pt}\selectfont in partial fulfillment for the award of the degree of\par}
+    {\fontsize{12pt}{18pt}\selectfont in partial fulfillment for the award of the degree of\par}
     
     \vspace{0.5cm}
     
-    {\fontsize{16pt}{24pt}\selectfont \textbf{BACHELOR OF SCIENCE}\par}
+    {\fontsize{12pt}{18pt}\selectfont BACHELOR OF SCIENCE\par}
     
     \vspace{1cm}
     
-    {\fontsize{14pt}{21pt}\selectfont IN\par}
+    {\fontsize{12pt}{18pt}\selectfont IN\par}
     
     \vspace{0.5cm}
     
-    {\fontsize{14pt}{21pt}\selectfont \textbf{COMPUTER SCIENCE}\par}
+    {\fontsize{12pt}{18pt}\selectfont COMPUTER SCIENCE\par}
     
     \vspace{2cm}
     
-    {\fontsize{14pt}{21pt}\selectfont \textbf{UNIVERSITY OF TECHNOLOGY AND APPLIED SCIENCES}\par}
+    {\fontsize{12pt}{18pt}\selectfont UNIVERSITY OF TECHNOLOGY AND APPLIED SCIENCES\par}
     
     \vspace{1cm}
     
-    {\fontsize{14pt}{21pt}\selectfont \textbf{AUGUST, 2026}\par}
+    {\fontsize{12pt}{18pt}\selectfont AUGUST, 2026\par}
     
 \end{titlepage}
 
@@ -99,7 +111,7 @@
 % ─────────────────── Declaration ──────────────────────────────
 \newpage
 \begin{center}
-    {\Large DECLARATION}
+    {\normalsize DECLARATION}
 \end{center}
 \vspace{1cm}
 I, Kassim Iskanda Deishini (20230404113), declared that this research report is my original work. It has not been submitted to any other university or higher institution of learning for any award. Any other author's work has clearly been referenced.
@@ -110,7 +122,7 @@ I, Kassim Iskanda Deishini (20230404113), declared that this research report is 
 % ─────────────────── Certification ────────────────────────────
 \newpage
 \begin{center}
-    {\Large CERTIFICATION}
+    {\normalsize CERTIFICATION}
 \end{center}
 \vspace{1cm}
 Certified that this project report ``TERRANODE: A BLOCKCHAIN-BASED SMART FARM SECURITY FRAMEWORK'' is the bonafide work of Kassim Iskanda Deishini who carried out the project work under my supervision.
@@ -118,16 +130,16 @@ Certified that this project report ``TERRANODE: A BLOCKCHAIN-BASED SMART FARM SE
 \vspace{3cm}
 
 \noindent \rule{6cm}{0.4pt} \hfill \rule{6cm}{0.4pt} \\
-\noindent \textbf{SIGNATURE} \hfill \textbf{SIGNATURE} \\
+\noindent SIGNATURE \hfill SIGNATURE \\
 \noindent Dr. Moses Apambila Agebure \hfill Professor Edward Baagyere \\
-\noindent \textbf{HEAD OF THE DEPARTMENT} \hfill \textbf{SUPERVISOR} \\
+\noindent HEAD OF THE DEPARTMENT \hfill SUPERVISOR \\
 \noindent \hfill Professor \\
 \noindent Department of Computer Science \hfill Department of Computer Science
 
 % ─────────────────── Abstract ─────────────────────────────────
 \newpage
 \begin{center}
-    {\Large ABSTRACT}
+    {\normalsize ABSTRACT}
 \end{center}
 \vspace{1cm}
 \doublespacing

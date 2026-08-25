@@ -3132,10 +3132,6 @@
     <bcf:citekey order="95" intorder="1">cocco2021blockchain</bcf:citekey>
     <bcf:citekey order="96" intorder="1">garg2018crop</bcf:citekey>
     <bcf:citekey order="97" intorder="1">garg2018crop</bcf:citekey>
-    <bcf:citekey order="98" intorder="1">khaki2019cnn</bcf:citekey>
-    <bcf:citekey order="99" intorder="1">khaki2019cnn</bcf:citekey>
-    <bcf:citekey order="100" intorder="1">sun2025storage</bcf:citekey>
-    <bcf:citekey order="101" intorder="1">sun2025storage</bcf:citekey>
   </bcf:section>
   <!-- SORTING TEMPLATES -->
   <bcf:sortingtemplate name="apa">
