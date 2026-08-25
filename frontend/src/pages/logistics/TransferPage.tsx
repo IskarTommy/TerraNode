@@ -126,8 +126,7 @@ export function TransferPage() {
                 label="Custody Type *"
                 error={!formData.custodyType && step > 1 ? 'Required' : undefined}
                 value={formData.custodyType}
-                onChange={handleChange}
-                name="custodyType"
+                onChange={(val) => setFormData(prev => ({ ...prev, custodyType: val }))}
                 placeholder="Select custody type"
                 options={CUSTODY_TYPES}
                 required
@@ -147,8 +146,7 @@ export function TransferPage() {
               <Select
                 label="Unit"
                 value={formData.unit}
-                onChange={handleChange}
-                name="unit"
+                onChange={(val) => setFormData(prev => ({ ...prev, unit: val }))}
                 options={[
                   { value: 'kg', label: 'Kilograms (kg)' },
                   { value: 'tonnes', label: 'Tonnes (t)' },
