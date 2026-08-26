@@ -4,6 +4,9 @@ import { Input } from '../../components/Common/Input';
 import { Select } from '../../components/Common/Input';
 import { cn } from '../../utils/cn';
 import { useState } from 'react';
+import { Transaction } from '@mysten/sui/transactions';
+import { useWallet } from '../../contexts/WalletContext';
+import { ledgerApi } from '../../api/ledger';
 
 const CUSTODY_TYPES = [
   { value: 'harvest', label: 'Harvest' },
@@ -49,14 +52,44 @@ export function TransferPage() {
     }));
   };
 
+  const { connected, signAndExecute } = useWallet();
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setSubmitting(true);
-    // Simulate transfer creation
-    await new Promise(resolve => setTimeout(resolve, 2000));
-    setTransferId('TXF-' + Math.random().toString(36).substr(2, 9).toUpperCase());
-    setStep(3);
-    setSubmitting(false);
+
+    try {
+      let suiTxDigest = 'SIMULATED_TX_' + Math.random().toString(36).substring(2, 10);
+
+      if (connected && formData.batchId.startsWith('0x')) {
+        const tx = new Transaction();
+        const PACKAGE_ID = "0x12d791039ab75e08f41140ccb9be4ce80b917f3eb2b52dab150831bc29afb92f";
+
+        tx.moveCall({
+          target: `${PACKAGE_ID}::agri_ledger::transfer_custody`,
+          arguments: [
+            tx.object(formData.batchId),
+            tx.pure.address(formData.toParty.startsWith('0x') ? formData.toParty : '0x0000000000000000000000000000000000000000')
+          ],
+        });
+
+        const { digest } = await signAndExecute(tx);
+        suiTxDigest = digest;
+      }
+
+      await ledgerApi.transfer(formData.batchId, {
+        batch_id: formData.batchId,
+        new_custodian_id: formData.toParty || '123e4567-e89b-12d3-a456-426614174000',
+      });
+
+      setTransferId('TXF-' + Math.random().toString(36).substring(2, 9).toUpperCase());
+      setStep(3);
+    } catch (err: any) {
+      console.error(err);
+      alert('Custody transfer failed. Check batch ID or backend connection.');
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   const nextStep = () => setStep(prev => Math.min(prev + 1, 3));
