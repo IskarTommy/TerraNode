@@ -73,6 +73,7 @@ export function TelemetryPage() {
       });
       showToast(`Telemetry saved! Hash: ${newRecord.payload_sha256.substring(0, 10)}...`, 'success');
       setSubmitDialogOpen(false);
+      setLiveRecords(prev => [newRecord, ...prev]);
       fetchTelemetry();
     } catch (err: any) {
       let msg = 'Failed to submit telemetry';
@@ -183,10 +184,36 @@ export function TelemetryPage() {
             <h3 className="text-body font-semibold text-fg-primary mb-4">Current Readings</h3>
             <div className="space-y-4">
               {[
-                { key: 'temperature', label: 'Temperature', value: `${MOCK_TELEMETRY[MOCK_TELEMETRY.length - 1].temperature?.toFixed(1) || '--'}°C`, status: 'normal' },
-                { key: 'humidity', label: 'Humidity', value: `${MOCK_TELEMETRY[MOCK_TELEMETRY.length - 1].humidity?.toFixed(1) || '--'}%`, status: 'normal' },
-                { key: 'ph', label: 'pH Level', value: `${MOCK_TELEMETRY[MOCK_TELEMETRY.length - 1].ph?.toFixed(2) || '--'}`, status: 'normal' },
-                { key: 'soilMoisture', label: 'Soil Moisture', value: `${MOCK_TELEMETRY[MOCK_TELEMETRY.length - 1].soilMoisture?.toFixed(1) || '--'}%`, status: 'warning' },
+                {
+                  key: 'temperature',
+                  label: 'Temperature',
+                  value: liveRecords.length > 0
+                    ? `${Number(liveRecords[0].temperature_celsius).toFixed(1)}°C`
+                    : `${MOCK_TELEMETRY[MOCK_TELEMETRY.length - 1].temperature?.toFixed(1) || '--'}°C`,
+                  status: 'normal'
+                },
+                {
+                  key: 'humidity',
+                  label: 'Humidity',
+                  value: `${MOCK_TELEMETRY[MOCK_TELEMETRY.length - 1].humidity?.toFixed(1) || '--'}%`,
+                  status: 'normal'
+                },
+                {
+                  key: 'ph',
+                  label: 'pH Level',
+                  value: liveRecords.length > 0
+                    ? `${Number(liveRecords[0].soil_ph).toFixed(2)}`
+                    : `${MOCK_TELEMETRY[MOCK_TELEMETRY.length - 1].ph?.toFixed(2) || '--'}`,
+                  status: 'normal'
+                },
+                {
+                  key: 'soilMoisture',
+                  label: 'Soil Moisture',
+                  value: liveRecords.length > 0
+                    ? `${Number(liveRecords[0].soil_moisture_percentage).toFixed(1)}%`
+                    : `${MOCK_TELEMETRY[MOCK_TELEMETRY.length - 1].soilMoisture?.toFixed(1) || '--'}%`,
+                  status: liveRecords.length > 0 && Number(liveRecords[0].soil_moisture_percentage) < 30 ? 'warning' : 'normal'
+                },
                 { key: 'lightIntensity', label: 'Light Intensity', value: `${Math.round(MOCK_TELEMETRY[MOCK_TELEMETRY.length - 1].lightIntensity || 0).toLocaleString()} lux`, status: 'normal' },
                 { key: 'co2', label: 'CO₂', value: `${Math.round(MOCK_TELEMETRY[MOCK_TELEMETRY.length - 1].co2 || 0)} ppm`, status: 'normal' },
               ].map((reading) => (

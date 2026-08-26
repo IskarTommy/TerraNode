@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Button } from '../../components/Common/Button';
 import { Card } from '../../components/Common/Card';
 import { Input, Select, Textarea } from '../../components/Common/Input';
@@ -66,6 +66,27 @@ const VARIETIES: Record<string, Array<{ value: string; label: string }>> = {
   ],
 };
 
+// Ghana crop parameters for auto-calculation
+const GHANA_CROP_PARAMS: Record<string, { daysToHarvest: number; baseYieldKgPerHa: number }> = {
+  maize: { daysToHarvest: 105, baseYieldKgPerHa: 2500 },      // Obatanpa 3.5 months
+  cocoa: { daysToHarvest: 180, baseYieldKgPerHa: 1200 },      // 6 months harvest cycle
+  cassava: { daysToHarvest: 270, baseYieldKgPerHa: 12000 },   // Bankye 9 months
+  yam: { daysToHarvest: 210, baseYieldKgPerHa: 10000 },       // Pona 7 months
+  rice: { daysToHarvest: 115, baseYieldKgPerHa: 3500 },       // AGRA Rice ~4 months
+  cowpea: { daysToHarvest: 70, baseYieldKgPerHa: 1500 },      // Beans ~2.3 months
+  plantain: { daysToHarvest: 300, baseYieldKgPerHa: 9000 },   // Apantu ~10 months
+  groundnut: { daysToHarvest: 90, baseYieldKgPerHa: 1800 },   // Peanuts ~3 months
+};
+
+const SOIL_YIELD_MULTIPLIERS: Record<string, number> = {
+  loam: 1.15,
+  clay: 1.05,
+  sandy: 0.85,
+  silt: 1.10,
+  peaty: 0.95,
+  chalky: 0.80,
+};
+
 export function MintBatchPage() {
   const [step, setStep] = useState(1);
   const [formData, setFormData] = useState({
@@ -85,6 +106,7 @@ export function MintBatchPage() {
     gpsCoordinates: '',
     soilType: '',
   });
+  const [calculationNote, setCalculationNote] = useState('');
   const [submitting, setSubmitting] = useState(false);
   const { connected, signAndExecute } = useWallet();
   const [txHash, setTxHash] = useState('');
@@ -98,6 +120,38 @@ export function MintBatchPage() {
       [name]: type === 'checkbox' ? (e.target as HTMLInputElement).checked : value,
     }));
   };
+
+  // Auto-calculation effect when cropType, plantedDate, area, or soilType change
+  useEffect(() => {
+    const params = GHANA_CROP_PARAMS[formData.cropType];
+    if (!params) return;
+
+    let autoHarvest = formData.estimatedHarvest;
+    if (formData.plantedDate) {
+      const pDate = new Date(formData.plantedDate);
+      if (!isNaN(pDate.getTime())) {
+        pDate.setDate(pDate.getDate() + params.daysToHarvest);
+        autoHarvest = pDate.toISOString().split('T')[0];
+      }
+    }
+
+    let autoYield = formData.quantity;
+    let note = '';
+    const areaNum = Number(formData.area);
+    if (areaNum > 0) {
+      const soilMult = SOIL_YIELD_MULTIPLIERS[formData.soilType] || 1.0;
+      const calculatedKg = Math.round(areaNum * params.baseYieldKgPerHa * soilMult);
+      autoYield = calculatedKg.toString();
+      note = `Auto-calculated: ~${calculatedKg.toLocaleString()} kg for ${areaNum} ha of ${formData.cropType.toUpperCase()} on ${formData.soilType ? formData.soilType.toUpperCase() : 'standard'} soil in Ghana.`;
+    }
+
+    setFormData(prev => ({
+      ...prev,
+      estimatedHarvest: autoHarvest || prev.estimatedHarvest,
+      quantity: autoYield || prev.quantity,
+    }));
+    setCalculationNote(note);
+  }, [formData.cropType, formData.plantedDate, formData.area, formData.soilType]);
 
   const handleSelectChange = (field: string) => (newValue: string) => {
     setFormData(prev => ({ ...prev, [field]: newValue }));
@@ -335,9 +389,15 @@ export function MintBatchPage() {
         {step === 3 && (
           <form onSubmit={(e) => { e.preventDefault(); nextStep(); }} className="space-y-5">
             <h3 className="text-heading-sm font-semibold text-fg-primary">Quality & Yield Estimate</h3>
+            {calculationNote && (
+              <div className="p-3 bg-emerald-500/10 border border-emerald-500/20 rounded-xl text-body-xs text-emerald-400 font-medium flex items-center gap-2">
+                <svg className="h-4 w-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                {calculationNote}
+              </div>
+            )}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
               <Input
-                label="Expected Quantity"
+                label="Expected Quantity (kg)"
                 type="number"
                 step="0.1"
                 min="0"
