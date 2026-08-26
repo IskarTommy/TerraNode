@@ -1,12 +1,14 @@
 import { StatCard } from '../../components/Dashboard/FarmerDashboard';
 import { TelemetryChart } from '../../components/Dashboard/FarmerDashboard';
-import { YieldPredictionChart } from '../../components/Dashboard/FarmerDashboard';
 import { Button } from '../../components/Common/Button';
 import { Card } from '../../components/Common/Card';
+import { Input } from '../../components/Common/Input';
 import { cn } from '../../utils/cn';
-import { useState } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Dialog, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from '../../components/Common';
 import { useToast } from '../../components/Common';
+import { telemetryApi } from '../../api/telemetry';
+import type { TelemetryRecord } from '../../types/telemetry';
 
 const MOCK_TELEMETRY = Array.from({ length: 48 }, (_, i) => ({
   timestamp: new Date(Date.now() - (47 - i) * 30 * 60 * 1000).toISOString(),
@@ -34,10 +36,64 @@ export function TelemetryPage() {
     Array<'temperature' | 'humidity' | 'ph' | 'soilMoisture' | 'lightIntensity' | 'co2'>
   >(['temperature', 'humidity', 'soilMoisture', 'ph']);
   const [exportDialogOpen, setExportDialogOpen] = useState(false);
+  const [submitDialogOpen, setSubmitDialogOpen] = useState(false);
   const [clearAlertsDialogOpen, setClearAlertsDialogOpen] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [liveRecords, setLiveRecords] = useState<TelemetryRecord[]>([]);
+  const [formData, setFormData] = useState({
+    temperature: '24.5',
+    soilMoisture: '52.0',
+    soilPh: '6.8',
+  });
   const { showToast } = useToast();
 
-  const filteredData = MOCK_TELEMETRY.slice(-(timeRange === '1h' ? 12 : timeRange === '24h' ? 48 : timeRange === '7d' ? 168 : 720));
+  const fetchTelemetry = useCallback(async () => {
+    try {
+      const res = await telemetryApi.getHistory();
+      if (res.results && res.results.length > 0) {
+        setLiveRecords(res.results);
+      }
+    } catch {
+      // Keep state as empty if offline or unauthenticated mock
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchTelemetry();
+  }, [fetchTelemetry]);
+
+  const handleSubmitTelemetry = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setSubmitting(true);
+    try {
+      const newRecord = await telemetryApi.submit({
+        temperature: Number(formData.temperature),
+        soil_moisture: Number(formData.soilMoisture),
+        soil_ph: Number(formData.soilPh),
+      });
+      showToast(`Telemetry saved! Hash: ${newRecord.payload_sha256.substring(0, 10)}...`, 'success');
+      setSubmitDialogOpen(false);
+      fetchTelemetry();
+    } catch (err: any) {
+      showToast(err.response?.data?.error?.message || 'Failed to submit telemetry', 'error');
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  const chartSourceData = liveRecords.length > 0
+    ? liveRecords.map(r => ({
+        timestamp: r.recorded_at,
+        temperature: Number(r.temperature_celsius),
+        humidity: 60,
+        ph: Number(r.soil_ph),
+        soilMoisture: Number(r.soil_moisture_percentage),
+        lightIntensity: 30000,
+        co2: 400,
+      })).reverse()
+    : MOCK_TELEMETRY;
+
+  const filteredData = chartSourceData.slice(-(timeRange === '1h' ? 12 : timeRange === '24h' ? 48 : timeRange === '7d' ? 168 : 720));
 
   return (
     <div className="space-y-6" data-role="farmer">
@@ -48,10 +104,16 @@ export function TelemetryPage() {
         </div>
         <div className="flex items-center gap-3">
           <Button
+            variant="primary"
+            onClick={() => setSubmitDialogOpen(true)}
+          >
+            + Record Reading
+          </Button>
+          <Button
             variant="outline"
             onClick={() => {
+              fetchTelemetry();
               showToast('Telemetry data refreshed', 'success');
-              // Actual refresh logic would go here
             }}
           >
             Refresh Data
@@ -60,15 +122,7 @@ export function TelemetryPage() {
             variant="secondary"
             onClick={() => setExportDialogOpen(true)}
           >
-            <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.5-1.5a2 2 0 012.828 0L20.414 11l-1.293 1.293A2 2 0 0118.414 12l1.293 1.293a2 2 0 01-2.828 2.828l-1.5 1.5a2 2 0 01-2.828 0L11.586 15H4v-2z"/></svg>
             Export
-          </Button>
-          <Button
-            variant="outline"
-            onClick={() => setClearAlertsDialogOpen(true)}
-          >
-            <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M6 18L18 6M6 6l12 12"/></svg>
-            Clear Alerts
           </Button>
         </div>
       </div>
@@ -176,6 +230,52 @@ export function TelemetryPage() {
           </Card>
         </div>
       </div>
+
+      {/* Record Reading Dialog */}
+      <Dialog open={submitDialogOpen} onOpenChange={setSubmitDialogOpen} className="w-96 sm:max-w-md">
+        <form onSubmit={handleSubmitTelemetry}>
+          <DialogHeader>
+            <DialogTitle>Record Environmental Telemetry</DialogTitle>
+            <DialogDescription>
+              Submit sensor readings to generate SHA-256 data integrity hashes.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4 py-4">
+            <Input
+              label="Temperature (°C)"
+              type="number"
+              step="0.1"
+              value={formData.temperature}
+              onChange={(e) => setFormData(prev => ({ ...prev, temperature: e.target.value }))}
+              required
+            />
+            <Input
+              label="Soil Moisture (%)"
+              type="number"
+              step="0.1"
+              value={formData.soilMoisture}
+              onChange={(e) => setFormData(prev => ({ ...prev, soilMoisture: e.target.value }))}
+              required
+            />
+            <Input
+              label="Soil pH (0 - 14)"
+              type="number"
+              step="0.01"
+              value={formData.soilPh}
+              onChange={(e) => setFormData(prev => ({ ...prev, soilPh: e.target.value }))}
+              required
+            />
+          </div>
+          <DialogFooter className="flex justify-end space-x-3">
+            <Button type="button" variant="ghost" onClick={() => setSubmitDialogOpen(false)}>
+              Cancel
+            </Button>
+            <Button type="submit" variant="primary" loading={submitting}>
+              Save Reading & Compute Hash
+            </Button>
+          </DialogFooter>
+        </form>
+      </Dialog>
 
       {/* Export Dialog */}
       <Dialog open={exportDialogOpen} onOpenChange={setExportDialogOpen} className="w-96 sm:max-w-xs">
