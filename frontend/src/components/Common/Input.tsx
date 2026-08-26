@@ -44,30 +44,30 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
     const helperId = `${id}-helper`;
     const hasError = !!error;
 
-    const labelClasses = cn(
-      'absolute left-3 text-body-sm text-fg-muted pointer-events-none select-none',
-      'transition-all duration-fast origin-left',
-      'top-3', // resting position: centered with input text
-      // peer selectors fire on elements AFTER the peer (input comes first in DOM)
-      hasError && 'peer-focus:text-error peer-focus-within:text-error',
-      'peer-focus:text-primary peer-focus:-translate-y-7 peer-focus:scale-85',
-      'peer-focus-within:text-primary peer-focus-within:-translate-y-7 peer-focus-within:scale-85',
-      'peer-data-[has-value=true]:text-primary peer-data-[has-value=true]:-translate-y-7 peer-data-[has-value=true]:scale-85'
-    );
-
     return (
       <div className={cn('relative', fullWidth && 'w-full')}>
+        {label && (
+          <label
+            htmlFor={id}
+            className={cn(
+              'block text-body-xs font-medium text-fg-secondary mb-1.5 select-none',
+              hasError && 'text-error-fg'
+            )}
+          >
+            {label}
+            {required && <span className="text-error ml-0.5" aria-hidden="true">*</span>}
+          </label>
+        )}
         <div className="relative">
-          {/* Input must come BEFORE label in DOM so peer sibling selectors fire */}
           <input
             ref={ref}
             id={id}
             className={cn(
-              'peer w-full bg-input-bg border-input-border text-input-fg placeholder-transparent',
+              'w-full bg-input-bg border-input-border text-input-fg',
               'rounded-input transition-all duration-fast',
               'focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-primary-bg',
               'disabled:bg-input-disabled-bg disabled:text-input-disabled-fg disabled:cursor-not-allowed',
-              'px-3 py-2.5',
+              'px-3 py-2.5 text-body-sm',
               leftIcon && 'pl-10',
               rightIcon && 'pr-10',
               hasError
@@ -79,15 +79,8 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
             required={required}
             aria-invalid={hasError}
             aria-describedby={hasError ? errorId : helperText ? helperId : undefined}
-            data-has-value={String(!!(props.value || props.defaultValue))}
             {...props}
           />
-          {label && (
-            <label htmlFor={id} className={labelClasses}>
-              {label}
-              {required && <span className="text-error ml-0.5" aria-hidden="true">*</span>}
-            </label>
-          )}
           {leftIcon && (
             <div
               className="absolute left-3 top-1/2 -translate-y-1/2 text-fg-muted pointer-events-none z-[1]"
@@ -166,14 +159,8 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
           <label
             htmlFor={id}
             className={cn(
-              'absolute left-3 top-3 text-fg-muted pointer-events-none',
-              'transition-all duration-fast origin-left',
-              'peer-placeholder-shown:text-body-sm peer-placeholder-shown:text-fg-muted',
-              'peer-focus:text-primary peer-focus:scale-85 peer-focus:-translate-y-2.5',
-              'peer-focus-within:text-primary peer-focus-within:scale-85 peer-focus-within:-translate-y-2.5',
-              'peer-[:not(:placeholder-shown)]:text-primary peer-[:not(:placeholder-shown)]:scale-85 peer-[:not(:placeholder-shown)]:-translate-y-2.5',
-              'peer-data-[has-value]:text-primary peer-data-[has-value]:scale-85 peer-data-[has-value]:-translate-y-2.5',
-              hasError && 'peer-focus:text-error peer-focus-within:text-error'
+              'block text-body-xs font-medium text-fg-secondary mb-1.5 select-none',
+              hasError && 'text-error-fg'
             )}
           >
             {label}
@@ -184,7 +171,7 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
           ref={ref}
           id={id}
           className={cn(
-            'peer w-full bg-input-bg border-input-border text-input-fg placeholder-transparent',
+            'w-full bg-input-bg border-input-border text-input-fg',
             'rounded-input transition-all duration-fast resize-y',
             'focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-primary-bg',
             'disabled:bg-input-disabled-bg disabled:text-input-disabled-fg disabled:cursor-not-allowed',
@@ -200,7 +187,6 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
           rows={minRows}
           aria-invalid={hasError}
           aria-describedby={hasError ? errorId : helperText ? helperId : undefined}
-          data-has-value={props.value || props.defaultValue ? 'true' : 'false'}
           {...props}
         />
         {hasError && (

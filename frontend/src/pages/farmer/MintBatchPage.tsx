@@ -9,43 +9,60 @@ import { ledgerApi } from '../../api/ledger';
 import { ConnectButton } from '@mysten/dapp-kit';
 
 const CROP_TYPES = [
-  { value: 'wheat', label: 'Wheat' },
-  { value: 'corn', label: 'Corn' },
-  { value: 'soybean', label: 'Soybean' },
-  { value: 'barley', label: 'Barley' },
+  { value: 'maize', label: 'Maize (Corn)' },
+  { value: 'cocoa', label: 'Cocoa' },
+  { value: 'cassava', label: 'Cassava' },
+  { value: 'yam', label: 'Yam' },
   { value: 'rice', label: 'Rice' },
-  { value: 'cotton', label: 'Cotton' },
+  { value: 'cowpea', label: 'Cowpea (Beans)' },
+  { value: 'plantain', label: 'Plantain' },
+  { value: 'groundnut', label: 'Groundnut (Peanuts)' },
 ];
 
 const VARIETIES: Record<string, Array<{ value: string; label: string }>> = {
-  wheat: [
-    { value: 'hard_red_winter', label: 'Hard Red Winter' },
-    { value: 'hard_red_spring', label: 'Hard Red Spring' },
-    { value: 'soft_red_winter', label: 'Soft Red Winter' },
-    { value: 'durum', label: 'Durum' },
+  maize: [
+    { value: 'obatanpa', label: 'Obatanpa (White Quality Protein Maize)' },
+    { value: 'omankwa', label: 'Omankwa (Drought Tolerant Yellow Maize)' },
+    { value: 'hondee', label: 'Hondee' },
+    { value: 'abontem', label: 'Abontem (Extra-Early Yellow Maize)' },
   ],
-  corn: [
-    { value: 'sweet_corn', label: 'Sweet Corn' },
-    { value: 'field_corn', label: 'Field Corn' },
-    { value: 'popcorn', label: 'Popcorn' },
+  cocoa: [
+    { value: 'hybrid', label: 'High-Yield Hybrid Cocoa' },
+    { value: 'amelonado', label: 'Amelonado (Traditional West African Cocoa)' },
+    { value: 'amazon', label: 'Upper Amazon Hybrid' },
   ],
-  soybean: [
-    { value: 'high_protein', label: 'High Protein' },
-    { value: 'high_oil', label: 'High Oil' },
-    { value: 'conventional', label: 'Conventional' },
+  cassava: [
+    { value: 'bankye_hemaa', label: 'Bankye Hemaa' },
+    { value: 'ampong', label: 'Ampong' },
+    { value: 'afisiafi', label: 'Afisiafi' },
+    { value: 'sika_bankye', label: 'Sika Bankye' },
   ],
-  barley: [
-    { value: 'malting', label: 'Malting Barley' },
-    { value: 'feed', label: 'Feed Barley' },
+  yam: [
+    { value: 'pona', label: 'Pona (White Yam)' },
+    { value: 'laribako', label: 'Laribako' },
+    { value: 'dente', label: 'Dente' },
+    { value: 'water_yam', label: 'Water Yam (Afase)' },
   ],
   rice: [
-    { value: 'long_grain', label: 'Long Grain' },
-    { value: 'medium_grain', label: 'Medium Grain' },
-    { value: 'short_grain', label: 'Short Grain' },
+    { value: 'agra_rice', label: 'AGRA Rice (Aromatic Lowland Rice)' },
+    { value: 'jasmine_85', label: 'Jasmine 85' },
+    { value: 'nerica_1', label: 'NERICA 1 (Upland Rice)' },
+    { value: 'toxi_3107', label: 'Toxi 3107 (Irrigated Rice)' },
   ],
-  cotton: [
-    { value: 'upland', label: 'Upland Cotton' },
-    { value: 'pima', label: 'Pima Cotton' },
+  cowpea: [
+    { value: 'songotra', label: 'Songotra' },
+    { value: 'zaayura', label: 'Zaayura' },
+    { value: 'padi_tuya', label: 'Padi Tuya' },
+  ],
+  plantain: [
+    { value: 'apantu', label: 'Apantu (False Horn Plantain)' },
+    { value: 'apem', label: 'Apem (French Plantain)' },
+    { value: 'oniaba', label: 'Oniaba' },
+  ],
+  groundnut: [
+    { value: 'yenyawoso', label: 'Yenyawoso' },
+    { value: 'azivivi', label: 'Azivivi' },
+    { value: 'kpanini', label: 'Kpanini' },
   ],
 };
 

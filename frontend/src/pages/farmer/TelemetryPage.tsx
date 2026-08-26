@@ -67,15 +67,23 @@ export function TelemetryPage() {
     setSubmitting(true);
     try {
       const newRecord = await telemetryApi.submit({
-        temperature: Number(formData.temperature),
-        soil_moisture: Number(formData.soilMoisture),
+        temperature_celsius: Number(formData.temperature),
+        soil_moisture_percentage: Number(formData.soilMoisture),
         soil_ph: Number(formData.soilPh),
       });
       showToast(`Telemetry saved! Hash: ${newRecord.payload_sha256.substring(0, 10)}...`, 'success');
       setSubmitDialogOpen(false);
       fetchTelemetry();
     } catch (err: any) {
-      showToast(err.response?.data?.error?.message || 'Failed to submit telemetry', 'error');
+      let msg = 'Failed to submit telemetry';
+      if (err.response?.data?.error?.message) {
+        msg = err.response.data.error.message;
+      } else if (err.response?.data) {
+        const errorData = err.response.data;
+        const details = typeof errorData === 'object' ? Object.values(errorData).flat().join(', ') : String(errorData);
+        if (details) msg = details;
+      }
+      showToast(msg, 'error');
     } finally {
       setSubmitting(false);
     }
