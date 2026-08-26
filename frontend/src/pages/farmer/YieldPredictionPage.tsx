@@ -117,30 +117,29 @@ export function YieldPredictionPage() {
             <h3 className="text-body font-semibold text-fg-primary mb-4">Model Details & Factors</h3>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div className="p-4 bg-bg-tertiary/50 rounded-xl">
-                <h4 className="text-body-sm font-medium text-fg-secondary mb-2">Key Influencing Factors</h4>
+                <h4 className="text-body-sm font-medium text-fg-secondary mb-2">Ghana Season Factors</h4>
                 <ul className="space-y-2 text-body-xs text-fg-muted">
-                  <li className="flex items-center gap-2"><span className="w-2 h-2 rounded-full bg-emerald-500" /> Soil moisture trends (30%)</li>
-                  <li className="flex items-center gap-2"><span className="w-2 h-2 rounded-full bg-cyan-500" /> Temperature patterns (25%)</li>
-                  <li className="flex items-center gap-2"><span className="w-2 h-2 rounded-full bg-violet-500" /> Historical yields (20%)</li>
-                  <li className="flex items-center gap-2"><span className="w-2 h-2 rounded-full bg-amber-500" /> Satellite NDVI (15%)</li>
-                  <li className="flex items-center gap-2"><span className="w-2 h-2 rounded-full bg-rose-500" /> Weather forecast (10%)</li>
+                  <li className="flex items-center gap-2"><span className="w-2 h-2 rounded-full bg-emerald-500" /> Major Rainy Season Rainfall (35%)</li>
+                  <li className="flex items-center gap-2"><span className="w-2 h-2 rounded-full bg-cyan-500" /> Soil Moisture & pH (25%)</li>
+                  <li className="flex items-center gap-2"><span className="w-2 h-2 rounded-full bg-amber-500" /> Harmattan Dryness Index (20%)</li>
+                  <li className="flex items-center gap-2"><span className="w-2 h-2 rounded-full bg-violet-500" /> Historical Regional Harvests (20%)</li>
                 </ul>
               </div>
               <div className="p-4 bg-bg-tertiary/50 rounded-xl">
                 <h4 className="text-body-sm font-medium text-fg-secondary mb-2">Model Performance</h4>
                 <div className="space-y-2 text-body-xs">
-                  <div className="flex justify-between"><span className="text-fg-muted">MAE</span><span className="text-fg-primary font-semibold">0.32 t/ha</span></div>
-                  <div className="flex justify-between"><span className="text-fg-muted">RMSE</span><span className="text-fg-primary font-semibold">0.41 t/ha</span></div>
+                  <div className="flex justify-between"><span className="text-fg-muted">MAE</span><span className="text-fg-primary font-semibold">0.32 MT</span></div>
+                  <div className="flex justify-between"><span className="text-fg-muted">RMSE</span><span className="text-fg-primary font-semibold">0.41 MT</span></div>
                   <div className="flex justify-between"><span className="text-fg-muted">R² Score</span><span className="text-fg-primary font-semibold">0.94</span></div>
-                  <div className="flex justify-between"><span className="text-fg-muted">MAPE</span><span className="text-fg-primary font-semibold">4.2%</span></div>
+                  <div className="flex justify-between"><span className="text-fg-muted">Season Fit</span><span className="text-fg-primary font-semibold">Major Season (Apr–Aug)</span></div>
                 </div>
               </div>
               <div className="p-4 bg-bg-tertiary/50 rounded-xl">
-                <h4 className="text-body-sm font-medium text-fg-secondary mb-2">Recommendations</h4>
+                <h4 className="text-body-sm font-medium text-fg-secondary mb-2">Ghana Season Recommendations</h4>
                 <ul className="space-y-2 text-body-xs text-fg-muted">
-                  <li className="flex items-start gap-2"><span className="w-2 h-2 rounded-full bg-emerald-500 mt-1.5" /> Increase irrigation in weeks 3-5</li>
-                  <li className="flex items-start gap-2"><span className="w-2 h-2 rounded-full bg-amber-500 mt-1.5" /> Apply nitrogen fertilizer at V6 stage</li>
-                  <li className="flex items-start gap-2"><span className="w-2 h-2 rounded-full bg-cyan-500 mt-1.5" /> Monitor for pest pressure in June</li>
+                  <li className="flex items-start gap-2"><span className="w-2 h-2 rounded-full bg-emerald-500 mt-1.5" /> Plant Obatanpa Maize at start of Major Rains (April)</li>
+                  <li className="flex items-start gap-2"><span className="w-2 h-2 rounded-full bg-amber-500 mt-1.5" /> Prepare ridges & apply NPK fertilizer before May heavy rains</li>
+                  <li className="flex items-start gap-2"><span className="w-2 h-2 rounded-full bg-cyan-500 mt-1.5" /> Protect drying crops against Harmattan winds in December</li>
                 </ul>
               </div>
             </div>

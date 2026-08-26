@@ -9,8 +9,8 @@ export interface TelemetryRecord {
 }
 
 export interface TelemetrySubmission {
-  temperature: number;
-  soil_moisture: number;
+  temperature_celsius: number;
+  soil_moisture_percentage: number;
   soil_ph: number;
 }
 
