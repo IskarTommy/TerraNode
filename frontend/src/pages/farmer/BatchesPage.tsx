@@ -1,11 +1,11 @@
-import { useState } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Card } from '../../components/Common/Card';
 import { Button } from '../../components/Common/Button';
 import { Input } from '../../components/Common/Input';
 import { cn } from '../../utils/cn';
 import { formatDate } from '../../utils/formatDate';
-
-type BatchStatus = 'growing' | 'harvested' | 'minted' | 'shipped';
+import { ledgerApi } from '../../api/ledger';
+import type { ProduceBatch } from '../../types/ledger';
 
 const MOCK_BATCHES = [
   {
@@ -25,57 +25,6 @@ const MOCK_BATCHES = [
     fieldId: 'FIELD-001',
     location: 'Kansas, USA',
   },
-  {
-    id: 'BATCH-2024-002',
-    cropType: 'Corn',
-    variety: 'Sweet Corn Hybrid',
-    plantedDate: '2024-05-01',
-    estimatedHarvest: '2024-09-15',
-    actualHarvest: '2024-09-12',
-    status: 'harvested',
-    quantity: 12300,
-    unit: 'kg',
-    qualityScore: 95,
-    yieldEstimate: 12.3,
-    txHash: '0x2b3c4d5e6f7890abcdef1234567890abcdef1234567890abcdef1234567890abc',
-    organicCertified: false,
-    fieldId: 'FIELD-002',
-    location: 'Iowa, USA',
-  },
-  {
-    id: 'BATCH-2024-003',
-    cropType: 'Soybean',
-    variety: 'High Protein',
-    plantedDate: '2024-06-10',
-    estimatedHarvest: '2024-10-25',
-    actualHarvest: '2024-10-20',
-    status: 'minted',
-    quantity: 4200,
-    unit: 'kg',
-    qualityScore: 88,
-    yieldEstimate: 4.2,
-    txHash: '0x3c4d5e6f7890abcdef1234567890abcdef1234567890abcdef1234567890abcd',
-    organicCertified: true,
-    fieldId: 'FIELD-003',
-    location: 'Illinois, USA',
-  },
-  {
-    id: 'BATCH-2024-004',
-    cropType: 'Barley',
-    variety: 'Malting Barley',
-    plantedDate: '2024-03-20',
-    estimatedHarvest: '2024-07-15',
-    actualHarvest: '2024-07-10',
-    status: 'shipped',
-    quantity: 6800,
-    unit: 'kg',
-    qualityScore: 90,
-    yieldEstimate: 6.8,
-    txHash: '0x4d5e6f7890abcdef1234567890abcdef1234567890abcdef1234567890abcdef',
-    organicCertified: false,
-    fieldId: 'FIELD-004',
-    location: 'Colorado, USA',
-  },
 ];
 
 const STATUS_CONFIG: Record<string, { label: string; color: string; bg: string; icon: string }> = {
@@ -88,9 +37,45 @@ const STATUS_CONFIG: Record<string, { label: string; color: string; bg: string; 
 export function BatchesPage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState<'all' | 'growing' | 'harvested' | 'minted' | 'shipped'>('all');
-  const [selectedBatch, setSelectedBatch] = useState<typeof MOCK_BATCHES[0] | null>(null);
+  const [selectedBatch, setSelectedBatch] = useState<any | null>(null);
+  const [liveBatches, setLiveBatches] = useState<ProduceBatch[]>([]);
 
-  const filteredBatches = MOCK_BATCHES.filter(batch => {
+  const fetchBatches = useCallback(async () => {
+    try {
+      const res = await ledgerApi.getList();
+      if (res.results && res.results.length > 0) {
+        setLiveBatches(res.results);
+      }
+    } catch {
+      // Keep state clean on fallback
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchBatches();
+  }, [fetchBatches]);
+
+  const displayBatches = liveBatches.length > 0
+    ? liveBatches.map(b => ({
+        id: b.batch_id,
+        cropType: b.crop_type,
+        variety: 'Standard Variety',
+        plantedDate: b.created_at,
+        estimatedHarvest: b.created_at,
+        actualHarvest: null,
+        status: b.status.toLowerCase(),
+        quantity: b.weight_kg,
+        unit: 'kg',
+        qualityScore: 92,
+        yieldEstimate: 8.5,
+        txHash: b.sui_tx_digest || '',
+        organicCertified: true,
+        fieldId: 'FIELD-001',
+        location: 'Farm Field',
+      }))
+    : MOCK_BATCHES;
+
+  const filteredBatches = displayBatches.filter(batch => {
     const matchesSearch = batch.id.toLowerCase().includes(searchQuery.toLowerCase()) ||
       batch.cropType.toLowerCase().includes(searchQuery.toLowerCase()) ||
       batch.fieldId.toLowerCase().includes(searchQuery.toLowerCase());
