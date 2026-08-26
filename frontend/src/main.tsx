@@ -17,7 +17,7 @@ createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <QueryClientProvider client={queryClient}>
       <SuiClientProvider networks={networkConfig} defaultNetwork="testnet">
-        <SuiWalletProvider>
+        <SuiWalletProvider autoConnect={true}>
           <App />
         </SuiWalletProvider>
       </SuiClientProvider>
