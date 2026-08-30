@@ -177,7 +177,7 @@ The audit logs page displays a chronological record of system activities, includ
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.85\textwidth]{figures/fig_audit_logs_page.png}
+    \includegraphics[width=0.75\textwidth]{figures/fig_audit_logs_page.png}
     \caption{Audit Logs Page}
     \label{fig:audit_logs_page}
 \end{figure}
@@ -190,6 +190,7 @@ This section presents the core algorithms implemented in TerraNode, with code ex
 
 The integrity hashing function generates a deterministic SHA-256 digest from the core fields of a telemetry record. The use of canonical JSON serialization with sorted keys, no whitespace, and fixed-precision formatting ensures that the same input data always produces the same hash, regardless of the order in which the fields are processed.
 
+\noindent\begin{minipage}{\textwidth}
 \begin{lstlisting}[language=Python, caption={Telemetry Data Integrity Hash Generation}, label={lst:hash_gen}]
 import hashlib
 import json
@@ -209,6 +210,7 @@ def generate_telemetry_hash(farmer_id, recorded_at,
         canonical_data.encode("utf-8")
     ).hexdigest()
 \end{lstlisting}
+\end{minipage}
 
 The function in Listing~\ref{lst:hash_gen} accepts the farmer identifier, recording timestamp, and three environmental measurements. It constructs a JSON string with sorted keys and minimal separators, then applies the SHA-256 algorithm to produce a 64-character hexadecimal digest. This hash serves as a fingerprint for the telemetry record: any modification to any field, no matter how small, would produce a completely different hash value.
 
@@ -216,6 +218,7 @@ The function in Listing~\ref{lst:hash_gen} accepts the farmer identifier, record
 
 The wallet-based login mechanism verifies that the user possesses the private key corresponding to their registered Sui public key. The verification algorithm reconstructs the signed payload using the Sui personal message signing protocol and checks the Ed25519 signature.
 
+\noindent\begin{minipage}{\textwidth}
 \begin{lstlisting}[language=Python, caption={Sui Personal Message Signature Verification}, label={lst:sig_verify}]
 import base64
 import hashlib
@@ -258,6 +261,7 @@ def verify_sui_personal_message(message_str,
     verify_key.verify(hashed_msg, signature)
     return True
 \end{lstlisting}
+\end{minipage}
 
 The function in Listing~\ref{lst:sig_verify} implements the full Sui personal message verification protocol. The signature bytes are decoded from base64 and split into the scheme flag, the 64-byte Ed25519 signature, and the public key. The message is prepended with the Sui intent prefix and BCS-encoded before being hashed with BLAKE2b. The final verification is performed by the PyNaCl library's \texttt{VerifyKey} class.
 
@@ -265,6 +269,7 @@ The function in Listing~\ref{lst:sig_verify} implements the full Sui personal me
 
 The prediction algorithm implements the weighted moving average model described in Chapter Three. The following listing shows the core computation logic.
 
+\noindent\begin{minipage}{\textwidth}
 \begin{lstlisting}[language=Python, caption={Crop Yield Prediction Service}, label={lst:predict}]
 def predict_yield(farmer_id):
     records = EnvironmentalTelemetry.objects.filter(
@@ -312,8 +317,9 @@ def predict_yield(farmer_id):
         }
     }
 \end{lstlisting}
+\end{minipage}
 
-The function in Listing~\ref{lst:predict} retrieves up to 90 recent telemetry records, calculates the mean values of temperature, soil moisture, and pH, applies the yield formula from Equation~\ref{eq:yield}, computes the confidence score from Equation~\ref{eq:confidence}, and generates a contextual recommendation based on the computed averages.
+The function in Listing~\ref{lst:predict} retrieves up to 90 recent telemetry records, calculates the mean values of temperature, soil moisture, and pH, applies the yield formula from Chapter Three (Equation 3.2), computes the confidence score (Equation 3.3), and generates a contextual recommendation based on the computed averages.
 
 \section{System Evaluation}
 

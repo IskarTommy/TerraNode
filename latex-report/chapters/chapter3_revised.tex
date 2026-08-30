@@ -1,0 +1,340 @@
+\chapter{METHODOLOGY}
+
+\section{Introduction}
+
+This chapter describes the research methodology and technical design decisions adopted in the development of TerraNode. It covers the research design approach, the system requirements derived from the research objectives stated in Chapter One, the architectural design of the platform, the data modelling strategy, the smart contract logic, and the predictive analytics engine. Each section includes the rationale behind the chosen approach and, where applicable, the mathematical formulations that govern the system's computational processes.
+
+\section{Research Design}
+
+This study follows a Design Science Research (DSR) methodology, which is appropriate for projects that involve the creation and evaluation of information technology artefacts intended to solve identified organizational problems. Under the DSR paradigm, the research process consists of two complementary activities: building the artefact and evaluating it against the requirements derived from the problem space.
+
+The research was conducted in four sequential phases:
+
+\begin{enumerate}
+    \item \textbf{Problem Identification and Requirements Analysis:} The shortcomings of existing centralized agricultural data management systems were identified through the literature review in Chapter Two. Functional and non-functional requirements were derived from the research questions and objectives stated in Chapter One.
+    \item \textbf{System Design:} The architectural blueprint, data models, API specifications, and smart contract structures were designed to satisfy the identified requirements.
+    \item \textbf{Implementation:} The system was implemented as a functional prototype using the technology stack described in Section~\ref{sec:tech_stack}.
+    \item \textbf{Evaluation:} The implemented system was tested and evaluated against the defined requirements, with results reported in Chapter Four.
+\end{enumerate}
+
+\section{System Requirements}
+
+\subsection{Functional Requirements}
+
+The functional requirements describe the specific capabilities that TerraNode must provide. These were derived directly from the research objectives outlined in Chapter One.
+
+\begin{table}[H]
+\centering
+\caption{Functional Requirements}
+\label{tab:functional_req}
+\begin{tabularx}{\textwidth}{|l|X|l|}
+\hline
+\textbf{ID} & \textbf{Requirement} & \textbf{Objective} \\
+\hline
+FR-01 & The system shall allow users to register with email, password, and role selection. & i \\
+\hline
+FR-02 & The system shall authenticate users using JWT tokens with role-based access control. & i \\
+\hline
+FR-03 & The system shall allow Sui wallet-based authentication via Ed25519 signature verification. & iii \\
+\hline
+FR-04 & The system shall capture environmental telemetry data (temperature, soil moisture, soil pH). & i \\
+\hline
+FR-05 & The system shall generate SHA-256 integrity hashes for all telemetry records. & iii \\
+\hline
+FR-06 & The system shall create produce batch records linked to telemetry data. & i \\
+\hline
+FR-07 & The system shall mint produce batch objects on the Sui blockchain. & iii \\
+\hline
+FR-08 & The system shall track custody transfers of produce batches between stakeholders. & iii \\
+\hline
+FR-09 & The system shall compute crop yield predictions based on historical telemetry data. & ii \\
+\hline
+FR-10 & The system shall provide role-specific dashboards for farmers, logistics handlers, and administrators. & i \\
+\hline
+\end{tabularx}
+\end{table}
+
+\subsection{Non-Functional Requirements}
+
+\begin{table}[H]
+\centering
+\caption{Non-Functional Requirements}
+\label{tab:nonfunctional_req}
+\begin{tabularx}{\textwidth}{|l|X|}
+\hline
+\textbf{ID} & \textbf{Requirement} \\
+\hline
+NFR-01 & All passwords shall be hashed using Argon2id with a minimum cost factor. \\
+\hline
+NFR-02 & API responses for standard operations shall return within 500 milliseconds. \\
+\hline
+NFR-03 & The web interface shall be responsive and accessible from modern web browsers. \\
+\hline
+NFR-04 & Blockchain transactions shall confirm within the Sui Testnet's normal finality window. \\
+\hline
+NFR-05 & The system shall enforce rate limiting on authentication endpoints (5 attempts per minute). \\
+\hline
+NFR-06 & Telemetry input values shall be validated within physically plausible ranges. \\
+\hline
+\end{tabularx}
+\end{table}
+
+\section{System Architecture}
+
+TerraNode follows a three-tier client-server architecture that separates the presentation layer, the business logic layer, and the data persistence layer. This architectural pattern promotes modularity, allowing each layer to be developed, tested, and maintained independently.
+
+\begin{itemize}
+    \item \textbf{Presentation Layer (Frontend):} A single-page application built with React and TypeScript, responsible for rendering the user interface and managing client-side state. The frontend communicates with the backend exclusively through RESTful API calls and interacts directly with the Sui blockchain through the Mysten dApp Kit for wallet operations.
+    \item \textbf{Business Logic Layer (Backend):} A Django REST Framework application that processes API requests, enforces business rules, manages user authentication, computes analytical predictions, and coordinates with the blockchain layer. The backend exposes four domain-specific API modules: Authentication, Telemetry, Ledger, and Analytics.
+    \item \textbf{Data Persistence Layer:} Comprises three storage components. PostgreSQL serves as the primary relational database for structured application data. Redis provides an in-memory cache for frequently accessed analytics results. The Sui blockchain acts as the immutable ledger for produce batch records and their associated integrity hashes.
+\end{itemize}
+
+Figure~\ref{fig:system_arch} illustrates the overall system architecture and the data flow between components.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\textwidth]{figures/fig_system_architecture.png}
+    \caption{TerraNode System Architecture}
+    \label{fig:system_arch}
+\end{figure}
+
+\section{Data Flow Design}
+
+\subsection{Context Diagram (Level 0)}
+
+The context diagram in Figure~\ref{fig:dfd_level0} shows TerraNode as a single process interacting with four external entities: the Farmer, the Logistics Handler, the System Administrator, and the Sui Blockchain Network.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\textwidth]{figures/fig_dfd_level0.png}
+    \caption{Context Diagram (DFD Level 0)}
+    \label{fig:dfd_level0}
+\end{figure}
+
+\subsection{Level 1 Data Flow Diagram}
+
+The Level 1 Data Flow Diagram in Figure~\ref{fig:dfd_level1} decomposes the TerraNode system into its four core processes:
+
+\begin{enumerate}
+    \item \textbf{Process 1.0 --- Authentication Module:} Handles user registration, credential-based login, wallet-based login, and session management through JWT tokens.
+    \item \textbf{Process 2.0 --- Telemetry Module:} Receives environmental sensor readings, validates input ranges, generates SHA-256 integrity hashes, and stores the records in the database.
+    \item \textbf{Process 3.0 --- Ledger Module:} Manages produce batch creation, coordinates with the Sui blockchain for on-chain minting and custody transfer, and maintains the local database mirror of blockchain state.
+    \item \textbf{Process 4.0 --- Analytics Module:} Retrieves historical telemetry records, applies the weighted moving average prediction algorithm, caches results in Redis, and returns yield forecasts to the user.
+\end{enumerate}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\textwidth]{figures/fig_dfd_level1.png}
+    \caption{Data Flow Diagram (Level 1)}
+    \label{fig:dfd_level1}
+\end{figure}
+
+\section{Entity-Relationship Model}
+
+The TerraNode database consists of three primary entities, each with clearly defined attributes and relationships. Figure~\ref{fig:er_diagram} presents the Entity-Relationship (ER) diagram.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\textwidth]{figures/fig_er_diagram.png}
+    \caption{Entity-Relationship Diagram}
+    \label{fig:er_diagram}
+\end{figure}
+
+\textbf{CustomUser} represents all system users and is derived from Django's AbstractUser model. Each user is uniquely identified by a UUID primary key and authenticated through their email address. The role field distinguishes between the three user types: Farmer, Logistics Handler, and Administrator. An optional \texttt{sui\_public\_key} field stores the user's Sui blockchain wallet address for wallet-based authentication.
+
+\textbf{EnvironmentalTelemetry} stores individual environmental readings captured by farmers. Each record includes temperature in Celsius, soil moisture as a percentage, and soil pH. A \texttt{payload\_sha256} field stores the SHA-256 hash of the canonical representation of the record, ensuring that any post-creation modification can be detected. Each telemetry record is linked to the farmer who submitted it through a foreign key relationship.
+
+\textbf{ProduceBatch} represents a batch of agricultural produce that moves through the supply chain. Each batch is linked to the farmer who created it, optionally linked to a telemetry record that describes the environmental conditions under which the produce was grown, and has a \texttt{current\_custodian} field that tracks who currently holds physical possession of the batch. The batch lifecycle is managed through a status field with four possible states: PENDING, MINTED, IN\_TRANSIT, and DELIVERED. Two blockchain-specific fields, \texttt{sui\_object\_id} and \texttt{sui\_tx\_digest}, store the identifiers returned by the Sui network after successful on-chain operations.
+
+\section{Use Case Modelling}
+
+Figure~\ref{fig:use_case} presents the use case diagram, which identifies the primary interactions between the three actor types and the TerraNode system.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1.0\textwidth]{figures/fig_use_case.png}
+    \caption{Use Case Diagram}
+    \label{fig:use_case}
+\end{figure}
+
+The \textbf{Farmer} actor can register an account, log in (via credentials or wallet), submit telemetry readings, create produce batches, mint batches on the Sui blockchain, view yield predictions, and manage their profile settings.
+
+The \textbf{Logistics Handler} actor can log in, receive custody of produce batches via on-chain transfer, update shipment statuses, and track the location and condition of batches under their care.
+
+The \textbf{System Administrator} actor can view all system data, manage user accounts, inspect audit logs, and monitor the overall health of the system infrastructure.
+
+\section{Smart Contract Design}
+
+The TerraNode smart contract is written in the Move programming language and deployed on the Sui Testnet. It defines the on-chain representation of produce batches and the operations that can be performed on them.
+
+\subsection{ProduceBatch Object Structure}
+
+The \texttt{ProduceBatch} struct is defined as a Sui object with the \texttt{key} and \texttt{store} abilities, which allow it to be owned, transferred, and stored on-chain. It contains the following fields:
+
+\begin{itemize}
+    \item \texttt{id} (UID): The unique object identifier assigned by the Sui runtime.
+    \item \texttt{crop\_type} (String): The type of crop in the batch.
+    \item \texttt{weight\_kg} (u64): The weight of the batch in kilograms.
+    \item \texttt{origin\_farmer\_address} (address): The Sui address of the farmer who created the batch.
+    \item \texttt{current\_custodian\_address} (address): The Sui address of the entity currently holding the batch.
+    \item \texttt{data\_integrity\_hash} (vector$<$u8$>$): The SHA-256 hash of the associated telemetry data, linking the on-chain record to its off-chain data source.
+\end{itemize}
+
+\subsection{Entry Functions}
+
+The smart contract exposes two entry functions:
+
+\textbf{mint\_batch:} Creates a new \texttt{ProduceBatch} object, sets the transaction sender as both the origin farmer and the initial custodian, and emits a \texttt{BatchMinted} event. The batch object is then transferred to the sender's address.
+
+\textbf{transfer\_custody:} Accepts a mutable reference to an existing \texttt{ProduceBatch} object and a new custodian address. The function verifies that the caller is the current custodian before updating the \texttt{current\_custodian\_address} field and emitting a \texttt{CustodyTransferred} event.
+
+\subsection{Event Emissions}
+
+The smart contract emits two event types for off-chain indexing. \texttt{BatchMinted} records the batch identifier, the farmer's address, and the crop type. \texttt{CustodyTransferred} records the batch identifier, the previous custodian address, and the new custodian address. These events can be queried through the Sui JSON-RPC API, enabling the TerraNode backend to synchronize its local database with the on-chain state.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\textwidth]{figures/fig_batch_lifecycle.png}
+    \caption{Batch Lifecycle Sequence Diagram}
+    \label{fig:batch_lifecycle}
+\end{figure}
+
+\section{Predictive Analytics Engine}
+
+\subsection{Feature Vector Composition}
+
+The analytics engine operates on a feature vector composed of three environmental variables extracted from the EnvironmentalTelemetry records: temperature in degrees Celsius ($T$), soil moisture as a percentage ($M$), and soil pH ($P$). For a given farmer, the engine retrieves the most recent 90 telemetry records, ordered by recording timestamp.
+
+\subsection{Weighted Moving Average Model}
+
+The current implementation uses a simplified weighted moving average model to compute a predicted crop yield. Given $n$ telemetry records, the model first calculates the arithmetic means of the three environmental features:
+
+\begin{equation}
+\bar{T} = \frac{1}{n} \sum_{i=1}^{n} T_i, \quad
+\bar{M} = \frac{1}{n} \sum_{i=1}^{n} M_i, \quad
+\bar{P} = \frac{1}{n} \sum_{i=1}^{n} P_i
+\label{eq:averages}
+\end{equation}
+
+The predicted yield $Y$ in metric tons is then computed as:
+
+\begin{equation}
+Y = \max\left(0, \; 50.0 + 0.5 \cdot \bar{M} - 2.0 \cdot |22.0 - \bar{T}|\right)
+\label{eq:yield}
+\end{equation}
+
+The base yield of 50.0 represents a nominal starting point. The moisture coefficient (0.5) reflects the positive linear relationship between soil moisture availability and crop productivity. The temperature penalty term ($2.0 \cdot |22.0 - \bar{T}|$) penalizes deviations from the optimal growing temperature of 22 degrees Celsius. The $\max(0, \ldots)$ function ensures that the predicted yield is never negative.
+
+\subsection{Confidence Score}
+
+The confidence score $C$ reflects the data density available for the prediction:
+
+\begin{equation}
+C = \min\left(0.95, \; \frac{n}{90}\right)
+\label{eq:confidence}
+\end{equation}
+
+The confidence score increases linearly with the number of data points up to a maximum of 0.95, reflecting the principle that more historical data generally leads to more reliable predictions. The minimum requirement is five data points; if fewer are available, the engine returns an error rather than an unreliable prediction.
+
+\subsection{Caching Strategy}
+
+To avoid redundant computation, prediction results are cached in Redis with a time-to-live (TTL) of 600 seconds (10 minutes). The cache key is constructed using the format \texttt{analytics:}\allowbreak\texttt{predict:}\allowbreak\texttt{\{farmer\_id\}}. When a prediction request arrives, the engine first checks the cache. If a valid cached result exists, it is returned immediately. Otherwise, the prediction is computed, stored in the cache, and then returned to the client.
+
+\section{Security Architecture}
+
+\subsection{Authentication}
+
+TerraNode implements a dual authentication mechanism. The primary method uses email and password credentials, processed through the Django REST Framework Simple JWT library. Upon successful authentication, the server issues a pair of tokens: a short-lived access token (default lifetime: 15 minutes) and a long-lived refresh token (default lifetime: 7 days). Token rotation is enabled, meaning that each time a refresh token is used, a new pair is issued and the old refresh token is blacklisted.
+
+\subsection{Sui Wallet Signature Verification}
+\label{sec:wallet_verify}
+
+The secondary authentication method allows users to log in using their Sui blockchain wallet. The verification process works as follows:
+
+\begin{enumerate}
+    \item The client constructs a login message in the format: \\ ``\texttt{Login to TerraNode with \{sui\_public\_key\}}''.
+    \item The user signs this message using their Sui wallet's Ed25519 private key.
+    \item The backend receives the message, the signature, and the public key.
+    \item The backend reconstructs the signed payload by prepending the Sui personal message intent prefix (\texttt{[3, 0, 0]}) and encoding the message length using ULEB128.
+    \item The reconstructed payload is hashed using BLAKE2b with a 32-byte digest.
+    \item The Ed25519 signature is verified against the hashed payload using the provided public key.
+    \item If verification succeeds and the public key matches a registered user, JWT tokens are issued.
+\end{enumerate}
+
+\subsection{Data Integrity Hashing}
+
+Every telemetry record is protected by a SHA-256 hash computed from a canonical JSON representation of its core fields. The canonical form uses sorted keys, no whitespace, and fixed-precision floating-point formatting to ensure deterministic output. This hash is stored alongside the record in the database and can be independently recomputed at any time to verify that the record has not been modified since creation. The same hash is embedded in the corresponding ProduceBatch object on the Sui blockchain, creating a verifiable link between the on-chain asset and its off-chain data source.
+
+\subsection{Role-Based Access Control}
+
+The backend enforces role-based access control (RBAC) through custom permission classes. Four permission levels are defined:
+
+\begin{itemize}
+    \item \textbf{IsFarmer:} Grants access to endpoints that create telemetry records, prepare produce batches, and view yield predictions.
+    \item \textbf{IsLogistics:} Grants access to batch transfer and shipment management endpoints.
+    \item \textbf{IsAdmin:} Grants access to administrative functions including user management and audit log inspection.
+    \item \textbf{IsFarmerOrAdmin:} Grants shared access to endpoints that both farmers and administrators need, such as telemetry history viewing.
+\end{itemize}
+
+Figure~\ref{fig:auth_flow} illustrates the authentication flow for both credential-based and wallet-based login.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\textwidth]{figures/fig_auth_flow.png}
+    \caption{Authentication Flow Diagram}
+    \label{fig:auth_flow}
+\end{figure}
+
+\section{Technology Stack}
+\label{sec:tech_stack}
+
+Table~\ref{tab:tech_stack} summarizes the technologies used in the development of TerraNode.
+
+\begin{table}[H]
+\centering
+\caption{Technology Stack}
+\label{tab:tech_stack}
+\begin{tabularx}{\textwidth}{|l|l|X|}
+\hline
+\textbf{Layer} & \textbf{Technology} & \textbf{Purpose} \\
+\hline
+Frontend & React 19 & Component-based user interface library \\
+\hline
+Frontend & TypeScript 6.0 & Statically typed JavaScript superset \\
+\hline
+Frontend & Vite 8.1 & Build tool and development server \\
+\hline
+Frontend & Recharts 3.9 & Data visualization (charts and graphs) \\
+\hline
+Frontend & Mysten dApp Kit & Sui wallet integration and transaction signing \\
+\hline
+Backend & Django 5.1 & Python web framework \\
+\hline
+Backend & Django REST Framework 3.15 & RESTful API toolkit \\
+\hline
+Backend & Simple JWT 5.3 & JSON Web Token authentication \\
+\hline
+Backend & Celery & Asynchronous task queue \\
+\hline
+Database & PostgreSQL & Primary relational database \\
+\hline
+Cache & Redis 5.0 & In-memory data store for caching \\
+\hline
+Blockchain & Sui Testnet & Delegated PoS public blockchain \\
+\hline
+Smart Contract & Move & Smart contract programming language \\
+\hline
+Security & Argon2id & Password hashing algorithm \\
+\hline
+Security & PyNaCl & Ed25519 signature verification \\
+\hline
+\end{tabularx}
+\end{table}
+
+\section{Development Tools}
+
+The system was developed using Visual Studio Code as the primary integrated development environment. Git was used for version control throughout the project lifecycle. The backend was managed using Pipenv for Python dependency isolation, while the frontend used npm as the package manager. Testing was performed using Django's built-in test framework augmented with pytest, factory-boy, and faker for test data generation.
+
+\section{Chapter Summary}
+
+This chapter presented the methodology adopted for the design and development of TerraNode. The Design Science Research approach was described, followed by detailed specifications of the functional and non-functional requirements. The three-tier system architecture was explained, and data flow diagrams at the context and first decomposition levels were presented. The entity-relationship model defined the core data structures, and the use case diagram captured the interactions between the three actor types and the system. The smart contract design was documented, including the object structure, entry functions, and event emissions. The predictive analytics engine was formally described with its mathematical formulations for yield prediction and confidence scoring. Finally, the security architecture was outlined, covering JWT authentication, Sui wallet verification, SHA-256 data integrity hashing, and role-based access control. The implementation of this design is detailed in the following chapter.

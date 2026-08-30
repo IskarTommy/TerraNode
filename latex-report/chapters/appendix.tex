@@ -1,0 +1,136 @@
+\appendix
+\titleformat{\chapter}[display]
+  {\normalfont\normalsize\centering}
+  {APPENDIX~\thechapter}{20pt}{\normalsize\MakeUppercase}
+
+\chapter{CODE LISTINGS}
+\label{app:code_listings}
+
+\section{SHA-256 Data Integrity Hash Generation}
+
+The integrity hashing function in Listing~\ref{lst:hash_gen} generates a deterministic SHA-256 digest from the core fields of a telemetry record. The use of canonical JSON serialization with sorted keys, no whitespace, and fixed-precision formatting ensures that the same input data always produces the same hash, regardless of the order in which the fields are processed. The function accepts the farmer identifier, recording timestamp, and three environmental measurements, then applies the SHA-256 algorithm to produce a 64-character hexadecimal digest. Any modification to any field, no matter how small, produces a completely different hash value.
+
+\noindent\begin{minipage}{\textwidth}
+\begin{lstlisting}[language=Python, caption={Telemetry Data Integrity Hash Generation}, label={lst:hash_gen}]
+import hashlib
+import json
+
+def generate_telemetry_hash(farmer_id, recorded_at,
+                            temperature, soil_moisture,
+                            soil_ph):
+    canonical_data = json.dumps({
+        "farmer_id": str(farmer_id),
+        "recorded_at": recorded_at.isoformat(),
+        "temperature_celsius": f"{temperature:.2f}",
+        "soil_moisture_percentage": f"{soil_moisture:.2f}",
+        "soil_ph": f"{soil_ph:.2f}",
+    }, sort_keys=True, separators=(",", ":"))
+
+    return hashlib.sha256(
+        canonical_data.encode("utf-8")
+    ).hexdigest()
+\end{lstlisting}
+\end{minipage}
+
+\section{Sui Ed25519 Signature Verification}
+
+Listing~\ref{lst:sig_verify} implements the full Sui personal message verification protocol. The wallet-based login mechanism verifies that the user possesses the private key corresponding to their registered Sui public key. The signature bytes are decoded from base64 and split into the scheme flag, the 64-byte Ed25519 signature, and the public key. The message is prepended with the Sui intent prefix and BCS-encoded before being hashed with BLAKE2b. The final verification is performed by the PyNaCl library's \texttt{VerifyKey} class.
+
+\noindent\begin{minipage}{\textwidth}
+\begin{lstlisting}[language=Python, caption={Sui Personal Message Signature Verification}, label={lst:sig_verify}]
+import base64
+import hashlib
+from nacl.signing import VerifyKey
+
+def verify_sui_personal_message(message_str,
+                                 signature_b64):
+    sig_bytes = base64.b64decode(signature_b64)
+    flag = sig_bytes[0]  # 0 = Ed25519
+    signature = sig_bytes[1:65]
+    pubkey = sig_bytes[65:]
+
+    # Sui personal message intent prefix
+    intent_prefix = bytes([3, 0, 0])
+    msg_bytes = message_str.encode('utf-8')
+
+    # ULEB128 length encoding
+    def to_uleb128(n):
+        result = bytearray()
+        while True:
+            byte = n & 0x7f
+            n >>= 7
+            if n != 0:
+                byte |= 0x80
+            result.append(byte)
+            if n == 0:
+                break
+        return bytes(result)
+
+    bcs_msg = to_uleb128(len(msg_bytes)) + msg_bytes
+    intent_message = intent_prefix + bcs_msg
+
+    # BLAKE2b hash with 32-byte digest
+    hashed_msg = hashlib.blake2b(
+        intent_message, digest_size=32
+    ).digest()
+
+    # Ed25519 verification
+    verify_key = VerifyKey(pubkey)
+    verify_key.verify(hashed_msg, signature)
+    return True
+\end{lstlisting}
+\end{minipage}
+
+\section{Crop Yield Prediction Service}
+
+Listing~\ref{lst:predict} shows the core prediction service function. The function retrieves up to 90 recent telemetry records, calculates the mean values of temperature, soil moisture, and pH, applies the yield formula from Chapter Three (Equation~\ref{eq:yield}), computes the confidence score (Equation~\ref{eq:confidence}), and generates a contextual recommendation based on the computed averages.
+
+\noindent\begin{minipage}{\textwidth}
+\begin{lstlisting}[language=Python, caption={Crop Yield Prediction Service}, label={lst:predict}]
+def predict_yield(farmer_id):
+    records = EnvironmentalTelemetry.objects.filter(
+        farmer_id=farmer_id
+    ).order_by("-recorded_at")[:90]
+
+    if len(records) < 5:
+        return {"error": "Insufficient data points"}
+
+    avg_temp = sum(
+        r.temperature_celsius for r in records
+    ) / len(records)
+    avg_moisture = sum(
+        r.soil_moisture_percentage for r in records
+    ) / len(records)
+    avg_ph = sum(
+        r.soil_ph for r in records
+    ) / len(records)
+
+    predicted_yield = (50.0
+        + (avg_moisture * 0.5)
+        - abs(22.0 - avg_temp) * 2.0)
+    predicted_yield = max(0.0, predicted_yield)
+
+    confidence = min(0.95, len(records) / 90.0)
+
+    recommendation = "Maintain current conditions."
+    if avg_moisture < 40:
+        recommendation = ("Increase irrigation to "
+                          "prevent crop stress.")
+    elif avg_temp > 35:
+        recommendation = ("Temperature is too high, "
+                          "consider shading.")
+
+    return {
+        "confidence_score": confidence,
+        "predicted_yield_metric_tons": predicted_yield,
+        "historical_variance_index": 0.15,
+        "data_points_analyzed": len(records),
+        "recommendation": recommendation,
+        "averages": {
+            "temp": avg_temp,
+            "moisture": avg_moisture,
+            "ph": avg_ph
+        }
+    }
+\end{lstlisting}
+\end{minipage}

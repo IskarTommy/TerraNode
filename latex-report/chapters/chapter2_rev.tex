@@ -1,0 +1,147 @@
+\chapter{LITERATURE REVIEW}
+
+\section{Introduction}
+
+This chapter examines published research that directly relates to the design and development of TerraNode. The review is organized thematically, beginning with the broader landscape of digital agriculture and progressing through blockchain fundamentals, agricultural supply chain traceability, predictive crop analytics, and the specific characteristics of the Sui blockchain platform. Each section identifies the strengths and shortcomings of existing approaches, culminating in an explicit statement of the research gap that this project seeks to address. A comparative summary table is presented to illustrate where existing solutions fall short and how TerraNode differs from them.
+
+\section{Overview of Precision Agriculture and Digital Farming}
+
+Precision agriculture has emerged as a response to the growing demand for food production efficiency in the face of climate variability and limited arable land. It involves the use of sensor networks, satellite imagery, and computational models to monitor crop health, soil conditions, and weather patterns at a granular level. The core idea is that farm management decisions should be driven by real-time data rather than by tradition or rough estimation.
+
+\textcite{padhiary2025emerging} provided a comprehensive survey of the technologies enabling smart and sustainable precision agriculture. Their review covered remote sensing, unmanned aerial vehicles, robotic systems, and Internet of Things (IoT) sensor platforms. They concluded that while individual technologies have matured considerably, the integration of these components into unified decision-support platforms remains a significant challenge. A key finding was that most existing implementations treat data collection and data analysis as separate workflows, which limits the ability of farmers to act on insights in a timely manner.
+
+\textcite{raj2022survey} further examined the development modes, technologies, and security challenges associated with smart agriculture. Their analysis highlighted that although IoT-based monitoring systems are now widely available, many deployments rely on centralized cloud architectures that introduce single points of failure and leave sensitive agricultural data exposed to unauthorized access. They argued that the next generation of agricultural information systems must address both data integrity and computational security from the ground up, rather than treating these as afterthoughts.
+
+The evolution from manual record-keeping to sensor-driven digital farming has not been uniform across regions. In many developing countries, smallholder farmers still depend on paper-based logs and personal experience to manage their operations. This gap between available technology and actual adoption motivates the design of TerraNode as a system that is both technically robust and accessible to users with limited technical backgrounds.
+
+\section{Agricultural Data Management Systems}
+
+Agricultural data management systems serve as the backbone of any digital farming initiative. These platforms are responsible for collecting environmental readings, storing historical production records, and presenting summarized information to decision-makers. Traditionally, such systems have been built on relational database architectures hosted on centralized servers.
+
+\textcite{sharma2023blockchain} conducted a systematic literature review of food supply chain management systems and found that the majority of existing platforms suffer from fragmented data silos, reliance on manual paperwork, and lack of interoperability between different stakeholders. Their bibliometric analysis of over 300 published studies revealed that while interest in blockchain-enabled supply chain management has grown rapidly since 2018, most proposed systems remain at the conceptual or prototype stage without addressing the needs of smallholder farmers in developing regions.
+
+The fundamental limitation of centralized agricultural databases is their vulnerability to data manipulation. When a single entity controls the database, historical records can be altered retroactively, either through deliberate fraud or through simple administrative error. This weakness becomes especially problematic when the data is used as input for analytical models. If the underlying records cannot be verified as authentic, any forecasts or recommendations derived from them are inherently unreliable. TerraNode addresses this limitation by anchoring every telemetry record and produce batch to the Sui blockchain before any analytical processing occurs, thereby ensuring that the data foundation is mathematically verifiable.
+
+\section{Blockchain Technology Fundamentals}
+
+Blockchain technology provides a decentralized, append-only data structure in which records are grouped into blocks, cryptographically linked in sequence, and distributed across a network of nodes. Once a block has been confirmed by the network consensus mechanism, the data it contains becomes practically immutable. This property makes blockchain well-suited for applications where trust, transparency, and auditability are essential.
+
+\textcite{chauhan2025blockchain} reviewed the intersection of blockchain and big data analytics in agriculture, describing how distributed ledger technology can be combined with large-scale data processing to create intelligent agricultural systems. Their review categorized blockchain consensus mechanisms into proof-of-work, proof-of-stake, and delegated proof-of-stake variants, noting that the latter category offers substantially lower energy consumption and faster transaction finality, which are critical considerations for agricultural applications where hardware resources may be constrained.
+
+Several types of blockchain architectures exist, each presenting distinct trade-offs. Public blockchains such as Bitcoin and Ethereum offer maximum decentralization but suffer from high transaction fees and limited throughput. Private blockchains such as Hyperledger Fabric provide faster performance but sacrifice the trustless properties that make public blockchains attractive. Consortium blockchains represent a middle ground, where a pre-selected group of validators maintains the network. The Sui blockchain, which TerraNode employs, is a public blockchain that uses a delegated proof-of-stake consensus mechanism to achieve high throughput and low transaction costs while maintaining the transparency and openness of a public network.
+
+\section{Blockchain Applications in Agricultural Supply Chains}
+
+The application of blockchain to agricultural supply chains has attracted considerable research attention over the past several years. The central appeal is that blockchain can provide an unalterable record of every transaction and custody transfer that occurs from the farm gate to the end consumer, thereby enabling full traceability and reducing opportunities for fraud.
+
+\textcite{caro2018blockchain} presented AgriBlockIoT, a fully decentralized blockchain-based traceability solution for agri-food supply chain management. Their system was designed to integrate IoT devices producing and consuming digital data along the supply chain. They implemented and compared two blockchain deployments, one on Ethereum and one on Hyperledger Sawtooth, evaluating performance in terms of latency, CPU usage, and network overhead. The Ethereum deployment showed higher latency due to its proof-of-work consensus mechanism, while the Hyperledger deployment offered faster confirmations but at the cost of reduced decentralization. This trade-off between performance and trustlessness is a recurring theme in the literature and one that the Sui blockchain's delegated proof-of-stake mechanism helps to resolve.
+
+\textcite{mirabelli2020blockchain} examined the intersection of blockchain and agricultural supply chain traceability through a structured literature review. Their analysis identified key research trends including the growing use of smart contracts for automating compliance checks, the integration of IoT sensor data with on-chain records, and the challenge of scaling blockchain systems to handle the volume of data generated by large agricultural operations. They noted that while many proof-of-concept implementations had been developed, few had been tested under realistic conditions with actual farmers as end users.
+
+\textcite{rahman2025enhancing} analyzed supply chain transparency through a data-driven examination of distributed ledger applications. Their study found that blockchain-enabled supply chains demonstrated measurably higher levels of stakeholder trust compared to traditional systems. However, they also identified several barriers to adoption, including the technical complexity of blockchain interfaces, the energy costs of mining-based consensus, and the absence of standardized protocols for recording agricultural data on-chain.
+
+\textcite{lin2017blockchain} presented an early but influential argument for blockchain as the evolutionary next step for Information and Communications Technology (ICT) in agriculture. Writing from the perspective of environmental systems engineering, they argued that when ICT-enabled agricultural systems incorporate blockchain infrastructure, the integrity of baseline environmental data is safeguarded for all participating stakeholders. Their work foreshadowed many of the design decisions in TerraNode, particularly the principle of recording environmental telemetry data on an immutable ledger before using it for downstream analysis.
+
+\section{Blockchain-Based Smart Farm Security Frameworks}
+
+Beyond supply chain traceability, blockchain has been proposed as a foundation for comprehensive farm security frameworks that protect not only logistics data but also the operational technology systems used on modern farms.
+
+\textcite{alabsi2023blockchain} proposed a blockchain-based smart farm security framework for the Internet of Things. Their system addressed the vulnerabilities that arise when IoT sensors and actuators on a farm are connected to centralized management servers. By recording sensor readings and control commands on a blockchain, their framework ensured that any unauthorized modifications to device configurations would be detectable. Their work is closely related to TerraNode in its focus on data integrity, though their system did not include a predictive analytics component or a supply chain custody tracking module.
+
+\textcite{agtrust2026framework} introduced the AgTrust framework for securing critical agriculture technology and emerging solutions. This comprehensive framework established security requirements across the full agricultural technology stack, from edge devices through network infrastructure to cloud-based analytics platforms. AgTrust contributed a threat taxonomy specific to agricultural IoT environments and proposed mitigation strategies at each layer. While the framework provided valuable security guidelines, it did not implement a working prototype or demonstrate integration with a specific blockchain platform.
+
+\textcite{dzreke2025securing} addressed the cybersecurity dimension of connected farming through an empirical study of IoT device vulnerabilities. By conducting penetration testing on 32 commercial agricultural IoT devices, the study identified critical attack surfaces across 15 farm subsystems. The findings revealed that firmware-level attacks could modify crop prescriptions by up to 19 percent, illustrating how cyber intrusions can directly affect biological outcomes. This work underscores the importance of data integrity mechanisms like those implemented in TerraNode, where SHA-256 hashing and blockchain anchoring protect against unauthorized data modification.
+
+\section{Predictive Analytics and Crop Yield Forecasting}
+
+Predictive analytics represents a growing area of interest in agricultural informatics. Accurate yield forecasting enables farmers to make informed decisions about resource allocation, harvest timing, and market planning. Various statistical and machine learning approaches have been applied to this problem.
+
+\textcite{khaki2019cnn} developed a deep learning framework combining Convolutional Neural Networks (CNNs) and Recurrent Neural Networks (RNNs) for crop yield prediction. Their model was trained on environmental data and management practices across the United States Corn Belt and achieved a root-mean-square-error of 9 percent for corn and 8 percent for soybean yields, substantially outperforming random forest, deep fully connected neural networks, and LASSO regression. Their work demonstrated that deep learning models can capture temporal dependencies in environmental data that simpler models miss, a finding that informs the design of more advanced versions of the TerraNode analytics engine.
+
+\textcite{garg2018crop} investigated crop yield forecasting using fuzzy logic and regression models. Their approach applied fuzzy time series analysis to historical wheat yield data, testing multiple interval partitioning schemes and regression equations. Their results showed that fuzzy logic-based models can handle the inherent uncertainty in agricultural data more gracefully than purely deterministic approaches. The regression component of their model is conceptually similar to the weighted moving average approach used in the current TerraNode analytics engine, though TerraNode focuses specifically on telemetry-derived environmental features rather than historical yield time series.
+
+\textcite{layek2025secured} presented what they termed a secured triad of IoT, machine learning, and blockchain for crop forecasting. Their system combined IoT-based data collection with machine learning prediction models and blockchain-based data verification. This work is among the closest to TerraNode in conceptual scope, as it recognizes the critical relationship between data security and prediction reliability. However, their implementation used a private blockchain setup rather than a public ledger, which limits the transparency and verifiability benefits. Furthermore, their system did not include a web-based management interface or role-based access control, both of which are essential features for real-world multi-stakeholder use.
+
+\section{Supply Chain Traceability and Distributed Ledger Systems}
+
+The traceability of agricultural produce from farm to consumer is a complex logistical challenge that involves multiple stakeholders, each with different access rights and responsibilities. Distributed ledger technology provides a natural mechanism for recording custody transfers in a manner that is transparent to all participants while remaining resistant to retroactive modification.
+
+\textcite{cocco2021blockchain} explored the combination of blockchain and self-sovereign identity to support quality assurance in the food supply chain. Their system allowed individual actors to maintain control over their own identity credentials while participating in a shared ledger that recorded product quality attestations. The self-sovereign identity concept influenced the design of TerraNode's wallet-based login system, where users can authenticate using their Sui wallet address and a cryptographic signature rather than relying solely on centralized credentials.
+
+\textcite{sun2025storage} addressed a practical challenge in blockchain-based agricultural systems: the storage overhead of full-node replication. Their Storage Light Node (SLN) model introduced a cold/hot data classification mechanism based on identity relevance, generation time, and query frequency. Using 50,563 real agricultural supply chain records, they demonstrated a 95.10 percent reduction in storage usage compared to full-node operation. This work highlights scalability considerations that will become increasingly important as TerraNode grows beyond its current prototype stage.
+
+\textcite{ktari2022agricultural} presented a lightweight embedded blockchain system for agricultural traceability, using olive oil production in Tunisia as a case study. Their system ran directly on embedded hardware connected to IoT sensors at the production site. The lightweight nature of their blockchain implementation made it feasible for deployment in resource-constrained environments typical of developing-country agriculture. While TerraNode does not target embedded deployment, the principle of minimizing computational overhead aligns with the decision to use the Sui blockchain, which offers lower transaction costs than Ethereum-based alternatives.
+
+\section{The Sui Blockchain and Move Programming Language}
+
+The Sui blockchain, developed by Mysten Labs, is a next-generation layer-one blockchain that uses an object-centric data model and a delegated proof-of-stake consensus mechanism. Unlike traditional account-based blockchains such as Ethereum, Sui treats all on-chain data as programmable objects with defined ownership and transfer rules. This object-oriented approach simplifies the development of asset-tracking applications, making it particularly suitable for supply chain use cases \parencite{sui2024documentation}.
+
+The Move programming language, originally developed for the Diem blockchain project, serves as the smart contract language for Sui. Move was designed with safety as a primary concern, incorporating a linear type system that prevents common vulnerabilities such as double-spending and reentrancy attacks. In the context of TerraNode, the Move-based smart contract defines a \texttt{ProduceBatch} object that carries the crop type, weight, originating farmer address, current custodian address, and a data integrity hash. The smart contract enforces that only the current custodian can initiate a custody transfer, providing on-chain access control that mirrors the role-based permissions in the off-chain backend.
+
+Sui achieves high throughput through parallel transaction execution. When transactions involve independent objects, the network can process them simultaneously without requiring global consensus for each one. This architectural feature results in sub-second transaction finality for simple operations, which is a significant advantage for agricultural applications where batch minting and custody transfers need to be confirmed quickly to avoid disrupting logistics workflows.
+
+\section{Related Work Summary and Comparative Analysis}
+
+Table~\ref{tab:related_work} presents a comparative summary of the key related works reviewed in this chapter, evaluated against the features that TerraNode provides.
+
+\begin{table}[H]
+\centering
+\caption{Comparative Analysis of Related Works}
+\label{tab:related_work}
+\begin{tabularx}{\textwidth}{|l|X|c|c|c|c|c|}
+\hline
+\textbf{Study} & \textbf{Focus Area} & \rotatebox{90}{\textbf{Blockchain}} & \rotatebox{90}{\textbf{Analytics}} & \rotatebox{90}{\textbf{Traceability}} & \rotatebox{90}{\textbf{Web UI}} & \rotatebox{90}{\textbf{Public Ledger}} \\
+\hline
+\textcite{alabsi2023blockchain} & Smart farm IoT security & Yes & No & No & No & No \\
+\hline
+\textcite{caro2018blockchain} & Agri-food traceability & Yes & No & Yes & No & Yes \\
+\hline
+\textcite{khaki2019cnn} & Crop yield prediction & No & Yes & No & No & N/A \\
+\hline
+\textcite{layek2025secured} & IoT + ML + blockchain & Yes & Yes & No & No & No \\
+\hline
+\textcite{mirabelli2020blockchain} & Supply chain traceability & Yes & No & Yes & No & Varies \\
+\hline
+\textcite{ktari2022agricultural} & Embedded blockchain & Yes & No & Yes & No & No \\
+\hline
+\textcite{sun2025storage} & Storage optimization & Yes & No & Yes & No & Yes \\
+\hline
+\textcite{cocco2021blockchain} & SSI in food supply chain & Yes & No & Yes & No & Yes \\
+\hline
+\textcite{garg2018crop} & Fuzzy yield forecasting & No & Yes & No & No & N/A \\
+\hline
+\textbf{TerraNode} & \textbf{Integrated platform} & \textbf{Yes} & \textbf{Yes} & \textbf{Yes} & \textbf{Yes} & \textbf{Yes} \\
+\hline
+\end{tabularx}
+\end{table}
+
+The comparative analysis reveals that while individual components of the TerraNode architecture have been explored in prior work, no single system combines all five capabilities: blockchain-based data immutability, predictive analytics, supply chain traceability, a role-based web interface, and deployment on a public high-throughput ledger. Most existing blockchain-agriculture systems focus on either traceability or security but do not incorporate analytical forecasting. Conversely, crop yield prediction studies rarely consider the integrity of their input data. TerraNode fills this gap by unifying these capabilities within a single, cohesive platform.
+
+\section{Research Gap}
+
+The review of existing literature reveals three primary gaps that the TerraNode project is designed to address.
+
+First, there is a disconnect between data security and data analytics in agricultural systems. Blockchain-based platforms tend to focus on recording and verifying transactions without providing tools for analyzing the data they protect. Meanwhile, predictive analytics platforms process agricultural data without questioning whether that data has been tampered with. TerraNode bridges this divide by making blockchain verification a prerequisite for analytical processing: only data that has been integrity-checked against its SHA-256 hash can feed into the yield prediction engine.
+
+Second, the vast majority of blockchain-agricultural prototypes either use private or consortium blockchains, which limit transparency, or use public blockchains like Ethereum that impose prohibitive costs for high-frequency agricultural data recording. TerraNode resolves this by leveraging the Sui blockchain, which offers the openness of a public ledger with transaction costs low enough to be feasible for routine telemetry logging.
+
+Third, existing systems rarely provide a complete, role-aware web interface that accommodates the different needs of farmers, logistics handlers, and administrators within a single platform. TerraNode's frontend delivers tailored dashboards for each user role, reducing the learning curve and making the system accessible to stakeholders with varying levels of technical proficiency.
+
+\section{Conceptual Framework}
+
+The conceptual framework underpinning this project draws from two established information systems theories. The Technology Acceptance Model (TAM), originally proposed by Davis, suggests that the adoption of a new information system depends on perceived usefulness and perceived ease of use. In the context of TerraNode, the system is designed to be useful by providing actionable yield predictions and transparent supply chain records, and easy to use through an intuitive web-based interface with role-specific dashboards.
+
+The DeLone and McLean Information Systems Success Model identifies six dimensions of system success: information quality, system quality, service quality, user satisfaction, system use, and net benefits. TerraNode's architecture addresses information quality through blockchain-verified data integrity, system quality through a modular three-tier design, and net benefits through tangible outcomes such as tamper-proof records and predictive forecasts.
+
+Figure~\ref{fig:conceptual_framework} illustrates the conceptual framework, showing how the theoretical foundations connect to the practical system components.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\textwidth]{figures/fig_conceptual_framework.png}
+    \caption{Conceptual Framework of the TerraNode System}
+    \label{fig:conceptual_framework}
+\end{figure}
+
+\section{Chapter Summary}
+
+This chapter reviewed the relevant literature across five thematic areas: precision agriculture and digital farming, blockchain technology and its agricultural applications, smart farm security frameworks, predictive crop yield analytics, and supply chain traceability systems. The review engaged with eighteen published works, identifying their individual contributions and limitations. A comparative analysis demonstrated that no existing system combines blockchain-based data immutability, predictive analytics, supply chain custody tracking, a role-differentiated web interface, and a public high-throughput ledger within a unified platform. The identified research gaps directly motivate the design and implementation of TerraNode, whose methodology is presented in the following chapter.

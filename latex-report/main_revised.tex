@@ -1,7 +1,6 @@
 \documentclass[12pt,a4paper]{report}
 \usepackage{mathptmx} % Times New Roman
 \usepackage{setspace}
-\doublespacing % Double spacing as per general text instructions
 \usepackage[style=apa, backend=biber]{biblatex}
 \addbibresource{references.bib}
 \usepackage{graphicx}
@@ -23,6 +22,9 @@
 \usepackage{enumitem}       % List customisation
 \usepackage{tabularx}       % Flexible-width tables
 
+\usepackage{microtype}     % Optical alignment and margin justification
+\emergencystretch=2em       % Prevent words from protruding beyond margins
+
 % ─── Code listing style (black and white friendly) ───────────
 \lstset{
   basicstyle=\ttfamily\footnotesize\linespread{1.0}\selectfont,
@@ -43,22 +45,31 @@
 % Supervisor guide: use "Chapter One" not "Chapter 1"
 % Titles in full capitals should NOT be bolded
 \renewcommand{\chaptername}{CHAPTER}
-\newcommand{\wordchapter}[1]{%
-  \ifcase#1\or ONE\or TWO\or THREE\or FOUR\or FIVE\or SIX\fi
+\newcommand{\wordchapter}{%
+  \ifcase\value{chapter}\or ONE\or TWO\or THREE\or FOUR\or FIVE\or SIX\else\thechapter\fi
 }
 \titleformat{\chapter}[display]
   {\normalfont\normalsize\centering}
-  {\MakeUppercase{\chaptername}~\wordchapter{\thechapter}}{20pt}{\normalsize\MakeUppercase}
+  {\MakeUppercase{\chaptername}~\wordchapter}{6pt}{\normalsize\MakeUppercase}
 
 % Numberless chapter headings (TOC, List of Tables, List of Figures, References)
 \titleformat{name=\chapter,numberless}
   {\normalfont\normalsize\centering}
   {}{0pt}{\normalsize\MakeUppercase}
 
+\titlespacing*{\chapter}{0pt}{0pt}{14pt}
+\titlespacing*{name=\chapter,numberless}{0pt}{0pt}{14pt}
+
 \renewcommand{\contentsname}{TABLE OF CONTENTS}
 \renewcommand{\listtablename}{LIST OF TABLES}
 \renewcommand{\listfigurename}{LIST OF FIGURES}
-\renewcommand{\bibname}{REFERENCES}
+\renewcommand{\bibname}{References}
+
+% Custom biblatex heading to ensure "References" appears in TOC and chapter title
+\defbibheading{bibintoc}[\bibname]{%
+  \chapter*{#1}%
+  \addcontentsline{toc}{chapter}{#1}%
+}
 
 % Prevent widow and orphan lines from spilling onto full pages
 \widowpenalty=10000
@@ -76,6 +87,10 @@
 \titleformat{\subsubsection}
   {\normalfont\normalsize\bfseries}
   {\thesubsubsection}{1em}{}
+
+\titlespacing*{\section}{0pt}{12pt}{4pt}
+\titlespacing*{\subsection}{0pt}{10pt}{3pt}
+\titlespacing*{\subsubsection}{0pt}{8pt}{2pt}
 
 \begin{document}
 
@@ -108,7 +123,7 @@
     
     \vspace{1cm}
     
-    {\fontsize{12pt}{18pt}\selectfont IN\par}
+    {\fontsize{12pt}{18pt}\selectfont in\par}
     
     \vspace{0.5cm}
     
@@ -127,35 +142,53 @@
 \pagenumbering{roman}
 
 % ─────────────────── Declaration ──────────────────────────────
-\newpage
-\begin{center}
-    {\normalsize DECLARATION}
-\end{center}
-\vspace{1cm}
-I, Kassim Iskanda Deishini (20230404113), declared that this research report is my original work. It has not been submitted to any other university or higher institution of learning for any award. Any other author's work has clearly been referenced.
-\vspace{2cm}\\
-\noindent Signature: \rule{5cm}{0.4pt} \hfill Date: \rule{4cm}{0.4pt}\\
-\noindent Kassim Iskanda Deishini (20230404113)
+\chapter*{DECLARATION}
+\addcontentsline{toc}{chapter}{Declaration}
 
-% ─────────────────── Certification ────────────────────────────
-\newpage
-\begin{center}
-    {\normalsize CERTIFICATION}
-\end{center}
-\vspace{1cm}
-Certified that this project report ``TERRANODE: A BLOCKCHAIN-BASED SMART FARM SECURITY FRAMEWORK'' is the original project work carried out by Kassim Iskanda Deishini (20230404113) under my supervision.
+\onehalfspacing
 
-\vspace{1.5cm}
+I, KASSIM ISKANDA DEISHINI (20230404113), hereby state that this research report is my original work. It has not been presented to any other University or other higher learning institution for any award. Works by other authors have been clearly referenced.
+
+\vspace{2cm}
 
 \noindent
-\begin{tabular}{@{}p{0.5\textwidth}p{0.5\textwidth}@{}}
- & \\[0.5cm]
-Signature..................................... & Signature..................................... \\[0.5cm]
-Date.......................................... & Date.......................................... \\[0.8cm]
-\textbf{PROFESSOR EDWARD BAAGYERE} & \textbf{DR. MOSES APAMBILA AGEBURE} \\
-SUPERVISOR & HEAD OF THE DEPARTMENT \\[0.5cm]
-Department of Computer Science & Department of Computer Science \\
-\end{tabular}
+Signature: \makebox[2in]{\dotfill} \hspace{1cm} Date: \makebox[2in]{\dotfill}
+
+\vspace{0.5cm}
+
+\noindent
+KASSIM ISKANDA DEISHINI\\
+(20230404113)
+
+% ─────────────────── Certification ────────────────────────────
+\chapter*{CERTIFICATION}
+\addcontentsline{toc}{chapter}{Certification}
+
+\onehalfspacing
+
+Certified that this project report ``\textit{TERRANODE: A BLOCKCHAIN-BASED SMART FARM SECURITY FRAMEWORK}'' is the bonafide work of KASSIM ISKANDA DEISHINI who carried out the project work under my supervision.
+
+\vspace{2cm}
+
+\noindent
+Signature: \makebox[2in]{\dotfill} \hspace{1cm} Date: \makebox[2in]{\dotfill}
+
+\vspace{0.5cm}
+
+\noindent
+PROF. EDWARD YELLAKUOR BAAGYERE\\
+(DEAN, SCHOOL OF COMPUTING AND INFORMATION SCIENCES)
+
+\vspace{3cm}
+
+\noindent
+Signature: \makebox[2in]{\dotfill} \hspace{1cm} Date: \makebox[2in]{\dotfill}
+
+\vspace{0.5cm}
+
+\noindent
+DR. MOSES APAMBILA AGEBURE\\
+(HEAD, DEPARTMENT OF COMPUTER SCIENCE)
 
 % ─────────────────── Abstract ─────────────────────────────────
 \newpage
@@ -163,7 +196,7 @@ Department of Computer Science & Department of Computer Science \\
     {\normalsize ABSTRACT}
 \end{center}
 \vspace{1cm}
-\doublespacing
+\onehalfspacing
 
 This project presents TerraNode, a secure analytics-driven agricultural data management system built on blockchain technology. The platform addresses the critical challenges of data vulnerability, lack of transparency, and unreliable predictive analytics that persist in conventional centralized agricultural information systems. TerraNode integrates a Django REST framework backend with a React-based web interface and anchors all agricultural records to the Sui blockchain through smart contracts written in the Move programming language. The system captures environmental telemetry data including temperature, soil moisture, and soil pH readings, generates SHA-256 integrity hashes for each record, and mints verifiable produce batch objects on the Sui distributed ledger. A predictive analytics engine processes historical telemetry data using a weighted moving average model to produce crop yield forecasts with computed confidence scores. Role-based access control separates the platform into farmer, logistics handler, and administrator interfaces, each secured with JSON Web Token authentication and Argon2id password hashing. The Sui blockchain component employs Ed25519 digital signatures and BLAKE2b hashing to verify wallet-based login operations. Evaluation results demonstrate successful functional operation across all modules, with blockchain transactions confirmed on the Sui Testnet within acceptable latency thresholds. The system provides smallholder farmers with a tamper-resistant data foundation upon which trustworthy yield predictions and transparent supply chain custody tracking can be built.
 
@@ -178,18 +211,23 @@ This project presents TerraNode, a secure analytics-driven agricultural data man
 \newpage
 
 \pagenumbering{arabic}
-\doublespacing
+\onehalfspacing
 
 % ─────────────────── Chapters ─────────────────────────────────
-\include{chapters/chapter1_revised}
-\include{chapters/chapter2}
-\include{chapters/chapter3_revised}
-\include{chapters/chapter4}
-\include{chapters/chapter5}
+\include{chapters/chapter1_rev}
+\include{chapters/chapter2_rev}
+\include{chapters/chapter3_rev}
+\include{chapters/chapter4_rev}
+\include{chapters/chapter5_rev}
 
 % ─────────────────── References ───────────────────────────────
 \newpage
 \singlespacing
-\printbibliography
+\printbibliography[heading=bibintoc, title={References}]
+
+% ─────────────────── Appendix ─────────────────────────────────
+\newpage
+\onehalfspacing
+\include{chapters/appendix}
 
 \end{document}

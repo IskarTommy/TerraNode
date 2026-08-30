@@ -1,0 +1,123 @@
+\documentclass[12pt,a4paper]{report}
+\usepackage{mathptmx} % Times New Roman
+\usepackage{setspace}
+\doublespacing % Double spacing as per general text instructions
+\usepackage[style=apa, backend=biber]{biblatex}
+\addbibresource{references.bib}
+\usepackage{graphicx}
+\usepackage{caption}
+\captionsetup{font=normalsize}
+\usepackage{titlesec}
+\usepackage{geometry}
+\geometry{a4paper, margin=1in}
+
+% Additional packages
+\usepackage{booktabs}       % Professional tables
+\usepackage{longtable}      % Multi-page tables
+\usepackage{float}          % Figure placement control
+\usepackage{listings}       % Code listings
+\usepackage{xcolor}         % Colour definitions for listings
+\usepackage{algorithm2e}    % Algorithm pseudocode
+\usepackage[hidelinks]{hyperref} % Clickable cross-refs (no coloured boxes)
+\usepackage{amsmath}        % Mathematical formulae
+\usepackage{enumitem}       % List customisation
+\usepackage{tabularx}       % Flexible-width tables
+
+% ─── Code listing style (black and white friendly) ───────────
+\lstset{
+  basicstyle=\ttfamily\normalsize,
+  keywordstyle=\bfseries,
+  commentstyle=\itshape,
+  breaklines=true,
+  frame=single,
+  numbers=left,
+  numberstyle=\normalsize,
+  tabsize=4,
+  captionpos=b,
+  showstringspaces=false
+}
+
+% ─── Chapter title formatting ────────────────────────────────
+% Supervisor guide: use "Chapter One" not "Chapter 1"
+% Titles in full capitals should NOT be bolded
+\renewcommand{\chaptername}{CHAPTER}
+\newcommand{\wordchapter}[1]{%
+  \ifcase#1\or ONE\or TWO\or THREE\or FOUR\or FIVE\or SIX\fi
+}
+\titleformat{\chapter}[display]
+  {\normalfont\normalsize\centering}
+  {\MakeUppercase{\chaptername}~\wordchapter{\thechapter}}{20pt}{\normalsize\MakeUppercase}
+
+% Section headings at 12pt (normalsize), not bolded for ALL CAPS, bold for mixed-case
+\titleformat{\section}
+  {\normalfont\normalsize\bfseries}
+  {\thesection}{1em}{}
+\titleformat{\subsection}
+  {\normalfont\normalsize\bfseries}
+  {\thesubsection}{1em}{}
+\titleformat{\subsubsection}
+  {\normalfont\normalsize\bfseries}
+  {\thesubsubsection}{1em}{}
+
+\begin{document}
+
+% ─────────────────── Title Page ───────────────────────────────
+\begin{titlepage}
+    \centering
+    \vspace*{1cm}
+    
+    {\fontsize{12pt}{18pt}\selectfont TERRANODE: A BLOCKCHAIN-BASED SMART FARM SECURITY FRAMEWORK\par}
+    
+    \vspace{2cm}
+    
+    {\fontsize{12pt}{18pt}\selectfont A PROJECT REPORT\par}
+    
+    \vspace{1.5cm}
+    
+    {\fontsize{12pt}{18pt}\selectfont\textit{Submitted by}\par}
+    
+    \vspace{0.5cm}
+    
+    {\fontsize{12pt}{18pt}\selectfont KASSIM ISKANDA DEISHINI (20230404113)\par}
+    
+    \vspace{2cm}
+    
+    {\fontsize{12pt}{18pt}\selectfont in partial fulfillment for the award of the degree of\par}
+    
+    \vspace{0.5cm}
+    
+    {\fontsize{12pt}{18pt}\selectfont BACHELOR OF SCIENCE\par}
+    
+    \vspace{1cm}
+    
+    {\fontsize{12pt}{18pt}\selectfont IN\par}
+    
+    \vspace{0.5cm}
+    
+    {\fontsize{12pt}{18pt}\selectfont COMPUTER SCIENCE\par}
+    
+    \vspace{2cm}
+    
+    {\fontsize{12pt}{18pt}\selectfont UNIVERSITY OF TECHNOLOGY AND APPLIED SCIENCES\par}
+    
+    \vspace{1cm}
+    
+    {\fontsize{12pt}{18pt}\selectfont AUGUST, 2026\par}
+    
+\end{titlepage}
+
+\pagenumbering{arabic}
+\doublespacing
+
+% ─────────────────── Chapters 1–3 only ────────────────────────
+\include{chapters/chapter1_revised}
+\include{chapters/chapter2}
+\include{chapters/chapter3_revised}
+
+% ─────────────────── References ───────────────────────────────
+\newpage
+\renewcommand{\bibname}{REFERENCES}
+\singlespacing
+\printbibliography
+
+\end{document}
