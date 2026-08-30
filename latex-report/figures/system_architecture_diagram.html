@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<style>
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+  body {
+    width: 2400px;
+    height: 1500px;
+    background-color: #f8fafc;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    color: #0f172a;
+    padding: 24px 36px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  /* Header Header Banner */
+  .diagram-header {
+    text-align: center;
+    background: #ffffff;
+    border: 1px solid #cbd5e1;
+    border-radius: 10px;
+    padding: 12px 24px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.04);
+  }
+  .diagram-title {
+    font-size: 26px;
+    font-weight: 800;
+    color: #0f172a;
+    letter-spacing: -0.5px;
+    text-transform: uppercase;
+  }
+  .diagram-subtitle {
+    font-size: 14px;
+    font-weight: 600;
+    color: #475569;
+    margin-top: 2px;
+  }
+
+  /* Tier Containers */
+  .tier-container {
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 14px 20px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.03);
+    position: relative;
+  }
+
+  /* Layer 1 - Client Layer */
+  .tier-client {
+    border: 2px solid #3b82f6;
+    background: #f0f9ff;
+  }
+  .tier-client .tier-badge {
+    background: #1d4ed8;
+  }
+
+  /* Layer 2 - Presentation Layer */
+  .tier-presentation {
+    border: 2px solid #0d9488;
+    background: #f0fdf4;
+  }
+  .tier-presentation .tier-badge {
+    background: #0f766e;
+  }
+
+  /* Layer 3 - Business Logic Layer */
+  .tier-business {
+    border: 2px solid #4f46e5;
+    background: #f5f3ff;
+  }
+  .tier-business .tier-badge {
+    background: #4338ca;
+  }
+
+  /* Layer 4 - Data Persistence & Ledger Layer */
+  .tier-data {
+    border: 2px solid #059669;
+    background: #ecfdf5;
+  }
+  .tier-data .tier-badge {
+    background: #047857;
+  }
+
+  .tier-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+  .tier-badge {
+    color: #ffffff;
+    font-size: 12px;
+    font-weight: 800;
+    padding: 4px 12px;
+    border-radius: 6px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    margin-right: 12px;
+  }
+  .tier-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: #0f172a;
+  }
+
+  /* Content Grids */
+  .grid-4 {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+  }
+  .grid-3 {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+  }
+  .grid-2 {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+
+  /* Card Component Style */
+  .card {
+    background: #ffffff;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    padding: 10px 14px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  }
+  .card-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: #1e293b;
+    border-bottom: 2px solid #e2e8f0;
+    padding-bottom: 4px;
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .card-tag {
+    font-size: 10px;
+    font-weight: 700;
+    padding: 2px 6px;
+    border-radius: 4px;
+    text-transform: uppercase;
+  }
+  .tag-blue { background: #dbeafe; color: #1e40af; }
+  .tag-teal { background: #ccfbf1; color: #115e59; }
+  .tag-purple { background: #ede9fe; color: #5b21b6; }
+  .tag-emerald { background: #d1fae5; color: #065f46; }
+  .tag-amber { background: #fef3c7; color: #92400e; }
+
+  ul.card-list {
+    list-style: none;
+  }
+  ul.card-list li {
+    font-size: 12px;
+    color: #334155;
+    margin-bottom: 4px;
+    line-height: 1.3;
+    position: relative;
+    padding-left: 14px;
+  }
+  ul.card-list li::before {
+    content: "•";
+    position: absolute;
+    left: 0;
+    color: #64748b;
+    font-weight: bold;
+  }
+
+  .code-text {
+    font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+    font-size: 11px;
+    background: #f1f5f9;
+    padding: 1px 4px;
+    border-radius: 3px;
+    color: #0f172a;
+  }
+
+  /* Inter-tier Connection Flow Banners */
+  .flow-banner-container {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    margin: 4px 0;
+    padding: 0 20px;
+  }
+  .flow-pill {
+    background: #ffffff;
+    border: 1px solid #94a3b8;
+    border-radius: 20px;
+    padding: 4px 16px;
+    font-size: 11px;
+    font-weight: 700;
+    color: #1e293b;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.06);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .flow-arrow {
+    color: #2563eb;
+    font-weight: 900;
+    font-size: 13px;
+  }
+
+  /* Cross-layer Binding Box */
+  .binding-pill {
+    background: #fef2f2;
+    border: 1px solid #fca5a5;
+    color: #991b1b;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 4px 14px;
+    border-radius: 20px;
+    box-shadow: 0 2px 4px rgba(153,27,27,0.1);
+  }
+
+</style>
+</head>
+<body>
+
+  <!-- Header Banner -->
+  <div class="diagram-header">
+    <div class="diagram-title">Figure 3.1: TerraNode System Architecture</div>
+    <div class="diagram-subtitle">Integrated Blockchain-Anchored Smart Farm Management & Predictive Analytics Platform</div>
+  </div>
+
+  <!-- TIER 1: USER / CLIENT LAYER -->
+  <div class="tier-container tier-client">
+    <div class="tier-header">
+      <span class="tier-badge">Layer 1</span>
+      <span class="tier-title">User / Client Layer (Actors & Browser Extensions)</span>
+    </div>
+    <div class="grid-4">
+      <div class="card">
+        <div class="card-title">
+          <span>Farmer Web Client</span>
+          <span class="card-tag tag-blue">Actor</span>
+        </div>
+        <ul class="card-list">
+          <li>Telemetry Submission (<span class="code-text">Temp, Moisture, pH</span>)</li>
+          <li>Produce Batch Minting Requests</li>
+          <li>Yield Forecast & Irrigation Queries</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <div class="card-title">
+          <span>Logistics Web Client</span>
+          <span class="card-tag tag-blue">Actor</span>
+        </div>
+        <ul class="card-list">
+          <li>Batch Custody Transfer Requests</li>
+          <li>Shipment Status & Location Updates</li>
+          <li>Supply Chain Tracking Dashboard</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <div class="card-title">
+          <span>Admin Web Client</span>
+          <span class="card-tag tag-blue">Actor</span>
+        </div>
+        <ul class="card-list">
+          <li>User Management & Role Assignment</li>
+          <li>System Audit Log Inspection</li>
+          <li>Infrastructure & Node Health Monitoring</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <div class="card-title">
+          <span>Sui Wallet Extension</span>
+          <span class="card-tag tag-purple">Wallet</span>
+        </div>
+        <ul class="card-list">
+          <li>Ed25519 Keypair Management</li>
+          <li>Off-Chain Intent Signature Generation</li>
+          <li>Direct Sui BCS Transaction Signing</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- FLOW BANNER 1 -> 2 -->
+  <div class="flow-banner-container">
+    <div class="flow-pill">
+      <span class="flow-arrow">▼</span> HTTPS / DOM Interaction
+    </div>
+    <div class="flow-pill">
+      <span class="flow-arrow">▼</span> User Input & Telemetry Form Data
+    </div>
+    <div class="flow-pill">
+      <span class="flow-arrow">▼</span> Sui Wallet Window Provider API (dApp Kit)
+    </div>
+  </div>
+
+  <!-- TIER 2: PRESENTATION LAYER -->
+  <div class="tier-container tier-presentation">
+    <div class="tier-header">
+      <span class="tier-badge">Layer 2</span>
+      <span class="tier-title">Presentation Layer (Frontend — React 19 + TypeScript + Vite SPA)</span>
+    </div>
+    <div class="grid-4">
+      <div class="card">
+        <div class="card-title">
+          <span>AuthContext</span>
+          <span class="card-tag tag-teal">State</span>
+        </div>
+        <ul class="card-list">
+          <li>Manages JWT Access & Refresh Tokens</li>
+          <li>Sui Wallet Signature Auth State</li>
+          <li>User Role & Session Persistence</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <div class="card-title">
+          <span>WalletContext</span>
+          <span class="card-tag tag-purple">Sui Web3</span>
+        </div>
+        <ul class="card-list">
+          <li>Mysten dApp Kit Integration</li>
+          <li>Sui JSON-RPC Provider Connection</li>
+          <li>Direct On-Chain Tx Execution & Signing</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <div class="card-title">
+          <span>RoleGuard Router</span>
+          <span class="card-tag tag-teal">Routing</span>
+        </div>
+        <ul class="card-list">
+          <li>RBAC Route Protection (<span class="code-text">Farmer / Logistics / Admin</span>)</li>
+          <li>Unauthorized Access Redirection</li>
+          <li>Dynamic Navigation & Layouts</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <div class="card-title">
+          <span>Recharts Dashboard</span>
+          <span class="card-tag tag-teal">Data Vis</span>
+        </div>
+        <ul class="card-list">
+          <li>Telemetry Trends (Temp, Moisture, pH)</li>
+          <li>Yield Forecast Charts & Confidence Scores</li>
+          <li>Batch Lifecycle Progress Tracking</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- FLOW BANNER 2 -> 3 & Direct Blockchain RPC -->
+  <div class="flow-banner-container">
+    <div class="flow-pill">
+      <span class="flow-arrow">▼</span> REST / JSON API Requests (<span class="code-text">HTTPS</span>)
+    </div>
+    <div class="flow-pill">
+      <span class="flow-arrow">▼</span> Bearer JWT Auth Header (<span class="code-text">Access Token</span>)
+    </div>
+    <div class="flow-pill" style="border-color: #7c3aed; background: #faf5ff;">
+      <span class="flow-arrow" style="color: #7c3aed;">⚡</span> Direct Sui RPC / BCS Tx Execution (Bypasses Backend for Minting/Transfer)
+    </div>
+  </div>
+
+  <!-- TIER 3: BUSINESS LOGIC LAYER -->
+  <div class="tier-container tier-business">
+    <div class="tier-header">
+      <span class="tier-badge">Layer 3</span>
+      <span class="tier-title">Business Logic Layer (Backend — Django 5.1 + DRF)</span>
+    </div>
+    <div class="grid-4">
+      <div class="card">
+        <div class="card-title">
+          <span>API Gateway & Auth</span>
+          <span class="card-tag tag-purple">Security</span>
+        </div>
+        <ul class="card-list">
+          <li>Simple JWT Token Handler</li>
+          <li>Argon2id Password Hashing</li>
+          <li>PyNaCl Ed25519 & BLAKE2b Verification</li>
+          <li>Rate Throttling (<span class="code-text">5 req/min</span>)</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <div class="card-title">
+          <span>Telemetry Module</span>
+          <span class="card-tag tag-purple">Core</span>
+        </div>
+        <ul class="card-list">
+          <li>Physical Range Validation (<span class="code-text">Temp/Moisture/pH</span>)</li>
+          <li>Deterministic SHA-256 Digest Generator</li>
+          <li>Duplicate Reading Prevention</li>
+          <li>Farmer-linked FK Mapping</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <div class="card-title">
+          <span>Ledger & Custody</span>
+          <span class="card-tag tag-purple">Lifecycle</span>
+        </div>
+        <ul class="card-list">
+          <li>2-Step Lifecycle (<span class="code-text">Prepare → Confirm</span>)</li>
+          <li>Maps Off-Chain Records to Sui Object IDs</li>
+          <li>Tracks On-Chain Tx Digests</li>
+          <li>Custody Status State Machine</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <div class="card-title">
+          <span>Predictive Analytics</span>
+          <span class="card-tag tag-amber">AI/Engine</span>
+        </div>
+        <ul class="card-list">
+          <li>Weighted Moving Average Yield Forecast (Y)</li>
+          <li>Confidence Score Engine (C = min(0.95, n / 90))</li>
+          <li>Optimal Temp Deviation Penalty</li>
+          <li>Irrigation & Shading Recommendations</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- FLOW BANNER 3 -> 4 & Cross-layer Hash Binding -->
+  <div class="flow-banner-container">
+    <div class="flow-pill">
+      <span class="flow-arrow">▼</span> Django ORM / SQL Queries
+    </div>
+    <div class="binding-pill">
+      🔒 SHA-256 Hash Binding (Telemetry <span class="code-text">payload_sha256</span> ↔ Sui <span class="code-text">data_integrity_hash</span>)
+    </div>
+    <div class="flow-pill">
+      <span class="flow-arrow">▼</span> Redis Cache Protocol (<span class="code-text">10m TTL</span>)
+    </div>
+    <div class="flow-pill" style="border-color: #059669; background: #ecfdf5;">
+      <span class="flow-arrow" style="color: #059669;">▼</span> Sui JSON-RPC Event Syncing
+    </div>
+  </div>
+
+  <!-- TIER 4: DATA PERSISTENCE & LEDGER LAYER -->
+  <div class="tier-container tier-data">
+    <div class="tier-header">
+      <span class="tier-badge">Layer 4</span>
+      <span class="tier-title">Data Persistence & Ledger Layer (Database, Cache & Sui Blockchain)</span>
+    </div>
+    <div class="grid-3">
+      <div class="card">
+        <div class="card-title">
+          <span>PostgreSQL Database</span>
+          <span class="card-tag tag-emerald">Relational DB</span>
+        </div>
+        <ul class="card-list">
+          <li><span class="code-text">CustomUser</span>: Credentials, Role, Sui Public Key</li>
+          <li><span class="code-text">EnvironmentalTelemetry</span>: Sensor Data & SHA-256 Hash</li>
+          <li><span class="code-text">ProduceBatch</span>: Off-chain Record, Sui Object ID, Status</li>
+          <li><span class="code-text">AuditLog</span>: Historical Actions & Security Logs</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <div class="card-title">
+          <span>Redis Cache</span>
+          <span class="card-tag tag-amber">In-Memory</span>
+        </div>
+        <ul class="card-list">
+          <li>Caches Computed Yield Predictions</li>
+          <li>Time-To-Live (TTL): <span class="code-text">600 seconds (10 mins)</span></li>
+          <li>Key Format: <span class="code-text">analytics:predict:{farmer_id}</span></li>
+          <li>Reduces PostgreSQL Query Load for Analytics</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <div class="card-title">
+          <span>Sui Blockchain (Testnet)</span>
+          <span class="card-tag tag-purple">Layer-1 Ledger</span>
+        </div>
+        <ul class="card-list">
+          <li>Move Contract Package: <span class="code-text">terranode::produce_batch</span></li>
+          <li><span class="code-text">ProduceBatch</span> Objects with <span class="code-text">data_integrity_hash</span></li>
+          <li>Move Entry Functions: <span class="code-text">mint_batch</span>, <span class="code-text">transfer_custody</span></li>
+          <li>Emitted Events: <span class="code-text">BatchMinted</span>, <span class="code-text">CustodyTransferred</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>
