@@ -28,6 +28,7 @@ const MOCK_BATCHES = [
 ];
 
 const STATUS_CONFIG: Record<string, { label: string; color: string; bg: string; icon: string }> = {
+  pending: { label: 'Pending', color: 'text-amber-500', bg: 'bg-amber-500/10', icon: '⏳' },
   growing: { label: 'Growing', color: 'text-emerald-500', bg: 'bg-emerald-500/10', icon: '🌱' },
   harvested: { label: 'Harvested', color: 'text-amber-500', bg: 'bg-amber-500/10', icon: '🌾' },
   minted: { label: 'Minted', color: 'text-cyan-500', bg: 'bg-cyan-500/10', icon: '⛓️' },
@@ -145,7 +146,7 @@ export function BatchesPage() {
             </thead>
             <tbody className="divide-y divide-border-primary/50">
               {filteredBatches.map((batch) => {
-                const config = STATUS_CONFIG[batch.status];
+                const config = STATUS_CONFIG[batch.status] || STATUS_CONFIG.pending;
                 return (
                   <tr key={batch.id} className="hover:bg-bg-tertiary/50 transition-colors" onClick={() => setSelectedBatch(batch)}>
                     <td className="px-4 py-3">
@@ -236,7 +237,7 @@ export function BatchesPage() {
                   { label: 'Batch ID', value: selectedBatch.id },
                   { label: 'Crop', value: `${selectedBatch.cropType} - ${selectedBatch.variety}` },
                   { label: 'Field', value: `${selectedBatch.fieldId} (${selectedBatch.location})` },
-                  { label: 'Status', value: STATUS_CONFIG[selectedBatch.status].label },
+                  { label: 'Status', value: (STATUS_CONFIG[selectedBatch.status] || STATUS_CONFIG.pending).label },
                   { label: 'Planted', value: formatDate(selectedBatch.plantedDate) },
                   { label: 'Est. Harvest', value: formatDate(selectedBatch.estimatedHarvest) },
                   { label: 'Actual Harvest', value: selectedBatch.actualHarvest ? formatDate(selectedBatch.actualHarvest) : '—' },
