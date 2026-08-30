@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    width: 2400px;
+    height: 1500px;
+    background-color: #f8fafc;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    color: #0f172a;
+    display: flex;
+    flex-direction: column;
+    padding: 60px;
+  }
+  .header {
+    text-align: center;
+    margin-bottom: 50px;
+  }
+  .header h1 {
+    font-size: 38px;
+    font-weight: 800;
+    color: #0f172a;
+    letter-spacing: -0.5px;
+  }
+  .header p {
+    font-size: 20px;
+    color: #475569;
+    margin-top: 8px;
+    font-weight: 500;
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: 1fr 60px 1.3fr 60px 1fr;
+    align-items: center;
+    flex: 1;
+  }
+  .column-card {
+    background: #ffffff;
+    border: 2px solid #cbd5e1;
+    border-radius: 16px;
+    padding: 32px 28px;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    height: 100%;
+  }
+  .column-title {
+    font-size: 24px;
+    font-weight: 700;
+    padding-bottom: 16px;
+    border-bottom: 3px solid;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .col-1 .column-title { color: #1e40af; border-color: #3b82f6; }
+  .col-2 .column-title { color: #065f46; border-color: #10b981; }
+  .col-3 .column-title { color: #7c2d12; border-color: #f97316; }
+
+  .box-item {
+    background: #f1f5f9;
+    border: 1.5px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 20px;
+  }
+  .box-item h3 {
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 8px;
+    color: #1e293b;
+  }
+  .box-item ul {
+    list-style: none;
+    padding-left: 0;
+  }
+  .box-item li {
+    font-size: 17px;
+    color: #334155;
+    margin-bottom: 6px;
+    position: relative;
+    padding-left: 20px;
+    line-height: 1.4;
+  }
+  .box-item li::before {
+    content: "•";
+    position: absolute;
+    left: 4px;
+    color: #3b82f6;
+    font-size: 20px;
+    line-height: 17px;
+  }
+  .col-2 .box-item li::before { color: #10b981; }
+  .col-3 .box-item li::before { color: #f97316; }
+
+  .connector {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .arrow-svg {
+    width: 60px;
+    height: 80px;
+  }
+</style>
+</head>
+<body>
+  <div class="header">
+    <h1>Figure 2.1: Conceptual Framework of the TerraNode System</h1>
+    <p>Integration of Theoretical Information Systems Models, Core Architectural Dimensions, and Agricultural Net Benefits</p>
+  </div>
+
+  <div class="grid">
+    <!-- Pillar 1 -->
+    <div class="column-card col-1">
+      <div class="column-title">
+        <span>1. Theoretical Foundations</span>
+      </div>
+      <div class="box-item" style="border-left: 6px solid #3b82f6;">
+        <h3>Technology Acceptance Model (TAM)</h3>
+        <ul>
+          <li><strong>Perceived Usefulness (PU):</strong> Enhances yield prediction accuracy & transaction speed.</li>
+          <li><strong>Perceived Ease of Use (PEOU):</strong> Intuitive React SPA with seamless Sui wallet prompts.</li>
+        </ul>
+      </div>
+      <div class="box-item" style="border-left: 6px solid #2563eb;">
+        <h3>DeLone & McLean IS Success Model</h3>
+        <ul>
+          <li><strong>Information Quality:</strong> Precise, tamper-proof telemetry data.</li>
+          <li><strong>System Quality:</strong> High availability 3-tier modular architecture.</li>
+          <li><strong>Service Quality:</strong> Role-tailored dashboards and dual authentication security.</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Arrow 1 -->
+    <div class="connector">
+      <svg class="arrow-svg" viewBox="0 0 60 80">
+        <defs>
+          <marker id="arrow1" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+            <path d="M 0 0 L 10 5 L 0 10 z" fill="#3b82f6"/>
+          </marker>
+        </defs>
+        <line x1="5" y1="40" x2="50" y2="40" stroke="#3b82f6" stroke-width="4" marker-end="url(#arrow1)" />
+      </svg>
+    </div>
+
+    <!-- Pillar 2 -->
+    <div class="column-card col-2">
+      <div class="column-title">
+        <span>2. TerraNode Architectural Dimensions</span>
+      </div>
+      <div class="box-item" style="border-left: 6px solid #10b981;">
+        <h3>Information Quality & Data Integrity</h3>
+        <ul>
+          <li>SHA-256 payload digest calculation for sensor telemetry.</li>
+          <li>On-chain Move smart contract state binding (`ProduceBatch`).</li>
+        </ul>
+      </div>
+      <div class="box-item" style="border-left: 6px solid #059669;">
+        <h3>System Quality & Modular Architecture</h3>
+        <ul>
+          <li>React 19 SPA frontend with Mysten dApp Kit integration.</li>
+          <li>Django 5.1 REST API backend with PostgreSQL storage.</li>
+        </ul>
+      </div>
+      <div class="box-item" style="border-left: 6px solid #047857;">
+        <h3>Service Quality & Security Control</h3>
+        <ul>
+          <li>RoleGuard RBAC (Farmer, Logistics Handler, Administrator).</li>
+          <li>Dual Authentication: Simple JWT + PyNaCl Ed25519 signatures.</li>
+        </ul>
+      </div>
+      <div class="box-item" style="border-left: 6px solid #065f46;">
+        <h3>Predictive Analytics Engine</h3>
+        <ul>
+          <li>Weighted Moving Average ($WMA$) crop yield forecasting model.</li>
+          <li>Redis sub-second caching engine (10 min TTL).</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Arrow 2 -->
+    <div class="connector">
+      <svg class="arrow-svg" viewBox="0 0 60 80">
+        <defs>
+          <marker id="arrow2" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+            <path d="M 0 0 L 10 5 L 0 10 z" fill="#10b981"/>
+          </marker>
+        </defs>
+        <line x1="5" y1="40" x2="50" y2="40" stroke="#10b981" stroke-width="4" marker-end="url(#arrow2)" />
+      </svg>
+    </div>
+
+    <!-- Pillar 3 -->
+    <div class="column-card col-3">
+      <div class="column-title">
+        <span>3. Net Benefits & Outcomes</span>
+      </div>
+      <div class="box-item" style="border-left: 6px solid #f97316;">
+        <h3>Tamper-Proof Audit Trail</h3>
+        <ul>
+          <li>Verifiable immutable history of farm telemetry and produce batches.</li>
+        </ul>
+      </div>
+      <div class="box-item" style="border-left: 6px solid #ea580c;">
+        <h3>Smallholder Farmer Protection</h3>
+        <ul>
+          <li>Fair trade verification & elimination of fraudulent yield claims.</li>
+        </ul>
+      </div>
+      <div class="box-item" style="border-left: 6px solid #c2410c;">
+        <h3>Climate-Adaptive Guidance</h3>
+        <ul>
+          <li>Data-driven irrigation, shading, and soil management recommendations.</li>
+        </ul>
+      </div>
+      <div class="box-item" style="border-left: 6px solid #9a3412;">
+        <h3>Transparent Supply Chain</h3>
+        <ul>
+          <li>End-to-end verifiable custody transfer on Sui Layer-1 network.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

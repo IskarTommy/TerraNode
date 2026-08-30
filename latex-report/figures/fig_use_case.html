@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    width: 2400px;
+    height: 1500px;
+    background-color: #f8fafc;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    color: #0f172a;
+    padding: 50px;
+    display: flex;
+    flex-direction: column;
+  }
+  .header {
+    text-align: center;
+    margin-bottom: 30px;
+  }
+  .header h1 {
+    font-size: 38px;
+    font-weight: 800;
+    color: #0f172a;
+  }
+  .header p {
+    font-size: 20px;
+    color: #475569;
+    margin-top: 6px;
+    font-weight: 500;
+  }
+  .canvas {
+    position: relative;
+    flex: 1;
+    background: #ffffff;
+    border: 2px solid #cbd5e1;
+    border-radius: 20px;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05);
+    display: flex;
+    padding: 40px;
+  }
+
+  /* Left Actors Sidebar */
+  .actors-column {
+    width: 480px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    padding-right: 40px;
+  }
+  .actor-card {
+    background: #f1f5f9;
+    border: 2.5px solid #cbd5e1;
+    border-radius: 14px;
+    padding: 24px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.04);
+  }
+  .actor-icon {
+    font-size: 44px;
+    background: #ffffff;
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid #cbd5e1;
+  }
+  .actor-info h3 {
+    font-size: 22px;
+    font-weight: 800;
+    color: #0f172a;
+  }
+  .actor-info p {
+    font-size: 15px;
+    color: #475569;
+    margin-top: 4px;
+  }
+
+  #act-farmer { border-color: #2563eb; }
+  #act-farmer .actor-icon { border-color: #2563eb; }
+
+  #act-logistics { border-color: #d97706; }
+  #act-logistics .actor-icon { border-color: #d97706; }
+
+  #act-admin { border-color: #4f46e5; }
+  #act-admin .actor-icon { border-color: #4f46e5; }
+
+  /* System Boundary Box */
+  .system-boundary {
+    flex: 1;
+    border: 3px dashed #0284c7;
+    border-radius: 20px;
+    background: #f0f9ff;
+    padding: 30px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+  }
+  .boundary-label {
+    position: absolute;
+    top: -18px;
+    right: 40px;
+    background: #0284c7;
+    color: #ffffff;
+    font-size: 16px;
+    font-weight: 800;
+    padding: 6px 20px;
+    border-radius: 20px;
+    letter-spacing: 0.5px;
+  }
+
+  .use-cases-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    flex: 1;
+    align-items: center;
+  }
+
+  .usecase-group {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .usecase-oval {
+    background: #ffffff;
+    border: 2.5px solid #0284c7;
+    border-radius: 50px;
+    padding: 18px 24px;
+    text-align: center;
+    font-size: 17px;
+    font-weight: 700;
+    color: #0f172a;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 80px;
+  }
+
+  .usecase-oval.include {
+    border-style: dashed;
+    border-color: #7c3aed;
+    background: #f5f3ff;
+    color: #5b21b6;
+    font-size: 16px;
+  }
+
+  svg.lines {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 10;
+  }
+</style>
+</head>
+<body>
+  <div class="header">
+    <h1>Figure 3.5: TerraNode System Use Case Diagram</h1>
+    <p>Actor Roles, Functional Use Cases, System Boundary, and Cryptographic Sub-process Includes</p>
+  </div>
+
+  <div class="canvas">
+    <div class="actors-column">
+      <div class="actor-card" id="act-farmer">
+        <div class="actor-icon">🌾</div>
+        <div class="actor-info">
+          <h3>Farmer</h3>
+          <p>Primary agricultural producer & telemetry provider</p>
+        </div>
+      </div>
+      <div class="actor-card" id="act-logistics">
+        <div class="actor-icon">🚚</div>
+        <div class="actor-info">
+          <h3>Logistics Handler</h3>
+          <p>Supply chain transporter & custodian</p>
+        </div>
+      </div>
+      <div class="actor-card" id="act-admin">
+        <div class="actor-icon">🛡️</div>
+        <div class="actor-info">
+          <h3>System Administrator</h3>
+          <p>Platform security auditor & manager</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="system-boundary">
+      <div class="boundary-label">SYSTEM BOUNDARY: TerraNode Platform</div>
+
+      <div class="use-cases-grid">
+        <!-- Farmer Use Cases -->
+        <div class="usecase-group">
+          <div class="usecase-oval">Sign Up / Log In (JWT / Sui Wallet)</div>
+          <div class="usecase-oval">Submit Environmental Telemetry (Temp, Moisture, pH)</div>
+          <div class="usecase-oval">Prepare & Mint Produce Batch on Sui</div>
+          <div class="usecase-oval">View Crop Yield Forecasts ($WMA$) & Advice</div>
+          <div class="usecase-oval">View Telemetry History & Hash Status</div>
+        </div>
+
+        <!-- Logistics & Admin Use Cases -->
+        <div class="usecase-group">
+          <div class="usecase-oval">Accept & Transfer Produce Custody</div>
+          <div class="usecase-oval">Update Shipment Logistics & Delivery Status</div>
+          <div class="usecase-oval">Track Batch Origin & On-Chain History</div>
+          <div class="usecase-oval">Manage User Accounts & RBAC Permissions</div>
+          <div class="usecase-oval">Inspect Cryptographic Audit Logs & Health</div>
+        </div>
+
+        <!-- Included Cryptographic Operations -->
+        <div class="usecase-group">
+          <div class="usecase-oval include">
+            <div>
+              <span style="font-size:12px; font-weight:800; color:#7c3aed; display:block; margin-bottom:4px;">&lt;&lt;include&gt;&gt;</span>
+              Compute SHA-256 Telemetry Digest
+            </div>
+          </div>
+          <div class="usecase-oval include">
+            <div>
+              <span style="font-size:12px; font-weight:800; color:#7c3aed; display:block; margin-bottom:4px;">&lt;&lt;include&gt;&gt;</span>
+              Sign Move Tx via Sui Wallet Extension
+            </div>
+          </div>
+          <div class="usecase-oval include">
+            <div>
+              <span style="font-size:12px; font-weight:800; color:#7c3aed; display:block; margin-bottom:4px;">&lt;&lt;include&gt;&gt;</span>
+              Verify Argon2id / Ed25519 Credentials
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
