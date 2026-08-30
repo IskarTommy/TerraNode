@@ -10,495 +10,184 @@
   }
   body {
     width: 2400px;
-    height: 1500px;
+    height: 1800px;
     background-color: #f8fafc;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-    color: #0f172a;
-    padding: 24px 36px;
     display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-  }
-
-  /* Header Header Banner */
-  .diagram-header {
-    text-align: center;
-    background: #ffffff;
-    border: 1px solid #cbd5e1;
-    border-radius: 10px;
-    padding: 12px 24px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.04);
-  }
-  .diagram-title {
-    font-size: 26px;
-    font-weight: 800;
-    color: #0f172a;
-    letter-spacing: -0.5px;
-    text-transform: uppercase;
-  }
-  .diagram-subtitle {
-    font-size: 14px;
-    font-weight: 600;
-    color: #475569;
-    margin-top: 2px;
-  }
-
-  /* Tier Containers */
-  .tier-container {
-    background: #ffffff;
-    border-radius: 12px;
-    padding: 14px 20px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.03);
-    position: relative;
-  }
-
-  /* Layer 1 - Client Layer */
-  .tier-client {
-    border: 2px solid #3b82f6;
-    background: #f0f9ff;
-  }
-  .tier-client .tier-badge {
-    background: #1d4ed8;
-  }
-
-  /* Layer 2 - Presentation Layer */
-  .tier-presentation {
-    border: 2px solid #0d9488;
-    background: #f0fdf4;
-  }
-  .tier-presentation .tier-badge {
-    background: #0f766e;
-  }
-
-  /* Layer 3 - Business Logic Layer */
-  .tier-business {
-    border: 2px solid #4f46e5;
-    background: #f5f3ff;
-  }
-  .tier-business .tier-badge {
-    background: #4338ca;
-  }
-
-  /* Layer 4 - Data Persistence & Ledger Layer */
-  .tier-data {
-    border: 2px solid #059669;
-    background: #ecfdf5;
-  }
-  .tier-data .tier-badge {
-    background: #047857;
-  }
-
-  .tier-header {
-    display: flex;
+    justify-content: center;
     align-items: center;
-    margin-bottom: 10px;
+    overflow: hidden;
   }
-  .tier-badge {
-    color: #ffffff;
-    font-size: 12px;
-    font-weight: 800;
-    padding: 4px 12px;
-    border-radius: 6px;
-    letter-spacing: 0.5px;
-    text-transform: uppercase;
-    margin-right: 12px;
+  svg {
+    width: 2400px;
+    height: 1800px;
   }
-  .tier-title {
-    font-size: 16px;
-    font-weight: 700;
-    color: #0f172a;
-  }
-
-  /* Content Grids */
-  .grid-4 {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 16px;
-  }
-  .grid-3 {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 16px;
-  }
-  .grid-2 {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 16px;
-  }
-
-  /* Card Component Style */
-  .card {
-    background: #ffffff;
-    border: 1px solid #cbd5e1;
-    border-radius: 8px;
-    padding: 10px 14px;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-  }
-  .card-title {
-    font-size: 14px;
-    font-weight: 700;
-    color: #1e293b;
-    border-bottom: 2px solid #e2e8f0;
-    padding-bottom: 4px;
-    margin-bottom: 6px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-  .card-tag {
-    font-size: 10px;
-    font-weight: 700;
-    padding: 2px 6px;
-    border-radius: 4px;
-    text-transform: uppercase;
-  }
-  .tag-blue { background: #dbeafe; color: #1e40af; }
-  .tag-teal { background: #ccfbf1; color: #115e59; }
-  .tag-purple { background: #ede9fe; color: #5b21b6; }
-  .tag-emerald { background: #d1fae5; color: #065f46; }
-  .tag-amber { background: #fef3c7; color: #92400e; }
-
-  ul.card-list {
-    list-style: none;
-  }
-  ul.card-list li {
-    font-size: 12px;
-    color: #334155;
-    margin-bottom: 4px;
-    line-height: 1.3;
-    position: relative;
-    padding-left: 14px;
-  }
-  ul.card-list li::before {
-    content: "•";
-    position: absolute;
-    left: 0;
-    color: #64748b;
-    font-weight: bold;
-  }
-
-  .code-text {
-    font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
-    font-size: 11px;
-    background: #f1f5f9;
-    padding: 1px 4px;
-    border-radius: 3px;
-    color: #0f172a;
-  }
-
-  /* Inter-tier Connection Flow Banners */
-  .flow-banner-container {
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    margin: 4px 0;
-    padding: 0 20px;
-  }
-  .flow-pill {
-    background: #ffffff;
-    border: 1px solid #94a3b8;
-    border-radius: 20px;
-    padding: 4px 16px;
-    font-size: 11px;
-    font-weight: 700;
-    color: #1e293b;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.06);
-    display: flex;
-    align-items: center;
-    gap: 6px;
-  }
-  .flow-arrow {
-    color: #2563eb;
-    font-weight: 900;
-    font-size: 13px;
-  }
-
-  /* Cross-layer Binding Box */
-  .binding-pill {
-    background: #fef2f2;
-    border: 1px solid #fca5a5;
-    color: #991b1b;
-    font-size: 11px;
-    font-weight: 700;
-    padding: 4px 14px;
-    border-radius: 20px;
-    box-shadow: 0 2px 4px rgba(153,27,27,0.1);
-  }
-
 </style>
 </head>
 <body>
 
-  <!-- Header Banner -->
-  <div class="diagram-header">
-    <div class="diagram-title">Figure 3.1: TerraNode System Architecture</div>
-    <div class="diagram-subtitle">Integrated Blockchain-Anchored Smart Farm Management & Predictive Analytics Platform</div>
-  </div>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900" width="2400" height="1800" style="background:#f8fafc; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;">
+  <defs>
+    <!-- Drop Shadow Filter -->
+    <filter id="shadow" x="-5%" y="-5%" width="110%" height="115%" filterUnits="userSpaceOnUse">
+      <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#0f172a" flood-opacity="0.08" />
+    </filter>
+    <filter id="boxShadow" x="-5%" y="-5%" width="110%" height="115%" filterUnits="userSpaceOnUse">
+      <feDropShadow dx="0" dy="2" stdDeviation="4" flood-color="#0f172a" flood-opacity="0.06" />
+    </filter>
 
-  <!-- TIER 1: USER / CLIENT LAYER -->
-  <div class="tier-container tier-client">
-    <div class="tier-header">
-      <span class="tier-badge">Layer 1</span>
-      <span class="tier-title">User / Client Layer (Actors & Browser Extensions)</span>
-    </div>
-    <div class="grid-4">
-      <div class="card">
-        <div class="card-title">
-          <span>Farmer Web Client</span>
-          <span class="card-tag tag-blue">Actor</span>
-        </div>
-        <ul class="card-list">
-          <li>Telemetry Submission (<span class="code-text">Temp, Moisture, pH</span>)</li>
-          <li>Produce Batch Minting Requests</li>
-          <li>Yield Forecast & Irrigation Queries</li>
-        </ul>
-      </div>
+    <!-- Arrow Markers -->
+    <marker id="arrow" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#334155" />
+    </marker>
+    <marker id="arrow-blue" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#0284c7" />
+    </marker>
+    <marker id="arrow-purple" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#7c3aed" />
+    </marker>
+  </defs>
 
-      <div class="card">
-        <div class="card-title">
-          <span>Logistics Web Client</span>
-          <span class="card-tag tag-blue">Actor</span>
-        </div>
-        <ul class="card-list">
-          <li>Batch Custody Transfer Requests</li>
-          <li>Shipment Status & Location Updates</li>
-          <li>Supply Chain Tracking Dashboard</li>
-        </ul>
-      </div>
+  <!-- Title -->
+  <text x="600" y="38" text-anchor="middle" font-size="22" font-weight="700" fill="#0f172a" letter-spacing="0.5">TERRANODE SYSTEM ARCHITECTURE</text>
+  <text x="600" y="60" text-anchor="middle" font-size="13" font-weight="500" fill="#64748b">Three-Tier Blockchain-Anchored Smart Farm Security &amp; Analytics Framework</text>
 
-      <div class="card">
-        <div class="card-title">
-          <span>Admin Web Client</span>
-          <span class="card-tag tag-blue">Actor</span>
-        </div>
-        <ul class="card-list">
-          <li>User Management & Role Assignment</li>
-          <li>System Audit Log Inspection</li>
-          <li>Infrastructure & Node Health Monitoring</li>
-        </ul>
-      </div>
+  <!-- ==================== TIER 1: PRESENTATION LAYER ==================== -->
+  <rect x="50" y="80" width="1100" height="150" rx="12" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.5" filter="url(#shadow)" />
+  <rect x="50" y="80" width="1100" height="32" rx="12" fill="#f1f5f9" />
+  <rect x="50" y="100" width="1100" height="12" fill="#f1f5f9" />
+  <text x="75" y="102" font-size="13" font-weight="700" fill="#334155" letter-spacing="0.8">1. PRESENTATION LAYER (FRONTEND)</text>
 
-      <div class="card">
-        <div class="card-title">
-          <span>Sui Wallet Extension</span>
-          <span class="card-tag tag-purple">Wallet</span>
-        </div>
-        <ul class="card-list">
-          <li>Ed25519 Keypair Management</li>
-          <li>Off-Chain Intent Signature Generation</li>
-          <li>Direct Sui BCS Transaction Signing</li>
-        </ul>
-      </div>
-    </div>
-  </div>
+  <!-- Client App Box -->
+  <g transform="translate(360, 125)">
+    <rect x="0" y="0" width="480" height="85" rx="8" fill="#f0fdf4" stroke="#86efac" stroke-width="1.5" filter="url(#boxShadow)" />
+    <text x="240" y="32" text-anchor="middle" font-size="16" font-weight="700" fill="#166534">React 19 + TypeScript Web Application</text>
+    <text x="240" y="54" text-anchor="middle" font-size="13" font-weight="500" fill="#15803d">Vite SPA • RoleGuard Routing • Recharts Data Visualization</text>
+    <text x="240" y="72" text-anchor="middle" font-size="12" font-weight="400" fill="#4b5563">AuthContext (JWT &amp; Wallet Login) • WalletContext (Mysten dApp Kit)</text>
+  </g>
 
-  <!-- FLOW BANNER 1 -> 2 -->
-  <div class="flow-banner-container">
-    <div class="flow-pill">
-      <span class="flow-arrow">▼</span> HTTPS / DOM Interaction
-    </div>
-    <div class="flow-pill">
-      <span class="flow-arrow">▼</span> User Input & Telemetry Form Data
-    </div>
-    <div class="flow-pill">
-      <span class="flow-arrow">▼</span> Sui Wallet Window Provider API (dApp Kit)
-    </div>
-  </div>
+  <!-- ==================== TIER 2: BUSINESS LOGIC LAYER ==================== -->
+  <rect x="50" y="270" width="1100" height="350" rx="12" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.5" filter="url(#shadow)" />
+  <rect x="50" y="270" width="1100" height="32" rx="12" fill="#f1f5f9" />
+  <rect x="50" y="290" width="1100" height="12" fill="#f1f5f9" />
+  <text x="75" y="292" font-size="13" font-weight="700" fill="#334155" letter-spacing="0.8">2. BUSINESS LOGIC LAYER (BACKEND)</text>
 
-  <!-- TIER 2: PRESENTATION LAYER -->
-  <div class="tier-container tier-presentation">
-    <div class="tier-header">
-      <span class="tier-badge">Layer 2</span>
-      <span class="tier-title">Presentation Layer (Frontend — React 19 + TypeScript + Vite SPA)</span>
-    </div>
-    <div class="grid-4">
-      <div class="card">
-        <div class="card-title">
-          <span>AuthContext</span>
-          <span class="card-tag tag-teal">State</span>
-        </div>
-        <ul class="card-list">
-          <li>Manages JWT Access & Refresh Tokens</li>
-          <li>Sui Wallet Signature Auth State</li>
-          <li>User Role & Session Persistence</li>
-        </ul>
-      </div>
+  <!-- DRF Core Gateway -->
+  <g transform="translate(360, 315)">
+    <rect x="0" y="0" width="480" height="65" rx="8" fill="#eff6ff" stroke="#93c5fd" stroke-width="1.5" filter="url(#boxShadow)" />
+    <text x="240" y="28" text-anchor="middle" font-size="16" font-weight="700" fill="#1e40af">Django REST Framework Backend (Django 5.1)</text>
+    <text x="240" y="48" text-anchor="middle" font-size="12.5" font-weight="500" fill="#2563eb">API Gateway • Token Verification • Throttling • Serializers</text>
+  </g>
 
-      <div class="card">
-        <div class="card-title">
-          <span>WalletContext</span>
-          <span class="card-tag tag-purple">Sui Web3</span>
-        </div>
-        <ul class="card-list">
-          <li>Mysten dApp Kit Integration</li>
-          <li>Sui JSON-RPC Provider Connection</li>
-          <li>Direct On-Chain Tx Execution & Signing</li>
-        </ul>
-      </div>
+  <!-- Users App -->
+  <g transform="translate(80, 420)">
+    <rect x="0" y="0" width="235" height="175" rx="8" fill="#ffffff" stroke="#e2e8f0" stroke-width="1.5" filter="url(#boxShadow)" />
+    <rect x="0" y="0" width="235" height="32" rx="8" fill="#f8fafc" />
+    <text x="117" y="22" text-anchor="middle" font-size="13.5" font-weight="700" fill="#0f172a">Users App</text>
+    <text x="117" y="55" text-anchor="middle" font-size="12" font-weight="600" fill="#475569">Auth &amp; Access Control</text>
+    <text x="20" y="82" font-size="11.5" fill="#334155">• JWT Token Lifecycle</text>
+    <text x="20" y="104" font-size="11.5" fill="#334155">• Argon2id Password Hash</text>
+    <text x="20" y="126" font-size="11.5" fill="#334155">• Sui Ed25519 Verify</text>
+    <text x="20" y="148" font-size="11.5" fill="#334155">• Custom RBAC Permissions</text>
+  </g>
 
-      <div class="card">
-        <div class="card-title">
-          <span>RoleGuard Router</span>
-          <span class="card-tag tag-teal">Routing</span>
-        </div>
-        <ul class="card-list">
-          <li>RBAC Route Protection (<span class="code-text">Farmer / Logistics / Admin</span>)</li>
-          <li>Unauthorized Access Redirection</li>
-          <li>Dynamic Navigation & Layouts</li>
-        </ul>
-      </div>
+  <!-- Telemetry App -->
+  <g transform="translate(345, 420)">
+    <rect x="0" y="0" width="235" height="175" rx="8" fill="#ffffff" stroke="#e2e8f0" stroke-width="1.5" filter="url(#boxShadow)" />
+    <rect x="0" y="0" width="235" height="32" rx="8" fill="#f8fafc" />
+    <text x="117" y="22" text-anchor="middle" font-size="13.5" font-weight="700" fill="#0f172a">Telemetry App</text>
+    <text x="117" y="55" text-anchor="middle" font-size="12" font-weight="600" fill="#475569">Sensor Data Processing</text>
+    <text x="20" y="82" font-size="11.5" fill="#334155">• Temp, Moisture, Soil pH</text>
+    <text x="20" y="104" font-size="11.5" fill="#334155">• Range Validation</text>
+    <text x="20" y="126" font-size="11.5" fill="#334155">• SHA-256 Digest Generator</text>
+    <text x="20" y="148" font-size="11.5" fill="#334155">• Duplicate Filter &amp; Storage</text>
+  </g>
 
-      <div class="card">
-        <div class="card-title">
-          <span>Recharts Dashboard</span>
-          <span class="card-tag tag-teal">Data Vis</span>
-        </div>
-        <ul class="card-list">
-          <li>Telemetry Trends (Temp, Moisture, pH)</li>
-          <li>Yield Forecast Charts & Confidence Scores</li>
-          <li>Batch Lifecycle Progress Tracking</li>
-        </ul>
-      </div>
-    </div>
-  </div>
+  <!-- Ledger App -->
+  <g transform="translate(615, 420)">
+    <rect x="0" y="0" width="235" height="175" rx="8" fill="#ffffff" stroke="#e2e8f0" stroke-width="1.5" filter="url(#boxShadow)" />
+    <rect x="0" y="0" width="235" height="32" rx="8" fill="#f8fafc" />
+    <text x="117" y="22" text-anchor="middle" font-size="13.5" font-weight="700" fill="#0f172a">Ledger App</text>
+    <text x="117" y="55" text-anchor="middle" font-size="12" font-weight="600" fill="#475569">Batch &amp; Custody Manager</text>
+    <text x="20" y="82" font-size="11.5" fill="#334155">• 2-Step Batch Workflow</text>
+    <text x="20" y="104" font-size="11.5" fill="#334155">• Status: PENDING → MINTED</text>
+    <text x="20" y="126" font-size="11.5" fill="#334155">• Sui Object ID Binding</text>
+    <text x="20" y="148" font-size="11.5" fill="#334155">• Custody Transfer Logging</text>
+  </g>
 
-  <!-- FLOW BANNER 2 -> 3 & Direct Blockchain RPC -->
-  <div class="flow-banner-container">
-    <div class="flow-pill">
-      <span class="flow-arrow">▼</span> REST / JSON API Requests (<span class="code-text">HTTPS</span>)
-    </div>
-    <div class="flow-pill">
-      <span class="flow-arrow">▼</span> Bearer JWT Auth Header (<span class="code-text">Access Token</span>)
-    </div>
-    <div class="flow-pill" style="border-color: #7c3aed; background: #faf5ff;">
-      <span class="flow-arrow" style="color: #7c3aed;">⚡</span> Direct Sui RPC / BCS Tx Execution (Bypasses Backend for Minting/Transfer)
-    </div>
-  </div>
+  <!-- Analytics App -->
+  <g transform="translate(885, 420)">
+    <rect x="0" y="0" width="235" height="175" rx="8" fill="#ffffff" stroke="#e2e8f0" stroke-width="1.5" filter="url(#boxShadow)" />
+    <rect x="0" y="0" width="235" height="32" rx="8" fill="#f8fafc" />
+    <text x="117" y="22" text-anchor="middle" font-size="13.5" font-weight="700" fill="#0f172a">Analytics App</text>
+    <text x="117" y="55" text-anchor="middle" font-size="12" font-weight="600" fill="#475569">Yield Prediction Engine</text>
+    <text x="20" y="82" font-size="11.5" fill="#334155">• Weighted Moving Average</text>
+    <text x="20" y="104" font-size="11.5" fill="#334155">• Confidence Score C(n)</text>
+    <text x="20" y="126" font-size="11.5" fill="#334155">• Temp Deviation Penalty</text>
+    <text x="20" y="148" font-size="11.5" fill="#334155">• Actionable Insights</text>
+  </g>
 
-  <!-- TIER 3: BUSINESS LOGIC LAYER -->
-  <div class="tier-container tier-business">
-    <div class="tier-header">
-      <span class="tier-badge">Layer 3</span>
-      <span class="tier-title">Business Logic Layer (Backend — Django 5.1 + DRF)</span>
-    </div>
-    <div class="grid-4">
-      <div class="card">
-        <div class="card-title">
-          <span>API Gateway & Auth</span>
-          <span class="card-tag tag-purple">Security</span>
-        </div>
-        <ul class="card-list">
-          <li>Simple JWT Token Handler</li>
-          <li>Argon2id Password Hashing</li>
-          <li>PyNaCl Ed25519 & BLAKE2b Verification</li>
-          <li>Rate Throttling (<span class="code-text">5 req/min</span>)</li>
-        </ul>
-      </div>
+  <!-- Connectors -->
+  <path d="M 440 380 L 440 400 L 197 400 L 197 420" fill="none" stroke="#64748b" stroke-width="1.5" marker-end="url(#arrow)" />
+  <path d="M 520 380 L 520 400 L 462 400 L 462 420" fill="none" stroke="#64748b" stroke-width="1.5" marker-end="url(#arrow)" />
+  <path d="M 680 380 L 680 400 L 732 400 L 732 420" fill="none" stroke="#64748b" stroke-width="1.5" marker-end="url(#arrow)" />
+  <path d="M 760 380 L 760 400 L 1002 400 L 1002 420" fill="none" stroke="#64748b" stroke-width="1.5" marker-end="url(#arrow)" />
 
-      <div class="card">
-        <div class="card-title">
-          <span>Telemetry Module</span>
-          <span class="card-tag tag-purple">Core</span>
-        </div>
-        <ul class="card-list">
-          <li>Physical Range Validation (<span class="code-text">Temp/Moisture/pH</span>)</li>
-          <li>Deterministic SHA-256 Digest Generator</li>
-          <li>Duplicate Reading Prevention</li>
-          <li>Farmer-linked FK Mapping</li>
-        </ul>
-      </div>
+  <!-- ==================== TIER 3: DATA PERSISTENCE LAYER ==================== -->
+  <rect x="50" y="660" width="1100" height="200" rx="12" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.5" filter="url(#shadow)" />
+  <rect x="50" y="660" width="1100" height="32" rx="12" fill="#f1f5f9" />
+  <rect x="50" y="680" width="1100" height="12" fill="#f1f5f9" />
+  <text x="75" y="682" font-size="13" font-weight="700" fill="#334155" letter-spacing="0.8">3. DATA PERSISTENCE &amp; BLOCKCHAIN LEDGER LAYER</text>
 
-      <div class="card">
-        <div class="card-title">
-          <span>Ledger & Custody</span>
-          <span class="card-tag tag-purple">Lifecycle</span>
-        </div>
-        <ul class="card-list">
-          <li>2-Step Lifecycle (<span class="code-text">Prepare → Confirm</span>)</li>
-          <li>Maps Off-Chain Records to Sui Object IDs</li>
-          <li>Tracks On-Chain Tx Digests</li>
-          <li>Custody Status State Machine</li>
-        </ul>
-      </div>
+  <!-- PostgreSQL -->
+  <g transform="translate(100, 710)">
+    <rect x="0" y="0" width="290" height="125" rx="8" fill="#faf5ff" stroke="#d8b4fe" stroke-width="1.5" filter="url(#boxShadow)" />
+    <text x="145" y="28" text-anchor="middle" font-size="15" font-weight="700" fill="#6b21a8">PostgreSQL Database</text>
+    <text x="145" y="48" text-anchor="middle" font-size="12" font-weight="600" fill="#7e22ce">Primary Relational Storage</text>
+    <text x="20" y="75" font-size="11.5" fill="#3b0764">• User Accounts &amp; Profiles</text>
+    <text x="20" y="95" font-size="11.5" fill="#3b0764">• Environmental Telemetry &amp; SHA-256</text>
+    <text x="20" y="115" font-size="11.5" fill="#3b0764">• Produce Batches &amp; Audit Logs</text>
+  </g>
 
-      <div class="card">
-        <div class="card-title">
-          <span>Predictive Analytics</span>
-          <span class="card-tag tag-amber">AI/Engine</span>
-        </div>
-        <ul class="card-list">
-          <li>Weighted Moving Average Yield Forecast (Y)</li>
-          <li>Confidence Score Engine (C = min(0.95, n / 90))</li>
-          <li>Optimal Temp Deviation Penalty</li>
-          <li>Irrigation & Shading Recommendations</li>
-        </ul>
-      </div>
-    </div>
-  </div>
+  <!-- Redis -->
+  <g transform="translate(465, 710)">
+    <rect x="0" y="0" width="270" height="125" rx="8" fill="#fff1f2" stroke="#fecdd3" stroke-width="1.5" filter="url(#boxShadow)" />
+    <text x="135" y="28" text-anchor="middle" font-size="15" font-weight="700" fill="#9f1239">Redis In-Memory Cache</text>
+    <text x="135" y="48" text-anchor="middle" font-size="12" font-weight="600" fill="#be123c">High-Speed Key-Value Store</text>
+    <text x="20" y="75" font-size="11.5" fill="#4c0519">• Cached Yield Forecasts</text>
+    <text x="20" y="95" font-size="11.5" fill="#4c0519">• 600s (10 min) TTL Expiration</text>
+    <text x="20" y="115" font-size="11.5" fill="#4c0519">• Sub-15ms Latency Response</text>
+  </g>
 
-  <!-- FLOW BANNER 3 -> 4 & Cross-layer Hash Binding -->
-  <div class="flow-banner-container">
-    <div class="flow-pill">
-      <span class="flow-arrow">▼</span> Django ORM / SQL Queries
-    </div>
-    <div class="binding-pill">
-      🔒 SHA-256 Hash Binding (Telemetry <span class="code-text">payload_sha256</span> ↔ Sui <span class="code-text">data_integrity_hash</span>)
-    </div>
-    <div class="flow-pill">
-      <span class="flow-arrow">▼</span> Redis Cache Protocol (<span class="code-text">10m TTL</span>)
-    </div>
-    <div class="flow-pill" style="border-color: #059669; background: #ecfdf5;">
-      <span class="flow-arrow" style="color: #059669;">▼</span> Sui JSON-RPC Event Syncing
-    </div>
-  </div>
+  <!-- Sui Blockchain -->
+  <g transform="translate(805, 710)">
+    <rect x="0" y="0" width="310" height="125" rx="8" fill="#f0fdfa" stroke="#99f6e4" stroke-width="1.5" filter="url(#boxShadow)" />
+    <text x="155" y="28" text-anchor="middle" font-size="15" font-weight="700" fill="#0f766e">Sui Blockchain (Testnet)</text>
+    <text x="155" y="48" text-anchor="middle" font-size="12" font-weight="600" fill="#115e59">Immutable Distributed Ledger</text>
+    <text x="20" y="75" font-size="11.5" fill="#134e4a">• Move Smart Contracts (Objects)</text>
+    <text x="20" y="95" font-size="11.5" fill="#134e4a">• On-Chain SHA-256 Hash Anchoring</text>
+    <text x="20" y="115" font-size="11.5" fill="#134e4a">• Verifiable Custody Event Emissions</text>
+  </g>
 
-  <!-- TIER 4: DATA PERSISTENCE & LEDGER LAYER -->
-  <div class="tier-container tier-data">
-    <div class="tier-header">
-      <span class="tier-badge">Layer 4</span>
-      <span class="tier-title">Data Persistence & Ledger Layer (Database, Cache & Sui Blockchain)</span>
-    </div>
-    <div class="grid-3">
-      <div class="card">
-        <div class="card-title">
-          <span>PostgreSQL Database</span>
-          <span class="card-tag tag-emerald">Relational DB</span>
-        </div>
-        <ul class="card-list">
-          <li><span class="code-text">CustomUser</span>: Credentials, Role, Sui Public Key</li>
-          <li><span class="code-text">EnvironmentalTelemetry</span>: Sensor Data & SHA-256 Hash</li>
-          <li><span class="code-text">ProduceBatch</span>: Off-chain Record, Sui Object ID, Status</li>
-          <li><span class="code-text">AuditLog</span>: Historical Actions & Security Logs</li>
-        </ul>
-      </div>
+  <!-- Inter-tier links -->
+  <path d="M 540 210 L 540 315" fill="none" stroke="#0284c7" stroke-width="2" marker-end="url(#arrow-blue)" />
+  <rect x="425" y="235" width="230" height="24" rx="4" fill="#e0f2fe" stroke="#7dd3fc" stroke-width="1" />
+  <text x="540" y="251" text-anchor="middle" font-size="11" font-weight="600" fill="#0369a1">HTTPS / JSON REST API (JWT Auth)</text>
 
-      <div class="card">
-        <div class="card-title">
-          <span>Redis Cache</span>
-          <span class="card-tag tag-amber">In-Memory</span>
-        </div>
-        <ul class="card-list">
-          <li>Caches Computed Yield Predictions</li>
-          <li>Time-To-Live (TTL): <span class="code-text">600 seconds (10 mins)</span></li>
-          <li>Key Format: <span class="code-text">analytics:predict:{farmer_id}</span></li>
-          <li>Reduces PostgreSQL Query Load for Analytics</li>
-        </ul>
-      </div>
+  <path d="M 840 167 L 1080 167 L 1080 710" fill="none" stroke="#7c3aed" stroke-width="2" marker-end="url(#arrow-purple)" />
+  <rect x="975" y="235" width="170" height="24" rx="4" fill="#ede9fe" stroke="#c4b5fd" stroke-width="1" />
+  <text x="1060" y="251" text-anchor="middle" font-size="11" font-weight="600" fill="#6d28d9">dApp Kit / Sui RPC (Signing)</text>
 
-      <div class="card">
-        <div class="card-title">
-          <span>Sui Blockchain (Testnet)</span>
-          <span class="card-tag tag-purple">Layer-1 Ledger</span>
-        </div>
-        <ul class="card-list">
-          <li>Move Contract Package: <span class="code-text">terranode::produce_batch</span></li>
-          <li><span class="code-text">ProduceBatch</span> Objects with <span class="code-text">data_integrity_hash</span></li>
-          <li>Move Entry Functions: <span class="code-text">mint_batch</span>, <span class="code-text">transfer_custody</span></li>
-          <li>Emitted Events: <span class="code-text">BatchMinted</span>, <span class="code-text">CustodyTransferred</span></li>
-        </ul>
-      </div>
-    </div>
-  </div>
+  <path d="M 197 595 L 197 710" fill="none" stroke="#334155" stroke-width="1.5" marker-end="url(#arrow)" />
+  <path d="M 462 595 L 462 640 L 295 640 L 295 710" fill="none" stroke="#334155" stroke-width="1.5" marker-end="url(#arrow)" />
+  <path d="M 732 595 L 732 640 L 350 640 L 350 710" fill="none" stroke="#334155" stroke-width="1.5" marker-end="url(#arrow)" />
+
+  <path d="M 760 595 L 760 640 L 890 640 L 890 710" fill="none" stroke="#0f766e" stroke-width="1.5" stroke-dasharray="4,4" marker-end="url(#arrow)" />
+  <rect x="785" y="628" width="130" height="20" rx="3" fill="#ccfbf1" stroke="#5eead4" stroke-width="1" />
+  <text x="850" y="642" text-anchor="middle" font-size="10" font-weight="600" fill="#0f766e">Verify Object IDs / Digest</text>
+
+  <path d="M 920 595 L 920 645 L 380 645 L 380 710" fill="none" stroke="#334155" stroke-width="1.5" stroke-dasharray="3,3" marker-end="url(#arrow)" />
+  <path d="M 1002 595 L 1002 650 L 600 650 L 600 710" fill="none" stroke="#be123c" stroke-width="1.5" marker-end="url(#arrow)" />
+</svg>
 
 </body>
 </html>
