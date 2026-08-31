@@ -1,0 +1,145 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1100 720" width="100%" height="100%">
+  <defs>
+    <style>
+      .life-hdr { font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, Helvetica, Arial, sans-serif; font-size: 14.5px; font-weight: 700; fill: #ffffff; }
+      .life-sub { font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, Helvetica, Arial, sans-serif; font-size: 12px; fill: #e2e8f0; }
+      .step-num { font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, Helvetica, Arial, sans-serif; font-size: 12px; font-weight: 800; fill: #ffffff; }
+      .msg-title { font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, Helvetica, Arial, sans-serif; font-size: 13.5px; font-weight: 700; fill: #0f172a; }
+      .msg-code { font-family: 'Consolas', 'Courier New', monospace; font-size: 12.5px; font-weight: 600; fill: #0284c7; }
+      .msg-desc { font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, Helvetica, Arial, sans-serif; font-size: 12.5px; fill: #475569; }
+    </style>
+    <filter id="shadow" x="-4%" y="-2%" width="108%" height="106%" filterUnits="userSpaceOnUse">
+      <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#0f172a" flood-opacity="0.08" />
+    </filter>
+    <marker id="arr-black" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#0f172a" />
+    </marker>
+    <marker id="arr-blue" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#0284c7" />
+    </marker>
+    <marker id="arr-purple" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#7e22ce" />
+    </marker>
+    <marker id="arr-green" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#059669" />
+    </marker>
+  </defs>
+
+  <!-- ==================== 5 LIFELINE PARTICIPANTS ==================== -->
+  <!-- 1. Farmer (User) -->
+  <g transform="translate(10, 10)">
+    <rect width="180" height="56" rx="6" fill="#065f46" filter="url(#shadow)" />
+    <text x="90" y="24" text-anchor="middle" class="life-hdr">Farmer (User)</text>
+    <text x="90" y="44" text-anchor="middle" class="life-sub">Browser Client</text>
+  </g>
+  <line x1="100" y1="66" x2="100" y2="700" stroke="#cbd5e1" stroke-width="1.8" stroke-dasharray="6,4" />
+
+  <!-- 2. React 19 Frontend -->
+  <g transform="translate(235, 10)">
+    <rect width="180" height="56" rx="6" fill="#0284c7" filter="url(#shadow)" />
+    <text x="90" y="24" text-anchor="middle" class="life-hdr">React 19 Frontend</text>
+    <text x="90" y="44" text-anchor="middle" class="life-sub">SPA + dApp Kit</text>
+  </g>
+  <line x1="325" y1="66" x2="325" y2="700" stroke="#cbd5e1" stroke-width="1.8" stroke-dasharray="6,4" />
+
+  <!-- 3. Django 5.1 Backend -->
+  <g transform="translate(460, 10)">
+    <rect width="180" height="56" rx="6" fill="#1e40af" filter="url(#shadow)" />
+    <text x="90" y="24" text-anchor="middle" class="life-hdr">Django Backend</text>
+    <text x="90" y="44" text-anchor="middle" class="life-sub">REST API + DB Store</text>
+  </g>
+  <line x1="550" y1="66" x2="550" y2="700" stroke="#cbd5e1" stroke-width="1.8" stroke-dasharray="6,4" />
+
+  <!-- 4. Sui Wallet Extension -->
+  <g transform="translate(685, 10)">
+    <rect width="180" height="56" rx="6" fill="#581c87" filter="url(#shadow)" />
+    <text x="90" y="24" text-anchor="middle" class="life-hdr">Sui Wallet</text>
+    <text x="90" y="44" text-anchor="middle" class="life-sub">Ed25519 Key Signer</text>
+  </g>
+  <line x1="775" y1="66" x2="775" y2="700" stroke="#cbd5e1" stroke-width="1.8" stroke-dasharray="6,4" />
+
+  <!-- 5. Sui Blockchain (Move) -->
+  <g transform="translate(910, 10)">
+    <rect width="180" height="56" rx="6" fill="#701a75" filter="url(#shadow)" />
+    <text x="90" y="24" text-anchor="middle" class="life-hdr">Sui Blockchain</text>
+    <text x="90" y="44" text-anchor="middle" class="life-sub">Move Smart Contract</text>
+  </g>
+  <line x1="1000" y1="66" x2="1000" y2="700" stroke="#cbd5e1" stroke-width="1.8" stroke-dasharray="6,4" />
+
+  <!-- ==================== SEQUENCE INTERACTIONS ==================== -->
+  
+  <!-- Step 1: Farmer -> React (Submit Form) -->
+  <line x1="100" y1="95" x2="325" y2="95" stroke="#0f172a" stroke-width="1.8" marker-end="url(#arr-black)" />
+  <circle cx="115" cy="95" r="11" fill="#0f172a" />
+  <text x="115" y="99" text-anchor="middle" class="step-num">1</text>
+  <text x="135" y="88" class="msg-title">Fill Batch Form &amp; Click "Mint On-Chain"</text>
+
+  <!-- Step 2: React -> Django (POST /prepare) -->
+  <line x1="325" y1="150" x2="550" y2="150" stroke="#0f172a" stroke-width="1.8" marker-end="url(#arr-black)" />
+  <circle cx="340" cy="150" r="11" fill="#0f172a" />
+  <text x="340" y="154" text-anchor="middle" class="step-num">2</text>
+  <text x="360" y="142" class="msg-title">POST /api/v1/ledger/prepare/</text>
+  <text x="360" y="162" class="msg-code">{ crop_type, weight_kg, telemetry_id }</text>
+
+  <!-- Self Step: Django DB Pending -->
+  <path d="M 550 180 L 590 180 L 590 205 L 550 205" fill="none" stroke="#1e40af" stroke-width="1.8" marker-end="url(#arr-blue)" />
+  <text x="600" y="192" class="msg-desc">Create DB Record (status=PENDING)</text>
+  <text x="600" y="208" class="msg-desc">Fetch Telemetry SHA-256 Hash</text>
+
+  <!-- Step 3: Django -> React (200 OK) -->
+  <line x1="550" y1="235" x2="325" y2="235" stroke="#0284c7" stroke-width="1.8" stroke-dasharray="5,4" marker-end="url(#arr-blue)" />
+  <circle cx="535" cy="235" r="11" fill="#0284c7" />
+  <text x="535" y="239" text-anchor="middle" class="step-num">3</text>
+  <text x="360" y="228" class="msg-title">200 OK: Return { batch_id, payload_sha256 }</text>
+
+  <!-- Step 4: React -> Wallet (Sign Request) -->
+  <line x1="325" y1="290" x2="775" y2="290" stroke="#0f172a" stroke-width="1.8" marker-end="url(#arr-black)" />
+  <circle cx="340" cy="290" r="11" fill="#0f172a" />
+  <text x="340" y="294" text-anchor="middle" class="step-num">4</text>
+  <text x="360" y="282" class="msg-title">signAndExecuteTransactionBlock(mint_batch)</text>
+  <text x="360" y="302" class="msg-code">Pass [crop_type, weight_kg, sha256_bytes]</text>
+
+  <!-- Step 5: Wallet -> Farmer (Prompt Approval) -->
+  <line x1="775" y1="345" x2="100" y2="345" stroke="#7e22ce" stroke-width="1.8" stroke-dasharray="5,4" marker-end="url(#arr-purple)" />
+  <circle cx="760" cy="345" r="11" fill="#7e22ce" />
+  <text x="760" y="349" text-anchor="middle" class="step-num">5</text>
+  <text x="360" y="338" class="msg-title">Prompt User Approval &amp; Gas Fee Confirmation</text>
+
+  <!-- Step 6: Farmer -> Wallet (Approve) -->
+  <line x1="100" y1="400" x2="775" y2="400" stroke="#059669" stroke-width="1.8" marker-end="url(#arr-green)" />
+  <circle cx="115" cy="400" r="11" fill="#059669" />
+  <text x="115" y="404" text-anchor="middle" class="step-num">6</text>
+  <text x="135" y="392" class="msg-title">Approve Signature in Wallet Modal (Ed25519 Signed)</text>
+
+  <!-- Step 7: Wallet -> Sui (Execute Move Call) -->
+  <line x1="775" y1="455" x2="1000" y2="455" stroke="#701a75" stroke-width="1.8" marker-end="url(#arr-purple)" />
+  <circle cx="790" cy="455" r="11" fill="#701a75" />
+  <text x="790" y="459" text-anchor="middle" class="step-num">7</text>
+  <text x="810" y="445" class="msg-title">Execute Move Call on Testnet</text>
+  <text x="810" y="465" class="msg-code">Emit BatchMinted Event &amp; Create Object</text>
+
+  <!-- Step 8: Sui -> React (Tx Result) -->
+  <line x1="1000" y1="515" x2="325" y2="515" stroke="#701a75" stroke-width="1.8" stroke-dasharray="5,4" marker-end="url(#arr-purple)" />
+  <circle cx="985" cy="515" r="11" fill="#701a75" />
+  <text x="985" y="519" text-anchor="middle" class="step-num">8</text>
+  <text x="520" y="505" class="msg-title">Return Tx Result: { sui_object_id, tx_digest }</text>
+
+  <!-- Step 9: React -> Django (POST /confirm) -->
+  <line x1="325" y1="570" x2="550" y2="570" stroke="#0f172a" stroke-width="1.8" marker-end="url(#arr-black)" />
+  <circle cx="340" cy="570" r="11" fill="#0f172a" />
+  <text x="340" y="574" text-anchor="middle" class="step-num">9</text>
+  <text x="360" y="560" class="msg-title">POST /api/v1/ledger/confirm/</text>
+  <text x="360" y="580" class="msg-code">{ batch_id, sui_object_id, tx_digest }</text>
+
+  <!-- Step 10: Django -> React (DB Updated) -->
+  <line x1="550" y1="625" x2="325" y2="625" stroke="#0284c7" stroke-width="1.8" stroke-dasharray="5,4" marker-end="url(#arr-blue)" />
+  <circle cx="535" cy="625" r="11" fill="#0284c7" />
+  <text x="535" y="629" text-anchor="middle" class="step-num">10</text>
+  <text x="360" y="618" class="msg-title">200 OK: DB Updated (status=MINTED)</text>
+
+  <!-- Step 11: React -> Farmer (Display Notification) -->
+  <line x1="325" y1="675" x2="100" y2="675" stroke="#059669" stroke-width="1.8" stroke-dasharray="5,4" marker-end="url(#arr-green)" />
+  <circle cx="310" cy="675" r="11" fill="#059669" />
+  <text x="310" y="679" text-anchor="middle" class="step-num">11</text>
+  <text x="135" y="668" class="msg-title">Display Success Notification &amp; SuiVision Explorer Link</text>
+</svg>

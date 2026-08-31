@@ -24,7 +24,7 @@
 \contentsline {section}{\numberline {2.10}Related Work Summary and Comparative Analysis}{11}{section.2.10}%
 \contentsline {section}{\numberline {2.11}Research Gap}{12}{section.2.11}%
 \contentsline {section}{\numberline {2.12}Conceptual Framework}{13}{section.2.12}%
-\contentsline {section}{\numberline {2.13}Chapter Summary}{13}{section.2.13}%
+\contentsline {section}{\numberline {2.13}Chapter Summary}{14}{section.2.13}%
 \contentsline {chapter}{\numberline {3}METHODOLOGY}{15}{chapter.3}%
 \contentsline {section}{\numberline {3.1}Introduction}{15}{section.3.1}%
 \contentsline {section}{\numberline {3.2}Research Design}{15}{section.3.2}%
@@ -34,42 +34,43 @@
 \contentsline {section}{\numberline {3.4}System Architecture}{17}{section.3.4}%
 \contentsline {section}{\numberline {3.5}Data Flow Design}{18}{section.3.5}%
 \contentsline {subsection}{\numberline {3.5.1}Context Diagram (Level 0)}{18}{subsection.3.5.1}%
-\contentsline {subsection}{\numberline {3.5.2}Level 1 Data Flow Diagram}{18}{subsection.3.5.2}%
-\contentsline {section}{\numberline {3.6}Entity-Relationship Model}{19}{section.3.6}%
-\contentsline {section}{\numberline {3.7}Use Case Modelling}{20}{section.3.7}%
-\contentsline {section}{\numberline {3.8}Smart Contract Design}{20}{section.3.8}%
-\contentsline {subsection}{\numberline {3.8.1}ProduceBatch Object Structure}{21}{subsection.3.8.1}%
-\contentsline {subsection}{\numberline {3.8.2}Entry Functions}{21}{subsection.3.8.2}%
-\contentsline {subsection}{\numberline {3.8.3}Event Emissions}{21}{subsection.3.8.3}%
-\contentsline {section}{\numberline {3.9}Predictive Analytics Engine}{22}{section.3.9}%
-\contentsline {subsection}{\numberline {3.9.1}Feature Vector Composition}{22}{subsection.3.9.1}%
-\contentsline {subsection}{\numberline {3.9.2}Weighted Moving Average Model}{22}{subsection.3.9.2}%
-\contentsline {subsection}{\numberline {3.9.3}Confidence Score}{23}{subsection.3.9.3}%
-\contentsline {subsection}{\numberline {3.9.4}Caching Strategy}{23}{subsection.3.9.4}%
-\contentsline {section}{\numberline {3.10}Security Architecture}{23}{section.3.10}%
-\contentsline {subsection}{\numberline {3.10.1}Authentication}{23}{subsection.3.10.1}%
-\contentsline {subsection}{\numberline {3.10.2}Sui Wallet Signature Verification}{23}{subsection.3.10.2}%
-\contentsline {subsection}{\numberline {3.10.3}Data Integrity Hashing}{24}{subsection.3.10.3}%
-\contentsline {subsection}{\numberline {3.10.4}Role-Based Access Control}{24}{subsection.3.10.4}%
-\contentsline {section}{\numberline {3.11}Technology Stack}{25}{section.3.11}%
-\contentsline {section}{\numberline {3.12}Development Tools}{26}{section.3.12}%
-\contentsline {section}{\numberline {3.13}Chapter Summary}{26}{section.3.13}%
-\contentsline {chapter}{\numberline {4}IMPLEMENTATION AND EVALUATION}{27}{chapter.4}%
-\contentsline {section}{\numberline {4.1}Introduction}{27}{section.4.1}%
-\contentsline {section}{\numberline {4.2}Research Results}{27}{section.4.2}%
-\contentsline {subsection}{\numberline {4.2.1}Research Objective One (1)}{27}{subsection.4.2.1}%
-\contentsline {subsection}{\numberline {4.2.2}Research Objective Two (2)}{34}{subsection.4.2.2}%
-\contentsline {subsection}{\numberline {4.2.3}Research Objective Three (3)}{35}{subsection.4.2.3}%
-\contentsline {subsection}{\numberline {4.2.4}Research Objective Four (4)}{35}{subsection.4.2.4}%
-\contentsline {section}{\numberline {4.3}Discussion of Research Findings}{38}{section.4.3}%
-\contentsline {section}{\numberline {4.4}Conclusion}{39}{section.4.4}%
-\contentsline {chapter}{\numberline {5}SUMMARY, CONCLUSION, AND RECOMMENDATIONS}{40}{chapter.5}%
-\contentsline {section}{\numberline {5.1}Introduction}{40}{section.5.1}%
-\contentsline {section}{\numberline {5.2}Summary of Findings}{40}{section.5.2}%
-\contentsline {section}{\numberline {5.3}Conclusion}{41}{section.5.3}%
-\contentsline {section}{\numberline {5.4}Recommendations for Future Work}{42}{section.5.4}%
-\contentsline {chapter}{References}{43}{chapter*.34}%
-\contentsline {chapter}{\numberline {A}CODE LISTINGS}{45}{appendix.A}%
-\contentsline {section}{\numberline {A.1}SHA-256 Data Integrity Hash Generation}{45}{appendix.A.1}%
-\contentsline {section}{\numberline {A.2}Sui Ed25519 Signature Verification}{45}{appendix.A.2}%
-\contentsline {section}{\numberline {A.3}Crop Yield Prediction Service}{46}{appendix.A.3}%
+\contentsline {subsection}{\numberline {3.5.2}Level 1 Data Flow Diagram}{19}{subsection.3.5.2}%
+\contentsline {section}{\numberline {3.6}Entity-Relationship Model}{20}{section.3.6}%
+\contentsline {section}{\numberline {3.7}Use Case Modelling}{22}{section.3.7}%
+\contentsline {subsection}{\numberline {3.7.1}Actor Descriptions}{22}{subsection.3.7.1}%
+\contentsline {section}{\numberline {3.8}Smart Contract Design}{22}{section.3.8}%
+\contentsline {subsection}{\numberline {3.8.1}ProduceBatch Object Structure}{23}{subsection.3.8.1}%
+\contentsline {subsection}{\numberline {3.8.2}Entry Functions}{23}{subsection.3.8.2}%
+\contentsline {subsection}{\numberline {3.8.3}Event Emissions}{23}{subsection.3.8.3}%
+\contentsline {section}{\numberline {3.9}Predictive Analytics Engine}{24}{section.3.9}%
+\contentsline {subsection}{\numberline {3.9.1}Feature Vector Composition}{24}{subsection.3.9.1}%
+\contentsline {subsection}{\numberline {3.9.2}Weighted Moving Average Model}{24}{subsection.3.9.2}%
+\contentsline {subsection}{\numberline {3.9.3}Confidence Score}{25}{subsection.3.9.3}%
+\contentsline {subsection}{\numberline {3.9.4}Caching Strategy}{25}{subsection.3.9.4}%
+\contentsline {section}{\numberline {3.10}Security Architecture}{25}{section.3.10}%
+\contentsline {subsection}{\numberline {3.10.1}Authentication}{25}{subsection.3.10.1}%
+\contentsline {subsection}{\numberline {3.10.2}Sui Wallet Signature Verification}{25}{subsection.3.10.2}%
+\contentsline {subsection}{\numberline {3.10.3}Data Integrity Hashing}{26}{subsection.3.10.3}%
+\contentsline {subsection}{\numberline {3.10.4}Role-Based Access Control}{26}{subsection.3.10.4}%
+\contentsline {section}{\numberline {3.11}Technology Stack}{27}{section.3.11}%
+\contentsline {section}{\numberline {3.12}Development Tools}{28}{section.3.12}%
+\contentsline {section}{\numberline {3.13}Chapter Summary}{28}{section.3.13}%
+\contentsline {chapter}{\numberline {4}IMPLEMENTATION AND EVALUATION}{29}{chapter.4}%
+\contentsline {section}{\numberline {4.1}Introduction}{29}{section.4.1}%
+\contentsline {section}{\numberline {4.2}Research Results}{29}{section.4.2}%
+\contentsline {subsection}{\numberline {4.2.1}Research Objective One (1)}{29}{subsection.4.2.1}%
+\contentsline {subsection}{\numberline {4.2.2}Research Objective Two (2)}{36}{subsection.4.2.2}%
+\contentsline {subsection}{\numberline {4.2.3}Research Objective Three (3)}{37}{subsection.4.2.3}%
+\contentsline {subsection}{\numberline {4.2.4}Research Objective Four (4)}{37}{subsection.4.2.4}%
+\contentsline {section}{\numberline {4.3}Discussion of Research Findings}{40}{section.4.3}%
+\contentsline {section}{\numberline {4.4}Conclusion}{41}{section.4.4}%
+\contentsline {chapter}{\numberline {5}SUMMARY, CONCLUSION, AND RECOMMENDATIONS}{42}{chapter.5}%
+\contentsline {section}{\numberline {5.1}Introduction}{42}{section.5.1}%
+\contentsline {section}{\numberline {5.2}Summary of Findings}{42}{section.5.2}%
+\contentsline {section}{\numberline {5.3}Conclusion}{43}{section.5.3}%
+\contentsline {section}{\numberline {5.4}Recommendations for Future Work}{44}{section.5.4}%
+\contentsline {chapter}{References}{45}{chapter*.34}%
+\contentsline {chapter}{\numberline {A}CODE LISTINGS}{47}{appendix.A}%
+\contentsline {section}{\numberline {A.1}SHA-256 Data Integrity Hash Generation}{47}{appendix.A.1}%
+\contentsline {section}{\numberline {A.2}Sui Ed25519 Signature Verification}{47}{appendix.A.2}%
+\contentsline {section}{\numberline {A.3}Crop Yield Prediction Service}{48}{appendix.A.3}%

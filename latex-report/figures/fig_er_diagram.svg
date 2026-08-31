@@ -1,0 +1,207 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1100 740" width="100%" height="100%">
+  <defs>
+    <style>
+      .card-title { font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 700; fill: #ffffff; }
+      .badge-text { font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, Helvetica, Arial, sans-serif; font-size: 13px; font-weight: 700; fill: #ffffff; }
+      .tbl-hdr { font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, Helvetica, Arial, sans-serif; font-size: 12.5px; font-weight: 800; fill: #64748b; }
+      .col-pk { font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, Helvetica, Arial, sans-serif; font-size: 13px; font-weight: 800; fill: #dc2626; }
+      .col-fk { font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, Helvetica, Arial, sans-serif; font-size: 13px; font-weight: 800; fill: #2563eb; }
+      .col-name { font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, Helvetica, Arial, sans-serif; font-size: 13.5px; font-weight: 600; fill: #0f172a; }
+      .col-type { font-family: 'Consolas', 'Courier New', monospace; font-size: 13px; font-weight: 600; fill: #0284c7; }
+      .col-desc { font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, Helvetica, Arial, sans-serif; font-size: 12.5px; fill: #64748b; }
+      .rel-label { font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, Helvetica, Arial, sans-serif; font-size: 13px; font-weight: 700; }
+    </style>
+    <filter id="shadow" x="-4%" y="-2%" width="108%" height="106%" filterUnits="userSpaceOnUse">
+      <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#0f172a" flood-opacity="0.08" />
+    </filter>
+    <marker id="crow" viewBox="0 0 12 12" refX="10" refY="6" markerWidth="8" markerHeight="8" orient="auto">
+      <path d="M 0 1 L 10 6 L 0 11 M 10 0 L 10 12" fill="none" stroke="#334155" stroke-width="1.8" />
+    </marker>
+  </defs>
+
+  <!-- ==================== TABLE 1: CustomUser (Left) ==================== -->
+  <g transform="translate(10, 10)">
+    <rect width="450" height="340" rx="8" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.5" filter="url(#shadow)" />
+    <path d="M 0 8 Q 0 0 8 0 L 442 0 Q 450 0 450 8 L 450 42 L 0 42 Z" fill="#1e40af" />
+    <text x="16" y="27" class="card-title">CustomUser</text>
+    <rect x="300" y="10" width="135" height="22" rx="11" fill="#3b82f6" opacity="0.9" />
+    <text x="367" y="25" text-anchor="middle" class="badge-text">Django User Auth</text>
+    
+    <rect x="0" y="42" width="450" height="26" fill="#f1f5f9" />
+    <text x="16" y="59" class="tbl-hdr">KEY</text>
+    <text x="56" y="59" class="tbl-hdr">ATTRIBUTE</text>
+    <text x="210" y="59" class="tbl-hdr">DATA TYPE</text>
+    <text x="320" y="59" class="tbl-hdr">CONSTRAINTS</text>
+    <line x1="0" y1="68" x2="450" y2="68" stroke="#e2e8f0" stroke-width="1" />
+
+    <!-- Rows -->
+    <text x="16" y="92" class="col-pk">PK</text>
+    <text x="56" y="92" class="col-name">id</text>
+    <text x="210" y="92" class="col-type">UUID</text>
+    <text x="320" y="92" class="col-desc">Primary Key</text>
+    <line x1="16" y1="102" x2="434" y2="102" stroke="#f1f5f9" stroke-width="1" />
+
+    <text x="56" y="124" class="col-name">email</text>
+    <text x="210" y="124" class="col-type">VARCHAR(255)</text>
+    <text x="320" y="124" class="col-desc">Unique, Index</text>
+    <line x1="16" y1="134" x2="434" y2="134" stroke="#f1f5f9" stroke-width="1" />
+
+    <text x="56" y="156" class="col-name">password</text>
+    <text x="210" y="156" class="col-type">VARCHAR(255)</text>
+    <text x="320" y="156" class="col-desc">Argon2id Hash</text>
+    <line x1="16" y1="166" x2="434" y2="166" stroke="#f1f5f9" stroke-width="1" />
+
+    <text x="56" y="188" class="col-name">full_name</text>
+    <text x="210" y="188" class="col-type">VARCHAR(150)</text>
+    <text x="320" y="188" class="col-desc">User Full Name</text>
+    <line x1="16" y1="198" x2="434" y2="198" stroke="#f1f5f9" stroke-width="1" />
+
+    <text x="56" y="220" class="col-name">role</text>
+    <text x="210" y="220" class="col-type">VARCHAR(20)</text>
+    <text x="320" y="220" class="col-desc">Farmer/Logistics/Admin</text>
+    <line x1="16" y1="230" x2="434" y2="230" stroke="#f1f5f9" stroke-width="1" />
+
+    <text x="56" y="252" class="col-name">sui_public_key</text>
+    <text x="210" y="252" class="col-type">VARCHAR(66)</text>
+    <text x="320" y="252" class="col-desc">Hex Format (Nullable)</text>
+    <line x1="16" y1="262" x2="434" y2="262" stroke="#f1f5f9" stroke-width="1" />
+
+    <text x="56" y="284" class="col-name">is_active</text>
+    <text x="210" y="284" class="col-type">BOOLEAN</text>
+    <text x="320" y="284" class="col-desc">Active Status Flag</text>
+    <line x1="16" y1="294" x2="434" y2="294" stroke="#f1f5f9" stroke-width="1" />
+
+    <text x="56" y="316" class="col-name">created_at</text>
+    <text x="210" y="316" class="col-type">TIMESTAMP</text>
+    <text x="320" y="316" class="col-desc">Auto Timestamp</text>
+  </g>
+
+  <!-- ==================== TABLE 2: EnvironmentalTelemetry (Right) ==================== -->
+  <g transform="translate(630, 10)">
+    <rect width="460" height="310" rx="8" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.5" filter="url(#shadow)" />
+    <path d="M 0 8 Q 0 0 8 0 L 452 0 Q 460 0 460 8 L 460 42 L 0 42 Z" fill="#065f46" />
+    <text x="16" y="27" class="card-title">EnvironmentalTelemetry</text>
+    <rect x="310" y="10" width="135" height="22" rx="11" fill="#10b981" opacity="0.9" />
+    <text x="377" y="25" text-anchor="middle" class="badge-text">IoT Sensor Layer</text>
+    
+    <rect x="0" y="42" width="460" height="26" fill="#f1f5f9" />
+    <text x="16" y="59" class="tbl-hdr">KEY</text>
+    <text x="56" y="59" class="tbl-hdr">ATTRIBUTE</text>
+    <text x="220" y="59" class="tbl-hdr">DATA TYPE</text>
+    <text x="330" y="59" class="tbl-hdr">CONSTRAINTS</text>
+    <line x1="0" y1="68" x2="460" y2="68" stroke="#e2e8f0" stroke-width="1" />
+
+    <!-- Rows -->
+    <text x="16" y="92" class="col-pk">PK</text>
+    <text x="56" y="92" class="col-name">id</text>
+    <text x="220" y="92" class="col-type">UUID</text>
+    <text x="330" y="92" class="col-desc">Primary Key</text>
+    <line x1="16" y1="102" x2="444" y2="102" stroke="#f1f5f9" stroke-width="1" />
+
+    <text x="16" y="124" class="col-fk">FK</text>
+    <text x="56" y="124" class="col-name">farmer_id</text>
+    <text x="220" y="124" class="col-type">UUID</text>
+    <text x="330" y="124" class="col-desc">FK -> CustomUser.id</text>
+    <line x1="16" y1="134" x2="444" y2="134" stroke="#f1f5f9" stroke-width="1" />
+
+    <text x="56" y="156" class="col-name">temperature_celsius</text>
+    <text x="220" y="156" class="col-type">DECIMAL(5,2)</text>
+    <text x="330" y="156" class="col-desc">[-10, 60] °C</text>
+    <line x1="16" y1="166" x2="444" y2="166" stroke="#f1f5f9" stroke-width="1" />
+
+    <text x="56" y="188" class="col-name">soil_moisture_pct</text>
+    <text x="220" y="188" class="col-type">DECIMAL(5,2)</text>
+    <text x="330" y="188" class="col-desc">[0, 100] %</text>
+    <line x1="16" y1="198" x2="444" y2="198" stroke="#f1f5f9" stroke-width="1" />
+
+    <text x="56" y="220" class="col-name">soil_ph</text>
+    <text x="220" y="220" class="col-type">DECIMAL(4,2)</text>
+    <text x="330" y="220" class="col-desc">[0, 14] pH</text>
+    <line x1="16" y1="230" x2="444" y2="230" stroke="#f1f5f9" stroke-width="1" />
+
+    <text x="56" y="252" class="col-name">payload_sha256</text>
+    <text x="220" y="252" class="col-type">VARCHAR(64)</text>
+    <text x="330" y="252" class="col-desc">SHA-256 Digest</text>
+    <line x1="16" y1="262" x2="444" y2="262" stroke="#f1f5f9" stroke-width="1" />
+
+    <text x="56" y="284" class="col-name">recorded_at</text>
+    <text x="220" y="284" class="col-type">TIMESTAMP</text>
+    <text x="330" y="284" class="col-desc">Auto Timestamp</text>
+  </g>
+
+  <!-- ==================== TABLE 3: ProduceBatch (Center Bottom) ==================== -->
+  <g transform="translate(300, 390)">
+    <rect width="490" height="340" rx="8" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.5" filter="url(#shadow)" />
+    <path d="M 0 8 Q 0 0 8 0 L 482 0 Q 490 0 490 8 L 490 42 L 0 42 Z" fill="#581c87" />
+    <text x="16" y="27" class="card-title">ProduceBatch</text>
+    <rect x="330" y="10" width="145" height="22" rx="11" fill="#9333ea" opacity="0.9" />
+    <text x="402" y="25" text-anchor="middle" class="badge-text">Sui Blockchain Asset</text>
+    
+    <rect x="0" y="42" width="490" height="26" fill="#f1f5f9" />
+    <text x="16" y="59" class="tbl-hdr">KEY</text>
+    <text x="56" y="59" class="tbl-hdr">ATTRIBUTE</text>
+    <text x="220" y="59" class="tbl-hdr">DATA TYPE</text>
+    <text x="340" y="59" class="tbl-hdr">CONSTRAINTS</text>
+    <line x1="0" y1="68" x2="490" y2="68" stroke="#e2e8f0" stroke-width="1" />
+
+    <!-- Rows -->
+    <text x="16" y="92" class="col-pk">PK</text>
+    <text x="56" y="92" class="col-name">id</text>
+    <text x="220" y="92" class="col-type">UUID</text>
+    <text x="340" y="92" class="col-desc">Primary Key</text>
+    <line x1="16" y1="102" x2="474" y2="102" stroke="#f1f5f9" stroke-width="1" />
+
+    <text x="16" y="124" class="col-fk">FK</text>
+    <text x="56" y="124" class="col-name">farmer_id</text>
+    <text x="220" y="124" class="col-type">UUID</text>
+    <text x="340" y="124" class="col-desc">FK -> CustomUser (Origin)</text>
+    <line x1="16" y1="134" x2="474" y2="134" stroke="#f1f5f9" stroke-width="1" />
+
+    <text x="16" y="156" class="col-fk">FK</text>
+    <text x="56" y="156" class="col-name">telemetry_id</text>
+    <text x="220" y="156" class="col-type">UUID</text>
+    <text x="340" y="156" class="col-desc">FK -> Telemetry (Nullable)</text>
+    <line x1="16" y1="166" x2="474" y2="166" stroke="#f1f5f9" stroke-width="1" />
+
+    <text x="16" y="188" class="col-fk">FK</text>
+    <text x="56" y="188" class="col-name">current_custodian</text>
+    <text x="220" y="188" class="col-type">UUID</text>
+    <text x="340" y="188" class="col-desc">FK -> CustomUser (Holder)</text>
+    <line x1="16" y1="198" x2="474" y2="198" stroke="#f1f5f9" stroke-width="1" />
+
+    <text x="56" y="220" class="col-name">crop_type</text>
+    <text x="220" y="220" class="col-type">VARCHAR(100)</text>
+    <text x="340" y="220" class="col-desc">e.g., Maize, Cocoa, Soy</text>
+    <line x1="16" y1="230" x2="474" y2="230" stroke="#f1f5f9" stroke-width="1" />
+
+    <text x="56" y="252" class="col-name">weight_kg</text>
+    <text x="220" y="252" class="col-type">DECIMAL(8,2)</text>
+    <text x="340" y="252" class="col-desc">Positive Non-zero</text>
+    <line x1="16" y1="262" x2="474" y2="262" stroke="#f1f5f9" stroke-width="1" />
+
+    <text x="56" y="284" class="col-name">status</text>
+    <text x="220" y="284" class="col-type">VARCHAR(20)</text>
+    <text x="340" y="284" class="col-desc">PENDING/MINTED/TRANSIT</text>
+    <line x1="16" y1="294" x2="474" y2="294" stroke="#f1f5f9" stroke-width="1" />
+
+    <text x="56" y="316" class="col-name">sui_object_id / tx</text>
+    <text x="220" y="316" class="col-type">VARCHAR(66)</text>
+    <text x="340" y="316" class="col-desc">Sui On-Chain IDs</text>
+  </g>
+
+  <!-- ==================== RELATIONSHIPS ==================== -->
+  <!-- Rel 1: CustomUser -> EnvironmentalTelemetry -->
+  <path d="M 460 110 L 630 110" fill="none" stroke="#2563eb" stroke-width="2" stroke-dasharray="5,4" marker-end="url(#crow)" />
+  <rect x="475" y="96" width="140" height="26" rx="13" fill="#eff6ff" stroke="#3b82f6" stroke-width="1.2" />
+  <text x="545" y="113" text-anchor="middle" class="rel-label" fill="#1e40af">1 : 0..* Submits</text>
+
+  <!-- Rel 2: CustomUser -> ProduceBatch -->
+  <path d="M 200 350 L 200 560 L 300 560" fill="none" stroke="#1e40af" stroke-width="2" marker-end="url(#crow)" />
+  <rect x="110" y="547" width="175" height="26" rx="13" fill="#f8fafc" stroke="#64748b" stroke-width="1.2" />
+  <text x="197" y="564" text-anchor="middle" class="rel-label" fill="#1e293b">1 : 0..* Origin &amp; Custody</text>
+
+  <!-- Rel 3: EnvironmentalTelemetry -> ProduceBatch -->
+  <path d="M 890 320 L 890 560 L 790 560" fill="none" stroke="#059669" stroke-width="2" stroke-dasharray="5,4" marker-end="url(#crow)" />
+  <rect x="805" y="547" width="170" height="26" rx="13" fill="#ecfdf5" stroke="#10b981" stroke-width="1.2" />
+  <text x="890" y="564" text-anchor="middle" class="rel-label" fill="#065f46">0..1 : 0..* Telemetry Link</text>
+</svg>

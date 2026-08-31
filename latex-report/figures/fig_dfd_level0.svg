@@ -1,0 +1,158 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1100 700" width="100%" height="100%">
+  <defs>
+    <style>
+      .ent-title { font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, Helvetica, Arial, sans-serif; font-size: 15px; font-weight: 700; fill: #ffffff; }
+      .ent-sec { font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, Helvetica, Arial, sans-serif; font-size: 13.5px; font-weight: 700; }
+      .ent-item { font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, Helvetica, Arial, sans-serif; font-size: 13px; fill: #334155; }
+      .proc-num { font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, Helvetica, Arial, sans-serif; font-size: 20px; font-weight: 800; fill: #0284c7; }
+      .proc-title { font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 700; fill: #0f172a; }
+      .proc-sub { font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, Helvetica, Arial, sans-serif; font-size: 13px; font-weight: 600; fill: #0284c7; }
+      .pill-text { font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, Helvetica, Arial, sans-serif; font-size: 12.5px; font-weight: 700; }
+    </style>
+    <filter id="shadow" x="-4%" y="-2%" width="108%" height="106%" filterUnits="userSpaceOnUse">
+      <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#0f172a" flood-opacity="0.08" />
+    </filter>
+    <marker id="arr-green" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#059669" />
+    </marker>
+    <marker id="arr-orange" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#d97706" />
+    </marker>
+    <marker id="arr-blue" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#4338ca" />
+    </marker>
+    <marker id="arr-purple" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#7e22ce" />
+    </marker>
+  </defs>
+
+  <!-- ==================== CENTRAL PROCESS (0.0) ==================== -->
+  <g transform="translate(425, 235)">
+    <circle cx="125" cy="115" r="115" fill="#f0f9ff" stroke="#0284c7" stroke-width="3" filter="url(#shadow)" />
+    <circle cx="125" cy="115" r="105" fill="#ffffff" stroke="#bae6fd" stroke-width="1.5" />
+    <text x="125" y="78" text-anchor="middle" class="proc-num">0.0</text>
+    <line x1="65" y1="90" x2="185" y2="90" stroke="#0284c7" stroke-width="1.5" />
+    <text x="125" y="115" text-anchor="middle" class="proc-title">TerraNode</text>
+    <text x="125" y="136" text-anchor="middle" class="proc-title">Smart Agriculture</text>
+    <text x="125" y="156" text-anchor="middle" class="proc-title">System</text>
+    <text x="125" y="184" text-anchor="middle" class="proc-sub">Blockchain &amp; IoT Engine</text>
+  </g>
+
+  <!-- ==================== ENTITY 1: Farmer (Top Left) ==================== -->
+  <g transform="translate(10, 10)">
+    <rect width="360" height="295" rx="8" fill="#ffffff" stroke="#10b981" stroke-width="1.8" filter="url(#shadow)" />
+    <path d="M 0 8 Q 0 0 8 0 L 352 0 Q 360 0 360 8 L 360 38 L 0 38 Z" fill="#065f46" />
+    <text x="16" y="25" class="ent-title">External Entity: Farmer</text>
+    
+    <text x="16" y="62" class="ent-sec" fill="#065f46">DATA INPUTS TO SYSTEM (→)</text>
+    <text x="24" y="84" class="ent-item">• User Credentials &amp; Sui Wallet Signatures</text>
+    <text x="24" y="104" class="ent-item">• Telemetry Readings: Temp, Moisture, pH</text>
+    <text x="24" y="124" class="ent-item">• Produce Batch Creation: Crop Type, Weight</text>
+
+    <line x1="16" y1="138" x2="344" y2="138" stroke="#f1f5f9" stroke-width="1.5" />
+
+    <text x="16" y="162" class="ent-sec" fill="#065f46">DATA OUTPUTS FROM SYSTEM (←)</text>
+    <text x="24" y="184" class="ent-item">• JWT Auth Session Tokens</text>
+    <text x="24" y="204" class="ent-item">• SHA-256 Telemetry Hash Receipts</text>
+    <text x="24" y="224" class="ent-item">• Crop Yield Forecasts &amp; Predictive Insights</text>
+    <text x="24" y="244" class="ent-item">• Batch On-Chain Minting Confirmations</text>
+  </g>
+
+  <!-- ==================== ENTITY 2: Logistics Handler (Bottom Left) ==================== -->
+  <g transform="translate(10, 395)">
+    <rect width="360" height="295" rx="8" fill="#ffffff" stroke="#f59e0b" stroke-width="1.8" filter="url(#shadow)" />
+    <path d="M 0 8 Q 0 0 8 0 L 352 0 Q 360 0 360 8 L 360 38 L 0 38 Z" fill="#9a3412" />
+    <text x="16" y="25" class="ent-title">External Entity: Logistics Handler</text>
+    
+    <text x="16" y="62" class="ent-sec" fill="#9a3412">DATA INPUTS TO SYSTEM (→)</text>
+    <text x="24" y="84" class="ent-item">• Batch Custody Acceptance Requests</text>
+    <text x="24" y="104" class="ent-item">• Shipment Location &amp; Transit Updates</text>
+    <text x="24" y="124" class="ent-item">• Sui Wallet Transaction Signatures</text>
+
+    <line x1="16" y1="138" x2="344" y2="138" stroke="#f1f5f9" stroke-width="1.5" />
+
+    <text x="16" y="162" class="ent-sec" fill="#9a3412">DATA OUTPUTS FROM SYSTEM (←)</text>
+    <text x="24" y="184" class="ent-item">• Assigned Batch Manifests &amp; Custody</text>
+    <text x="24" y="204" class="ent-item">• Producer Origin &amp; Telemetry Baseline</text>
+    <text x="24" y="224" class="ent-item">• On-Chain Custody Transfer Receipts</text>
+  </g>
+
+  <!-- ==================== ENTITY 3: System Administrator (Top Right) ==================== -->
+  <g transform="translate(730, 10)">
+    <rect width="360" height="295" rx="8" fill="#ffffff" stroke="#6366f1" stroke-width="1.8" filter="url(#shadow)" />
+    <path d="M 0 8 Q 0 0 8 0 L 352 0 Q 360 0 360 8 L 360 38 L 0 38 Z" fill="#3730a3" />
+    <text x="16" y="25" class="ent-title">External Entity: System Administrator</text>
+    
+    <text x="16" y="62" class="ent-sec" fill="#3730a3">DATA INPUTS TO SYSTEM (→)</text>
+    <text x="24" y="84" class="ent-item">• User Governance &amp; Role Assignments</text>
+    <text x="24" y="104" class="ent-item">• System Configuration &amp; Policy Rules</text>
+    <text x="24" y="124" class="ent-item">• Cache Clearing &amp; Sync Triggers</text>
+
+    <line x1="16" y1="138" x2="344" y2="138" stroke="#f1f5f9" stroke-width="1.5" />
+
+    <text x="16" y="162" class="ent-sec" fill="#3730a3">DATA OUTPUTS FROM SYSTEM (←)</text>
+    <text x="24" y="184" class="ent-item">• Cryptographic Audit Trail Logs</text>
+    <text x="24" y="204" class="ent-item">• Health, Latency &amp; Error Metrics</text>
+    <text x="24" y="224" class="ent-item">• Aggregated Telemetry Summaries</text>
+  </g>
+
+  <!-- ==================== ENTITY 4: Sui Blockchain (Bottom Right) ==================== -->
+  <g transform="translate(730, 395)">
+    <rect width="360" height="295" rx="8" fill="#ffffff" stroke="#a855f7" stroke-width="1.8" filter="url(#shadow)" />
+    <path d="M 0 8 Q 0 0 8 0 L 352 0 Q 360 0 360 8 L 360 38 L 0 38 Z" fill="#581c87" />
+    <text x="16" y="25" class="ent-title">External Entity: Sui Blockchain Network</text>
+    
+    <text x="16" y="62" class="ent-sec" fill="#581c87">DATA INPUTS TO LEDGER (→)</text>
+    <text x="24" y="84" class="ent-item">• Move: `mint_batch(crop, wt, hash)`</text>
+    <text x="24" y="104" class="ent-item">• Move: `transfer_custody(batch, to)`</text>
+    <text x="24" y="124" class="ent-item">• Ed25519 Message Intent Verifications</text>
+
+    <line x1="16" y1="138" x2="344" y2="138" stroke="#f1f5f9" stroke-width="1.5" />
+
+    <text x="16" y="162" class="ent-sec" fill="#581c87">DATA OUTPUTS FROM LEDGER (←)</text>
+    <text x="24" y="184" class="ent-item">• Immutable Sui Object IDs (66-char hex)</text>
+    <text x="24" y="204" class="ent-item">• Transaction Digests &amp; Execution Gas</text>
+    <text x="24" y="224" class="ent-item">• On-Chain Event Streams (`BatchMinted`)</text>
+  </g>
+
+  <!-- ==================== FLOW CONNECTIONS ==================== -->
+  <!-- Farmer -> Center -->
+  <path d="M 370 120 Q 430 140 455 245" fill="none" stroke="#059669" stroke-width="2" marker-end="url(#arr-green)" />
+  <rect x="375" y="140" width="115" height="24" rx="6" fill="#ecfdf5" stroke="#10b981" stroke-width="1" />
+  <text x="432" y="156" text-anchor="middle" class="pill-text" fill="#065f46">Telemetry &amp; Batches</text>
+
+  <!-- Center -> Farmer -->
+  <path d="M 445 285 Q 410 240 370 240" fill="none" stroke="#059669" stroke-width="2" stroke-dasharray="5,4" marker-end="url(#arr-green)" />
+  <rect x="375" y="248" width="115" height="24" rx="6" fill="#ecfdf5" stroke="#10b981" stroke-width="1" />
+  <text x="432" y="264" text-anchor="middle" class="pill-text" fill="#065f46">Forecasts &amp; Tokens</text>
+
+  <!-- Logistics -> Center -->
+  <path d="M 370 480 Q 420 460 460 415" fill="none" stroke="#d97706" stroke-width="2" marker-end="url(#arr-orange)" />
+  <rect x="375" y="445" width="125" height="24" rx="6" fill="#fffbeb" stroke="#f59e0b" stroke-width="1" />
+  <text x="437" y="461" text-anchor="middle" class="pill-text" fill="#9a3412">Custody Status</text>
+
+  <!-- Center -> Logistics -->
+  <path d="M 445 440 Q 400 520 370 560" fill="none" stroke="#d97706" stroke-width="2" stroke-dasharray="5,4" marker-end="url(#arr-orange)" />
+  <rect x="375" y="535" width="125" height="24" rx="6" fill="#fffbeb" stroke="#f59e0b" stroke-width="1" />
+  <text x="437" y="551" text-anchor="middle" class="pill-text" fill="#9a3412">Manifests &amp; Proof</text>
+
+  <!-- Admin -> Center -->
+  <path d="M 730 120 Q 670 140 645 245" fill="none" stroke="#4338ca" stroke-width="2" marker-end="url(#arr-blue)" />
+  <rect x="610" y="140" width="120" height="24" rx="6" fill="#e0e7ff" stroke="#6366f1" stroke-width="1" />
+  <text x="670" y="156" text-anchor="middle" class="pill-text" fill="#3730a3">Governance Cmds</text>
+
+  <!-- Center -> Admin -->
+  <path d="M 655 285 Q 690 240 730 240" fill="none" stroke="#4338ca" stroke-width="2" stroke-dasharray="5,4" marker-end="url(#arr-blue)" />
+  <rect x="610" y="248" width="120" height="24" rx="6" fill="#e0e7ff" stroke="#6366f1" stroke-width="1" />
+  <text x="670" y="264" text-anchor="middle" class="pill-text" fill="#3730a3">Audit Logs &amp; Metrics</text>
+
+  <!-- Center -> Sui -->
+  <path d="M 640 415 Q 680 460 730 480" fill="none" stroke="#7e22ce" stroke-width="2" marker-end="url(#arr-purple)" />
+  <rect x="600" y="445" width="130" height="24" rx="6" fill="#f3e8ff" stroke="#a855f7" stroke-width="1" />
+  <text x="665" y="461" text-anchor="middle" class="pill-text" fill="#581c87">Move Contract Calls</text>
+
+  <!-- Sui -> Center -->
+  <path d="M 730 560 Q 700 520 655 440" fill="none" stroke="#7e22ce" stroke-width="2" stroke-dasharray="5,4" marker-end="url(#arr-purple)" />
+  <rect x="600" y="535" width="130" height="24" rx="6" fill="#f3e8ff" stroke="#a855f7" stroke-width="1" />
+  <text x="665" y="551" text-anchor="middle" class="pill-text" fill="#581c87">Object IDs &amp; Tx Data</text>
+</svg>

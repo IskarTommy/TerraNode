@@ -1,0 +1,159 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1240 670" width="100%" height="100%">
+  <defs>
+    <style>
+      .pillar-hdr { font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, Helvetica, Arial, sans-serif; font-size: 18px; font-weight: 700; fill: #ffffff; }
+      .block-title { font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 700; }
+      .bullet-title { font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, Helvetica, Arial, sans-serif; font-size: 14.5px; font-weight: 700; fill: #1e293b; }
+      .bullet-text { font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, Helvetica, Arial, sans-serif; font-size: 14px; fill: #334155; }
+    </style>
+    <filter id="shadow" x="-4%" y="-2%" width="108%" height="106%" filterUnits="userSpaceOnUse">
+      <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#0f172a" flood-opacity="0.08" />
+    </filter>
+    <marker id="arr-blue" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#2563eb" />
+    </marker>
+    <marker id="arr-green" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#059669" />
+    </marker>
+  </defs>
+
+  <!-- ==================== PILLAR 1: Theoretical Foundations (Left) ==================== -->
+  <g transform="translate(10, 10)">
+    <rect width="365" height="650" rx="10" fill="#f8fafc" stroke="#93c5fd" stroke-width="1.8" filter="url(#shadow)" />
+    <path d="M 0 10 Q 0 0 10 0 L 355 0 Q 365 0 365 10 L 365 48 L 0 48 Z" fill="#1e40af" />
+    <text x="20" y="31" class="pillar-hdr">1. Theoretical Foundations</text>
+
+    <!-- Card 1: TAM Model -->
+    <g transform="translate(15, 62)">
+      <rect width="335" height="265" rx="8" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.2" />
+      <path d="M 0 8 Q 0 0 8 0 L 327 0 Q 335 0 335 8 L 335 36 L 0 36 Z" fill="#eff6ff" />
+      <text x="14" y="24" class="block-title" fill="#1e40af">Technology Acceptance Model (TAM)</text>
+      
+      <circle cx="18" cy="58" r="4.5" fill="#2563eb" />
+      <text x="30" y="62" class="bullet-title">Perceived Usefulness (PU):</text>
+      <text x="30" y="82" class="bullet-text">Provides verifiable crop provenance,</text>
+      <text x="30" y="102" class="bullet-text">tamper-proof telemetry, and predictive</text>
+      <text x="30" y="122" class="bullet-text">yield insights to optimize harvest returns.</text>
+
+      <circle cx="18" cy="154" r="4.5" fill="#2563eb" />
+      <text x="30" y="158" class="bullet-title">Perceived Ease of Use (PEOU):</text>
+      <text x="30" y="178" class="bullet-text">Single-page React interface, intuitive</text>
+      <text x="30" y="198" class="bullet-text">role-based dashboards, and seamless</text>
+      <text x="30" y="218" class="bullet-text">Sui wallet 1-click transaction signing.</text>
+    </g>
+
+    <!-- Card 2: DeLone & McLean Model -->
+    <g transform="translate(15, 342)">
+      <rect width="335" height="292" rx="8" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.2" />
+      <path d="M 0 8 Q 0 0 8 0 L 327 0 Q 335 0 335 8 L 335 36 L 0 36 Z" fill="#eff6ff" />
+      <text x="14" y="24" class="block-title" fill="#1e40af">DeLone &amp; McLean IS Success Model</text>
+      
+      <circle cx="18" cy="58" r="4.5" fill="#2563eb" />
+      <text x="30" y="62" class="bullet-title">Information Quality:</text>
+      <text x="30" y="82" class="bullet-text">Accurate, timely sensor records secured</text>
+      <text x="30" y="102" class="bullet-text">by SHA-256 cryptographic hashes.</text>
+
+      <circle cx="18" cy="132" r="4.5" fill="#2563eb" />
+      <text x="30" y="136" class="bullet-title">System Quality:</text>
+      <text x="30" y="156" class="bullet-text">High-throughput Django REST API,</text>
+      <text x="30" y="176" class="bullet-text">Redis caching, and Sui Move contracts.</text>
+
+      <circle cx="18" cy="208" r="4.5" fill="#2563eb" />
+      <text x="30" y="212" class="bullet-title">Service Quality:</text>
+      <text x="30" y="232" class="bullet-text">RoleGuard RBAC, real-time telemetry</text>
+      <text x="30" y="252" class="bullet-text">alerts, and dual-mode authentication.</text>
+    </g>
+  </g>
+
+  <!-- Connector 1 -> 2 -->
+  <line x1="375" y1="335" x2="435" y2="335" stroke="#2563eb" stroke-width="3" marker-end="url(#arr-blue)" />
+
+  <!-- ==================== PILLAR 2: TerraNode Architecture (Center) ==================== -->
+  <g transform="translate(445, 10)">
+    <rect width="380" height="650" rx="10" fill="#f8fafc" stroke="#86efac" stroke-width="1.8" filter="url(#shadow)" />
+    <path d="M 0 10 Q 0 0 10 0 L 370 0 Q 380 0 380 10 L 380 48 L 0 48 Z" fill="#065f46" />
+    <text x="20" y="31" class="pillar-hdr">2. TerraNode System Architecture</text>
+
+    <!-- Card 1: Info Quality -->
+    <g transform="translate(15, 62)">
+      <rect width="350" height="132" rx="8" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.2" />
+      <text x="16" y="26" class="block-title" fill="#065f46">Information Quality &amp; Cryptography</text>
+      <text x="16" y="52" class="bullet-text">• Deterministic SHA-256 payload hashing</text>
+      <text x="16" y="74" class="bullet-text">• Immutable on-chain batch state binding</text>
+      <text x="16" y="96" class="bullet-text">• Verifiable provenance chain from seed</text>
+    </g>
+
+    <!-- Card 2: System Quality -->
+    <g transform="translate(15, 206)">
+      <rect width="350" height="132" rx="8" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.2" />
+      <text x="16" y="26" class="block-title" fill="#065f46">System Quality &amp; 3-Tier Modularity</text>
+      <text x="16" y="52" class="bullet-text">• React 19 SPA + Mysten Sui dApp Kit</text>
+      <text x="16" y="74" class="bullet-text">• Django 5.1 REST API + PostgreSQL backend</text>
+      <text x="16" y="96" class="bullet-text">• Move smart contracts on Sui Testnet</text>
+    </g>
+
+    <!-- Card 3: Service Quality -->
+    <g transform="translate(15, 350)">
+      <rect width="350" height="132" rx="8" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.2" />
+      <text x="16" y="26" class="block-title" fill="#065f46">Service Quality &amp; Dual Security</text>
+      <text x="16" y="52" class="bullet-text">• RoleGuard RBAC (Farmer, Logistics, Admin)</text>
+      <text x="16" y="74" class="bullet-text">• Dual Auth: SimpleJWT + Sui Ed25519</text>
+      <text x="16" y="96" class="bullet-text">• End-to-end cryptographic audit logging</text>
+    </g>
+
+    <!-- Card 4: Predictive Engine -->
+    <g transform="translate(15, 494)">
+      <rect width="350" height="140" rx="8" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.2" />
+      <text x="16" y="26" class="block-title" fill="#065f46">Predictive Analytics Engine</text>
+      <text x="16" y="52" class="bullet-text">• Weighted Moving Average (WMA) forecasts</text>
+      <text x="16" y="74" class="bullet-text">• Temperature &amp; soil moisture evaluation</text>
+      <text x="16" y="96" class="bullet-text">• Redis high-speed caching (600s TTL)</text>
+    </g>
+  </g>
+
+  <!-- Connector 2 -> 3 -->
+  <line x1="825" y1="335" x2="885" y2="335" stroke="#059669" stroke-width="3" marker-end="url(#arr-green)" />
+
+  <!-- ==================== PILLAR 3: Net Benefits (Right) ==================== -->
+  <g transform="translate(895, 10)">
+    <rect width="335" height="650" rx="10" fill="#f8fafc" stroke="#fdba74" stroke-width="1.8" filter="url(#shadow)" />
+    <path d="M 0 10 Q 0 0 10 0 L 325 0 Q 335 0 335 10 L 335 48 L 0 48 Z" fill="#9a3412" />
+    <text x="20" y="31" class="pillar-hdr">3. Net Benefits &amp; Outcomes</text>
+
+    <!-- Card 1: Tamper-Proof Audit -->
+    <g transform="translate(15, 62)">
+      <rect width="305" height="132" rx="8" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.2" />
+      <text x="14" y="26" class="block-title" fill="#9a3412">Tamper-Proof Audit Trail</text>
+      <text x="14" y="52" class="bullet-text">• Elimination of record fraud</text>
+      <text x="14" y="74" class="bullet-text">• Unalterable history of IoT sensors</text>
+      <text x="14" y="96" class="bullet-text">• Verifiable proof of crop quality</text>
+    </g>
+
+    <!-- Card 2: Farmer Protection -->
+    <g transform="translate(15, 206)">
+      <rect width="305" height="132" rx="8" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.2" />
+      <text x="14" y="26" class="block-title" fill="#9a3412">Farmer Protection &amp; Fair Trade</text>
+      <text x="14" y="52" class="bullet-text">• Non-repudiable origin proof</text>
+      <text x="14" y="74" class="bullet-text">• Protection against predatory pricing</text>
+      <text x="14" y="96" class="bullet-text">• Verified batch weight and custody</text>
+    </g>
+
+    <!-- Card 3: Climate Adaptive -->
+    <g transform="translate(15, 350)">
+      <rect width="305" height="132" rx="8" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.2" />
+      <text x="14" y="26" class="block-title" fill="#9a3412">Climate-Adaptive Decisions</text>
+      <text x="14" y="52" class="bullet-text">• Actionable irrigation &amp; pH guidance</text>
+      <text x="14" y="74" class="bullet-text">• Proactive harvest volume forecasts</text>
+      <text x="14" y="96" class="bullet-text">• Reduction in post-harvest losses</text>
+    </g>
+
+    <!-- Card 4: Supply Chain Transparency -->
+    <g transform="translate(15, 494)">
+      <rect width="305" height="140" rx="8" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.2" />
+      <text x="14" y="26" class="block-title" fill="#9a3412">Transparent Supply Chain</text>
+      <text x="14" y="52" class="bullet-text">• End-to-end custody verification</text>
+      <text x="14" y="74" class="bullet-text">• Instant on-chain state transition</text>
+      <text x="14" y="96" class="bullet-text">• Full consumer traceability</text>
+    </g>
+  </g>
+</svg>

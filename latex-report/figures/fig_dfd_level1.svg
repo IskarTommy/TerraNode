@@ -1,0 +1,164 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1140 760" width="100%" height="100%">
+  <defs>
+    <style>
+      .proc-num { font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, Helvetica, Arial, sans-serif; font-size: 15px; font-weight: 800; fill: #ffffff; }
+      .proc-title { font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, Helvetica, Arial, sans-serif; font-size: 15px; font-weight: 700; fill: #ffffff; }
+      .proc-desc { font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, Helvetica, Arial, sans-serif; font-size: 13.5px; fill: #334155; }
+      .ds-title { font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, Helvetica, Arial, sans-serif; font-size: 14.5px; font-weight: 700; fill: #1e293b; }
+      .ds-desc { font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, Helvetica, Arial, sans-serif; font-size: 13px; fill: #475569; }
+      .ent-title { font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, Helvetica, Arial, sans-serif; font-size: 14px; font-weight: 700; fill: #ffffff; }
+      .ent-sub { font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, Helvetica, Arial, sans-serif; font-size: 12.5px; fill: #475569; }
+      .flow-label { font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, Helvetica, Arial, sans-serif; font-size: 12px; font-weight: 700; fill: #1e40af; }
+    </style>
+    <filter id="shadow" x="-4%" y="-2%" width="108%" height="106%" filterUnits="userSpaceOnUse">
+      <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#0f172a" flood-opacity="0.08" />
+    </filter>
+    <marker id="arr-gray" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#475569" />
+    </marker>
+    <marker id="arr-blue" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#0284c7" />
+    </marker>
+    <marker id="arr-green" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#059669" />
+    </marker>
+    <marker id="arr-purple" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#7e22ce" />
+    </marker>
+    <marker id="arr-red" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#dc2626" />
+    </marker>
+  </defs>
+
+  <!-- ==================== COLUMN 1: TELEMETRY & POSTGRESQL (LEFT) ==================== -->
+  <!-- Entity: Farmer -->
+  <g transform="translate(10, 10)">
+    <rect width="330" height="65" rx="6" fill="#ffffff" stroke="#10b981" stroke-width="1.8" filter="url(#shadow)" />
+    <path d="M 0 6 Q 0 0 6 0 L 324 0 Q 330 0 330 6 L 330 26 L 0 26 Z" fill="#065f46" />
+    <text x="165" y="18" text-anchor="middle" class="ent-title">External Entity: Farmer (Producer)</text>
+    <text x="165" y="48" text-anchor="middle" class="ent-sub">Submits Sensor Readings &amp; Prepares Batches</text>
+  </g>
+
+  <!-- Process 2.0: Environmental Telemetry -->
+  <g transform="translate(10, 150)">
+    <rect width="330" height="175" rx="8" fill="#ffffff" stroke="#10b981" stroke-width="1.5" filter="url(#shadow)" />
+    <path d="M 0 8 Q 0 0 8 0 L 322 0 Q 330 0 330 8 L 330 34 L 0 34 Z" fill="#065f46" />
+    <text x="14" y="23" class="proc-num">2.0</text>
+    <text x="46" y="23" class="proc-title">Environmental Telemetry Module</text>
+    <text x="16" y="58" class="proc-desc">• Ingests sensor data: Temp, Moisture, pH</text>
+    <text x="16" y="82" class="proc-desc">• Range boundary validation: [-10,60], [0,100]</text>
+    <text x="16" y="106" class="proc-desc">• Deterministic SHA-256 hash receipt</text>
+    <text x="16" y="130" class="proc-desc">• Persists timestamped DB records</text>
+  </g>
+
+  <!-- Data Store D1: PostgreSQL Database -->
+  <g transform="translate(10, 480)">
+    <rect width="330" height="115" rx="6" fill="#f8fafc" stroke="#334155" stroke-width="1.5" filter="url(#shadow)" />
+    <rect x="0" y="0" width="6" height="115" fill="#0284c7" rx="3" />
+    <text x="20" y="32" class="ds-title">D1: PostgreSQL Database</text>
+    <text x="20" y="58" class="ds-desc">• User accounts &amp; Argon2id password hashes</text>
+    <text x="20" y="82" class="ds-desc">• Sensor telemetry records &amp; SHA-256 hashes</text>
+    <text x="20" y="102" class="ds-desc">• Relational produce batch lifecycle states</text>
+  </g>
+
+  <!-- Column 1 Flow: Farmer -> 2.0 -> D1 (Direct Vertical) -->
+  <line x1="175" y1="75" x2="175" y2="150" stroke="#059669" stroke-width="2" marker-end="url(#arr-green)" />
+  <line x1="175" y1="325" x2="175" y2="480" stroke="#059669" stroke-width="2.5" marker-end="url(#arr-green)" />
+
+  <!-- ==================== COLUMN 2: AUTH & ANALYTICS (CENTER) ==================== -->
+  <!-- Process 1.0: Auth & Session Module -->
+  <g transform="translate(400, 10)">
+    <rect width="330" height="175" rx="8" fill="#ffffff" stroke="#0284c7" stroke-width="1.5" filter="url(#shadow)" />
+    <path d="M 0 8 Q 0 0 8 0 L 322 0 Q 330 0 330 8 L 330 34 L 0 34 Z" fill="#0284c7" />
+    <text x="14" y="23" class="proc-num">1.0</text>
+    <text x="46" y="23" class="proc-title">Authentication &amp; Session Module</text>
+    <text x="16" y="58" class="proc-desc">• Credential check via Argon2id hash</text>
+    <text x="16" y="82" class="proc-desc">• Sui Ed25519 wallet message verify</text>
+    <text x="16" y="106" class="proc-desc">• 15-min JWT access &amp; refresh tokens</text>
+    <text x="16" y="130" class="proc-desc">• RoleGuard RBAC authorization</text>
+  </g>
+
+  <!-- Process 4.0: Predictive Analytics Engine -->
+  <g transform="translate(400, 240)">
+    <rect width="330" height="175" rx="8" fill="#ffffff" stroke="#d97706" stroke-width="1.5" filter="url(#shadow)" />
+    <path d="M 0 8 Q 0 0 8 0 L 322 0 Q 330 0 330 8 L 330 34 L 0 34 Z" fill="#9a3412" />
+    <text x="14" y="23" class="proc-num">4.0</text>
+    <text x="46" y="23" class="proc-title">Predictive Analytics Engine</text>
+    <text x="16" y="58" class="proc-desc">• Queries 90-record telemetry window</text>
+    <text x="16" y="82" class="proc-desc">• WMA formula &amp; baseline metrics</text>
+    <text x="16" y="106" class="proc-desc">• Calculates prediction confidence C</text>
+    <text x="16" y="130" class="proc-desc">• Redis 600s TTL cache management</text>
+  </g>
+
+  <!-- Data Store D2: Redis High-Speed Cache -->
+  <g transform="translate(400, 480)">
+    <rect width="330" height="115" rx="6" fill="#f8fafc" stroke="#334155" stroke-width="1.5" filter="url(#shadow)" />
+    <rect x="0" y="0" width="6" height="115" fill="#ef4444" rx="3" />
+    <text x="20" y="32" class="ds-title">D2: Redis High-Speed Cache</text>
+    <text x="20" y="58" class="ds-desc">• 600s TTL Predictive Yield Analytics</text>
+    <text x="20" y="82" class="ds-desc">• Rate limiting counters &amp; session states</text>
+    <text x="20" y="102" class="ds-desc">• Fast low-latency sub-millisecond retrieval</text>
+  </g>
+
+  <!-- Column 2 Flow: 4.0 -> D2 (Direct Vertical) -->
+  <line x1="565" y1="415" x2="565" y2="480" stroke="#dc2626" stroke-width="2.5" marker-end="url(#arr-red)" />
+
+  <!-- ==================== COLUMN 3: BLOCKCHAIN LEDGER & SUPPLY CHAIN (RIGHT) ==================== -->
+  <!-- Entity: Logistics Handler -->
+  <g transform="translate(790, 10)">
+    <rect width="330" height="65" rx="6" fill="#ffffff" stroke="#f59e0b" stroke-width="1.8" filter="url(#shadow)" />
+    <path d="M 0 6 Q 0 0 6 0 L 324 0 Q 330 0 330 6 L 330 26 L 0 26 Z" fill="#9a3412" />
+    <text x="165" y="18" text-anchor="middle" class="ent-title">External Entity: Logistics Handler</text>
+    <text x="165" y="48" text-anchor="middle" class="ent-sub">Custody Transfers &amp; Transit Status</text>
+  </g>
+
+  <!-- Process 3.0: Blockchain Ledger & Batch -->
+  <g transform="translate(790, 150)">
+    <rect width="330" height="175" rx="8" fill="#ffffff" stroke="#a855f7" stroke-width="1.5" filter="url(#shadow)" />
+    <path d="M 0 8 Q 0 0 8 0 L 322 0 Q 330 0 330 8 L 330 34 L 0 34 Z" fill="#581c87" />
+    <text x="14" y="23" class="proc-num">3.0</text>
+    <text x="46" y="23" class="proc-title">Blockchain Ledger &amp; Batch Module</text>
+    <text x="16" y="58" class="proc-desc">• Prepares batch creation payload &amp; hash</text>
+    <text x="16" y="82" class="proc-desc">• Coordinates Sui Move transaction</text>
+    <text x="16" y="106" class="proc-desc">• Manages custody transitions &amp; status</text>
+    <text x="16" y="130" class="proc-desc">• Binds Sui Object ID &amp; Tx Digest</text>
+  </g>
+
+  <!-- Data Store D3: Sui Testnet Blockchain -->
+  <g transform="translate(790, 480)">
+    <rect width="330" height="115" rx="6" fill="#f8fafc" stroke="#334155" stroke-width="1.5" filter="url(#shadow)" />
+    <rect x="0" y="0" width="6" height="115" fill="#a855f7" rx="3" />
+    <text x="20" y="32" class="ds-title">D3: Sui Testnet Blockchain</text>
+    <text x="20" y="58" class="ds-desc">• On-chain Move ProduceBatch Objects</text>
+    <text x="20" y="82" class="ds-desc">• Immutable Custody Transfer Events</text>
+    <text x="20" y="102" class="ds-desc">• Cryptographic SHA-256 integrity binding</text>
+  </g>
+
+  <!-- Entity: Sui Network -->
+  <g transform="translate(790, 660)">
+    <rect width="330" height="60" rx="6" fill="#ffffff" stroke="#a855f7" stroke-width="1.8" filter="url(#shadow)" />
+    <path d="M 0 6 Q 0 0 6 0 L 324 0 Q 330 0 330 6 L 330 24 L 0 24 Z" fill="#581c87" />
+    <text x="165" y="16" text-anchor="middle" class="ent-title">External: Sui Blockchain Network</text>
+    <text x="165" y="44" text-anchor="middle" class="ent-sub">Move Smart Contract RPC Execution</text>
+  </g>
+
+  <!-- Column 3 Flow: Logistics -> 3.0 -> D3 -> Network (Direct Vertical) -->
+  <line x1="955" y1="75" x2="955" y2="150" stroke="#d97706" stroke-width="2" marker-end="url(#arr-gray)" />
+  <line x1="955" y1="325" x2="955" y2="480" stroke="#7e22ce" stroke-width="2.5" marker-end="url(#arr-purple)" />
+  <line x1="955" y1="595" x2="955" y2="660" stroke="#7e22ce" stroke-width="2" marker-end="url(#arr-purple)" />
+
+  <!-- ==================== CROSS-COLUMN DATA FLOWS (CLEAN HORIZONTAL RUNS) ==================== -->
+  
+  <!-- Flow 1: 1.0 (Auth) -> D1 (User Accounts) [Exits bottom-left of 1.0 into top of D1] -->
+  <path d="M 400 95 L 360 95 L 360 460 L 260 460 L 260 480" fill="none" stroke="#0284c7" stroke-width="1.8" stroke-dasharray="4,3" marker-end="url(#arr-blue)" />
+
+  <!-- Flow 2: 4.0 (Analytics) -> D1 (Query 90 records) [Direct horizontal left into D1] -->
+  <path d="M 400 325 L 350 325 L 350 510 L 340 510" fill="none" stroke="#d97706" stroke-width="1.8" stroke-dasharray="4,3" marker-end="url(#arr-gray)" />
+
+  <!-- Flow 3: 3.0 (Ledger) -> D1 (Mirror Batch State) [Runs in open channel y=440 into D1] -->
+  <path d="M 790 310 L 750 310 L 750 440 L 300 440 L 300 480" fill="none" stroke="#7e22ce" stroke-width="1.8" stroke-dasharray="4,3" marker-end="url(#arr-purple)" />
+
+  <!-- Flow 4: Farmer -> 1.0 (Auth Login) [Top horizontal] -->
+  <line x1="340" y1="45" x2="400" y2="45" stroke="#2563eb" stroke-width="2" marker-end="url(#arr-blue)" />
+
+</svg>

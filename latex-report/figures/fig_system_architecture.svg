@@ -1,0 +1,165 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1100 860" width="100%" height="100%">
+  <defs>
+    <style>
+      .tier-hdr { font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 700; fill: #ffffff; }
+      .card-hdr { font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, Helvetica, Arial, sans-serif; font-size: 15px; font-weight: 700; fill: #0f172a; }
+      .card-body { font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, Helvetica, Arial, sans-serif; font-size: 13.5px; fill: #334155; }
+      .badge-text { font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, Helvetica, Arial, sans-serif; font-size: 13px; font-weight: 700; fill: #ffffff; }
+      .protocol-lbl { font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, Helvetica, Arial, sans-serif; font-size: 13px; font-weight: 700; fill: #1e40af; }
+    </style>
+    <filter id="shadow" x="-4%" y="-2%" width="108%" height="106%" filterUnits="userSpaceOnUse">
+      <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#0f172a" flood-opacity="0.08" />
+    </filter>
+    <marker id="arr-down" viewBox="0 0 10 10" refX="5" refY="6" markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M 1 0 L 5 10 L 9 0 z" fill="#2563eb" />
+    </marker>
+  </defs>
+
+  <!-- ==================== TIER 1: Client & Actor Layer ==================== -->
+  <g transform="translate(10, 10)">
+    <rect width="1080" height="175" rx="10" fill="#f8fafc" stroke="#93c5fd" stroke-width="1.8" filter="url(#shadow)" />
+    <path d="M 0 10 Q 0 0 10 0 L 1070 0 Q 1080 0 1080 10 L 1080 40 L 0 40 Z" fill="#1e40af" />
+    <text x="20" y="26" class="tier-hdr">Layer 1: User &amp; Client Tier</text>
+
+    <!-- Card 1: Farmer -->
+    <g transform="translate(20, 52)">
+      <rect width="320" height="105" rx="8" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.2" />
+      <text x="16" y="26" class="card-hdr" fill="#065f46">🌾 Farmer (Producer)</text>
+      <text x="16" y="52" class="card-body">• Submits IoT Telemetry Readings</text>
+      <text x="16" y="74" class="card-body">• Mints &amp; Originates Produce Batches</text>
+      <text x="16" y="96" class="card-body">• Inspects Predictive Yield Analytics</text>
+    </g>
+
+    <!-- Card 2: Logistics -->
+    <g transform="translate(370, 52)">
+      <rect width="320" height="105" rx="8" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.2" />
+      <text x="16" y="26" class="card-hdr" fill="#9a3412">🚚 Logistics Handler</text>
+      <text x="16" y="52" class="card-body">• Verifies Provenance &amp; Telemetry</text>
+      <text x="16" y="74" class="card-body">• Signs On-Chain Custody Transfers</text>
+      <text x="16" y="96" class="card-body">• Updates Transit &amp; Delivery Status</text>
+    </g>
+
+    <!-- Card 3: Wallet -->
+    <g transform="translate(720, 52)">
+      <rect width="340" height="105" rx="8" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.2" />
+      <text x="16" y="26" class="card-hdr" fill="#581c87">🔑 Sui Wallet Extension</text>
+      <text x="16" y="52" class="card-body">• Ed25519 Cryptographic Signatures</text>
+      <text x="16" y="74" class="card-body">• Gas Fee Sponsoring &amp; Approvals</text>
+      <text x="16" y="96" class="card-body">• Direct Testnet Blockchain Sign-In</text>
+    </g>
+  </g>
+
+  <!-- Flow 1 -> 2 -->
+  <line x1="550" y1="185" x2="550" y2="225" stroke="#2563eb" stroke-width="2.5" marker-end="url(#arr-down)" />
+  <rect x="470" y="195" width="160" height="24" rx="12" fill="#eff6ff" stroke="#3b82f6" stroke-width="1" />
+  <text x="550" y="212" text-anchor="middle" class="protocol-lbl">HTTPS / TLS 1.3</text>
+
+  <!-- ==================== TIER 2: Presentation Layer ==================== -->
+  <g transform="translate(10, 230)">
+    <rect width="1080" height="185" rx="10" fill="#f8fafc" stroke="#86efac" stroke-width="1.8" filter="url(#shadow)" />
+    <path d="M 0 10 Q 0 0 10 0 L 1070 0 Q 1080 0 1080 10 L 1080 40 L 0 40 Z" fill="#065f46" />
+    <text x="20" y="26" class="tier-hdr">Layer 2: Presentation Tier (React 19 SPA + Mysten Sui dApp Kit)</text>
+
+    <!-- Module 1 -->
+    <g transform="translate(20, 52)">
+      <rect width="320" height="115" rx="8" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.2" />
+      <text x="16" y="26" class="card-hdr" fill="#065f46">User Experience &amp; Views</text>
+      <text x="16" y="52" class="card-body">• Farmer &amp; Logistics Dashboards</text>
+      <text x="16" y="74" class="card-body">• Batch Minting &amp; Custody Views</text>
+      <text x="16" y="96" class="card-body">• Real-Time Yield &amp; Weather Alerts</text>
+    </g>
+
+    <!-- Module 2 -->
+    <g transform="translate(370, 52)">
+      <rect width="320" height="115" rx="8" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.2" />
+      <text x="16" y="26" class="card-hdr" fill="#065f46">State &amp; Context Services</text>
+      <text x="16" y="52" class="card-body">• AuthContext (JWT &amp; Auto-Refresh)</text>
+      <text x="16" y="74" class="card-body">• Axios Interceptors &amp; RoleGuards</text>
+      <text x="16" y="96" class="card-body">• Lucide Icons &amp; Tailwind Styling</text>
+    </g>
+
+    <!-- Module 3 -->
+    <g transform="translate(720, 52)">
+      <rect width="340" height="115" rx="8" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.2" />
+      <text x="16" y="26" class="card-hdr" fill="#581c87">Sui dApp Kit Integration</text>
+      <text x="16" y="52" class="card-body">• SuiClientProvider (Testnet RPC)</text>
+      <text x="16" y="74" class="card-body">• useSignAndExecuteTransaction</text>
+      <text x="16" y="96" class="card-body">• Move Call Payload Formatting</text>
+    </g>
+  </g>
+
+  <!-- Flow 2 -> 3 -->
+  <line x1="550" y1="415" x2="550" y2="455" stroke="#2563eb" stroke-width="2.5" marker-end="url(#arr-down)" />
+  <rect x="440" y="425" width="220" height="24" rx="12" fill="#eff6ff" stroke="#3b82f6" stroke-width="1" />
+  <text x="550" y="442" text-anchor="middle" class="protocol-lbl">REST API / JSON / PyNaCl</text>
+
+  <!-- ==================== TIER 3: Backend & Business Logic Layer ==================== -->
+  <g transform="translate(10, 460)">
+    <rect width="1080" height="185" rx="10" fill="#f8fafc" stroke="#fed7aa" stroke-width="1.8" filter="url(#shadow)" />
+    <path d="M 0 10 Q 0 0 10 0 L 1070 0 Q 1080 0 1080 10 L 1080 40 L 0 40 Z" fill="#9a3412" />
+    <text x="20" y="26" class="tier-hdr">Layer 3: Business Logic &amp; REST Services Tier (Django 5.1)</text>
+
+    <!-- App 1: Auth & Core -->
+    <g transform="translate(20, 52)">
+      <rect width="320" height="115" rx="8" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.2" />
+      <text x="16" y="26" class="card-hdr" fill="#1e40af">Authentication &amp; RBAC</text>
+      <text x="16" y="52" class="card-body">• SimpleJWT &amp; Argon2id Passwords</text>
+      <text x="16" y="74" class="card-body">• Sui Ed25519 Personal Msg Verify</text>
+      <text x="16" y="96" class="card-body">• CustomUser Role Governance</text>
+    </g>
+
+    <!-- App 2: Ledger & Telemetry -->
+    <g transform="translate(370, 52)">
+      <rect width="320" height="115" rx="8" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.2" />
+      <text x="16" y="26" class="card-hdr" fill="#065f46">Ledger &amp; Telemetry Apps</text>
+      <text x="16" y="52" class="card-body">• Deterministic SHA-256 Hasher</text>
+      <text x="16" y="74" class="card-body">• Batch Status State Machine</text>
+      <text x="16" y="96" class="card-body">• Telemetry Input Validation</text>
+    </g>
+
+    <!-- App 3: Analytics & Audits -->
+    <g transform="translate(720, 52)">
+      <rect width="340" height="115" rx="8" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.2" />
+      <text x="16" y="26" class="card-hdr" fill="#9a3412">Analytics &amp; Audit Engine</text>
+      <text x="16" y="52" class="card-body">• Weighted Moving Average (WMA)</text>
+      <text x="16" y="74" class="card-body">• Confidence Scoring &amp; Penalties</text>
+      <text x="16" y="96" class="card-body">• Cryptographic Security Logging</text>
+    </g>
+  </g>
+
+  <!-- Flow 3 -> 4 -->
+  <line x1="550" y1="645" x2="550" y2="685" stroke="#2563eb" stroke-width="2.5" marker-end="url(#arr-down)" />
+  <rect x="420" y="655" width="260" height="24" rx="12" fill="#eff6ff" stroke="#3b82f6" stroke-width="1" />
+  <text x="550" y="672" text-anchor="middle" class="protocol-lbl">SQL ORM / JSON-RPC / Redis Protocol</text>
+
+  <!-- ==================== TIER 4: Data & Persistence Layer ==================== -->
+  <g transform="translate(10, 690)">
+    <rect width="1080" height="160" rx="10" fill="#f8fafc" stroke="#e9d5ff" stroke-width="1.8" filter="url(#shadow)" />
+    <path d="M 0 10 Q 0 0 10 0 L 1070 0 Q 1080 0 1080 10 L 1080 40 L 0 40 Z" fill="#581c87" />
+    <text x="20" y="26" class="tier-hdr">Layer 4: Data Persistence &amp; Blockchain Ledger Tier</text>
+
+    <!-- Store 1: Postgres -->
+    <g transform="translate(20, 52)">
+      <rect width="320" height="95" rx="8" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.2" />
+      <text x="16" y="26" class="card-hdr" fill="#1e40af">🗄️ PostgreSQL Database</text>
+      <text x="16" y="52" class="card-body">• Users, Batches &amp; Telemetry Relational Data</text>
+      <text x="16" y="74" class="card-body">• UUID Keys, Foreign Keys &amp; Audit Tables</text>
+    </g>
+
+    <!-- Store 2: Redis -->
+    <g transform="translate(370, 52)">
+      <rect width="320" height="95" rx="8" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.2" />
+      <text x="16" y="26" class="card-hdr" fill="#b91c1c">⚡ Redis In-Memory Cache</text>
+      <text x="16" y="52" class="card-body">• 600s TTL Yield Analytics Caching</text>
+      <text x="16" y="74" class="card-body">• High-Throughput Rate Limit Tracking</text>
+    </g>
+
+    <!-- Store 3: Sui Blockchain -->
+    <g transform="translate(720, 52)">
+      <rect width="340" height="95" rx="8" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.2" />
+      <text x="16" y="26" class="card-hdr" fill="#581c87">⛓️ Sui Blockchain Network</text>
+      <text x="16" y="52" class="card-body">• `terranode::batch_tracker` Move Package</text>
+      <text x="16" y="74" class="card-body">• Immutable On-Chain Custody &amp; Events</text>
+    </g>
+  </g>
+</svg>

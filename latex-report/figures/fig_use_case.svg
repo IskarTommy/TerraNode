@@ -1,0 +1,174 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1100 760" width="100%" height="100%">
+  <defs>
+    <style>
+      .actor-title { font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, Helvetica, Arial, sans-serif; font-size: 15px; font-weight: 700; fill: #0f172a; }
+      .actor-desc { font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, Helvetica, Arial, sans-serif; font-size: 12.5px; fill: #64748b; }
+      .uc-text { font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, Helvetica, Arial, sans-serif; font-size: 13.5px; font-weight: 600; fill: #0f172a; }
+      .inc-text { font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, Helvetica, Arial, sans-serif; font-size: 12.5px; font-weight: 600; fill: #6b21a8; }
+      .inc-label { font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, Helvetica, Arial, sans-serif; font-size: 11.5px; font-style: italic; font-weight: 700; fill: #7c3aed; }
+      .boundary-title { font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, Helvetica, Arial, sans-serif; font-size: 13.5px; font-weight: 700; fill: #0284c7; }
+    </style>
+    <filter id="shadow" x="-4%" y="-2%" width="108%" height="106%" filterUnits="userSpaceOnUse">
+      <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#0f172a" flood-opacity="0.08" />
+    </filter>
+    <marker id="arr-purple" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#7c3aed" />
+    </marker>
+  </defs>
+
+  <!-- ==================== ACTORS (LEFT) ==================== -->
+  <!-- Actor 1: Farmer -->
+  <g transform="translate(10, 50)">
+    <rect width="200" height="100" rx="8" fill="#ffffff" stroke="#10b981" stroke-width="2" filter="url(#shadow)" />
+    <circle cx="45" cy="50" r="24" fill="#ecfdf5" stroke="#10b981" stroke-width="1.5" />
+    <!-- Farmer Icon -->
+    <path d="M 45 35 L 45 65 M 37 45 C 37 38 45 38 45 45 M 45 45 C 45 38 53 38 53 45 M 39 55 C 39 48 45 48 45 55 M 45 55 C 45 48 51 48 51 55" stroke="#059669" stroke-width="2" stroke-linecap="round" fill="none" />
+    <text x="82" y="44" class="actor-title">Farmer</text>
+    <text x="82" y="64" class="actor-desc">Agricultural Producer</text>
+    <text x="82" y="80" class="actor-desc">&amp; Telemetry Submitter</text>
+  </g>
+
+  <!-- Actor 2: Logistics Handler -->
+  <g transform="translate(10, 310)">
+    <rect width="200" height="100" rx="8" fill="#ffffff" stroke="#f59e0b" stroke-width="2" filter="url(#shadow)" />
+    <circle cx="45" cy="50" r="24" fill="#fffbeb" stroke="#f59e0b" stroke-width="1.5" />
+    <!-- Truck Icon -->
+    <path d="M 32 54 L 32 44 L 48 44 L 54 50 L 58 50 L 58 54 M 36 58 A 3 3 0 1 1 36 52 A 3 3 0 1 1 36 58 M 52 58 A 3 3 0 1 1 52 52 A 3 3 0 1 1 52 58" stroke="#d97706" stroke-width="2" stroke-linecap="round" fill="none" />
+    <text x="82" y="44" class="actor-title">Logistics</text>
+    <text x="82" y="64" class="actor-desc">Supply Transporter</text>
+    <text x="82" y="80" class="actor-desc">&amp; Custody Verifier</text>
+  </g>
+
+  <!-- Actor 3: System Admin -->
+  <g transform="translate(10, 570)">
+    <rect width="200" height="100" rx="8" fill="#ffffff" stroke="#6366f1" stroke-width="2" filter="url(#shadow)" />
+    <circle cx="45" cy="50" r="24" fill="#e0e7ff" stroke="#6366f1" stroke-width="1.5" />
+    <!-- Shield Icon -->
+    <path d="M 45 35 L 55 40 L 55 52 C 55 60 45 65 45 65 C 45 65 35 60 35 52 L 35 40 Z" stroke="#4338ca" stroke-width="2" stroke-linecap="round" fill="none" />
+    <text x="82" y="44" class="actor-title">System Admin</text>
+    <text x="82" y="64" class="actor-desc">Platform Security &amp;</text>
+    <text x="82" y="80" class="actor-desc">Account Governance</text>
+  </g>
+
+  <!-- ==================== SYSTEM BOUNDARY ==================== -->
+  <g transform="translate(240, 10)">
+    <rect width="850" height="740" rx="12" fill="#f8fafc" stroke="#0284c7" stroke-width="1.8" stroke-dasharray="6,4" />
+    <rect x="15" y="-12" width="220" height="24" rx="6" fill="#0284c7" />
+    <text x="125" y="4" text-anchor="middle" class="badge-text">SYSTEM: TerraNode Platform</text>
+
+    <!-- Use Cases (Left Column) -->
+    <!-- UC1: Sign Up / Log In -->
+    <g transform="translate(40, 30)">
+      <rect width="240" height="42" rx="21" fill="#ffffff" stroke="#0284c7" stroke-width="1.5" />
+      <text x="120" y="26" text-anchor="middle" class="uc-text">Sign Up / Log In (JWT / Wallet)</text>
+    </g>
+
+    <!-- UC2: Submit Telemetry -->
+    <g transform="translate(40, 95)">
+      <rect width="240" height="42" rx="21" fill="#ffffff" stroke="#10b981" stroke-width="1.5" />
+      <text x="120" y="26" text-anchor="middle" class="uc-text">Submit IoT Telemetry Readings</text>
+    </g>
+
+    <!-- UC3: Prepare & Mint Produce Batch -->
+    <g transform="translate(40, 160)">
+      <rect width="240" height="42" rx="21" fill="#ffffff" stroke="#10b981" stroke-width="1.5" />
+      <text x="120" y="26" text-anchor="middle" class="uc-text">Prepare &amp; Mint Batch (Sui Move)</text>
+    </g>
+
+    <!-- UC4: View Yield Predictions -->
+    <g transform="translate(40, 225)">
+      <rect width="240" height="42" rx="21" fill="#ffffff" stroke="#10b981" stroke-width="1.5" />
+      <text x="120" y="26" text-anchor="middle" class="uc-text">View Predictive Yield Insights</text>
+    </g>
+
+    <!-- UC5: Inspect Telemetry SHA-256 -->
+    <g transform="translate(40, 290)">
+      <rect width="240" height="42" rx="21" fill="#ffffff" stroke="#10b981" stroke-width="1.5" />
+      <text x="120" y="26" text-anchor="middle" class="uc-text">Inspect SHA-256 Hash Receipts</text>
+    </g>
+
+    <!-- UC6: Accept & Transfer Custody -->
+    <g transform="translate(40, 365)">
+      <rect width="240" height="42" rx="21" fill="#ffffff" stroke="#f59e0b" stroke-width="1.5" />
+      <text x="120" y="26" text-anchor="middle" class="uc-text">Accept &amp; Transfer Custody</text>
+    </g>
+
+    <!-- UC7: Update Shipment Status -->
+    <g transform="translate(40, 430)">
+      <rect width="240" height="42" rx="21" fill="#ffffff" stroke="#f59e0b" stroke-width="1.5" />
+      <text x="120" y="26" text-anchor="middle" class="uc-text">Update Shipment &amp; Transit Status</text>
+    </g>
+
+    <!-- UC8: Track Origin & Audit -->
+    <g transform="translate(40, 495)">
+      <rect width="240" height="42" rx="21" fill="#ffffff" stroke="#f59e0b" stroke-width="1.5" />
+      <text x="120" y="26" text-anchor="middle" class="uc-text">Track Batch Origin &amp; History</text>
+    </g>
+
+    <!-- UC9: Manage User Accounts -->
+    <g transform="translate(40, 565)">
+      <rect width="240" height="42" rx="21" fill="#ffffff" stroke="#6366f1" stroke-width="1.5" />
+      <text x="120" y="26" text-anchor="middle" class="uc-text">Manage User Roles &amp; Accounts</text>
+    </g>
+
+    <!-- UC10: Inspect Cryptographic Audit Logs -->
+    <g transform="translate(40, 625)">
+      <rect width="240" height="42" rx="21" fill="#ffffff" stroke="#6366f1" stroke-width="1.5" />
+      <text x="120" y="26" text-anchor="middle" class="uc-text">Inspect Cryptographic Audit Logs</text>
+    </g>
+
+    <!-- UC11: Monitor Health -->
+    <g transform="translate(40, 685)">
+      <rect width="240" height="42" rx="21" fill="#ffffff" stroke="#6366f1" stroke-width="1.5" />
+      <text x="120" y="26" text-anchor="middle" class="uc-text">Monitor Health &amp; Cache State</text>
+    </g>
+
+    <!-- Sub-Processes: <<include>> (Right Column) -->
+    <!-- Inc 1: Compute SHA-256 -->
+    <g transform="translate(540, 110)">
+      <rect width="270" height="55" rx="27" fill="#faf5ff" stroke="#a855f7" stroke-width="1.5" stroke-dasharray="5,3" />
+      <text x="135" y="24" text-anchor="middle" class="inc-label">&lt;&lt;include&gt;&gt;</text>
+      <text x="135" y="44" text-anchor="middle" class="inc-text">Compute SHA-256 Telemetry Digest</text>
+    </g>
+
+    <!-- Inc 2: Sign Move Tx -->
+    <g transform="translate(540, 240)">
+      <rect width="270" height="55" rx="27" fill="#faf5ff" stroke="#a855f7" stroke-width="1.5" stroke-dasharray="5,3" />
+      <text x="135" y="24" text-anchor="middle" class="inc-label">&lt;&lt;include&gt;&gt;</text>
+      <text x="135" y="44" text-anchor="middle" class="inc-text">Sign Move Tx via Sui Wallet</text>
+    </g>
+
+    <!-- Inc 3: Verify Argon2id / Ed25519 -->
+    <g transform="translate(540, 390)">
+      <rect width="270" height="55" rx="27" fill="#faf5ff" stroke="#a855f7" stroke-width="1.5" stroke-dasharray="5,3" />
+      <text x="135" y="24" text-anchor="middle" class="inc-label">&lt;&lt;include&gt;&gt;</text>
+      <text x="135" y="44" text-anchor="middle" class="inc-text">Verify Argon2id / Ed25519 Key</text>
+    </g>
+
+    <!-- <<include>> Dependency Arrows -->
+    <path d="M 280 116 L 540 137" fill="none" stroke="#9333ea" stroke-width="1.5" stroke-dasharray="4,3" marker-end="url(#arr-purple)" />
+    <path d="M 280 181 L 540 255" fill="none" stroke="#9333ea" stroke-width="1.5" stroke-dasharray="4,3" marker-end="url(#arr-purple)" />
+    <path d="M 280 386 L 540 275" fill="none" stroke="#9333ea" stroke-width="1.5" stroke-dasharray="4,3" marker-end="url(#arr-purple)" />
+    <path d="M 280 51 L 540 405" fill="none" stroke="#9333ea" stroke-width="1.5" stroke-dasharray="4,3" marker-end="url(#arr-purple)" />
+  </g>
+
+  <!-- ==================== ACTOR ASSOCIATION LINES ==================== -->
+  <!-- Farmer Connections -->
+  <line x1="210" y1="80" x2="280" y2="60" stroke="#10b981" stroke-width="1.8" />
+  <line x1="210" y1="90" x2="280" y2="125" stroke="#10b981" stroke-width="1.8" />
+  <line x1="210" y1="100" x2="280" y2="190" stroke="#10b981" stroke-width="1.8" />
+  <line x1="210" y1="110" x2="280" y2="255" stroke="#10b981" stroke-width="1.8" />
+  <line x1="210" y1="120" x2="280" y2="320" stroke="#10b981" stroke-width="1.8" />
+
+  <!-- Logistics Connections -->
+  <line x1="210" y1="340" x2="280" y2="60" stroke="#f59e0b" stroke-width="1.8" />
+  <line x1="210" y1="355" x2="280" y2="395" stroke="#f59e0b" stroke-width="1.8" />
+  <line x1="210" y1="370" x2="280" y2="460" stroke="#f59e0b" stroke-width="1.8" />
+  <line x1="210" y1="385" x2="280" y2="525" stroke="#f59e0b" stroke-width="1.8" />
+
+  <!-- Admin Connections -->
+  <line x1="210" y1="600" x2="280" y2="60" stroke="#6366f1" stroke-width="1.8" />
+  <line x1="210" y1="620" x2="280" y2="595" stroke="#6366f1" stroke-width="1.8" />
+  <line x1="210" y1="635" x2="280" y2="655" stroke="#6366f1" stroke-width="1.8" />
+  <line x1="210" y1="650" x2="280" y2="715" stroke="#6366f1" stroke-width="1.8" />
+</svg>
