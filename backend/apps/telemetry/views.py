@@ -1,13 +1,13 @@
 from rest_framework import generics, status
 from rest_framework.response import Response
+from rest_framework.views import APIView
 from django.db import transaction, IntegrityError
 from django.utils import timezone
-# pyrefly: ignore [missing-import]
-from apps.users.permissions import IsFarmer, IsFarmerOrAdmin
+from rest_framework.permissions import IsAuthenticated
+from apps.users.permissions import IsFarmer, IsFarmerOrAdmin, IsAdmin
 from .models import EnvironmentalTelemetry
 from .serializers import TelemetryInputSerializer, TelemetryOutputSerializer
 from .services import generate_telemetry_hash
-
 
 class TelemetrySubmitView(generics.CreateAPIView):
     permission_classes = (IsFarmer,)
@@ -29,9 +29,6 @@ class TelemetrySubmitView(generics.CreateAPIView):
             soil_ph=data['soil_ph']
         )
 
-        # Use a nested atomic savepoint so a duplicate-hash IntegrityError
-        # rolls back only the insert and leaves the request transaction usable
-        # (critical on PostgreSQL; the bare decorator+catch would abort it).
         try:
             with transaction.atomic():
                 telemetry = EnvironmentalTelemetry.objects.create(
@@ -51,7 +48,6 @@ class TelemetrySubmitView(generics.CreateAPIView):
         output_serializer = TelemetryOutputSerializer(telemetry)
         return Response(output_serializer.data, status=status.HTTP_201_CREATED)
 
-
 class TelemetryHistoryView(generics.ListAPIView):
     permission_classes = (IsFarmerOrAdmin,)
     serializer_class = TelemetryOutputSerializer
@@ -62,7 +58,6 @@ class TelemetryHistoryView(generics.ListAPIView):
             return EnvironmentalTelemetry.objects.all()
         return EnvironmentalTelemetry.objects.filter(farmer=user)
 
-
 class TelemetryLatestView(generics.RetrieveAPIView):
     permission_classes = (IsFarmerOrAdmin,)
     serializer_class = TelemetryOutputSerializer
@@ -72,3 +67,44 @@ class TelemetryLatestView(generics.RetrieveAPIView):
         if user.role == "ADMIN":
             return EnvironmentalTelemetry.objects.latest('recorded_at')
         return EnvironmentalTelemetry.objects.filter(farmer=user).latest('recorded_at')
+
+class TelemetryAuditLogView(APIView):
+    """Administrator cryptographic audit trail to verify hash integrity across all stored telemetry."""
+    permission_classes = (IsAdmin,)
+
+    def get(self, request):
+        records = EnvironmentalTelemetry.objects.all().order_by('-recorded_at')[:100]
+        audit_results = []
+        tampered_count = 0
+
+        for r in records:
+            expected_hash = generate_telemetry_hash(
+                farmer_id=r.farmer_id,
+                recorded_at=r.recorded_at,
+                temperature=r.temperature_celsius,
+                soil_moisture=r.soil_moisture_percentage,
+                soil_ph=r.soil_ph
+            )
+            is_valid = (expected_hash == r.payload_sha256)
+            if not is_valid:
+                tampered_count += 1
+
+            audit_results.append({
+                "id": str(r.id),
+                "farmer": r.farmer.full_name,
+                "recorded_at": r.recorded_at,
+                "temperature": r.temperature_celsius,
+                "soil_moisture": r.soil_moisture_percentage,
+                "soil_ph": r.soil_ph,
+                "stored_hash": r.payload_sha256,
+                "recomputed_hash": expected_hash,
+                "status": "INTEGRITY_VERIFIED" if is_valid else "TAMPER_FLAGGED"
+            })
+
+        return Response({
+            "total_audited": len(records),
+            "tampered_count": tampered_count,
+            "overall_integrity": "PASS" if tampered_count == 0 else "FAIL_TAMPER_DETECTED",
+            "algorithm": "SHA-256 (Canonical JSON FIPS 180-4)",
+            "audit_trail": audit_results
+        })
