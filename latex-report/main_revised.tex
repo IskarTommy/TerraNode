@@ -1,6 +1,9 @@
 \documentclass[12pt,a4paper]{report}
 \usepackage{mathptmx} % Times New Roman
 \usepackage{setspace}
+\onehalfspacing
+\usepackage{parskip}
+\setlength{\parindent}{0pt}
 \usepackage[style=apa, backend=biber]{biblatex}
 \addbibresource{references.bib}
 \usepackage{graphicx}
@@ -49,16 +52,16 @@
   \ifcase\value{chapter}\or ONE\or TWO\or THREE\or FOUR\or FIVE\or SIX\else\thechapter\fi
 }
 \titleformat{\chapter}[display]
-  {\normalfont\normalsize\centering}
-  {\MakeUppercase{\chaptername}~\wordchapter}{6pt}{\normalsize\MakeUppercase}
+  {\normalfont\normalsize\centering\singlespacing}
+  {\MakeUppercase{\chaptername}~\wordchapter}{2pt}{\normalsize\MakeUppercase}
 
 % Numberless chapter headings (TOC, List of Tables, List of Figures, References)
 \titleformat{name=\chapter,numberless}
-  {\normalfont\normalsize\centering}
+  {\normalfont\normalsize\centering\singlespacing}
   {}{0pt}{\normalsize\MakeUppercase}
 
-\titlespacing*{\chapter}{0pt}{0pt}{14pt}
-\titlespacing*{name=\chapter,numberless}{0pt}{0pt}{14pt}
+\titlespacing*{\chapter}{0pt}{0pt}{12pt}
+\titlespacing*{name=\chapter,numberless}{0pt}{0pt}{12pt}
 
 \renewcommand{\contentsname}{TABLE OF CONTENTS}
 \renewcommand{\listtablename}{LIST OF TABLES}

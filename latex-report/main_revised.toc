@@ -4,8 +4,8 @@
 \contentsline {section}{\numberline {1.1}Background of the study}{1}{section.1.1}%
 \contentsline {section}{\numberline {1.2}Problem Statement}{2}{section.1.2}%
 \contentsline {section}{\numberline {1.3}Research Questions}{3}{section.1.3}%
-\contentsline {section}{\numberline {1.4}Objectives of the Study}{3}{section.1.4}%
-\contentsline {subsection}{\numberline {1.4.1}General Objective}{3}{subsection.1.4.1}%
+\contentsline {section}{\numberline {1.4}Objectives of the Study}{4}{section.1.4}%
+\contentsline {subsection}{\numberline {1.4.1}General Objective}{4}{subsection.1.4.1}%
 \contentsline {subsection}{\numberline {1.4.2}Specific Objectives}{4}{subsection.1.4.2}%
 \contentsline {section}{\numberline {1.5}Scope of the Study}{4}{section.1.5}%
 \contentsline {section}{\numberline {1.6}Limitations of the Study}{4}{section.1.6}%
@@ -18,10 +18,10 @@
 \contentsline {section}{\numberline {2.4}Blockchain Technology Fundamentals}{7}{section.2.4}%
 \contentsline {section}{\numberline {2.5}Blockchain Applications in Agricultural Supply Chains}{8}{section.2.5}%
 \contentsline {section}{\numberline {2.6}Blockchain-Based Smart Farm Security Frameworks}{9}{section.2.6}%
-\contentsline {section}{\numberline {2.7}Predictive Analytics and Crop Yield Forecasting}{9}{section.2.7}%
+\contentsline {section}{\numberline {2.7}Predictive Analytics and Crop Yield Forecasting}{10}{section.2.7}%
 \contentsline {section}{\numberline {2.8}Supply Chain Traceability and Distributed Ledger Systems}{10}{section.2.8}%
 \contentsline {section}{\numberline {2.9}The Sui Blockchain and Move Programming Language}{11}{section.2.9}%
-\contentsline {section}{\numberline {2.10}Related Work Summary and Comparative Analysis}{11}{section.2.10}%
+\contentsline {section}{\numberline {2.10}Related Work Summary and Comparative Analysis}{12}{section.2.10}%
 \contentsline {section}{\numberline {2.11}Research Gap}{12}{section.2.11}%
 \contentsline {section}{\numberline {2.12}Conceptual Framework}{13}{section.2.12}%
 \contentsline {section}{\numberline {2.13}Chapter Summary}{14}{section.2.13}%
