@@ -1,0 +1,160 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1100 680" width="1100" height="680">
+  <defs>
+    <style>
+      .title-text { font-family: 'Segoe UI', Arial, sans-serif; font-size: 20px; font-weight: bold; fill: #1e293b; text-anchor: middle; }
+      .header-text { font-family: 'Segoe UI', Arial, sans-serif; font-size: 15px; font-weight: bold; fill: #0f172a; }
+      .body-text { font-family: 'Segoe UI', Arial, sans-serif; font-size: 13px; fill: #334155; }
+      .code-text { font-family: 'Consolas', monospace; font-size: 12px; fill: #047857; font-weight: bold; }
+      .node-box { fill: #ffffff; stroke: #cbd5e1; stroke-width: 1.5; rx: 8; ry: 8; }
+      .primary-box { fill: #f0fdf4; stroke: #16a34a; stroke-width: 2; rx: 8; ry: 8; }
+      .accent-box { fill: #eff6ff; stroke: #2563eb; stroke-width: 2; rx: 8; ry: 8; }
+      .gold-box { fill: #fefce8; stroke: #ca8a04; stroke-width: 2; rx: 8; ry: 8; }
+      .purple-box { fill: #faf5ff; stroke: #9333ea; stroke-width: 2; rx: 8; ry: 8; }
+      .arrow { stroke: #64748b; stroke-width: 2; fill: none; marker-end: url(#arrowhead); }
+      .arrow-accent { stroke: #2563eb; stroke-width: 2; fill: none; marker-end: url(#arrowhead-blue); }
+    </style>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#64748b" />
+    </marker>
+    <marker id="arrowhead-blue" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#2563eb" />
+    </marker>
+    <filter id="shadow" x="-5%" y="-5%" width="110%" height="110%">
+      <feDropShadow dx="2" dy="3" stdDeviation="3" flood-opacity="0.08"/>
+    </filter>
+  </defs>
+
+  <!-- Canvas Background -->
+  <rect width="1100" height="680" fill="#f8fafc"/>
+
+  <!-- Title Banner -->
+  <text x="550" y="38" class="title-text">Predictive Analytics Engine Architecture &amp; Decision Workflow</text>
+
+  <!-- Step 1: Data Ingestion & Retrieval -->
+  <g filter="url(#shadow)">
+    <rect x="40" y="70" width="220" height="420" class="node-box"/>
+    <rect x="40" y="70" width="220" height="40" fill="#e2e8f0" rx="8" ry="8"/>
+    <text x="150" y="95" class="header-text" text-anchor="middle">1. Telemetry Ingestion</text>
+    
+    <rect x="55" y="125" width="190" height="60" fill="#f1f5f9" stroke="#cbd5e1" rx="6"/>
+    <text x="65" y="148" class="body-text" font-weight="bold">Farmer Telemetry Pool</text>
+    <text x="65" y="168" class="body-text">Query last n=90 readings</text>
+
+    <rect x="55" y="200" width="190" height="70" fill="#f1f5f9" stroke="#cbd5e1" rx="6"/>
+    <text x="65" y="222" class="body-text" font-weight="bold">Feature Extraction</text>
+    <text x="65" y="242" class="code-text">T_i: Temperature (°C)</text>
+    <text x="65" y="258" class="code-text">M_i: Moisture (%) | P_i: pH</text>
+
+    <rect x="55" y="285" width="190" height="70" fill="#f1f5f9" stroke="#cbd5e1" rx="6"/>
+    <text x="65" y="307" class="body-text" font-weight="bold">Sample Size Check</text>
+    <text x="65" y="327" class="body-text">Condition: n ≥ 5 points</text>
+    <text x="65" y="343" class="body-text">Prevents sparse bias</text>
+
+    <rect x="55" y="370" width="190" height="100" fill="#f1f5f9" stroke="#cbd5e1" rx="6"/>
+    <text x="65" y="392" class="body-text" font-weight="bold">SHA-256 Verification</text>
+    <text x="65" y="412" class="body-text">Cross-checks integrity</text>
+    <text x="65" y="430" class="code-text">H = SHA-256(Record)</text>
+    <text x="65" y="448" class="body-text">Validates uncorrupted state</text>
+  </g>
+
+  <!-- Arrow 1 -> 2 -->
+  <path d="M 260 280 L 300 280" class="arrow"/>
+
+  <!-- Step 2: Statistical Modeling -->
+  <g filter="url(#shadow)">
+    <rect x="300" y="70" width="250" height="420" class="accent-box"/>
+    <rect x="300" y="70" width="250" height="40" fill="#dbeafe" rx="8" ry="8"/>
+    <text x="425" y="95" class="header-text" text-anchor="middle" fill="#1e40af">2. Weighted Statistical Engine</text>
+
+    <rect x="315" y="125" width="220" height="90" fill="#ffffff" stroke="#93c5fd" rx="6"/>
+    <text x="325" y="148" class="body-text" font-weight="bold">Mean Telemetry Aggregation</text>
+    <text x="325" y="170" class="code-text">\bar{T} = \frac{1}{n} \sum T_i</text>
+    <text x="325" y="190" class="code-text">\bar{M} = \frac{1}{n} \sum M_i</text>
+    <text x="325" y="205" class="code-text">\bar{P} = \frac{1}{n} \sum P_i</text>
+
+    <rect x="315" y="225" width="220" height="115" fill="#ffffff" stroke="#93c5fd" rx="6"/>
+    <text x="325" y="248" class="body-text" font-weight="bold">Yield Forecast Model</text>
+    <text x="325" y="270" class="code-text">\hat{Y} = \alpha + \beta_1\bar{M} - \beta_2|\bar{T} - T^*|</text>
+    <text x="325" y="290" class="body-text">T* = 22.0°C (Optimal Base)</text>
+    <text x="325" y="310" class="body-text">Moisture Weight (\beta_1 = 0.50)</text>
+    <text x="325" y="326" class="body-text">Temp Penalty (\beta_2 = 1.20)</text>
+
+    <rect x="315" y="350" width="220" height="120" fill="#ffffff" stroke="#93c5fd" rx="6"/>
+    <text x="325" y="372" class="body-text" font-weight="bold">Confidence &amp; Variance</text>
+    <text x="325" y="394" class="code-text">V = \sigma_T^2 + \sigma_M^2</text>
+    <text x="325" y="415" class="code-text">C = C_{max} \cdot (1 - \lambda \cdot V)</text>
+    <text x="325" y="435" class="body-text">Bounded: C \in [50.0\%, 95.0\%]</text>
+    <text x="325" y="452" class="body-text">Sample Scaling: \min(1, n/30)</text>
+  </g>
+
+  <!-- Arrow 2 -> 3 -->
+  <path d="M 550 280 L 590 280" class="arrow"/>
+
+  <!-- Step 3: Decision Logic & Recommendation -->
+  <g filter="url(#shadow)">
+    <rect x="590" y="70" width="230" height="420" class="gold-box"/>
+    <rect x="590" y="70" width="230" height="40" fill="#fef08a" rx="8" ry="8"/>
+    <text x="705" y="95" class="header-text" text-anchor="middle" fill="#854d0e">3. Decision Rule Matrix</text>
+
+    <rect x="605" y="125" width="200" height="75" fill="#ffffff" stroke="#fde047" rx="6"/>
+    <text x="615" y="148" class="body-text" font-weight="bold">Moisture Deficit Rule</text>
+    <text x="615" y="168" class="body-text">If \bar{M} &lt; 40.0%:</text>
+    <text x="615" y="186" class="code-text">"Increase irrigation rate"</text>
+
+    <rect x="605" y="210" width="200" height="75" fill="#ffffff" stroke="#fde047" rx="6"/>
+    <text x="615" y="233" class="body-text" font-weight="bold">Heat Stress Rule</text>
+    <text x="615" y="253" class="body-text">If \bar{T} &gt; 32.0°C:</text>
+    <text x="615" y="271" class="code-text">"Consider shading / cooling"</text>
+
+    <rect x="605" y="295" width="200" height="75" fill="#ffffff" stroke="#fde047" rx="6"/>
+    <text x="615" y="318" class="body-text" font-weight="bold">Soil Acidity Rule</text>
+    <text x="615" y="338" class="body-text">If \bar{P} &lt; 6.0 or \bar{P} &gt; 7.5:</text>
+    <text x="615" y="356" class="code-text">"Soil conditioning needed"</text>
+
+    <rect x="605" y="380" width="200" height="90" fill="#ffffff" stroke="#fde047" rx="6"/>
+    <text x="615" y="403" class="body-text" font-weight="bold">Optimal Conditions</text>
+    <text x="615" y="423" class="body-text">Within target thresholds:</text>
+    <text x="615" y="442" class="code-text">"Maintain current regime"</text>
+    <text x="615" y="458" class="body-text">High Confidence Output</text>
+  </g>
+
+  <!-- Arrow 3 -> 4 -->
+  <path d="M 820 280 L 860 280" class="arrow"/>
+
+  <!-- Step 4: Caching & UI Presentation -->
+  <g filter="url(#shadow)">
+    <rect x="860" y="70" width="200" height="420" class="primary-box"/>
+    <rect x="860" y="70" width="200" height="40" fill="#bbf7d0" rx="8" ry="8"/>
+    <text x="960" y="95" class="header-text" text-anchor="middle" fill="#15803d">4. Delivery &amp; Caching</text>
+
+    <rect x="875" y="125" width="170" height="85" fill="#ffffff" stroke="#86efac" rx="6"/>
+    <text x="885" y="148" class="body-text" font-weight="bold">Redis Cache Layer</text>
+    <text x="885" y="168" class="body-text">TTL: 10 minutes (600s)</text>
+    <text x="885" y="188" class="code-text">Latency: ~15 ms</text>
+    <text x="885" y="202" class="body-text">(Uncached: ~110 ms)</text>
+
+    <rect x="875" y="220" width="170" height="150" fill="#ffffff" stroke="#86efac" rx="6"/>
+    <text x="885" y="243" class="body-text" font-weight="bold">React UI Presentation</text>
+    <text x="885" y="265" class="body-text">• Predicted Yield (MT)</text>
+    <text x="885" y="285" class="body-text">• Confidence Score (%)</text>
+    <text x="885" y="305" class="body-text">• Variance Index</text>
+    <text x="885" y="325" class="body-text">• Sample Points Count</text>
+    <text x="885" y="345" class="body-text">• Status Recommendation</text>
+    <text x="885" y="360" class="code-text">Farmer Actionable</text>
+
+    <rect x="875" y="380" width="170" height="90" fill="#ffffff" stroke="#86efac" rx="6"/>
+    <text x="885" y="403" class="body-text" font-weight="bold">Audit Logging</text>
+    <text x="885" y="423" class="body-text">Prediction event saved</text>
+    <text x="885" y="440" class="body-text">Farmer ID + Timestamp</text>
+    <text x="885" y="456" class="body-text">Verifiable in admin log</text>
+  </g>
+
+  <!-- Bottom Summary Box -->
+  <g filter="url(#shadow)">
+    <rect x="40" y="520" width="1020" height="130" class="purple-box"/>
+    <text x="60" y="550" class="header-text" fill="#6b21a8">Key Features of TerraNode Predictive Analytics Engine (Research Objective 2):</text>
+    <text x="60" y="575" class="body-text">• <tspan font-weight="bold">Tamper-Evident Input Pipeline:</tspan> Forecasts operate strictly on SHA-256 authenticated telemetry records, eliminating garbage-in manipulation.</text>
+    <text x="60" y="600" class="body-text">• <tspan font-weight="bold">Deterministic Sensitivity:</tspan> Produces consistent, biologically grounded yield responses with quadratic temperature penalty and linear moisture scaling.</text>
+    <text x="60" y="625" class="body-text">• <tspan font-weight="bold">High-Throughput Caching:</tspan> In-memory Redis caching achieves sub-20ms response latency, satisfying real-time agricultural dashboard demands.</text>
+  </g>
+</svg>

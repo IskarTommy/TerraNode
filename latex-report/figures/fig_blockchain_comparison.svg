@@ -1,0 +1,145 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1100 600" width="1100" height="600">
+  <defs>
+    <style>
+      .title-text { font-family: 'Segoe UI', Arial, sans-serif; font-size: 20px; font-weight: bold; fill: #0f172a; text-anchor: middle; }
+      .sub-title { font-family: 'Segoe UI', Arial, sans-serif; font-size: 13px; fill: #64748b; text-anchor: middle; }
+      .header-text { font-family: 'Segoe UI', Arial, sans-serif; font-size: 14px; font-weight: bold; fill: #0f172a; }
+      .axis-text { font-family: 'Segoe UI', Arial, sans-serif; font-size: 12px; fill: #475569; }
+      .val-text { font-family: 'Consolas', monospace; font-size: 11px; font-weight: bold; }
+      .legend-text { font-family: 'Segoe UI', Arial, sans-serif; font-size: 12px; fill: #334155; }
+      .chart-panel { fill: #ffffff; stroke: #cbd5e1; stroke-width: 1.5; rx: 8; ry: 8; }
+      .grid-line { stroke: #f1f5f9; stroke-width: 1; stroke-dasharray: 4,4; }
+    </style>
+    <filter id="shadow" x="-5%" y="-5%" width="110%" height="110%">
+      <feDropShadow dx="2" dy="3" stdDeviation="3" flood-opacity="0.08"/>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1100" height="600" fill="#f8fafc"/>
+
+  <!-- Title -->
+  <text x="550" y="35" class="title-text">Comparative Performance Analysis: Agricultural Blockchain Deployments</text>
+  <text x="550" y="55" class="sub-title">Benchmark comparison of TerraNode (Sui DPoS) against published state-of-the-art agricultural frameworks</text>
+
+  <!-- Chart 1: Transaction Confirmation Latency (Log Scale / Normalized Seconds) -->
+  <g filter="url(#shadow)">
+    <rect x="40" y="80" width="490" height="380" class="chart-panel"/>
+    <text x="285" y="110" class="header-text" text-anchor="middle">Transaction Confirmation Latency (Seconds, Log Scale)</text>
+    
+    <!-- Y-axis lines and labels -->
+    <!-- 0.01s, 0.1s, 1.0s, 10.0s, 20.0s -->
+    <line x1="100" y1="380" x2="490" y2="380" stroke="#94a3b8" stroke-width="1.5"/>
+    <line x1="100" y1="130" x2="100" y2="380" stroke="#94a3b8" stroke-width="1.5"/>
+
+    <line x1="100" y1="330" x2="490" y2="330" class="grid-line"/>
+    <text x="90" y="335" class="axis-text" text-anchor="end">0.02s</text>
+
+    <line x1="100" y1="270" x2="490" y2="270" class="grid-line"/>
+    <text x="90" y="275" class="axis-text" text-anchor="end">0.2s</text>
+
+    <line x1="100" y1="210" x2="490" y2="210" class="grid-line"/>
+    <text x="90" y="215" class="axis-text" text-anchor="end">1.2s</text>
+
+    <line x1="100" y1="150" x2="490" y2="150" class="grid-line"/>
+    <text x="90" y="155" class="axis-text" text-anchor="end">16.5s</text>
+
+    <!-- Bar 1: Ethereum (Caro et al., 2018) -->
+    <rect x="120" y="150" width="55" height="230" fill="#ef4444" rx="4"/>
+    <text x="147" y="142" class="val-text" fill="#b91c1c" text-anchor="middle">16.55 s</text>
+    <text x="147" y="400" class="axis-text" text-anchor="middle" font-weight="bold">Ethereum</text>
+    <text x="147" y="415" font-family="Segoe UI" font-size="10" fill="#64748b" text-anchor="middle">Caro et al.</text>
+
+    <!-- Bar 2: Quorum (Ktari et al., 2022) -->
+    <rect x="195" y="280" width="55" height="100" fill="#f59e0b" rx="4"/>
+    <text x="222" y="272" class="val-text" fill="#b45309" text-anchor="middle">0.18 s</text>
+    <text x="222" y="400" class="axis-text" text-anchor="middle" font-weight="bold">Quorum</text>
+    <text x="222" y="415" font-family="Segoe UI" font-size="10" fill="#64748b" text-anchor="middle">Ktari et al.</text>
+
+    <!-- Bar 3: Sawtooth (Caro et al., 2018) -->
+    <rect x="270" y="330" width="55" height="50" fill="#3b82f6" rx="4"/>
+    <text x="297" y="322" class="val-text" fill="#1d4ed8" text-anchor="middle">0.021 s</text>
+    <text x="297" y="400" class="axis-text" text-anchor="middle" font-weight="bold">Sawtooth</text>
+    <text x="297" y="415" font-family="Segoe UI" font-size="10" fill="#64748b" text-anchor="middle">Caro et al.</text>
+
+    <!-- Bar 4: IoT Smart Farm (Aliyu & Liu, 2023) -->
+    <rect x="345" y="250" width="55" height="130" fill="#8b5cf6" rx="4"/>
+    <text x="372" y="242" class="val-text" fill="#6d28d9" text-anchor="middle">1.02 s</text>
+    <text x="372" y="400" class="axis-text" text-anchor="middle" font-weight="bold">IoT Farm</text>
+    <text x="372" y="415" font-family="Segoe UI" font-size="10" fill="#64748b" text-anchor="middle">Aliyu &amp; Liu</text>
+
+    <!-- Bar 5: TerraNode (Sui DPoS) -->
+    <rect x="420" y="210" width="55" height="170" fill="#10b981" stroke="#047857" stroke-width="2" rx="4"/>
+    <text x="447" y="202" class="val-text" fill="#047857" text-anchor="middle">1.20 s</text>
+    <text x="447" y="400" class="axis-text" text-anchor="middle" font-weight="bold" fill="#047857">TerraNode</text>
+    <text x="447" y="415" font-family="Segoe UI" font-size="10" fill="#047857" font-weight="bold" text-anchor="middle">(Sui Testnet)</text>
+    
+    <text x="285" y="445" font-family="Segoe UI" font-size="11" fill="#475569" text-anchor="middle" font-style="italic">TerraNode offers public decentralization without Ethereum's 16.5s latency penalty</text>
+  </g>
+
+  <!-- Chart 2: Architectural Capabilities Matrix & Cost -->
+  <g filter="url(#shadow)">
+    <rect x="560" y="80" width="500" height="380" class="chart-panel"/>
+    <text x="810" y="110" class="header-text" text-anchor="middle">Feature &amp; Operational Cost Comparison</text>
+
+    <!-- Table header -->
+    <rect x="580" y="130" width="460" height="30" fill="#f1f5f9" stroke="#cbd5e1" rx="4"/>
+    <text x="590" y="150" font-family="Segoe UI" font-size="11" font-weight="bold" fill="#0f172a">Deployment</text>
+    <text x="700" y="150" font-family="Segoe UI" font-size="11" font-weight="bold" fill="#0f172a">Consensus</text>
+    <text x="800" y="150" font-family="Segoe UI" font-size="11" font-weight="bold" fill="#0f172a">Gas Cost</text>
+    <text x="910" y="150" font-family="Segoe UI" font-size="11" font-weight="bold" fill="#0f172a">Decentralization</text>
+    <text x="1000" y="150" font-family="Segoe UI" font-size="11" font-weight="bold" fill="#0f172a">Analytics</text>
+
+    <!-- Row 1: Ethereum (Caro 2018) -->
+    <rect x="580" y="165" width="460" height="40" fill="#ffffff" stroke="#e2e8f0"/>
+    <text x="590" y="190" font-family="Segoe UI" font-size="11" font-weight="bold" fill="#ef4444">Ethereum</text>
+    <text x="700" y="190" font-family="Segoe UI" font-size="11" fill="#475569">PoW (Mining)</text>
+    <text x="800" y="190" font-family="Segoe UI" font-size="11" fill="#ef4444">High ($2-$15)</text>
+    <text x="910" y="190" font-family="Segoe UI" font-size="11" fill="#16a34a">Public</text>
+    <text x="1000" y="190" font-family="Segoe UI" font-size="11" fill="#ef4444">None</text>
+
+    <!-- Row 2: Sawtooth (Caro 2018) -->
+    <rect x="580" y="210" width="460" height="40" fill="#f8fafc" stroke="#e2e8f0"/>
+    <text x="590" y="235" font-family="Segoe UI" font-size="11" font-weight="bold" fill="#3b82f6">Sawtooth</text>
+    <text x="700" y="235" font-family="Segoe UI" font-size="11" fill="#475569">PoET</text>
+    <text x="800" y="235" font-family="Segoe UI" font-size="11" fill="#16a34a">Zero (Perm.)</text>
+    <text x="910" y="235" font-family="Segoe UI" font-size="11" fill="#ca8a04">Private/Consort.</text>
+    <text x="1000" y="235" font-family="Segoe UI" font-size="11" fill="#ef4444">None</text>
+
+    <!-- Row 3: Quorum (Ktari 2022) -->
+    <rect x="580" y="255" width="460" height="40" fill="#ffffff" stroke="#e2e8f0"/>
+    <text x="590" y="280" font-family="Segoe UI" font-size="11" font-weight="bold" fill="#f59e0b">Quorum</text>
+    <text x="700" y="280" font-family="Segoe UI" font-size="11" fill="#475569">Raft / IBFT</text>
+    <text x="800" y="280" font-family="Segoe UI" font-size="11" fill="#16a34a">Zero (Perm.)</text>
+    <text x="910" y="280" font-family="Segoe UI" font-size="11" fill="#ca8a04">Private Enterprise</text>
+    <text x="1000" y="280" font-family="Segoe UI" font-size="11" fill="#ef4444">None</text>
+
+    <!-- Row 4: Layek et al. (2025) -->
+    <rect x="580" y="300" width="460" height="40" fill="#f8fafc" stroke="#e2e8f0"/>
+    <text x="590" y="325" font-family="Segoe UI" font-size="11" font-weight="bold" fill="#8b5cf6">Layek et al.</text>
+    <text x="700" y="325" font-family="Segoe UI" font-size="11" fill="#475569">Private DLT</text>
+    <text x="800" y="325" font-family="Segoe UI" font-size="11" fill="#16a34a">Zero (Sim.)</text>
+    <text x="910" y="325" font-family="Segoe UI" font-size="11" fill="#ca8a04">Private</text>
+    <text x="1000" y="325" font-family="Segoe UI" font-size="11" fill="#16a34a">ML Integrated</text>
+
+    <!-- Row 5: TerraNode (Proposed) -->
+    <rect x="580" y="345" width="460" height="45" fill="#ecfdf5" stroke="#10b981" stroke-width="1.5" rx="4"/>
+    <text x="590" y="372" font-family="Segoe UI" font-size="11" font-weight="bold" fill="#047857">TerraNode</text>
+    <text x="700" y="372" font-family="Segoe UI" font-size="11" font-weight="bold" fill="#047857">Sui Move DPoS</text>
+    <text x="800" y="372" font-family="Segoe UI" font-size="11" font-weight="bold" fill="#047857">~0.003 SUI</text>
+    <text x="910" y="372" font-family="Segoe UI" font-size="11" font-weight="bold" fill="#047857">Public Ledger</text>
+    <text x="1000" y="372" font-family="Segoe UI" font-size="11" font-weight="bold" fill="#047857">WMA + Cache</text>
+
+    <rect x="580" y="400" width="460" height="45" fill="#f0fdf4" stroke="#bbf7d0" rx="4"/>
+    <text x="590" y="426" font-family="Segoe UI" font-size="11" fill="#15803d" font-weight="bold">Core Advantage:</text>
+    <text x="690" y="426" font-family="Segoe UI" font-size="11" fill="#166534">Combines public decentralization, low fees, sub-3s finality &amp; predictive analytics</text>
+  </g>
+
+  <!-- Bottom Synthesis Box -->
+  <g filter="url(#shadow)">
+    <rect x="40" y="480" width="1020" height="95" fill="#ffffff" stroke="#cbd5e1" rx="8"/>
+    <text x="60" y="508" class="header-text" fill="#0f172a">Summary of Comparative Evaluation:</text>
+    <text x="60" y="532" class="axis-text">1. <tspan font-weight="bold">Latency &amp; Finality:</tspan> Sui Move object execution delivers ~1.20s batch minting latency compared to 16.55s on Ethereum PoW (Caro et al., 2018).</text>
+    <text x="60" y="555" class="axis-text">2. <tspan font-weight="bold">Economic Feasibility:</tspan> At 0.003 SUI per transaction (~$0.005), TerraNode is economically viable for daily smallholder records without enterprise private lock-in.</text>
+  </g>
+</svg>

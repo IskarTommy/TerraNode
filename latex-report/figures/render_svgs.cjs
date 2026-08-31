@@ -12,7 +12,10 @@ const diagrams = [
   { svg: 'fig_er_diagram.svg', png: 'fig_er_diagram.png', width: 1100, height: 740 },
   { svg: 'fig_use_case.svg', png: 'fig_use_case.png', width: 1100, height: 760 },
   { svg: 'fig_batch_lifecycle.svg', png: 'fig_batch_lifecycle.png', width: 1100, height: 720 },
-  { svg: 'fig_auth_flow.svg', png: 'fig_auth_flow.png', width: 1100, height: 740 }
+  { svg: 'fig_auth_flow.svg', png: 'fig_auth_flow.png', width: 1100, height: 740 },
+  { svg: 'fig_prediction_analytics.svg', png: 'fig_prediction_analytics.png', width: 1100, height: 680 },
+  { svg: 'fig_crypto_pipeline.svg', png: 'fig_crypto_pipeline.png', width: 1100, height: 640 },
+  { svg: 'fig_blockchain_comparison.svg', png: 'fig_blockchain_comparison.png', width: 1100, height: 600 }
 ];
 
 async function render() {

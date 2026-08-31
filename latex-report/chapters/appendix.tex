@@ -1,10 +1,12 @@
 \appendix
 \titleformat{\chapter}[display]
   {\normalfont\normalsize\centering\singlespacing}
-  {APPENDIX~\thechapter}{2pt}{\normalsize\MakeUppercase}
+  {}{0pt}{\normalsize\MakeUppercase}
 \titlespacing*{\chapter}{0pt}{0pt}{12pt}
 
-\chapter{CODE LISTINGS}
+\renewcommand{\thesection}{A.\arabic{section}}
+\chapter*{APPENDIX: CODE LISTINGS}
+\addcontentsline{toc}{chapter}{APPENDIX:\quad CODE LISTINGS}
 \label{app:code_listings}
 
 \section{SHA-256 Data Integrity Hash Generation}

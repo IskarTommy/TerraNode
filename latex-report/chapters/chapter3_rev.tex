@@ -10,7 +10,7 @@ This study follows a Design Science Research (DSR) methodology, which is appropr
 
 The research was conducted in four sequential phases:
 
-\begin{enumerate}[label=\roman*.]
+\begin{enumerate}[label=(\roman*)]
     \item \textbf{Problem Identification and Requirements Analysis:} The shortcomings of existing centralized agricultural data management systems were identified through the literature review in Chapter Two. Functional and non-functional requirements were derived from the research questions and objectives stated in Chapter One.
     \item \textbf{System Design:} The architectural blueprint, data models, API specifications, and smart contract structures were designed to satisfy the identified requirements.
     \item \textbf{Implementation:} The system was implemented as a functional prototype using the technology stack described in Section~\ref{sec:tech_stack}.
@@ -85,7 +85,7 @@ NFR-06 & Telemetry input values shall be validated within physically plausible r
 
 TerraNode follows a three-tier client-server architecture that separates the presentation layer, the business logic layer, and the data persistence layer. This architectural pattern promotes modularity, allowing each layer to be developed, tested, and maintained independently.
 
-\begin{enumerate}[label=\roman*.]
+\begin{enumerate}[label=(\roman*)]
     \item \textbf{Presentation Layer (Frontend):} A single-page application built with React and TypeScript, responsible for rendering the user interface and managing client-side state. The frontend communicates with the backend exclusively through RESTful API calls and interacts directly with the Sui blockchain through the Mysten dApp Kit for wallet operations.
     \item \textbf{Business Logic Layer (Backend):} A Django REST Framework application that processes API requests, enforces business rules, manages user authentication, computes analytical predictions, and coordinates with the blockchain layer. The backend exposes four domain-specific API modules: Authentication, Telemetry, Ledger, and Analytics.
     \item \textbf{Data Persistence Layer:} Comprises three storage components. PostgreSQL serves as the primary relational database for structured application data. Redis provides an in-memory cache for frequently accessed analytics results. The Sui blockchain acts as the immutable ledger for produce batch records and their associated integrity hashes.
@@ -117,7 +117,7 @@ The context diagram in Figure~\ref{fig:dfd_level0} shows TerraNode as a single p
 
 The Level 1 Data Flow Diagram in Figure~\ref{fig:dfd_level1} decomposes the TerraNode system into its four core processes:
 
-\begin{enumerate}[label=\roman*.]
+\begin{enumerate}[label=(\roman*)]
     \item \textbf{Process 1.0 --- Authentication Module:} Handles user registration, credential-based login, wallet-based login, and session management through JWT tokens.
     \item \textbf{Process 2.0 --- Telemetry Module:} Receives environmental sensor readings, validates input ranges, generates SHA-256 integrity hashes, and stores the records in the database.
     \item \textbf{Process 3.0 --- Ledger Module:} Manages produce batch creation, coordinates with the Sui blockchain for on-chain minting and custody transfer, and maintains the local database mirror of blockchain state.
@@ -175,7 +175,7 @@ The TerraNode smart contract is written in the Move programming language and dep
 
 The \texttt{ProduceBatch} struct is defined as a Sui object with the \texttt{key} and \texttt{store} abilities, which allow it to be owned, transferred, and stored on-chain. It contains the following fields:
 
-\begin{enumerate}[label=\roman*.]
+\begin{enumerate}[label=(\roman*)]
     \item \texttt{id} (UID): The unique object identifier assigned by the Sui runtime.
     \item \texttt{crop\_type} (String): The type of crop in the batch.
     \item \texttt{weight\_kg} (u64): The weight of the batch in kilograms.
@@ -255,7 +255,7 @@ TerraNode implements a dual authentication mechanism. The primary method uses em
 
 The secondary authentication method allows users to log in using their Sui blockchain wallet. The verification process works as follows:
 
-\begin{enumerate}[label=\roman*.]
+\begin{enumerate}[label=(\roman*)]
     \item The client constructs a login message in the format: \\ ``\texttt{Login to TerraNode with \{sui\_public\_key\}}''.
     \item The user signs this message using their Sui wallet's Ed25519 private key.
     \item The backend receives the message, the signature, and the public key.
@@ -273,7 +273,7 @@ Every telemetry record is protected by a SHA-256 hash computed from a canonical 
 
 The backend enforces role-based access control (RBAC) through custom permission classes. Four permission levels are defined:
 
-\begin{enumerate}[label=\roman*.]
+\begin{enumerate}[label=(\roman*)]
     \item \textbf{IsFarmer:} Grants access to endpoints that create telemetry records, prepare produce batches, and view yield predictions.
     \item \textbf{IsLogistics:} Grants access to batch transfer and shipment management endpoints.
     \item \textbf{IsAdmin:} Grants access to administrative functions including user management and audit log inspection.

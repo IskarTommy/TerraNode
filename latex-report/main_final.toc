@@ -1,5 +1,8 @@
-\contentsline {chapter}{Declaration}{i}{chapter*.1}%
-\contentsline {chapter}{Certification}{ii}{chapter*.2}%
+\contentsline {chapter}{DECLARATION}{ii}{chapter*.1}%
+\contentsline {chapter}{CERTIFICATION}{iii}{chapter*.2}%
+\contentsline {chapter}{ACKNOWLEDGMENT}{iv}{chapter*.3}%
+\contentsline {chapter}{DEDICATION}{v}{chapter*.4}%
+\contentsline {chapter}{ABSTRACT}{vi}{chapter*.5}%
 \contentsline {chapter}{\numberline {1}INTRODUCTION}{1}{chapter.1}%
 \contentsline {section}{\numberline {1.1}Background of the study}{1}{section.1.1}%
 \contentsline {section}{\numberline {1.2}Problem Statement}{2}{section.1.2}%
@@ -55,22 +58,22 @@
 \contentsline {section}{\numberline {3.11}Technology Stack}{27}{section.3.11}%
 \contentsline {section}{\numberline {3.12}Development Tools}{28}{section.3.12}%
 \contentsline {section}{\numberline {3.13}Chapter Summary}{28}{section.3.13}%
-\contentsline {chapter}{\numberline {4}IMPLEMENTATION AND EVALUATION}{29}{chapter.4}%
+\contentsline {chapter}{\numberline {4}RESULTS AND DISCUSSION}{29}{chapter.4}%
 \contentsline {section}{\numberline {4.1}Introduction}{29}{section.4.1}%
 \contentsline {section}{\numberline {4.2}Research Results}{29}{section.4.2}%
-\contentsline {subsection}{\numberline {4.2.1}Research Objective One (1)}{29}{subsection.4.2.1}%
-\contentsline {subsection}{\numberline {4.2.2}Research Objective Two (2)}{36}{subsection.4.2.2}%
-\contentsline {subsection}{\numberline {4.2.3}Research Objective Three (3)}{37}{subsection.4.2.3}%
-\contentsline {subsection}{\numberline {4.2.4}Research Objective Four (4)}{37}{subsection.4.2.4}%
-\contentsline {section}{\numberline {4.3}Discussion of Research Findings}{40}{section.4.3}%
-\contentsline {section}{\numberline {4.4}Conclusion}{41}{section.4.4}%
-\contentsline {chapter}{\numberline {5}SUMMARY, CONCLUSION, AND RECOMMENDATIONS}{42}{chapter.5}%
-\contentsline {section}{\numberline {5.1}Introduction}{42}{section.5.1}%
-\contentsline {section}{\numberline {5.2}Summary of Findings}{42}{section.5.2}%
-\contentsline {section}{\numberline {5.3}Conclusion}{43}{section.5.3}%
-\contentsline {section}{\numberline {5.4}Recommendations for Future Work}{44}{section.5.4}%
-\contentsline {chapter}{References}{45}{chapter*.34}%
-\contentsline {chapter}{\numberline {A}CODE LISTINGS}{47}{appendix.A}%
-\contentsline {section}{\numberline {A.1}SHA-256 Data Integrity Hash Generation}{47}{appendix.A.1}%
-\contentsline {section}{\numberline {A.2}Sui Ed25519 Signature Verification}{47}{appendix.A.2}%
-\contentsline {section}{\numberline {A.3}Crop Yield Prediction Service}{48}{appendix.A.3}%
+\contentsline {subsection}{\numberline {4.2.1}Research Objective One (1): Web-Based Agricultural Data Management Platform}{29}{subsection.4.2.1}%
+\contentsline {subsection}{\numberline {4.2.2}Research Objective Two (2): Predictive Analytics Module for Crop Yield Forecasting}{35}{subsection.4.2.2}%
+\contentsline {subsection}{\numberline {4.2.3}Research Objective Three (3): Blockchain-Based Security and Cryptographic Integrity Mechanisms}{38}{subsection.4.2.3}%
+\contentsline {subsection}{\numberline {4.2.4}Research Objective Four (4): System Performance and Comprehensive Evaluation}{42}{subsection.4.2.4}%
+\contentsline {section}{\numberline {4.3}Discussion of Research Findings}{46}{section.4.3}%
+\contentsline {section}{\numberline {4.4}Chapter Summary}{47}{section.4.4}%
+\contentsline {chapter}{\numberline {5}SUMMARY, CONCLUSION, AND RECOMMENDATIONS}{48}{chapter.5}%
+\contentsline {section}{\numberline {5.1}Introduction}{48}{section.5.1}%
+\contentsline {section}{\numberline {5.2}Summary of Findings}{48}{section.5.2}%
+\contentsline {section}{\numberline {5.3}Conclusion}{49}{section.5.3}%
+\contentsline {section}{\numberline {5.4}Recommendations for Future Work}{50}{section.5.4}%
+\contentsline {chapter}{REFERENCES}{51}{chapter*.40}%
+\contentsline {chapter}{APPENDIX:\hskip 1em\relax CODE LISTINGS}{53}{appendix*.41}%
+\contentsline {section}{\numberline {A.1}SHA-256 Data Integrity Hash Generation}{53}{appendix.Alph0.1}%
+\contentsline {section}{\numberline {A.2}Sui Ed25519 Signature Verification}{53}{appendix.Alph0.2}%
+\contentsline {section}{\numberline {A.3}Crop Yield Prediction Service}{54}{appendix.Alph0.3}%

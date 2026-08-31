@@ -1,0 +1,313 @@
+\documentclass[12pt,a4paper]{report}
+\usepackage{mathptmx} % Times New Roman
+\usepackage{setspace}
+\onehalfspacing
+\usepackage{parskip}
+\setlength{\parindent}{0pt}
+\usepackage[style=apa, backend=biber]{biblatex}
+\addbibresource{references.bib}
+\usepackage{graphicx}
+\usepackage{caption}
+\captionsetup{font=normalsize, justification=centering, labelsep=colon}
+\captionsetup[figure]{font=normalsize, justification=centering}
+\captionsetup[table]{font=normalsize, justification=centering}
+\usepackage{titlesec}
+\usepackage{geometry}
+\geometry{a4paper, margin=1in}
+
+% Additional packages
+\usepackage{pdfpages}       % Include external title page PDF
+\usepackage{booktabs}       % Professional tables
+\usepackage{longtable}      % Multi-page tables
+\usepackage{float}          % Figure placement control
+\usepackage{listings}       % Code listings
+\usepackage{xcolor}         % Colour definitions for listings
+\usepackage{algorithm2e}    % Algorithm pseudocode
+\usepackage[hidelinks]{hyperref} % Clickable cross-refs (no coloured boxes)
+\usepackage{amsmath}        % Mathematical formulae
+\usepackage{enumitem}       % List customisation
+\setlist[enumerate,1]{label=(\roman*),leftmargin=2em}
+\setlist[enumerate,2]{label=(\alph*),leftmargin=2em}
+\setlist[itemize,1]{label=(\roman*),leftmargin=2em}
+\setlist[itemize,2]{label=(\alph*),leftmargin=2em}
+\usepackage{tabularx}       % Flexible-width tables
+\usepackage{tocloft}        % Table of contents styling
+
+\usepackage{microtype}      % Optical alignment and margin justification
+\emergencystretch=2em       % Prevent words from protruding beyond margins
+
+% ─── Code listing style (black and white friendly) ───────────
+\lstset{
+  basicstyle=\ttfamily\footnotesize\linespread{1.0}\selectfont,
+  keywordstyle=\bfseries,
+  commentstyle=\itshape,
+  breaklines=true,
+  frame=single,
+  numbers=left,
+  numberstyle=\tiny,
+  tabsize=4,
+  captionpos=b,
+  showstringspaces=false,
+  aboveskip=12pt,
+  belowskip=12pt
+}
+
+% ─── Chapter title formatting in document body ────────────────
+\renewcommand{\chaptername}{CHAPTER}
+\newcommand{\wordchapter}{%
+  \ifcase\value{chapter}\or ONE\or TWO\or THREE\or FOUR\or FIVE\or SIX\else\thechapter\fi
+}
+\titleformat{\chapter}[display]
+  {\normalfont\normalsize\centering\singlespacing}
+  {\MakeUppercase{\chaptername}~\wordchapter}{2pt}{\normalsize\MakeUppercase}
+
+% Numberless chapter headings (TOC, Preliminaries, References)
+\titleformat{name=\chapter,numberless}
+  {\normalfont\normalsize\centering\singlespacing}
+  {}{0pt}{\normalsize\MakeUppercase}
+
+\titlespacing*{\chapter}{0pt}{0pt}{12pt}
+\titlespacing*{name=\chapter,numberless}{0pt}{0pt}{12pt}
+
+% Section headings at 12pt (normalsize), bold
+\titleformat{\section}
+  {\normalfont\normalsize\bfseries}
+  {\thesection}{1em}{}
+\titleformat{\subsection}
+  {\normalfont\normalsize\bfseries}
+  {\thesubsection}{1em}{}
+\titleformat{\subsubsection}
+  {\normalfont\normalsize\bfseries}
+  {\thesubsubsection}{1em}{}
+
+\titlespacing*{\section}{0pt}{12pt}{4pt}
+\titlespacing*{\subsection}{0pt}{10pt}{3pt}
+\titlespacing*{\subsubsection}{0pt}{8pt}{2pt}
+
+% ─── Table of Contents & List Customization (tocloft) ────────
+\renewcommand{\contentsname}{TABLE OF CONTENTS}
+\renewcommand{\listtablename}{LIST OF TABLES}
+\renewcommand{\listfigurename}{LIST OF FIGURES}
+% Centering TOC, LOT, LOF titles
+\renewcommand{\cfttoctitlefont}{\hfill\normalfont\normalsize\bfseries}
+\renewcommand{\cftaftertoctitle}{\hfill\null}
+\renewcommand{\cftlottitlefont}{\hfill\normalfont\normalsize\bfseries}
+\renewcommand{\cftafterlottitle}{\hfill\null}
+\renewcommand{\cftloftitlefont}{\hfill\normalfont\normalsize\bfseries}
+\renewcommand{\cftafterloftitle}{\hfill\null}
+
+\renewcommand{\cftchapleader}{\cftdotfill{\cftdotsep}} % Dotted leader for chapters
+\renewcommand{\cftsecleader}{\cftdotfill{\cftdotsep}}
+\renewcommand{\cftsubsecleader}{\cftdotfill{\cftdotsep}}
+
+% Adjust chapter entry in TOC to display "CHAPTER ONE: ", "CHAPTER TWO: ", etc.
+\makeatletter
+\newcommand{\wordnum}[1]{%
+  \ifnum\pdfstrcmp{#1}{1}=0 ONE\else
+  \ifnum\pdfstrcmp{#1}{2}=0 TWO\else
+  \ifnum\pdfstrcmp{#1}{3}=0 THREE\else
+  \ifnum\pdfstrcmp{#1}{4}=0 FOUR\else
+  \ifnum\pdfstrcmp{#1}{5}=0 FIVE\else
+  \ifnum\pdfstrcmp{#1}{6}=0 SIX\else
+  #1\fi\fi\fi\fi\fi\fi
+}
+\renewcommand{\numberline}[1]{%
+  \hb@xt@\@tempdima{\@cftbsnum \wordnum{#1}\@cftasnum\hfil}%
+}
+\makeatother
+
+\renewcommand{\cftchappresnum}{CHAPTER }
+\renewcommand{\cftchapaftersnum}{:\ }
+\renewcommand{\cftchapnumwidth}{8.5em}
+\renewcommand{\cftchapfont}{\normalfont\normalsize}
+\renewcommand{\cftchappagefont}{\normalfont\normalsize}
+
+\renewcommand{\bibname}{REFERENCES}
+\defbibheading{bibintoc}[\bibname]{%
+  \chapter*{#1}%
+  \addcontentsline{toc}{chapter}{#1}%
+}
+
+% Prevent widow and orphan lines
+\widowpenalty=10000
+\clubpenalty=10000
+\displaywidowpenalty=10000
+\raggedbottom
+
+\begin{document}
+
+% ─────────────────── Outer Cover Page (12pt font size) ────────
+\thispagestyle{empty}
+\begin{center}
+    \vspace*{1.5cm}
+    
+    {\fontsize{12pt}{18pt}\selectfont UNIVERSITY OF TECHNOLOGY AND APPLIED SCIENCES\par}
+    
+    \vspace{0.3cm}
+    
+    {\fontsize{12pt}{18pt}\selectfont SCHOOL OF COMPUTING AND INFORMATION SCIENCES\par}
+    
+    \vspace{4.0cm}
+    
+    {\fontsize{12pt}{18pt}\selectfont TERRANODE: A BLOCKCHAIN-BASED\\ SMART FARM SECURITY FRAMEWORK\par}
+    
+    \vspace{5.5cm}
+    
+    {\fontsize{12pt}{18pt}\selectfont KASSIM ISKANDA DEISHINI\par}
+    
+    \vspace{5.5cm}
+    
+    {\fontsize{12pt}{18pt}\selectfont 2026\par}
+\end{center}
+\newpage
+
+% ─────────────────── Inner Title Page (12pt font size) ────────
+\begin{titlepage}
+    \centering
+    \vspace*{0.5cm}
+    
+    {\fontsize{12pt}{18pt}\selectfont TERRANODE: A BLOCKCHAIN-BASED SMART FARM SECURITY FRAMEWORK\par}
+    
+    \vspace{1.5cm}
+    
+    {\fontsize{12pt}{18pt}\selectfont A PROJECT REPORT\par}
+    
+    \vspace{1.2cm}
+    
+    {\fontsize{12pt}{18pt}\selectfont\textit{Submitted by}\par}
+    
+    \vspace{0.4cm}
+    
+    {\fontsize{12pt}{18pt}\selectfont KASSIM ISKANDA DEISHINI\par}
+    {\fontsize{12pt}{18pt}\selectfont (20230404113)\par}
+    
+    \vspace{1.5cm}
+    
+    {\fontsize{12pt}{18pt}\selectfont in partial fulfillment for the award of the degree of\par}
+    
+    \vspace{0.4cm}
+    
+    {\fontsize{12pt}{18pt}\selectfont BACHELOR OF SCIENCE\par}
+    
+    \vspace{0.4cm}
+    
+    {\fontsize{12pt}{18pt}\selectfont in\par}
+    
+    \vspace{0.4cm}
+    
+    {\fontsize{12pt}{18pt}\selectfont COMPUTER SCIENCE\par}
+    
+    \vspace{1.5cm}
+    
+    {\fontsize{12pt}{18pt}\selectfont DEPARTMENT OF COMPUTER SCIENCE\par}
+    {\fontsize{12pt}{18pt}\selectfont SCHOOL OF COMPUTING AND INFORMATION SCIENCES\par}
+    {\fontsize{12pt}{18pt}\selectfont UNIVERSITY OF TECHNOLOGY AND APPLIED SCIENCES\par}
+    
+    \vspace{1.0cm}
+    
+    {\fontsize{12pt}{18pt}\selectfont AUGUST, 2026\par}
+    
+\end{titlepage}
+
+\pagenumbering{roman}
+\setcounter{page}{2}
+
+% ─────────────────── Declaration ──────────────────────────────
+\chapter*{DECLARATION}
+\addcontentsline{toc}{chapter}{DECLARATION}
+\doublespacing
+
+I, KASSIM ISKANDA DEISHINI (20230404113), hereby declare that this project report titled ``\textit{TERRANODE: A BLOCKCHAIN-BASED SMART FARM SECURITY FRAMEWORK}'' is my original research work. It has not been presented to any other university or institution of higher learning for the award of any degree. All works and publications by other authors cited herein have been fully referenced.
+
+\vspace{2.0cm}
+
+\noindent
+\begin{tabular}{@{}p{0.45\textwidth}@{\hspace{0.1\textwidth}}p{0.45\textwidth}@{}}
+Signature: \dotfill & Date: \dotfill \\[0.6cm]
+\multicolumn{2}{@{}l}{KASSIM ISKANDA DEISHINI} \\
+\multicolumn{2}{@{}l}{(20230404113)} \\
+\end{tabular}
+
+% ─────────────────── Certification ────────────────────────────
+\newpage
+\chapter*{CERTIFICATION}
+\addcontentsline{toc}{chapter}{CERTIFICATION}
+\doublespacing
+
+Certified that this project report ``\textit{TERRANODE: A BLOCKCHAIN-BASED SMART FARM SECURITY FRAMEWORK}'' is the bonafide work of KASSIM ISKANDA DEISHINI (20230404113) carried out under my supervision in the Department of Computer Science, School of Computing and Information Sciences, University of Technology and Applied Sciences.
+
+\vspace{1.8cm}
+
+\noindent
+\begin{tabular}{@{}p{0.45\textwidth}@{\hspace{0.1\textwidth}}p{0.45\textwidth}@{}}
+Signature: \dotfill & Signature: \dotfill \\[0.4cm]
+Date: \dotfill & Date: \dotfill \\[0.6cm]
+PROF. EDWARD Y. BAAGYERE & DR. MOSES A. AGEBURE \\
+SUPERVISOR & HEAD OF DEPARTMENT \\[0.2cm]
+Dean, School of Computing and Information Sciences & Department of Computer Science \\
+University of Technology and Applied Sciences & University of Technology and Applied Sciences \\
+\end{tabular}
+
+% ─────────────────── Acknowledgment ───────────────────────────
+\newpage
+\chapter*{ACKNOWLEDGMENT}
+\addcontentsline{toc}{chapter}{ACKNOWLEDGMENT}
+\doublespacing
+
+First and foremost, praise and gratitude are rendered to the Almighty God for His divine grace, wisdom, strength, and protection throughout the duration of this academic journey.
+
+Sincere appreciation and profound gratitude are extended to my supervisor, Prof. Edward Yellakuor Baagyere, Dean of the School of Computing and Information Sciences, for his exceptional mentorship, constructive critique, and scholarly guidance from the inception of this research to its completion. His high academic standards and insightful feedback were pivotal to the success of this project.
+
+Gratitude is also extended to Dr. Moses Apambila Agebure, Head of the Department of Computer Science, and to all faculty lecturers and staff in the School of Computing and Information Sciences for their dedication to academic excellence and invaluable instruction throughout my undergraduate studies.
+
+Finally, deepest love and heartfelt gratitude go to my parents, family members, and colleagues for their unwavering moral, financial, and emotional support, encouragement, and prayers throughout my academic journey.
+
+% ─────────────────── Dedication ───────────────────────────────
+\newpage
+\chapter*{DEDICATION}
+\addcontentsline{toc}{chapter}{DEDICATION}
+\doublespacing
+
+This project work is dedicated to my beloved family, whose unconditional love, continuous sacrifices, and steadfast encouragement have been my greatest pillar of strength and inspiration.
+
+It is also dedicated to all hardworking smallholder farmers, whose relentless dedication feeds nations, with the hope that secure technological innovations will empower their livelihoods.
+
+% ─────────────────── Abstract ─────────────────────────────────
+\newpage
+\chapter*{ABSTRACT}
+\addcontentsline{toc}{chapter}{ABSTRACT}
+\doublespacing
+
+This project presents TerraNode, a secure analytics-driven agricultural data management system built on blockchain technology. The platform addresses the critical challenges of data vulnerability, lack of transparency, and unreliable predictive analytics that persist in conventional centralized agricultural information systems. TerraNode integrates a Django REST framework backend with a React-based web interface and anchors all agricultural records to the Sui blockchain through smart contracts written in the Move programming language. The system captures environmental telemetry data including temperature, soil moisture, and soil pH readings, generates SHA-256 integrity hashes for each record, and mints verifiable produce batch objects on the Sui distributed ledger. A predictive analytics engine processes historical telemetry data using a weighted moving average model to produce crop yield forecasts with computed confidence scores and variance indices. Role-based access control separates the platform into farmer, logistics handler, and administrator interfaces, each secured with JSON Web Token authentication and Argon2id password hashing. The Sui blockchain component employs Ed25519 digital signatures and BLAKE2b hashing to verify wallet-based login operations. Evaluation results demonstrate 100\% pass rates across 143 automated test cases and 15 functional requirement verification scenarios. On the Sui Testnet, blockchain produce batch minting achieved an average latency of 1.20 seconds, custody transfer transactions confirmed in 0.90 seconds with deterministic transaction finality under 3.00 seconds, and gas execution costs averaged 0.003 SUI per transaction. Furthermore, telemetry data integrity hashing executed in 0.012 ms, and the predictive analytics engine served cached yield forecasts within 15 ms (110 ms uncached), establishing a high-throughput, tamper-resistant framework for smallholder agricultural management.
+
+% ─────────────────── Table of Contents ────────────────────────
+\newpage
+\onehalfspacing
+\tableofcontents
+\newpage
+\listoftables
+\newpage
+\listoffigures
+\newpage
+
+\pagenumbering{arabic}
+\onehalfspacing
+
+% ─────────────────── Chapters ─────────────────────────────────
+\include{chapters/chapter1_rev}
+\include{chapters/chapter2_rev}
+\include{chapters/chapter3_rev}
+\include{chapters/chapter4_rev}
+\include{chapters/chapter5_rev}
+
+% ─────────────────── References ───────────────────────────────
+\newpage
+\singlespacing
+\printbibliography[heading=bibintoc, title={REFERENCES}]
+
+% ─────────────────── Appendix ─────────────────────────────────
+\newpage
+\onehalfspacing
+\include{chapters/appendix}
+
+\end{document}

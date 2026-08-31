@@ -91,21 +91,15 @@
       \field{year}{2025}
     \endentry
     \entry{alabsi2023blockchain}{article}{}{}
-      \name{author}{3}{}{%
-        {{un=0,uniquepart=base,hash=5632c304e5a3b075f4cdb6bc489ff2d6}{%
-           family={Al-Absi},
-           familyi={A\bibinithyphendelim A\bibinitperiod},
+      \name{author}{2}{}{%
+        {{un=0,uniquepart=base,hash=590b63277978a70d193222e0c454dbd0}{%
+           family={Aliyu},
+           familyi={A\bibinitperiod},
            given={A.\bibnamedelimi A.},
            giveni={A\bibinitperiod\bibinitdelim A\bibinitperiod},
            givenun=0}}%
-        {{un=0,uniquepart=base,hash=a84850d9c7116e4bf32c45ba066f4d0c}{%
-           family={Al-Absi},
-           familyi={A\bibinithyphendelim A\bibinitperiod},
-           given={M.\bibnamedelimi A.},
-           giveni={M\bibinitperiod\bibinitdelim A\bibinitperiod},
-           givenun=0}}%
-        {{un=0,uniquepart=base,hash=a38fe2282e0ae708270c02346a36d08f}{%
-           family={Lee},
+        {{un=0,uniquepart=base,hash=7bb074c37d04e2fb30a473aa12102ae1}{%
+           family={Liu},
            familyi={L\bibinitperiod},
            given={J.},
            giveni={J\bibinitperiod},
@@ -114,16 +108,18 @@
       \list{publisher}{1}{%
         {MDPI}%
       }
-      \strng{namehash}{7ceeedcb791da6ea0f2872e9fa9c660d}
-      \strng{fullhash}{476939da02f7d6960b8436cddc590b86}
-      \strng{fullhashraw}{476939da02f7d6960b8436cddc590b86}
-      \strng{bibnamehash}{476939da02f7d6960b8436cddc590b86}
-      \strng{authorbibnamehash}{476939da02f7d6960b8436cddc590b86}
-      \strng{authornamehash}{7ceeedcb791da6ea0f2872e9fa9c660d}
-      \strng{authorfullhash}{476939da02f7d6960b8436cddc590b86}
-      \strng{authorfullhashraw}{476939da02f7d6960b8436cddc590b86}
+      \strng{namehash}{3147ffbffc525000c32f9a030b5811ac}
+      \strng{fullhash}{3147ffbffc525000c32f9a030b5811ac}
+      \strng{fullhashraw}{3147ffbffc525000c32f9a030b5811ac}
+      \strng{bibnamehash}{3147ffbffc525000c32f9a030b5811ac}
+      \strng{authorbibnamehash}{3147ffbffc525000c32f9a030b5811ac}
+      \strng{authornamehash}{3147ffbffc525000c32f9a030b5811ac}
+      \strng{authorfullhash}{3147ffbffc525000c32f9a030b5811ac}
+      \strng{authorfullhashraw}{3147ffbffc525000c32f9a030b5811ac}
+      \field{extraname}{1}
       \field{sortinit}{A}
       \field{sortinithash}{2f401846e2029bad6b3ecc16d50031e2}
+      \field{extradate}{1}
       \field{extradatescope}{labelyear}
       \field{labeldatesource}{}
       \true{uniqueprimaryauthor}
@@ -136,6 +132,55 @@
       \field{year}{2023}
       \field{pages}{7992}
       \range{pages}{1}
+      \verb{doi}
+      \verb 10.3390/s23187992
+      \endverb
+    \endentry
+    \entry{aliyu2023blockchain}{article}{}{}
+      \name{author}{2}{}{%
+        {{un=0,uniquepart=base,hash=590b63277978a70d193222e0c454dbd0}{%
+           family={Aliyu},
+           familyi={A\bibinitperiod},
+           given={A.\bibnamedelimi A.},
+           giveni={A\bibinitperiod\bibinitdelim A\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=7bb074c37d04e2fb30a473aa12102ae1}{%
+           family={Liu},
+           familyi={L\bibinitperiod},
+           given={J.},
+           giveni={J\bibinitperiod},
+           givenun=0}}%
+      }
+      \list{publisher}{1}{%
+        {MDPI}%
+      }
+      \strng{namehash}{3147ffbffc525000c32f9a030b5811ac}
+      \strng{fullhash}{3147ffbffc525000c32f9a030b5811ac}
+      \strng{fullhashraw}{3147ffbffc525000c32f9a030b5811ac}
+      \strng{bibnamehash}{3147ffbffc525000c32f9a030b5811ac}
+      \strng{authorbibnamehash}{3147ffbffc525000c32f9a030b5811ac}
+      \strng{authornamehash}{3147ffbffc525000c32f9a030b5811ac}
+      \strng{authorfullhash}{3147ffbffc525000c32f9a030b5811ac}
+      \strng{authorfullhashraw}{3147ffbffc525000c32f9a030b5811ac}
+      \field{extraname}{2}
+      \field{sortinit}{A}
+      \field{sortinithash}{2f401846e2029bad6b3ecc16d50031e2}
+      \field{extradate}{2}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Sensors}
+      \field{number}{18}
+      \field{title}{Blockchain-Based Smart Farm Security Framework for the Internet of Things}
+      \field{volume}{23}
+      \field{year}{2023}
+      \field{pages}{7992}
+      \range{pages}{1}
+      \verb{doi}
+      \verb 10.3390/s23187992
+      \endverb
     \endentry
     \entry{caro2018blockchain}{article}{}{}
       \name{author}{4}{}{%
@@ -1087,21 +1132,15 @@
       \field{year}{2025}
     \endentry
     \entry{alabsi2023blockchain}{article}{}{}
-      \name{author}{3}{}{%
-        {{un=0,uniquepart=base,hash=5632c304e5a3b075f4cdb6bc489ff2d6}{%
-           family={Al-Absi},
-           familyi={A\bibinithyphendelim A\bibinitperiod},
+      \name{author}{2}{}{%
+        {{un=0,uniquepart=base,hash=590b63277978a70d193222e0c454dbd0}{%
+           family={Aliyu},
+           familyi={A\bibinitperiod},
            given={A.\bibnamedelimi A.},
            giveni={A\bibinitperiod\bibinitdelim A\bibinitperiod},
            givenun=0}}%
-        {{un=0,uniquepart=base,hash=a84850d9c7116e4bf32c45ba066f4d0c}{%
-           family={Al-Absi},
-           familyi={A\bibinithyphendelim A\bibinitperiod},
-           given={M.\bibnamedelimi A.},
-           giveni={M\bibinitperiod\bibinitdelim A\bibinitperiod},
-           givenun=0}}%
-        {{un=0,uniquepart=base,hash=a38fe2282e0ae708270c02346a36d08f}{%
-           family={Lee},
+        {{un=0,uniquepart=base,hash=7bb074c37d04e2fb30a473aa12102ae1}{%
+           family={Liu},
            familyi={L\bibinitperiod},
            given={J.},
            giveni={J\bibinitperiod},
@@ -1110,16 +1149,18 @@
       \list{publisher}{1}{%
         {MDPI}%
       }
-      \strng{namehash}{7ceeedcb791da6ea0f2872e9fa9c660d}
-      \strng{fullhash}{476939da02f7d6960b8436cddc590b86}
-      \strng{fullhashraw}{476939da02f7d6960b8436cddc590b86}
-      \strng{bibnamehash}{476939da02f7d6960b8436cddc590b86}
-      \strng{authorbibnamehash}{476939da02f7d6960b8436cddc590b86}
-      \strng{authornamehash}{7ceeedcb791da6ea0f2872e9fa9c660d}
-      \strng{authorfullhash}{476939da02f7d6960b8436cddc590b86}
-      \strng{authorfullhashraw}{476939da02f7d6960b8436cddc590b86}
+      \strng{namehash}{3147ffbffc525000c32f9a030b5811ac}
+      \strng{fullhash}{3147ffbffc525000c32f9a030b5811ac}
+      \strng{fullhashraw}{3147ffbffc525000c32f9a030b5811ac}
+      \strng{bibnamehash}{3147ffbffc525000c32f9a030b5811ac}
+      \strng{authorbibnamehash}{3147ffbffc525000c32f9a030b5811ac}
+      \strng{authornamehash}{3147ffbffc525000c32f9a030b5811ac}
+      \strng{authorfullhash}{3147ffbffc525000c32f9a030b5811ac}
+      \strng{authorfullhashraw}{3147ffbffc525000c32f9a030b5811ac}
+      \field{extraname}{1}
       \field{sortinit}{A}
       \field{sortinithash}{2f401846e2029bad6b3ecc16d50031e2}
+      \field{extradate}{1}
       \field{extradatescope}{labelyear}
       \field{labeldatesource}{}
       \true{uniqueprimaryauthor}
@@ -1132,6 +1173,55 @@
       \field{year}{2023}
       \field{pages}{7992}
       \range{pages}{1}
+      \verb{doi}
+      \verb 10.3390/s23187992
+      \endverb
+    \endentry
+    \entry{aliyu2023blockchain}{article}{}{}
+      \name{author}{2}{}{%
+        {{un=0,uniquepart=base,hash=590b63277978a70d193222e0c454dbd0}{%
+           family={Aliyu},
+           familyi={A\bibinitperiod},
+           given={A.\bibnamedelimi A.},
+           giveni={A\bibinitperiod\bibinitdelim A\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=7bb074c37d04e2fb30a473aa12102ae1}{%
+           family={Liu},
+           familyi={L\bibinitperiod},
+           given={J.},
+           giveni={J\bibinitperiod},
+           givenun=0}}%
+      }
+      \list{publisher}{1}{%
+        {MDPI}%
+      }
+      \strng{namehash}{3147ffbffc525000c32f9a030b5811ac}
+      \strng{fullhash}{3147ffbffc525000c32f9a030b5811ac}
+      \strng{fullhashraw}{3147ffbffc525000c32f9a030b5811ac}
+      \strng{bibnamehash}{3147ffbffc525000c32f9a030b5811ac}
+      \strng{authorbibnamehash}{3147ffbffc525000c32f9a030b5811ac}
+      \strng{authornamehash}{3147ffbffc525000c32f9a030b5811ac}
+      \strng{authorfullhash}{3147ffbffc525000c32f9a030b5811ac}
+      \strng{authorfullhashraw}{3147ffbffc525000c32f9a030b5811ac}
+      \field{extraname}{2}
+      \field{sortinit}{A}
+      \field{sortinithash}{2f401846e2029bad6b3ecc16d50031e2}
+      \field{extradate}{2}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Sensors}
+      \field{number}{18}
+      \field{title}{Blockchain-Based Smart Farm Security Framework for the Internet of Things}
+      \field{volume}{23}
+      \field{year}{2023}
+      \field{pages}{7992}
+      \range{pages}{1}
+      \verb{doi}
+      \verb 10.3390/s23187992
+      \endverb
     \endentry
     \entry{caro2018blockchain}{article}{}{}
       \name{author}{4}{}{%
