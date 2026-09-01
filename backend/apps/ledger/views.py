@@ -1,16 +1,28 @@
-from rest_framework import generics, status
+import hashlib
+import json
+
+from rest_framework import generics, serializers, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from django.shortcuts import get_object_or_404
+from django.db import IntegrityError, transaction
+from django.core.exceptions import ImproperlyConfigured
 from django.db.models import Q
+from django.utils import timezone
 from django.contrib.auth import get_user_model
-from apps.users.permissions import IsFarmer, IsLogistics, IsFarmerOrAdmin
-from apps.telemetry.services import generate_telemetry_hash
+from apps.users.permissions import IsFarmer
+from apps.telemetry.encryption_service import read_telemetry_values
 from apps.users.models import AuditEvent
 from .models import ProduceBatch, CustodyTransfer
-from .serializers import BatchPrepareSerializer, BatchConfirmSerializer, BatchOutputSerializer
-from .services import verify_integrity, verify_sui_transaction_on_rpc
+from .serializers import (
+    BatchConfirmSerializer,
+    BatchOutputSerializer,
+    BatchPrepareSerializer,
+    BatchTransferInputSerializer,
+    CustodyTransferSerializer,
+)
+from .services import verify_sui_transaction_on_rpc
 
 User = get_user_model()
 
@@ -21,6 +33,22 @@ ALLOWED_LIFECYCLE_TRANSITIONS = {
     ProduceBatch.Status.DELIVERED: []
 }
 
+
+def _rpc_failure_response(result, operation):
+    http_status = (
+        status.HTTP_503_SERVICE_UNAVAILABLE
+        if result.get("reason_code") == "rpc_unavailable"
+        else status.HTTP_400_BAD_REQUEST
+    )
+    return Response(
+        {
+            "error": f"Sui Testnet {operation} verification failed",
+            "reason": result.get("error", "Unknown verification failure"),
+            "reason_code": result.get("reason_code", "verification_failed"),
+        },
+        status=http_status,
+    )
+
 class BatchPrepareView(generics.CreateAPIView):
     """Step 1: Farmer stages a produce batch record in PENDING state before calling Sui Move contract."""
     permission_classes = (IsFarmer,)
@@ -30,15 +58,23 @@ class BatchPrepareView(generics.CreateAPIView):
         farmer = self.request.user
         telemetry = serializer.validated_data.get('origin_telemetry')
         if telemetry:
-            data_integrity_hash = generate_telemetry_hash(
-                farmer_id=farmer.id,
-                recorded_at=telemetry.recorded_at,
-                temperature=telemetry.temperature_celsius,
-                soil_moisture=telemetry.soil_moisture_percentage,
-                soil_ph=telemetry.soil_ph,
-            )
+            if telemetry.farmer_id != farmer.id:
+                raise serializers.ValidationError(
+                    {"origin_telemetry": "A farmer may only anchor their own telemetry."}
+                )
+            read_telemetry_values(telemetry, request_user=farmer)
+            data_integrity_hash = telemetry.payload_sha256
         else:
-            data_integrity_hash = "no-telemetry-hash"
+            canonical_batch = json.dumps(
+                {
+                    "crop_type": serializer.validated_data["crop_type"],
+                    "farmer_id": str(farmer.id),
+                    "weight_grams": int(serializer.validated_data["weight_kg"] * 1000),
+                },
+                sort_keys=True,
+                separators=(",", ":"),
+            ).encode("utf-8")
+            data_integrity_hash = hashlib.sha256(canonical_batch).hexdigest()
 
         batch = serializer.save(
             farmer=farmer,
@@ -54,11 +90,11 @@ class BatchPrepareView(generics.CreateAPIView):
         )
 
 class BatchConfirmView(APIView):
-    """Step 2: Farmer confirms the Sui object ID and tx digest after on-chain minting with RPC verification."""
+    """Confirm a mint only after deriving and verifying its object from Sui effects."""
     permission_classes = (IsFarmer,)
 
     def post(self, request, pk):
-        batch = get_object_or_404(ProduceBatch, pk=pk)
+        batch = get_object_or_404(ProduceBatch.objects.select_related("farmer"), pk=pk)
 
         if batch.farmer != request.user or batch.current_custodian != request.user:
             return Response({"error": "Unauthorized to confirm this batch"}, status=status.HTTP_403_FORBIDDEN)
@@ -69,36 +105,75 @@ class BatchConfirmView(APIView):
         serializer = BatchConfirmSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 
-        sui_object_id = serializer.validated_data['sui_object_id']
-        sui_tx_digest = serializer.validated_data.get('sui_tx_digest')
+        sui_tx_digest = serializer.validated_data["sui_tx_digest"]
 
-        if sui_tx_digest and ProduceBatch.objects.filter(sui_tx_digest=sui_tx_digest).exclude(id=batch.id).exists():
+        if not request.user.sui_public_key:
+            return Response(
+                {"error": "Bind a verified Sui wallet before minting."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+        if (
+            ProduceBatch.objects.filter(sui_tx_digest=sui_tx_digest).exists()
+            or CustodyTransfer.objects.filter(tx_digest=sui_tx_digest).exists()
+        ):
             return Response({"error": "This transaction digest has already been consumed"}, status=status.HTTP_400_BAD_REQUEST)
 
-        if sui_tx_digest:
-            rpc_res = verify_sui_transaction_on_rpc(
-                tx_digest=sui_tx_digest,
-                expected_sender=request.user.sui_public_key,
-                expected_function="mint_batch"
-            )
-            if not rpc_res["verified"] and "Failed to connect" not in rpc_res.get("error", ""):
-                return Response({"error": f"Sui Testnet Verification Failed: {rpc_res.get('error')}"}, status=status.HTTP_400_BAD_REQUEST)
-
-            if rpc_res.get("object_id"):
-                sui_object_id = rpc_res["object_id"]
-
-        batch.sui_object_id = sui_object_id
-        if sui_tx_digest:
-            batch.sui_tx_digest = sui_tx_digest
-        batch.status = ProduceBatch.Status.MINTED
-        batch.save()
-
-        AuditEvent.objects.create(
-            event_type=AuditEvent.EventType.BATCH_CONFIRM,
-            user=request.user,
-            description=f"Farmer {request.user.email} confirmed mint for batch {batch.id} (Object ID: {sui_object_id})",
-            metadata={"batch_id": str(batch.id), "sui_object_id": sui_object_id, "sui_tx_digest": sui_tx_digest}
+        rpc_res = verify_sui_transaction_on_rpc(
+            tx_digest=sui_tx_digest,
+            expected_sender=request.user.sui_public_key,
+            expected_function="mint_batch",
+            expected_batch=batch,
         )
+        if not rpc_res.get("verified"):
+            return _rpc_failure_response(rpc_res, "mint")
+
+        try:
+            with transaction.atomic():
+                batch = ProduceBatch.objects.select_for_update().get(pk=pk)
+                if batch.status != ProduceBatch.Status.PENDING:
+                    return Response(
+                        {"error": f"Invalid transition from status {batch.status} to MINTED"},
+                        status=status.HTTP_409_CONFLICT,
+                    )
+                if (
+                    ProduceBatch.objects.filter(sui_tx_digest=sui_tx_digest).exclude(pk=batch.pk).exists()
+                    or CustodyTransfer.objects.filter(tx_digest=sui_tx_digest).exists()
+                ):
+                    return Response(
+                        {"error": "This transaction digest has already been consumed"},
+                        status=status.HTTP_409_CONFLICT,
+                    )
+                batch.sui_object_id = rpc_res["object_id"]
+                batch.sui_tx_digest = sui_tx_digest
+                batch.mint_verified_at = timezone.now()
+                batch.mint_verification = rpc_res
+                batch.status = ProduceBatch.Status.MINTED
+                batch.save(
+                    update_fields=[
+                        "sui_object_id",
+                        "sui_tx_digest",
+                        "mint_verified_at",
+                        "mint_verification",
+                        "status",
+                        "updated_at",
+                    ]
+                )
+                AuditEvent.objects.create(
+                    event_type=AuditEvent.EventType.BATCH_CONFIRM,
+                    user=request.user,
+                    wallet_address=request.user.sui_public_key,
+                    description=f"Verified Sui mint for batch {batch.id}",
+                    metadata={
+                        "batch_id": str(batch.id),
+                        "sui_object_id": batch.sui_object_id,
+                        "sui_tx_digest": sui_tx_digest,
+                    },
+                )
+        except IntegrityError:
+            return Response(
+                {"error": "The Sui transaction digest or object ID has already been consumed."},
+                status=status.HTTP_409_CONFLICT,
+            )
 
         return Response(BatchOutputSerializer(batch).data)
 
@@ -107,70 +182,118 @@ class BatchTransferView(APIView):
     permission_classes = (IsAuthenticated,)
 
     def post(self, request, pk):
-        batch = get_object_or_404(ProduceBatch, pk=pk)
+        batch = get_object_or_404(
+            ProduceBatch.objects.select_related("farmer", "current_custodian"),
+            pk=pk,
+        )
         current_user = request.user
 
         if batch.current_custodian != current_user:
             return Response({"error": "Only the current custodian can initiate a custody transfer"}, status=status.HTTP_403_FORBIDDEN)
 
-        target_user_id = request.data.get("to_user_id")
-        target_wallet = request.data.get("to_wallet")
+        input_serializer = BatchTransferInputSerializer(data=request.data)
+        input_serializer.is_valid(raise_exception=True)
+        transfer_data = input_serializer.validated_data
+        target_user = get_object_or_404(User, id=transfer_data["to_user_id"])
 
-        target_user = None
-        if target_user_id:
-            target_user = get_object_or_404(User, id=target_user_id)
-        elif target_wallet:
-            target_user = User.objects.filter(sui_public_key__iexact=target_wallet).first()
-            if not target_user:
-                return Response({"error": "Target wallet address is not registered to an authorized user"}, status=status.HTTP_400_BAD_REQUEST)
-        else:
-            return Response({"error": "to_user_id or to_wallet is required"}, status=status.HTTP_400_BAD_REQUEST)
-
-        if not target_user.sui_public_key:
+        if not target_user.is_active or target_user.role not in {
+            User.Role.FARMER,
+            User.Role.LOGISTICS,
+        }:
+            return Response(
+                {"error": "Target user is not an active custody stakeholder."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+        if target_user == current_user:
+            return Response(
+                {"error": "Custody cannot be transferred to the current custodian."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+        if not current_user.sui_public_key or not target_user.sui_public_key:
             return Response({"error": "Target user must have a bound wallet address for on-chain custody"}, status=status.HTTP_400_BAD_REQUEST)
 
-        target_status = request.data.get("status", ProduceBatch.Status.IN_TRANSIT)
+        target_status = transfer_data["status"]
         allowed = ALLOWED_LIFECYCLE_TRANSITIONS.get(batch.status, [])
         if target_status not in allowed:
             return Response({"error": f"Invalid lifecycle transition from {batch.status} to {target_status}"}, status=status.HTTP_400_BAD_REQUEST)
 
-        sui_tx_digest = request.data.get("sui_tx_digest", "")
-
-        verified_on_chain = False
-        if sui_tx_digest:
-            rpc_res = verify_sui_transaction_on_rpc(
-                tx_digest=sui_tx_digest,
-                expected_sender=current_user.sui_public_key,
-                expected_function="transfer_custody"
+        sui_tx_digest = transfer_data["sui_tx_digest"]
+        if (
+            ProduceBatch.objects.filter(sui_tx_digest=sui_tx_digest).exists()
+            or CustodyTransfer.objects.filter(tx_digest=sui_tx_digest).exists()
+        ):
+            return Response(
+                {"error": "This transaction digest has already been consumed"},
+                status=status.HTTP_400_BAD_REQUEST,
             )
-            if rpc_res["verified"]:
-                verified_on_chain = True
-            elif "Failed to connect" not in rpc_res.get("error", ""):
-                return Response({"error": f"Sui Testnet Transfer Verification Failed: {rpc_res.get('error')}"}, status=status.HTTP_400_BAD_REQUEST)
+        if not batch.sui_object_id:
+            return Response(
+                {"error": "Batch has no verified Sui object."},
+                status=status.HTTP_409_CONFLICT,
+            )
 
-        transfer_record = CustodyTransfer.objects.create(
-            batch=batch,
-            from_user=current_user,
-            to_user=target_user,
-            from_wallet=current_user.sui_public_key or "",
-            to_wallet=target_user.sui_public_key or "",
+        rpc_res = verify_sui_transaction_on_rpc(
             tx_digest=sui_tx_digest,
-            verified_on_chain=verified_on_chain,
-            event_metadata=request.data.get("metadata", {})
+            expected_sender=current_user.sui_public_key,
+            expected_function="transfer_custody",
+            expected_batch=batch,
+            expected_object_id=batch.sui_object_id,
+            expected_recipient=target_user.sui_public_key,
         )
+        if not rpc_res.get("verified"):
+            return _rpc_failure_response(rpc_res, "custody transfer")
 
-        batch.current_custodian = target_user
-        batch.status = target_status
-        if sui_tx_digest:
-            batch.sui_tx_digest = sui_tx_digest
-        batch.save()
-
-        AuditEvent.objects.create(
-            event_type=AuditEvent.EventType.CUSTODY_TRANSFER,
-            user=current_user,
-            description=f"Custody of batch {batch.id} transferred from {current_user.email} to {target_user.email}",
-            metadata={"batch_id": str(batch.id), "from_user": str(current_user.id), "to_user": str(target_user.id), "sui_tx_digest": sui_tx_digest}
-        )
+        try:
+            with transaction.atomic():
+                batch = ProduceBatch.objects.select_for_update().get(pk=pk)
+                if batch.current_custodian_id != current_user.id:
+                    return Response(
+                        {"error": "Custody changed while this transfer was being verified."},
+                        status=status.HTTP_409_CONFLICT,
+                    )
+                if target_status not in ALLOWED_LIFECYCLE_TRANSITIONS.get(batch.status, []):
+                    return Response(
+                        {"error": f"Invalid lifecycle transition from {batch.status} to {target_status}"},
+                        status=status.HTTP_409_CONFLICT,
+                    )
+                if (
+                    ProduceBatch.objects.filter(sui_tx_digest=sui_tx_digest).exists()
+                    or CustodyTransfer.objects.filter(tx_digest=sui_tx_digest).exists()
+                ):
+                    return Response(
+                        {"error": "This transaction digest has already been consumed"},
+                        status=status.HTTP_409_CONFLICT,
+                    )
+                CustodyTransfer.objects.create(
+                    batch=batch,
+                    from_user=current_user,
+                    to_user=target_user,
+                    from_wallet=current_user.sui_public_key,
+                    to_wallet=target_user.sui_public_key,
+                    tx_digest=sui_tx_digest,
+                    verified_on_chain=True,
+                    event_metadata={**transfer_data["metadata"], "verification": rpc_res},
+                )
+                batch.current_custodian = target_user
+                batch.status = target_status
+                batch.save(update_fields=["current_custodian", "status", "updated_at"])
+                AuditEvent.objects.create(
+                    event_type=AuditEvent.EventType.CUSTODY_TRANSFER,
+                    user=current_user,
+                    wallet_address=current_user.sui_public_key,
+                    description=f"Verified custody transfer for batch {batch.id}",
+                    metadata={
+                        "batch_id": str(batch.id),
+                        "from_user": str(current_user.id),
+                        "to_user": str(target_user.id),
+                        "sui_tx_digest": sui_tx_digest,
+                    },
+                )
+        except IntegrityError:
+            return Response(
+                {"error": "The Sui transaction digest has already been consumed."},
+                status=status.HTTP_409_CONFLICT,
+            )
 
         return Response(BatchOutputSerializer(batch).data)
 
@@ -195,6 +318,38 @@ class BatchDetailView(generics.RetrieveAPIView):
         if user.role == "ADMIN":
             return ProduceBatch.objects.all()
         return ProduceBatch.objects.filter(Q(current_custodian=user) | Q(farmer=user)).distinct()
+
+
+class BatchLookupView(APIView):
+    permission_classes = (IsAuthenticated,)
+
+    def get(self, request, identifier):
+        visible = ProduceBatch.objects.all() if request.user.role == "ADMIN" else ProduceBatch.objects.filter(
+            Q(current_custodian=request.user) | Q(farmer=request.user)
+        )
+        batch = visible.filter(sui_object_id__iexact=identifier).first()
+        if batch is None:
+            try:
+                batch = visible.filter(pk=identifier).first()
+            except (ValueError, TypeError):
+                batch = None
+        if batch is None:
+            return Response({"error": "Visible batch not found."}, status=status.HTTP_404_NOT_FOUND)
+        return Response(BatchOutputSerializer(batch).data)
+
+
+class CustodyTransferHistoryView(generics.ListAPIView):
+    permission_classes = (IsAuthenticated,)
+    serializer_class = CustodyTransferSerializer
+    pagination_class = None
+
+    def get_queryset(self):
+        user = self.request.user
+        batches = ProduceBatch.objects.all() if user.role == "ADMIN" else ProduceBatch.objects.filter(
+            Q(current_custodian=user) | Q(farmer=user)
+        )
+        batch = get_object_or_404(batches, pk=self.kwargs["pk"])
+        return batch.transfers.select_related("from_user", "to_user").all()
 
 class PublicBatchVerifyView(APIView):
     """
@@ -223,25 +378,41 @@ class PublicBatchVerifyView(APIView):
 
         local_integrity = True
         if batch.origin_telemetry:
-            recomputed = generate_telemetry_hash(
-                farmer_id=batch.origin_telemetry.farmer_id,
-                recorded_at=batch.origin_telemetry.recorded_at,
-                temperature=batch.origin_telemetry.temperature_celsius,
-                soil_moisture=batch.origin_telemetry.soil_moisture_percentage,
-                soil_ph=batch.origin_telemetry.soil_ph
-            )
-            local_integrity = (recomputed == batch.origin_telemetry.payload_sha256)
+            try:
+                read_telemetry_values(
+                    batch.origin_telemetry,
+                    enforce_authorization=False,
+                )
+                local_integrity = True
+            except (ValueError, ImproperlyConfigured):
+                local_integrity = False
 
         batch_hash_match = (batch.data_integrity_hash == batch.origin_telemetry.payload_sha256) if batch.origin_telemetry else True
 
         sui_tx_verified = False
         sui_details = {}
-        if batch.sui_tx_digest:
-            rpc_res = verify_sui_transaction_on_rpc(tx_digest=batch.sui_tx_digest)
+        if batch.sui_tx_digest and batch.sui_object_id and batch.status != ProduceBatch.Status.PENDING:
+            rpc_res = verify_sui_transaction_on_rpc(
+                tx_digest=batch.sui_tx_digest,
+                expected_sender=batch.farmer.sui_public_key,
+                expected_function="mint_batch",
+                expected_batch=batch,
+                expected_object_id=batch.sui_object_id,
+                expected_recipient=batch.current_custodian.sui_public_key,
+            )
             sui_tx_verified = rpc_res.get("verified", False)
             sui_details = rpc_res
 
-        overall_verification = local_integrity and batch_hash_match and (sui_tx_verified if batch.sui_tx_digest else True)
+        custody_chain_verified = all(
+            transfer.verified_on_chain and transfer.tx_digest
+            for transfer in batch.transfers.all()
+        )
+        overall_verification = (
+            local_integrity
+            and batch_hash_match
+            and sui_tx_verified
+            and custody_chain_verified
+        )
 
         return Response({
             "verified": overall_verification,
@@ -258,6 +429,7 @@ class PublicBatchVerifyView(APIView):
             "local_integrity": local_integrity,
             "batch_hash_match": batch_hash_match,
             "sui_tx_verified": sui_tx_verified,
+            "custody_chain_verified": custody_chain_verified,
             "overall_verification": overall_verification,
             "created_at": batch.created_at,
             "sui_explorer_url": f"https://suiscan.xyz/testnet/object/{batch.sui_object_id}" if batch.sui_object_id else None

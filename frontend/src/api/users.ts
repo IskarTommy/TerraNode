@@ -7,10 +7,15 @@ export interface UserRecord {
   is_active: boolean;
   date_joined: string;
   last_login: string | null;
-  profile?: {
-    full_name: string;
-    wallet_address: string | null;
-  };
+  full_name: string;
+  sui_public_key: string | null;
+}
+
+export interface Stakeholder {
+  id: string;
+  full_name: string;
+  role: 'FARMER' | 'LOGISTICS';
+  sui_public_key: string;
 }
 
 export interface UserListResponse {
@@ -21,6 +26,10 @@ export interface UserListResponse {
 }
 
 export const usersApi = {
+  getStakeholders: async (): Promise<Stakeholder[]> => {
+    const response = await apiClient.get<Stakeholder[]>('/auth/stakeholders/');
+    return response.data;
+  },
   /** Get paginated user list */
   getList: async (params?: {
     page?: number;

@@ -333,6 +333,14 @@ export function DashboardLayout({
 
         {/* Page content */}
         <main className="dashboard-content">
+          {import.meta.env.VITE_DEMO_MODE === 'true' && (
+            <div
+              role="status"
+              className="mb-4 rounded-xl border-2 border-amber-400 bg-amber-400/15 px-4 py-3 text-center font-bold text-amber-300"
+            >
+              DEMO DATA MODE — synthetic records are enabled and must not be treated as real evidence.
+            </div>
+          )}
           {children}
         </main>
       </div>

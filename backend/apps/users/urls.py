@@ -6,7 +6,9 @@ from .views import (
     ProfileView,
     LogoutView,
     RequestWalletChallengeView,
-    WalletLoginView
+    WalletLoginView,
+    AdminUserListView,
+    StakeholderListView,
 )
 
 urlpatterns = [
@@ -17,4 +19,6 @@ urlpatterns = [
     path('register/', RegisterView.as_view(), name='auth_register'),
     path('logout/', LogoutView.as_view(), name='auth_logout'),
     path('profile/', ProfileView.as_view(), name='auth_profile'),
+    path('users/', AdminUserListView.as_view(), name='admin_user_list'),
+    path('stakeholders/', StakeholderListView.as_view(), name='stakeholder_list'),
 ]

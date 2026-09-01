@@ -1,19 +1,32 @@
-/* Ledger Types */
 export type BatchStatus = 'PENDING' | 'MINTED' | 'IN_TRANSIT' | 'DELIVERED';
 
+export interface CustodyTransfer {
+  id: string;
+  batch: string;
+  from_user: string;
+  to_user: string;
+  from_wallet: string;
+  to_wallet: string;
+  tx_digest: string;
+  verified_on_chain: boolean;
+  transferred_at: string;
+  event_metadata: Record<string, unknown>;
+}
+
 export interface ProduceBatch {
-  batch_id: string;
-  farmer_id: string;
-  farmer_name?: string;
+  id: string;
+  farmer: string;
+  current_custodian: string;
+  origin_telemetry: string | null;
   crop_type: string;
   weight_kg: number;
+  weight_grams: number;
   data_integrity_hash: string;
   status: BatchStatus;
-  sui_object_id?: string;
-  sui_tx_digest?: string;
-  current_custodian_id?: string;
-  current_custodian_name?: string;
-  origin_telemetry_id?: string;
+  sui_object_id: string | null;
+  sui_tx_digest: string | null;
+  mint_verified_at: string | null;
+  transfers: CustodyTransfer[];
   created_at: string;
   updated_at: string;
 }
@@ -21,7 +34,7 @@ export interface ProduceBatch {
 export interface BatchPrepareRequest {
   crop_type: string;
   weight_kg: number;
-  origin_telemetry_id?: string;
+  origin_telemetry?: string;
 }
 
 export interface BatchPrepareResponse {
@@ -34,13 +47,14 @@ export interface BatchPrepareResponse {
 }
 
 export interface BatchConfirmRequest {
-  sui_object_id: string;
   sui_tx_digest: string;
 }
 
 export interface BatchTransferRequest {
-  batch_id: string;
-  new_custodian_id: string;
+  to_user_id: string;
+  sui_tx_digest: string;
+  status: 'IN_TRANSIT' | 'DELIVERED';
+  metadata?: Record<string, unknown>;
 }
 
 export interface BatchListResponse {
@@ -48,17 +62,6 @@ export interface BatchListResponse {
   count: number;
   next: string | null;
   previous: string | null;
-}
-
-export interface TransferLogEntry {
-  transfer_id: string;
-  batch_id: string;
-  from_custodian_id: string;
-  from_custodian_name: string;
-  to_custodian_id: string;
-  to_custodian_name: string;
-  sui_tx_digest: string;
-  transferred_at: string;
 }
 
 export const BATCH_STATUS_CONFIG: Record<BatchStatus, { label: string; color: string; bg: string }> = {

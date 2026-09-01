@@ -1,10 +1,22 @@
 /* Analytics Types */
 export interface PredictionResult {
+  is_simulation: boolean;
+  crop_type: string;
+  model_type: string;
   confidence_score: number;
   predicted_yield_metric_tons: number;
-  historical_variance_index: number;
-  data_points_analyzed: number;
+  data_points_analyzed: {
+    temperature: number;
+    soil_moisture: number;
+    soil_ph: number;
+  };
+  contributing_observations: string[];
   recommendation: string;
+  averages: {
+    temp: number;
+    moisture: number;
+    ph: number | null;
+  };
 }
 
 export interface TelemetrySummary {
@@ -36,18 +48,17 @@ export interface AdminStats {
   in_transit_batches: number;
   delivered_batches: number;
   flagged_anomalies: number;
+  telemetry_records: number;
 }
 
 export interface AuditLogEntry {
   id: string;
-  user_id: string;
-  user_email: string;
-  user_role: string;
-  action: string;
-  resource_type: string;
-  resource_id: string;
-  details: Record<string, unknown>;
-  ip_address: string;
+  event_type: string;
+  user_email: string | null;
+  wallet_address: string;
+  description: string;
+  metadata: Record<string, unknown>;
+  ip_address: string | null;
   timestamp: string;
 }
 

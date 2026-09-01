@@ -134,6 +134,17 @@ CELERY_BROKER_URL = env("REDIS_URL")
 CELERY_RESULT_BACKEND = env("REDIS_URL")
 CELERY_ACCEPT_CONTENT = ["json"]
 CELERY_TASK_SERIALIZER = "json"
+CELERY_TASK_TRACK_STARTED = True
+CELERY_TASK_TIME_LIMIT = 900
+CELERY_TASK_SOFT_TIME_LIMIT = 840
+CELERY_BROKER_CONNECTION_RETRY_ON_STARTUP = True
+CELERY_WORKER_SEND_TASK_EVENTS = True
+CELERY_BEAT_SCHEDULE = {
+    "daily-telemetry-integrity-audit": {
+        "task": "apps.telemetry.tasks.run_telemetry_integrity_audit_task",
+        "schedule": timedelta(days=1),
+    },
+}
 
 # ─── Static Files ─────────────────────────────────────
 STATIC_URL = "/static/"

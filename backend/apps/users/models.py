@@ -16,7 +16,7 @@ class CustomUser(AbstractUser):
     email = models.EmailField(unique=True)
     full_name = models.CharField(max_length=200)
     role = models.CharField(max_length=20, choices=Role.choices)
-    sui_public_key = models.CharField(max_length=66, blank=True, null=True)
+    sui_public_key = models.CharField(max_length=66, blank=True, null=True, unique=True)
 
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = ["full_name", "role"]
@@ -28,10 +28,15 @@ class CustomUser(AbstractUser):
 
 
 class WalletChallenge(models.Model):
+    class Purpose(models.TextChoices):
+        AUTHENTICATE = "AUTHENTICATE", "Authenticate"
+        BIND = "BIND", "Bind Wallet"
+
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     wallet_address = models.CharField(max_length=66, db_index=True)
     nonce = models.CharField(max_length=64, unique=True)
     domain = models.CharField(max_length=100, default="TerraNode Auth")
+    purpose = models.CharField(max_length=30, choices=Purpose.choices, default=Purpose.AUTHENTICATE)
     message = models.TextField()
     issued_at = models.DateTimeField(auto_now_add=True)
     expires_at = models.DateTimeField()

@@ -3,9 +3,9 @@ import type { PredictionResult, TelemetrySummary, SystemHealth, AdminStats } fro
 
 export const analyticsApi = {
   /** Get AI yield prediction */
-  predictYield: async (userId?: string): Promise<PredictionResult> => {
+  predictYield: async (cropType = 'MAIZE'): Promise<PredictionResult> => {
     const response = await apiClient.get<PredictionResult>('/analytics/predict/', {
-      params: userId ? { user_id: userId } : undefined,
+      params: { crop_type: cropType },
     });
     return response.data;
   },

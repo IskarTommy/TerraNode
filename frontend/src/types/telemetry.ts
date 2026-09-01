@@ -1,17 +1,22 @@
 export interface TelemetryRecord {
-  log_id: string;
-  farmer_id: string;
+  id: string;
+  farmer: string;
   recorded_at: string;
-  temperature_celsius: number;
-  soil_moisture_percentage: number;
-  soil_ph: number;
+  temperature_celsius: number | null;
+  soil_moisture_percentage: number | null;
+  soil_ph: number | null;
   payload_sha256: string;
+  schema_version: number;
+  key_version: number;
+  source_type: 'MANUAL' | 'DATASET_IMPORT' | 'SENSOR' | 'SYNTHETIC' | null;
+  created_at: string;
 }
 
 export interface TelemetrySubmission {
-  temperature_celsius: number;
-  soil_moisture_percentage: number;
-  soil_ph: number;
+  recorded_at?: string;
+  temperature_celsius?: number | null;
+  soil_moisture_percentage?: number | null;
+  soil_ph?: number | null;
 }
 
 export interface TelemetryHistoryResponse {
@@ -21,16 +26,4 @@ export interface TelemetryHistoryResponse {
   results: TelemetryRecord[];
 }
 
-export interface LatestTelemetryResponse {
-  temperature_celsius: number | null;
-  soil_moisture_percentage: number | null;
-  soil_ph: number | null;
-  recorded_at: string | null;
-}
-
-export interface TelemetryChartDataPoint {
-  timestamp: string;
-  temperature: number;
-  moisture: number;
-  ph: number;
-}
+export type LatestTelemetryResponse = TelemetryRecord;

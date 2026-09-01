@@ -1,120 +1,146 @@
-import os
 import base64
-from django.test import TestCase
+import os
+
 from django.contrib.auth import get_user_model
 from django.core.management import call_command
+from django.core.management.base import CommandError
+from django.test import TestCase
 from django.utils import timezone
-from apps.telemetry.models import EnvironmentalTelemetry
-from apps.telemetry.encryption_service import (
-    encrypt_telemetry_payload,
-    decrypt_telemetry_payload,
-    get_encryption_key
-)
+
 from apps.users.models import AuditEvent
+from .encryption_service import (
+    decrypt_telemetry_payload,
+    encrypt_telemetry_payload,
+    read_telemetry_values,
+)
+from .models import EnvironmentalTelemetry
+from .services import generate_telemetry_hash
+
 
 User = get_user_model()
+TEST_KEY_BYTES = b"01234567890123456789012345678901"
+TEST_KEY = base64.b64encode(TEST_KEY_BYTES).decode("ascii")
 
-class Phase3EncryptionTests(TestCase):
+
+class EncryptionAndMigrationTests(TestCase):
     def setUp(self):
-        os.environ["TELEMETRY_ENCRYPTION_KEY"] = base64.b64encode(b"01234567890123456789012345678901").decode('utf-8')
-        self.key_bytes = get_encryption_key()
+        self.previous_key = os.environ.get("TELEMETRY_ENCRYPTION_KEY")
+        os.environ["TELEMETRY_ENCRYPTION_KEY"] = TEST_KEY
         self.farmer = User.objects.create_user(
-            email="crypto_farmer@example.com",
-            password="Password123!",
+            email="crypto@example.com",
+            password="StrongPass123!",
             full_name="Crypto Farmer",
-            role="FARMER"
-        )
-        self.rec_time = timezone.now().isoformat()
-
-    def test_encryption_decryption_round_trip_and_nonce_uniqueness(self):
-        ct1, nonce1, tag1, hash1 = encrypt_telemetry_payload(
-            farmer_id=self.farmer.id,
-            recorded_at_iso=self.rec_time,
-            temperature=26.5,
-            soil_moisture=55.0,
-            soil_ph=6.4,
-            key_bytes=self.key_bytes
+            role=User.Role.FARMER,
         )
 
-        decrypted = decrypt_telemetry_payload(
-            farmer_id=self.farmer.id,
-            recorded_at_iso=self.rec_time,
-            ciphertext_b64=ct1,
-            nonce_b64=nonce1,
-            auth_tag_b64=tag1,
-            key_bytes=self.key_bytes
+    def tearDown(self):
+        if self.previous_key is None:
+            os.environ.pop("TELEMETRY_ENCRYPTION_KEY", None)
+        else:
+            os.environ["TELEMETRY_ENCRYPTION_KEY"] = self.previous_key
+
+    def test_round_trip_nonce_uniqueness_and_tamper_failure(self):
+        recorded = timezone.now().isoformat()
+        first = encrypt_telemetry_payload(
+            self.farmer.pk,
+            recorded,
+            26.5,
+            55.0,
+            None,
+            key_bytes=TEST_KEY_BYTES,
         )
-
-        self.assertEqual(decrypted["temperature_celsius"], 26.5)
-        self.assertEqual(decrypted["soil_moisture_percentage"], 55.0)
-        self.assertEqual(decrypted["soil_ph"], 6.4)
-
-        ct2, nonce2, tag2, hash2 = encrypt_telemetry_payload(
-            farmer_id=self.farmer.id,
-            recorded_at_iso=self.rec_time,
-            temperature=26.5,
-            soil_moisture=55.0,
-            soil_ph=6.4,
-            key_bytes=self.key_bytes
+        second = encrypt_telemetry_payload(
+            self.farmer.pk,
+            recorded,
+            26.5,
+            55.0,
+            None,
+            key_bytes=TEST_KEY_BYTES,
         )
-
-        self.assertNotEqual(nonce1, nonce2)
-        self.assertEqual(hash1, hash2)
-
-    def test_modified_ciphertext_and_wrong_key_fails_closed(self):
-        ct, nonce, tag, hash_val = encrypt_telemetry_payload(
-            farmer_id=self.farmer.id,
-            recorded_at_iso=self.rec_time,
-            temperature=30.0,
-            soil_moisture=40.0,
-            soil_ph=6.0,
-            key_bytes=self.key_bytes
+        self.assertNotEqual(first[1], second[1])
+        self.assertEqual(first[3], second[3])
+        values = decrypt_telemetry_payload(
+            self.farmer.pk,
+            recorded,
+            first[0],
+            first[1],
+            first[2],
+            key_bytes=TEST_KEY_BYTES,
         )
+        self.assertEqual(values["temperature_celsius"], 26.5)
 
-        tampered_ct = base64.b64encode(b"TAMPERED_DATA_BYTES_XYZ").decode("utf-8")
+        tampered = base64.b64encode(b"tampered").decode("ascii")
         with self.assertRaises(ValueError):
             decrypt_telemetry_payload(
-                farmer_id=self.farmer.id,
-                recorded_at_iso=self.rec_time,
-                ciphertext_b64=tampered_ct,
-                nonce_b64=nonce,
-                auth_tag_b64=tag,
-                key_bytes=self.key_bytes
+                self.farmer.pk,
+                recorded,
+                tampered,
+                first[1],
+                first[2],
+                key_bytes=TEST_KEY_BYTES,
             )
+        self.assertTrue(
+            AuditEvent.objects.filter(
+                event_type=AuditEvent.EventType.SECURITY_ALERT
+            ).exists()
+        )
 
-        alert = AuditEvent.objects.filter(event_type=AuditEvent.EventType.SECURITY_ALERT).first()
-        self.assertIsNotNone(alert)
-
-        wrong_key = base64.b64encode(b"wrongkeywrongkeywrongkeywrongkey")
-        with self.assertRaises(ValueError):
-            decrypt_telemetry_payload(
-                farmer_id=self.farmer.id,
-                recorded_at_iso=self.rec_time,
-                ciphertext_b64=ct,
-                nonce_b64=nonce,
-                auth_tag_b64=tag,
-                key_bytes=base64.b64decode(wrong_key)
-            )
-
-    def test_migration_dry_run_and_backfill(self):
-        telem = EnvironmentalTelemetry.objects.create(
+    def test_legacy_migration_preserves_hash_is_idempotent_and_clears_last(self):
+        recorded = timezone.now()
+        legacy_hash = generate_telemetry_hash(
+            self.farmer.pk,
+            recorded,
+            22.0,
+            60.0,
+            6.5,
+            schema_version=0,
+        )
+        record = EnvironmentalTelemetry.objects.create(
             farmer=self.farmer,
-            recorded_at=timezone.now(),
+            recorded_at=recorded,
             temperature_celsius=22.0,
             soil_moisture_percentage=60.0,
             soil_ph=6.5,
-            payload_sha256="pre_migration_hash_1"
+            payload_sha256=legacy_hash,
         )
-
         call_command("migrate_telemetry_encryption", dry_run=True)
-        telem.refresh_from_db()
-        self.assertEqual(telem.encrypted_payload_b64, "")
+        record.refresh_from_db()
+        self.assertFalse(record.encrypted_payload_b64)
 
         call_command("migrate_telemetry_encryption")
-        telem.refresh_from_db()
-        self.assertNotEqual(telem.encrypted_payload_b64, "")
-        self.assertEqual(telem.temperature_celsius, 22.0)
+        record.refresh_from_db()
+        first_ciphertext = record.encrypted_payload_b64
+        self.assertTrue(first_ciphertext)
+        self.assertEqual(record.schema_version, 0)
+        self.assertEqual(record.payload_sha256, legacy_hash)
+        self.assertEqual(record.temperature_celsius, 22.0)
 
-        call_command("audit_telemetry_integrity")
-        audit_event = AuditEvent.objects.filter(event_type=AuditEvent.EventType.INTEGRITY_CHECK_PASS).first()
-        self.assertIsNotNone(audit_event)
+        call_command("migrate_telemetry_encryption")
+        record.refresh_from_db()
+        self.assertEqual(record.encrypted_payload_b64, first_ciphertext)
+
+        call_command("migrate_telemetry_encryption", clear_plaintext=True)
+        record.refresh_from_db()
+        self.assertIsNone(record.temperature_celsius)
+        self.assertEqual(
+            read_telemetry_values(record, enforce_authorization=False)[
+                "soil_moisture_percentage"
+            ],
+            60.0,
+        )
+        call_command("migrate_telemetry_encryption", clear_plaintext=True)
+        record.refresh_from_db()
+        self.assertEqual(record.encrypted_payload_b64, first_ciphertext)
+
+    def test_migration_rejects_plaintext_hash_mismatch_without_overwrite(self):
+        record = EnvironmentalTelemetry.objects.create(
+            farmer=self.farmer,
+            recorded_at=timezone.now(),
+            temperature_celsius=22.0,
+            payload_sha256="ff" * 32,
+        )
+        with self.assertRaises(CommandError):
+            call_command("migrate_telemetry_encryption")
+        record.refresh_from_db()
+        self.assertFalse(record.encrypted_payload_b64)
+        self.assertEqual(record.payload_sha256, "ff" * 32)

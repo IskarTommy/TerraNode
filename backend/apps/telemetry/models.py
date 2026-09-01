@@ -22,6 +22,16 @@ class DataProvenance(models.Model):
     latitude = models.DecimalField(max_digits=9, decimal_places=6, null=True, blank=True)
     longitude = models.DecimalField(max_digits=9, decimal_places=6, null=True, blank=True)
     time_standard = models.CharField(max_length=50, default="UTC")
+    parameters_units = models.JSONField(default=dict, blank=True)
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=["source_type", "provider_name", "source_record_id"],
+                condition=~models.Q(source_record_id=""),
+                name="telemetry_unique_external_source",
+            ),
+        ]
 
     def __str__(self):
         return f"Provenance {self.id} ({self.source_type} - {self.provider_name})"
@@ -29,6 +39,7 @@ class DataProvenance(models.Model):
 
 class ImportRun(models.Model):
     class Status(models.TextChoices):
+        IN_PROGRESS = "IN_PROGRESS", "In Progress"
         SUCCESS = "SUCCESS", "Success"
         PARTIAL = "PARTIAL", "Partial Import"
         FAILED = "FAILED", "Failed"
@@ -37,7 +48,7 @@ class ImportRun(models.Model):
     provenance = models.ForeignKey(DataProvenance, on_delete=models.CASCADE, related_name="import_runs")
     started_at = models.DateTimeField(auto_now_add=True)
     completed_at = models.DateTimeField(null=True, blank=True)
-    status = models.CharField(max_length=20, choices=Status.choices, default=Status.SUCCESS)
+    status = models.CharField(max_length=20, choices=Status.choices, default=Status.IN_PROGRESS)
     records_inserted = models.IntegerField(default=0)
     records_skipped = models.IntegerField(default=0)
     records_failed = models.IntegerField(default=0)
@@ -63,6 +74,7 @@ class EnvironmentalTelemetry(models.Model):
     auth_tag_b64 = models.CharField(max_length=32, blank=True, default="")
     key_version = models.IntegerField(default=1)
     schema_version = models.IntegerField(default=1)
+    encrypted_at = models.DateTimeField(null=True, blank=True)
 
     payload_sha256 = models.CharField(max_length=64, unique=True, editable=False)
     provenance = models.ForeignKey(DataProvenance, on_delete=models.SET_NULL, null=True, blank=True, related_name="telemetry_records")
@@ -72,6 +84,19 @@ class EnvironmentalTelemetry(models.Model):
         ordering = ['-recorded_at']
         indexes = [
             models.Index(fields=['farmer', 'recorded_at']),
+        ]
+        constraints = [
+            models.CheckConstraint(
+                condition=(
+                    models.Q(encrypted_payload_b64="")
+                    | (
+                        ~models.Q(nonce_b64="")
+                        & ~models.Q(auth_tag_b64="")
+                        & models.Q(encrypted_at__isnull=False)
+                    )
+                ),
+                name="telemetry_encryption_fields_complete",
+            ),
         ]
 
     def __str__(self):

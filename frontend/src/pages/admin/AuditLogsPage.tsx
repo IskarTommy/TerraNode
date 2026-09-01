@@ -1,44 +1,31 @@
-import { Card } from '../../components/Common/Card';
+import { useCallback, useEffect, useState } from 'react';
 
-const MOCK_LOGS = [
-  { id: '1', action: 'User login', user: 'farmer_john@example.com', timestamp: '2024-10-22T10:30:00Z', ip: '192.168.1.1' },
-  { id: '2', action: 'Batch minted', user: 'farmer_jane@example.com', timestamp: '2024-10-22T09:15:00Z', ip: '192.168.1.2' },
-  { id: '3', action: 'Transfer created', user: 'logistics_bob@example.com', timestamp: '2024-10-21T14:00:00Z', ip: '192.168.1.3' },
-  { id: '4', action: 'Role changed', user: 'admin@example.com', timestamp: '2024-10-21T11:00:00Z', ip: '192.168.1.4' },
-];
+import { auditApi } from '../../api/audit';
+import { Button } from '../../components/Common/Button';
+import { Card } from '../../components/Common/Card';
+import type { AuditLogEntry } from '../../types/analytics';
+
 
 export function AuditLogsPage() {
+  const [logs, setLogs] = useState<AuditLogEntry[]>([]);
+  const [state, setState] = useState<'loading' | 'ready' | 'error'>('loading');
+  const load = useCallback(async () => {
+    setState('loading');
+    try {
+      setLogs((await auditApi.getList({ page_size: 100 })).results);
+      setState('ready');
+    } catch {
+      setState('error');
+    }
+  }, []);
+  useEffect(() => { void load(); }, [load]);
   return (
     <div className="space-y-6" data-role="admin">
-      <div>
-        <h1 className="text-display-lg font-bold text-fg-primary">Audit Logs</h1>
-        <p className="text-body text-fg-muted mt-1">System activity and audit trail</p>
-      </div>
-
-      <Card variant="glass" padding="md">
-        <div className="overflow-x-auto">
-          <table className="w-full">
-            <thead>
-              <tr className="border-b border-border-primary">
-                <th className="px-4 py-3 text-left text-body-xs font-semibold text-fg-muted uppercase">Action</th>
-                <th className="px-4 py-3 text-left text-body-xs font-semibold text-fg-muted uppercase">User</th>
-                <th className="px-4 py-3 text-left text-body-xs font-semibold text-fg-muted uppercase">Timestamp</th>
-                <th className="px-4 py-3 text-left text-body-xs font-semibold text-fg-muted uppercase">IP Address</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-border-primary/50">
-              {MOCK_LOGS.map((log) => (
-                <tr key={log.id} className="hover:bg-bg-tertiary/50">
-                  <td className="px-4 py-3 text-body-sm text-fg-primary">{log.action}</td>
-                  <td className="px-4 py-3 text-body-sm text-fg-secondary">{log.user}</td>
-                  <td className="px-4 py-3 text-body-sm text-fg-secondary">{new Date(log.timestamp).toLocaleString()}</td>
-                  <td className="px-4 py-3 text-body-sm text-fg-secondary">{log.ip}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </Card>
+      <div className="flex justify-between"><div><h1 className="text-display-lg font-bold">Audit Events</h1><p className="text-fg-muted">Persisted security, integrity, mint, and custody evidence.</p></div><Button variant="outline" onClick={load}>Refresh</Button></div>
+      {state === 'loading' && <Card variant="glass" padding="lg">Loading audit events…</Card>}
+      {state === 'error' && <Card variant="glass" padding="lg"><p role="alert" className="text-red-300">Could not load audit events.</p></Card>}
+      {state === 'ready' && logs.length === 0 && <Card variant="glass" padding="lg">No audit events found.</Card>}
+      {state === 'ready' && logs.map((log) => <Card key={log.id} variant="glass" padding="md"><div className="flex flex-col lg:flex-row justify-between gap-2"><div><p className="font-semibold">{log.event_type}</p><p>{log.description}</p><p className="text-body-xs text-fg-muted">{log.user_email || log.wallet_address || 'System event'}</p></div><p className="text-body-xs text-fg-muted">{new Date(log.timestamp).toLocaleString()}</p></div></Card>)}
     </div>
   );
 }

@@ -1,0 +1,86 @@
+name: terranode
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-terranode}
+      POSTGRES_USER: ${POSTGRES_USER:-terranode}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env.compose}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-terranode} -d ${POSTGRES_DB:-terranode}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    restart: unless-stopped
+
+  redis:
+    image: redis:7-alpine
+    command: ["redis-server", "--appendonly", "yes"]
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    restart: unless-stopped
+
+  backend:
+    build:
+      context: ./backend
+    env_file: .env.compose
+    environment:
+      DJANGO_SETTINGS_MODULE: config.settings.docker
+      DATABASE_URL: postgresql://${POSTGRES_USER:-terranode}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB:-terranode}
+      REDIS_URL: redis://redis:6379/0
+    command: >
+      sh -c "python manage.py migrate --noinput &&
+             gunicorn config.wsgi:application --bind 0.0.0.0:8000 --workers 3 --timeout 60"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/healthz/', timeout=3)"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    restart: unless-stopped
+
+  celery:
+    build:
+      context: ./backend
+    env_file: .env.compose
+    environment:
+      DJANGO_SETTINGS_MODULE: config.settings.docker
+      DATABASE_URL: postgresql://${POSTGRES_USER:-terranode}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB:-terranode}
+      REDIS_URL: redis://redis:6379/0
+    command: celery -A config worker --loglevel=INFO
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ./frontend
+      args:
+        VITE_API_BASE_URL: /api/v1
+        VITE_SUI_PACKAGE_ID: ${SUI_PACKAGE_ID}
+        VITE_DEMO_MODE: ${VITE_DEMO_MODE:-false}
+    ports:
+      - "8080:80"
+    depends_on:
+      backend:
+        condition: service_healthy
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+  redis_data:

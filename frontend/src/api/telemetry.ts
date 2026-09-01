@@ -3,11 +3,7 @@ import type { TelemetryRecord, TelemetrySubmission, TelemetryHistoryResponse, La
 
 export const telemetryApi = {
   /** Submit a new telemetry reading */
-  submit: async (data: {
-    temperature_celsius: number;
-    soil_moisture_percentage: number;
-    soil_ph: number;
-  }): Promise<TelemetryRecord> => {
+  submit: async (data: TelemetrySubmission): Promise<TelemetryRecord> => {
     const response = await apiClient.post<TelemetryRecord>('/telemetry/submit/', data);
     return response.data;
   },

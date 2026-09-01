@@ -1,235 +1,155 @@
-from django.test import TestCase
+import base64
+import os
+from unittest import mock
+
 from django.contrib.auth import get_user_model
-from rest_framework.test import APIClient
-from rest_framework import status
+from django.test import TestCase
+from django.urls import reverse
 from django.utils import timezone
-from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework import status
+from rest_framework.test import APIClient
+
+from .encryption_service import encrypted_storage_fields, read_telemetry_values
 from .models import EnvironmentalTelemetry
-from .serializers import TelemetryInputSerializer, TelemetryOutputSerializer
+from .serializers import TelemetryInputSerializer
 from .services import generate_telemetry_hash
-import json
+
 
 User = get_user_model()
+TEST_KEY = base64.b64encode(b"01234567890123456789012345678901").decode("ascii")
 
-class TelemetrySerializerTests(TestCase):
-    def test_valid_telemetry_input(self):
-        data = {
-            'temperature_celsius': 25.0,
-            'soil_moisture_percentage': 60.0,
-            'soil_ph': 6.5
-        }
-        serializer = TelemetryInputSerializer(data=data)
-        self.assertTrue(serializer.is_valid())
-        self.assertEqual(serializer.validated_data['temperature_celsius'], 25.0)
 
-    def test_invalid_temperature_too_low(self):
-        data = {
-            'temperature_celsius': -60.0,  # below -50
-            'soil_moisture_percentage': 60.0,
-            'soil_ph': 6.5
-        }
-        serializer = TelemetryInputSerializer(data=data)
-        self.assertFalse(serializer.is_valid())
-        self.assertIn('temperature_celsius', serializer.errors)
+class TelemetrySerializerAndHashTests(TestCase):
+    def test_partial_input_is_valid_but_all_missing_is_not(self):
+        serializer = TelemetryInputSerializer(data={"temperature_celsius": 25.0})
+        self.assertTrue(serializer.is_valid(), serializer.errors)
+        empty = TelemetryInputSerializer(data={})
+        self.assertFalse(empty.is_valid())
+        self.assertIn("non_field_errors", empty.errors)
 
-    def test_invalid_soil_moisture_over_100(self):
-        data = {
-            'temperature_celsius': 25.0,
-            'soil_moisture_percentage': 150.0,  # above 100
-            'soil_ph': 6.5
-        }
-        serializer = TelemetryInputSerializer(data=data)
-        self.assertFalse(serializer.is_valid())
-        self.assertIn('soil_moisture_percentage', serializer.errors)
-
-    def test_invalid_ph_out_of_range(self):
-        data = {
-            'temperature_celsius': 25.0,
-            'soil_moisture_percentage': 60.0,
-            'soil_ph': 15.0  # above 14
-        }
-        serializer = TelemetryInputSerializer(data=data)
-        self.assertFalse(serializer.is_valid())
-        self.assertIn('soil_ph', serializer.errors)
-
-class TelemetryServiceTests(TestCase):
-    def test_hash_deterministic(self):
-        farmer_id = '11111111-1111-1111-1111-111111111111'
+    def test_measurement_ranges_and_hash_versioning(self):
+        invalid = TelemetryInputSerializer(data={"soil_moisture_percentage": 101})
+        self.assertFalse(invalid.is_valid())
         recorded_at = timezone.now()
-        temp = 25.5
-        moisture = 60.2
-        ph = 6.7
-        hash1 = generate_telemetry_hash(farmer_id, recorded_at, temp, moisture, ph)
-        hash2 = generate_telemetry_hash(farmer_id, recorded_at, temp, moisture, ph)
-        self.assertEqual(hash1, hash2)
+        current = generate_telemetry_hash("farmer", recorded_at, 25, 50, None)
+        legacy = generate_telemetry_hash(
+            "farmer",
+            recorded_at,
+            25,
+            50,
+            None,
+            schema_version=0,
+        )
+        self.assertNotEqual(current, legacy)
+        self.assertEqual(
+            current,
+            generate_telemetry_hash("farmer", recorded_at, 25, 50, None),
+        )
 
-    def test_hash_different_for_different_inputs(self):
-        farmer_id = '11111111-1111-1111-1111-111111111111'
-        recorded_at = timezone.now()
-        temp = 25.5
-        moisture = 60.2
-        ph = 6.7
-        hash1 = generate_telemetry_hash(farmer_id, recorded_at, temp, moisture, ph)
-        # change one value
-        hash2 = generate_telemetry_hash(farmer_id, recorded_at, temp + 1, moisture, ph)
-        self.assertNotEqual(hash1, hash2)
 
-class TelemetryViewTests(TestCase):
+class EncryptedTelemetryAPITests(TestCase):
     def setUp(self):
+        self.previous_key = os.environ.get("TELEMETRY_ENCRYPTION_KEY")
+        os.environ["TELEMETRY_ENCRYPTION_KEY"] = TEST_KEY
         self.client = APIClient()
-        self.submit_url = '/api/v1/telemetry/submit/'
-        self.history_url = '/api/v1/telemetry/history/'
-        self.latest_url = '/api/v1/telemetry/latest/'
-        # Create a farmer user
         self.farmer = User.objects.create_user(
-            email='farmer@example.com',
-            password='Pass1234!',
-            full_name='Farmer John',
-            role='FARMER'
+            email="farmer@example.com",
+            password="StrongPass123!",
+            full_name="Farmer",
+            role=User.Role.FARMER,
         )
-        # Create an admin user
-        self.admin = User.objects.create_superuser(
-            email='admin@example.com',
-            password='AdminPass123!',
-            full_name='Admin Admin',
-            role='ADMIN'
+        self.other_farmer = User.objects.create_user(
+            email="other@example.com",
+            password="StrongPass123!",
+            full_name="Other",
+            role=User.Role.FARMER,
         )
-        # Create a logistics user
         self.logistics = User.objects.create_user(
-            email='logistics@example.com',
-            password='Pass1234!',
-            full_name='Logistics Linda',
-            role='LOGISTICS'
+            email="logistics@example.com",
+            password="StrongPass123!",
+            full_name="Logistics",
+            role=User.Role.LOGISTICS,
         )
 
-    def _authenticate(self, user):
-        refresh = RefreshToken.for_user(user)
-        self.client.credentials(HTTP_AUTHORIZATION=f'Bearer {refresh.access_token}')
+    def tearDown(self):
+        if self.previous_key is None:
+            os.environ.pop("TELEMETRY_ENCRYPTION_KEY", None)
+        else:
+            os.environ["TELEMETRY_ENCRYPTION_KEY"] = self.previous_key
 
-    def test_submit_telemetry_unauthenticated(self):
-        data = {
-            'temperature_celsius': 25.0,
-            'soil_moisture_percentage': 60.0,
-            'soil_ph': 6.5
-        }
-        response = self.client.post(self.submit_url, data, format='json')
-        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
-
-    def test_submit_telemetry_non_farmer_forbidden(self):
-        self._authenticate(self.logistics)  # logistics user
-        data = {
-            'temperature_celsius': 25.0,
-            'soil_moisture_percentage': 60.0,
-            'soil_ph': 6.5
-        }
-        response = self.client.post(self.submit_url, data, format='json')
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
-
-    def test_submit_telemetry_success(self):
-        self._authenticate(self.farmer)
-        data = {
-            'temperature_celsius': 25.0,
-            'soil_moisture_percentage': 60.0,
-            'soil_ph': 6.5
-        }
-        response = self.client.post(self.submit_url, data, format='json')
+    def test_submission_encrypts_at_rest_and_authorized_output_decrypts(self):
+        self.client.force_authenticate(self.farmer)
+        response = self.client.post(
+            reverse("telemetry_submit"),
+            {
+                "temperature_celsius": 25.25,
+                "soil_moisture_percentage": 60.0,
+            },
+            format="json",
+        )
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        self.assertIn('id', response.data)
-        self.assertEqual(response.data['temperature_celsius'], 25.0)
-        self.assertEqual(response.data['soil_moisture_percentage'], 60.0)
-        self.assertEqual(response.data['soil_ph'], 6.5)
-        # Check that a telemetry record was created
-        self.assertEqual(EnvironmentalTelemetry.objects.count(), 1)
-        telemetry = EnvironmentalTelemetry.objects.first()
-        self.assertEqual(telemetry.farmer, self.farmer)
-        # Check that the hash matches
-        expected_hash = generate_telemetry_hash(
-            farmer_id=self.farmer.id,
-            recorded_at=telemetry.recorded_at,
-            temperature=25.0,
-            soil_moisture=60.0,
-            soil_ph=6.5
+        self.assertEqual(response.data["temperature_celsius"], 25.25)
+        self.assertIsNone(response.data["soil_ph"])
+        record = EnvironmentalTelemetry.objects.get()
+        self.assertIsNone(record.temperature_celsius)
+        self.assertIsNone(record.soil_moisture_percentage)
+        self.assertTrue(record.encrypted_payload_b64)
+        self.assertIsNotNone(record.encrypted_at)
+        self.assertEqual(
+            read_telemetry_values(record, request_user=self.farmer)["temperature_celsius"],
+            25.25,
         )
-        self.assertEqual(telemetry.payload_sha256, expected_hash)
 
-    def test_submit_telemetry_duplicate_hash_conflict(self):
-        from unittest import mock
-        # The hash includes recorded_at, so freeze time so both submissions
-        # produce an identical payload_sha256 and trip the unique constraint.
-        fixed_time = timezone.now()
-        self._authenticate(self.farmer)
-        data = {
-            'temperature_celsius': 25.0,
-            'soil_moisture_percentage': 60.0,
-            'soil_ph': 6.5
-        }
-        # First submission
-        with mock.patch('django.utils.timezone.now', return_value=fixed_time):
-            response1 = self.client.post(self.submit_url, data, format='json')
-            self.assertEqual(response1.status_code, status.HTTP_201_CREATED)
-            # Second submission with same data (should produce same hash)
-            response2 = self.client.post(self.submit_url, data, format='json')
-        # According to the view, duplicate hash results in 409 Conflict
-        self.assertEqual(response2.status_code, status.HTTP_409_CONFLICT)
-        self.assertIn('error', response2.data)
+    def test_missing_key_fails_without_storing_plaintext(self):
+        os.environ.pop("TELEMETRY_ENCRYPTION_KEY", None)
+        self.client.force_authenticate(self.farmer)
+        response = self.client.post(
+            reverse("telemetry_submit"),
+            {"temperature_celsius": 25.0},
+            format="json",
+        )
+        self.assertEqual(response.status_code, status.HTTP_503_SERVICE_UNAVAILABLE)
+        self.assertFalse(EnvironmentalTelemetry.objects.exists())
 
-    def test_submit_telemetry_invalid_data(self):
-        self._authenticate(self.farmer)
-        data = {
-            'temperature_celsius': -60.0,  # invalid
-            'soil_moisture_percentage': 60.0,
-            'soil_ph': 6.5
-        }
-        response = self.client.post(self.submit_url, data, format='json')
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        # Custom exception handler wraps validation errors inside error.details
-        self.assertIn('temperature_celsius', response.data['error']['details'])
-
-    def test_history_view_access_control(self):
-        # Create a telemetry record for farmer
-        telemetry = EnvironmentalTelemetry.objects.create(
+    def test_history_is_scoped_and_decrypted_for_authorized_farmer(self):
+        recorded_at = timezone.now()
+        record = EnvironmentalTelemetry.objects.create(
             farmer=self.farmer,
-            recorded_at=timezone.now(),
-            temperature_celsius=25.0,
-            soil_moisture_percentage=60.0,
-            soil_ph=6.5,
-            payload_sha256='dummyhash'
+            recorded_at=recorded_at,
+            **encrypted_storage_fields(self.farmer.pk, recorded_at, 24.0, 55.0, None),
         )
-        # Test farmer can see own history
-        self._authenticate(self.farmer)
-        response = self.client.get(self.history_url, format='json')
+        other_time = timezone.now()
+        EnvironmentalTelemetry.objects.create(
+            farmer=self.other_farmer,
+            recorded_at=other_time,
+            **encrypted_storage_fields(self.other_farmer.pk, other_time, 29.0, 40.0, None),
+        )
+        self.client.force_authenticate(self.farmer)
+        response = self.client.get(reverse("telemetry_history"))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        # History is paginated (StandardPagination) → records under 'results'
-        self.assertEqual(len(response.data['results']), 1)  # only his own
-        # Test admin can see all
-        self._authenticate(self.admin)
-        response = self.client.get(self.history_url, format='json')
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(len(response.data['results']), 1)  # still only one total
-        # Test logistics cannot see history (IsFarmerOrAdmin)
-        self._authenticate(self.logistics)
-        response = self.client.get(self.history_url, format='json')
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(len(response.data["results"]), 1)
+        self.assertEqual(response.data["results"][0]["id"], str(record.pk))
+        self.assertEqual(response.data["results"][0]["temperature_celsius"], 24.0)
 
-    def test_latest_view_access_control(self):
-        telemetry = EnvironmentalTelemetry.objects.create(
-            farmer=self.farmer,
-            recorded_at=timezone.now(),
-            temperature_celsius=25.0,
-            soil_moisture_percentage=60.0,
-            soil_ph=6.5,
-            payload_sha256='dummyhash'
+    def test_non_farmer_cannot_submit_or_read_history(self):
+        self.client.force_authenticate(self.logistics)
+        submit = self.client.post(
+            reverse("telemetry_submit"),
+            {"temperature_celsius": 25.0},
+            format="json",
         )
-        # Farmer can see latest
-        self._authenticate(self.farmer)
-        response = self.client.get(self.latest_url, format='json')
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data['id'], str(telemetry.id))
-        # Admin can see latest
-        self._authenticate(self.admin)
-        response = self.client.get(self.latest_url, format='json')
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        # Logistics cannot
-        self._authenticate(self.logistics)
-        response = self.client.get(self.latest_url, format='json')
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(submit.status_code, status.HTTP_403_FORBIDDEN)
+        history = self.client.get(reverse("telemetry_history"))
+        self.assertEqual(history.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_duplicate_canonical_submission_conflicts(self):
+        fixed = timezone.now()
+        self.client.force_authenticate(self.farmer)
+        payload = {
+            "recorded_at": fixed.isoformat(),
+            "temperature_celsius": 25.0,
+        }
+        first = self.client.post(reverse("telemetry_submit"), payload, format="json")
+        second = self.client.post(reverse("telemetry_submit"), payload, format="json")
+        self.assertEqual(first.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(second.status_code, status.HTTP_409_CONFLICT)

@@ -1,5 +1,7 @@
 from django.db import models
 from django.conf import settings
+from django.core.validators import MinValueValidator
+from decimal import Decimal
 import uuid
 
 class ProduceBatch(models.Model):
@@ -13,12 +15,20 @@ class ProduceBatch(models.Model):
     farmer = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="batches")
     origin_telemetry = models.ForeignKey("telemetry.EnvironmentalTelemetry", on_delete=models.RESTRICT, related_name="batches", null=True, blank=True)
     crop_type = models.CharField(max_length=100)
-    weight_kg = models.DecimalField(max_digits=10, decimal_places=2)
+    weight_kg = models.DecimalField(
+        max_digits=10,
+        decimal_places=3,
+        validators=[MinValueValidator(Decimal("0.001"))],
+        help_text='Canonical off-chain weight in kilograms; converted exactly to integer grams on-chain.',
+    )
     data_integrity_hash = models.CharField(max_length=64, blank=True, default="")
     current_custodian = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.RESTRICT, related_name="custodial_batches")
 
     sui_object_id = models.CharField(max_length=66, blank=True, null=True, unique=True)
-    sui_tx_digest = models.CharField(max_length=66, blank=True, null=True)
+    # The mint digest is immutable and is never overwritten by later custody transfers.
+    sui_tx_digest = models.CharField(max_length=100, blank=True, null=True, unique=True)
+    mint_verified_at = models.DateTimeField(blank=True, null=True)
+    mint_verification = models.JSONField(default=dict, blank=True)
     status = models.CharField(max_length=20, choices=Status.choices, default=Status.PENDING)
 
     created_at = models.DateTimeField(auto_now_add=True)
@@ -46,7 +56,7 @@ class CustodyTransfer(models.Model):
     to_user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.RESTRICT, related_name="transfers_received")
     from_wallet = models.CharField(max_length=66, blank=True, default="")
     to_wallet = models.CharField(max_length=66, blank=True, default="")
-    tx_digest = models.CharField(max_length=66, blank=True, default="")
+    tx_digest = models.CharField(max_length=100, blank=True, null=True, unique=True)
     verified_on_chain = models.BooleanField(default=False)
     transferred_at = models.DateTimeField(auto_now_add=True)
     event_metadata = models.JSONField(default=dict, blank=True)
@@ -55,6 +65,12 @@ class CustodyTransfer(models.Model):
         ordering = ['-transferred_at']
         indexes = [
             models.Index(fields=['batch', 'transferred_at']),
+        ]
+        constraints = [
+            models.CheckConstraint(
+                condition=~models.Q(from_user=models.F("to_user")),
+                name="ledger_transfer_distinct_users",
+            ),
         ]
 
     def __str__(self):

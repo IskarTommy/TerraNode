@@ -21,6 +21,7 @@ python-dotenv = "~=1.0"
 celery = "*"
 pysui = "*"
 pynacl = "*"
+cryptography = "~=43.0"
 
 [dev-packages]
 pytest = "*"

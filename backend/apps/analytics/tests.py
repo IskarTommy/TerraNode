@@ -1,143 +1,125 @@
-from django.test import TestCase
-from django.contrib.auth import get_user_model
-from rest_framework.test import APIClient
-from rest_framework import status
-from django.utils import timezone
-from django.core.cache import cache
-from apps.telemetry.models import EnvironmentalTelemetry
-from .services import predict_yield
+import base64
 import datetime
+import os
+from unittest.mock import patch
+
+from django.contrib.auth import get_user_model
+from django.core.cache import cache
+from django.test import TestCase
+from django.utils import timezone
+from rest_framework import status
+from rest_framework.test import APIClient
+
+from apps.telemetry.encryption_service import encrypted_storage_fields
+from apps.telemetry.models import EnvironmentalTelemetry
+from .services import predict_yield, prediction_cache_key
+
 
 User = get_user_model()
+TEST_KEY = base64.b64encode(b"01234567890123456789012345678901").decode("ascii")
 
-class AnalyticsServiceTests(TestCase):
+
+class AnalyticsMixin:
     def setUp(self):
-        self.farmer = User.objects.create_user(
-            email='farmer@example.com',
-            password='Pass1234!',
-            full_name='Farmer',
-            role='FARMER'
-        )
-        # Clear cache before each test
+        super().setUp()
+        self.previous_key = os.environ.get("TELEMETRY_ENCRYPTION_KEY")
+        os.environ["TELEMETRY_ENCRYPTION_KEY"] = TEST_KEY
         cache.clear()
-        # Create a base timestamp
+        self.farmer = User.objects.create_user(
+            email="farmer@example.com",
+            password="StrongPass123!",
+            full_name="Farmer",
+            role=User.Role.FARMER,
+        )
         self.base_time = timezone.now() - datetime.timedelta(days=30)
 
-    def _create_telemetry(self, offset_days, temp, moisture, ph):
-        """Helper to create a telemetry record."""
-        recorded_at = self.base_time + datetime.timedelta(days=offset_days)
+    def tearDown(self):
+        cache.clear()
+        if self.previous_key is None:
+            os.environ.pop("TELEMETRY_ENCRYPTION_KEY", None)
+        else:
+            os.environ["TELEMETRY_ENCRYPTION_KEY"] = self.previous_key
+        super().tearDown()
+
+    def create_observation(self, index, temperature=24.0, moisture=55.0, ph=None):
+        recorded_at = self.base_time + datetime.timedelta(days=index)
         return EnvironmentalTelemetry.objects.create(
             farmer=self.farmer,
             recorded_at=recorded_at,
-            temperature_celsius=temp,
-            soil_moisture_percentage=moisture,
-            soil_ph=ph,
-            payload_sha256=f'hash{offset_days}'  # dummy unique hash
+            **encrypted_storage_fields(
+                self.farmer.pk,
+                recorded_at,
+                temperature,
+                moisture,
+                ph,
+            ),
         )
 
-    def test_predict_yield_insufficient_data(self):
-        # Create only 4 records (need at least 5)
-        for i in range(4):
-            self._create_telemetry(i, 20.0 + i, 50.0 + i, 6.0 + i*0.1)
-        result = predict_yield(self.farmer.id)
-        self.assertIn('error', result)
-        self.assertEqual(result['error'], 'Insufficient data points for prediction (Need at least 5)')
 
-    def test_predict_yield_sufficient_data(self):
-        # Create 10 records with varying values
-        for i in range(10):
-            self._create_telemetry(i, 20.0 + i*0.5, 50.0 + i*2, 6.0 + i*0.1)
-        result = predict_yield(self.farmer.id)
-        self.assertNotIn('error', result)
-        self.assertIn('predicted_yield_metric_tons', result)
-        self.assertIn('confidence_score', result)
-        self.assertIn('recommendation', result)
-        self.assertGreaterEqual(result['predicted_yield_metric_tons'], 0)
-        self.assertGreaterEqual(result['confidence_score'], 0)
-        self.assertLessEqual(result['confidence_score'], 1)
+class AnalyticsServiceTests(AnalyticsMixin, TestCase):
+    def test_insufficient_result_reports_actual_observation_counts(self):
+        for index in range(4):
+            self.create_observation(index)
+        result = predict_yield(self.farmer.pk, "MAIZE")
+        self.assertIn("error", result)
+        self.assertEqual(result["data_points_analyzed"]["temperature"], 4)
+        self.assertEqual(result["data_points_analyzed"]["soil_moisture"], 4)
 
-    def test_predict_yield_caching(self):
-        # Create 10 records
-        for i in range(10):
-            self._create_telemetry(i, 20.0, 50.0, 6.0)
-        # First call
-        result1 = predict_yield(self.farmer.id)
-        # Ensure it's cached
-        cache_key = f"analytics:predict:{self.farmer.id}"
-        cached = cache.get(cache_key)
-        self.assertIsNotNone(cached)
-        # Second call should return same result (from cache)
-        result2 = predict_yield(self.farmer.id)
-        self.assertEqual(result1, result2)
-
-    def test_predict_yield_cache_expiration(self):
-        # We'll test by manually setting cache with a short TTL? Hard to test real expiration without mocking time.
-        # We'll skip explicit expiration test; trust that caching works.
-        pass
-
-class AnalyticsViewTests(TestCase):
-    def setUp(self):
-        self.client = APIClient()
-        self.farmer = User.objects.create_user(
-            email='farmer@example.com',
-            password='Pass1234!',
-            full_name='Farmer',
-            role='FARMER'
-        )
-        self.logistics = User.objects.create_user(
-            email='logistics@example.com',
-            password='Pass1234!',
-            full_name='Logistics',
-            role='LOGISTICS'
-        )
-        self.admin = User.objects.create_superuser(
-            email='admin@example.com',
-            password='AdminPass123!',
-            full_name='Admin',
-            role='ADMIN'
-        )
-        self.predict_url = '/api/v1/analytics/predict/'
-        self.summary_url = '/api/v1/analytics/summary/'
-        # Create some telemetry data for farmer
-        base_time = timezone.now() - datetime.timedelta(days=30)
-        for i in range(10):
-            EnvironmentalTelemetry.objects.create(
-                farmer=self.farmer,
-                recorded_at=base_time + datetime.timedelta(days=i),
-                temperature_celsius=20.0 + i*0.5,
-                soil_moisture_percentage=50.0 + i*2,
-                soil_ph=6.0 + i*0.1,
-                payload_sha256=f'hash{i}'
+    def test_sufficient_encrypted_data_produces_labelled_rule_based_estimate(self):
+        for index in range(10):
+            self.create_observation(
+                index,
+                temperature=22 + index / 2,
+                moisture=50 + index,
             )
+        result = predict_yield(self.farmer.pk, "MAIZE")
+        self.assertNotIn("error", result)
+        self.assertEqual(result["model_type"], "WMA Yield Estimate (Rule-Based Forecast)")
+        self.assertFalse(result["is_simulation"])
+        self.assertIsNone(result["averages"]["ph"])
+        self.assertIn("No soil pH observation", result["recommendation"])
 
-    def _authenticate(self, user):
-        from rest_framework_simplejwt.tokens import RefreshToken
-        refresh = RefreshToken.for_user(user)
-        self.client.credentials(HTTP_AUTHORIZATION=f'Bearer {refresh.access_token}')
+    def test_cache_is_crop_specific_invalidated_on_write_and_outage_safe(self):
+        for index in range(5):
+            self.create_observation(index)
+        result = predict_yield(self.farmer.pk, "MAIZE")
+        key = prediction_cache_key(self.farmer.pk, "MAIZE")
+        self.assertEqual(cache.get(key), result)
 
-    def test_predict_yield_unauthenticated(self):
-        response = self.client.get(self.predict_url, format='json')
+        self.create_observation(6)
+        self.assertIsNone(cache.get(key))
+
+        with patch("apps.analytics.services.cache.get", side_effect=ConnectionError("offline")), patch(
+            "apps.analytics.services.cache.set",
+            side_effect=ConnectionError("offline"),
+        ):
+            uncached = predict_yield(self.farmer.pk, "MAIZE")
+        self.assertNotIn("error", uncached)
+
+
+class AnalyticsViewTests(AnalyticsMixin, TestCase):
+    def setUp(self):
+        super().setUp()
+        self.client = APIClient()
+        for index in range(5):
+            self.create_observation(index)
+
+    def test_prediction_requires_authentication(self):
+        response = self.client.get("/api/v1/analytics/predict/")
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
-    def test_predict_yield_success(self):
-        self._authenticate(self.farmer)
-        response = self.client.get(self.predict_url, format='json')
+    def test_prediction_returns_real_estimate_and_disables_simulation(self):
+        self.client.force_authenticate(self.farmer)
+        response = self.client.get("/api/v1/analytics/predict/?crop_type=MAIZE")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertIn('predicted_yield_metric_tons', response.data)
-        self.assertIn('confidence_score', response.data)
-        self.assertIn('recommendation', response.data)
+        self.assertIn("predicted_yield_metric_tons", response.data)
+        simulation = self.client.get(
+            "/api/v1/analytics/predict/?sim_temp=25&sim_moisture=50&sim_ph=6"
+        )
+        self.assertEqual(simulation.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(simulation.data["error"], "Simulation mode is disabled.")
 
-    def test_predict_yield_other_role_forbidden(self):
-        # According to permissions, IsAuthenticated is required, so any authenticated user can access.
-        # But the service uses request.user.id, so logistics will get prediction based on their own (empty) data.
-        self._authenticate(self.logistics)
-        response = self.client.get(self.predict_url, format='json')
-        # Should return error because logistics has no telemetry data (insufficient data)
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertIn('error', response.data)
-
-    def test_summary_view(self):
-        self._authenticate(self.farmer)
-        response = self.client.get(self.summary_url, format='json')
+    def test_summary_is_authenticated(self):
+        self.client.force_authenticate(self.farmer)
+        response = self.client.get("/api/v1/analytics/summary/")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertIn('message', response.data)

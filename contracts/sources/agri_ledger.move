@@ -10,6 +10,9 @@ module terranode::agri_ledger {
     // ══════════════════════════════════════════
     const ENotCustodian: u64 = 0;
     const EInvalidRecipient: u64 = 1;
+    const ESameCustodian: u64 = 2;
+    const EInvalidWeight: u64 = 3;
+    const EInvalidIntegrityHash: u64 = 4;
 
     // ══════════════════════════════════════════
     //  OBJECTS
@@ -57,6 +60,8 @@ module terranode::agri_ledger {
         ctx: &mut TxContext
     ) {
         let sender = tx_context::sender(ctx);
+        assert!(weight_grams > 0, EInvalidWeight);
+        assert!(vector::length(&integrity_hash) == 32, EInvalidIntegrityHash);
         let batch = ProduceBatch {
             id: object::new(ctx),
             crop_type: crop_type,
@@ -88,6 +93,7 @@ module terranode::agri_ledger {
         let sender = tx_context::sender(ctx);
         assert!(batch.current_custodian_address == sender, ENotCustodian);
         assert!(new_custodian != @0x0, EInvalidRecipient);
+        assert!(new_custodian != sender, ESameCustodian);
 
         batch.current_custodian_address = new_custodian;
 
@@ -119,5 +125,26 @@ module terranode::agri_ledger {
 
     public fun get_crop_type(batch: &ProduceBatch): &String {
         &batch.crop_type
+    }
+
+    #[test_only]
+    public fun new_test_batch(
+        custodian: address,
+        weight_grams: u64,
+        ctx: &mut TxContext
+    ): ProduceBatch {
+        ProduceBatch {
+            id: object::new(ctx),
+            crop_type: std::string::utf8(b"TEST"),
+            weight_grams,
+            origin_farmer_address: custodian,
+            current_custodian_address: custodian,
+            data_integrity_hash: vector[
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0
+            ],
+        }
     }
 }

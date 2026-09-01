@@ -1,9 +1,11 @@
 import base64
 import hashlib
+import re
 import secrets
 from datetime import timedelta
 from django.utils import timezone
 from django.contrib.auth import get_user_model
+from django.db import IntegrityError, transaction
 from rest_framework import generics, status
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny, IsAuthenticated
@@ -12,11 +14,35 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.views import TokenObtainPairView
 from nacl.signing import VerifyKey
 
-from .models import WalletChallenge
-from .serializers import RegisterSerializer, ProfileSerializer, CustomTokenObtainPairSerializer
+from .models import AuditEvent, WalletChallenge
+from .serializers import (
+    AdminUserSerializer,
+    StakeholderSerializer,
+    RegisterSerializer,
+    ProfileSerializer,
+    CustomTokenObtainPairSerializer,
+)
+from .permissions import IsAdmin
 from core.throttling import LoginRateThrottle
 
 User = get_user_model()
+SUI_ADDRESS_RE = re.compile(r"^0x[0-9a-fA-F]{64}$")
+
+
+def _request_ip(request):
+    forwarded = request.META.get("HTTP_X_FORWARDED_FOR", "")
+    return (forwarded.split(",")[0].strip() if forwarded else request.META.get("REMOTE_ADDR")) or None
+
+
+def _audit_auth(request, event_type, description, wallet_address="", user=None, metadata=None):
+    AuditEvent.objects.create(
+        event_type=event_type,
+        user=user,
+        wallet_address=wallet_address,
+        ip_address=_request_ip(request),
+        description=description,
+        metadata=metadata or {},
+    )
 
 
 def derive_sui_address_from_pubkey(pubkey_bytes: bytes, flag: int = 0) -> str:
@@ -33,8 +59,8 @@ def verify_sui_personal_message_signature(message_str: str, signature_b64: str):
     Returns (is_valid, derived_address, pubkey_hex).
     """
     try:
-        sig_bytes = base64.b64decode(signature_b64)
-        if len(sig_bytes) < 97:
+        sig_bytes = base64.b64decode(signature_b64, validate=True)
+        if len(sig_bytes) != 97:
             return False, None, None
 
         flag = sig_bytes[0]
@@ -93,6 +119,38 @@ class ProfileView(generics.RetrieveUpdateAPIView):
         return self.request.user
 
 
+class AdminUserListView(generics.ListAPIView):
+    permission_classes = (IsAdmin,)
+    serializer_class = AdminUserSerializer
+
+    def get_queryset(self):
+        queryset = User.objects.all().order_by("-date_joined")
+        role = self.request.query_params.get("role")
+        search = self.request.query_params.get("search")
+        if role:
+            queryset = queryset.filter(role=role)
+        if search:
+            queryset = queryset.filter(email__icontains=search)
+        return queryset
+
+
+class StakeholderListView(generics.ListAPIView):
+    permission_classes = (IsAuthenticated,)
+    serializer_class = StakeholderSerializer
+    pagination_class = None
+
+    def get_queryset(self):
+        return (
+            User.objects.filter(
+                is_active=True,
+                role__in=[User.Role.FARMER, User.Role.LOGISTICS],
+                sui_public_key__isnull=False,
+            )
+            .exclude(pk=self.request.user.pk)
+            .order_by("full_name")
+        )
+
+
 class LogoutView(APIView):
     permission_classes = (IsAuthenticated,)
 
@@ -115,30 +173,57 @@ class RequestWalletChallengeView(APIView):
 
     def post(self, request):
         wallet_address = request.data.get('wallet_address')
-        if not wallet_address or not wallet_address.startswith('0x'):
-            return Response({"error": "Valid wallet_address starting with 0x is required"}, status=status.HTTP_400_BAD_REQUEST)
+        if not isinstance(wallet_address, str) or not SUI_ADDRESS_RE.fullmatch(wallet_address):
+            return Response(
+                {"error": "wallet_address must be 0x followed by exactly 64 hexadecimal characters"},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
 
         wallet_address = wallet_address.lower()
+        registered_user = User.objects.filter(sui_public_key__iexact=wallet_address).first()
+        authenticated_user = request.user if request.user.is_authenticated else None
+        if authenticated_user:
+            if registered_user and registered_user.pk != authenticated_user.pk:
+                return Response(
+                    {"error": "Wallet is already bound to another account."},
+                    status=status.HTTP_409_CONFLICT,
+                )
+            if (
+                authenticated_user.sui_public_key
+                and authenticated_user.sui_public_key.lower() != wallet_address
+            ):
+                return Response(
+                    {"error": "Wallet rotation requires an administrator-assisted recovery process."},
+                    status=status.HTTP_409_CONFLICT,
+                )
+
         nonce = secrets.token_hex(32)
         domain = "TerraNode Auth"
+        purpose = (
+            WalletChallenge.Purpose.BIND
+            if authenticated_user and not authenticated_user.sui_public_key
+            else WalletChallenge.Purpose.AUTHENTICATE
+        )
         now = timezone.now()
         expires_at = now + timedelta(minutes=5)
 
         message = (
             f"TerraNode Authentication Challenge\n"
             f"Domain: {domain}\n"
+            f"Purpose: {purpose}\n"
             f"Wallet: {wallet_address}\n"
             f"Nonce: {nonce}\n"
             f"Issued: {now.isoformat()}\n"
             f"Expires: {expires_at.isoformat()}"
         )
 
-        user = User.objects.filter(sui_public_key__iexact=wallet_address).first()
+        user = authenticated_user or registered_user
 
         challenge = WalletChallenge.objects.create(
             wallet_address=wallet_address,
             nonce=nonce,
             domain=domain,
+            purpose=purpose,
             message=message,
             expires_at=expires_at,
             user=user
@@ -164,8 +249,13 @@ class WalletLoginView(APIView):
             return Response({"error": "challenge_id and signature are required"}, status=status.HTTP_400_BAD_REQUEST)
 
         try:
-            challenge = WalletChallenge.objects.get(id=challenge_id)
+            challenge = WalletChallenge.objects.select_related("user").get(id=challenge_id)
         except (WalletChallenge.DoesNotExist, ValueError):
+            _audit_auth(
+                request,
+                AuditEvent.EventType.AUTH_FAILURE,
+                "Wallet login rejected: invalid challenge identifier",
+            )
             return Response({"error": "Invalid challenge identifier"}, status=status.HTTP_401_UNAUTHORIZED)
 
         if not challenge.is_valid():
@@ -173,19 +263,91 @@ class WalletLoginView(APIView):
 
         is_valid, derived_address, pubkey_hex = verify_sui_personal_message_signature(challenge.message, signature)
         if not is_valid or not derived_address:
+            _audit_auth(
+                request,
+                AuditEvent.EventType.AUTH_FAILURE,
+                "Wallet login rejected: invalid signature",
+                wallet_address=challenge.wallet_address,
+                user=challenge.user,
+                metadata={"challenge_id": str(challenge.id)},
+            )
             return Response({"error": "Invalid cryptographic signature"}, status=status.HTTP_401_UNAUTHORIZED)
 
         if derived_address.lower() != challenge.wallet_address.lower():
+            _audit_auth(
+                request,
+                AuditEvent.EventType.AUTH_FAILURE,
+                "Wallet login rejected: signer address mismatch",
+                wallet_address=challenge.wallet_address,
+                user=challenge.user,
+                metadata={"challenge_id": str(challenge.id)},
+            )
             return Response({"error": "Derived signer address does not match challenged wallet address"}, status=status.HTTP_401_UNAUTHORIZED)
 
-        challenge.used_at = timezone.now()
-        challenge.save()
+        consumed_at = timezone.now()
+        with transaction.atomic():
+            consumed = WalletChallenge.objects.filter(
+                pk=challenge.pk,
+                used_at__isnull=True,
+                expires_at__gt=consumed_at,
+            ).update(used_at=consumed_at)
+            if consumed != 1:
+                return Response(
+                    {"error": "Challenge expired or already consumed"},
+                    status=status.HTTP_401_UNAUTHORIZED,
+                )
 
-        user = User.objects.filter(sui_public_key__iexact=challenge.wallet_address).first()
-        if not user:
-            return Response({"error": "Wallet address not registered to any TerraNode account"}, status=status.HTTP_404_NOT_FOUND)
+            if challenge.purpose == WalletChallenge.Purpose.BIND:
+                if not challenge.user_id:
+                    return Response(
+                        {"error": "Wallet-binding challenge has no authenticated account."},
+                        status=status.HTTP_401_UNAUTHORIZED,
+                    )
+                user = User.objects.select_for_update().get(pk=challenge.user_id)
+                if user.sui_public_key and user.sui_public_key.lower() != challenge.wallet_address:
+                    return Response(
+                        {"error": "Account wallet binding changed before challenge completion."},
+                        status=status.HTTP_409_CONFLICT,
+                    )
+                try:
+                    user.sui_public_key = challenge.wallet_address
+                    user.save(update_fields=["sui_public_key"])
+                except IntegrityError:
+                    return Response(
+                        {"error": "Wallet is already bound to another account."},
+                        status=status.HTTP_409_CONFLICT,
+                    )
+            else:
+                user = User.objects.filter(
+                    sui_public_key__iexact=challenge.wallet_address,
+                    is_active=True,
+                ).first()
+                if not user:
+                    _audit_auth(
+                        request,
+                        AuditEvent.EventType.AUTH_FAILURE,
+                        "Valid wallet proof has no active TerraNode account",
+                        wallet_address=challenge.wallet_address,
+                        metadata={"challenge_id": str(challenge.id)},
+                    )
+                    return Response(
+                        {"error": "Wallet address not registered to an active TerraNode account"},
+                        status=status.HTTP_404_NOT_FOUND,
+                    )
 
         refresh = RefreshToken.for_user(user)
+        _audit_auth(
+            request,
+            AuditEvent.EventType.AUTH_SUCCESS,
+            "Wallet authentication succeeded",
+            wallet_address=challenge.wallet_address,
+            user=user,
+            metadata={
+                "challenge_id": str(challenge.id),
+                "purpose": challenge.purpose,
+                "public_key_fingerprint": hashlib.sha256(bytes.fromhex(pubkey_hex)).hexdigest()[:16],
+            },
+        )
         return Response({
             'refresh': str(refresh),
             'access': str(refresh.access_token),

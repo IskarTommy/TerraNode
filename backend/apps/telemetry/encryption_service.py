@@ -1,102 +1,234 @@
-import os
-import json
 import base64
 import hashlib
+import json
+import os
+
+from cryptography.exceptions import InvalidTag
 from cryptography.hazmat.primitives.ciphers.aead import AESGCM
-from django.conf import settings
-from django.core.exceptions import ImproperlyConfigured
+from django.core.exceptions import ImproperlyConfigured, PermissionDenied
+from django.utils import timezone
+
 from apps.users.models import AuditEvent
+from .services import CURRENT_SCHEMA_VERSION, canonical_telemetry_payload
 
 
-def get_encryption_key() -> bytes:
-    key_b64 = os.environ.get("TELEMETRY_ENCRYPTION_KEY")
-    if not key_b64:
-        raise ImproperlyConfigured("TELEMETRY_ENCRYPTION_KEY environment variable is required (must be base64-encoded 32-byte key).")
+def get_encryption_key(key_version=1):
+    variable = f"TELEMETRY_ENCRYPTION_KEY_V{key_version}"
+    encoded = os.environ.get(variable)
+    if not encoded and key_version == 1:
+        encoded = os.environ.get("TELEMETRY_ENCRYPTION_KEY")
+    if not encoded:
+        raise ImproperlyConfigured(
+            f"{variable} must contain a base64-encoded 32-byte AES key"
+        )
     try:
-        key_bytes = base64.b64decode(key_b64)
-        if len(key_bytes) != 32:
-            raise ValueError("TELEMETRY_ENCRYPTION_KEY must be 32 bytes when decoded")
-        return key_bytes
-    except Exception as e:
-        raise ValueError(f"Invalid TELEMETRY_ENCRYPTION_KEY base64 format: {e}")
+        key = base64.b64decode(encoded, validate=True)
+    except (ValueError, TypeError) as exc:
+        raise ImproperlyConfigured(f"{variable} is not valid base64") from exc
+    if len(key) != 32:
+        raise ImproperlyConfigured(f"{variable} must decode to exactly 32 bytes")
+    return key
 
 
-def serialize_canonical_plaintext(farmer_id, recorded_at_iso: str, temperature, soil_moisture, soil_ph, schema_version: int = 1) -> bytes:
-    """Produces one versioned canonical plaintext JSON representation."""
-    canonical_dict = {
-        "farmer_id": str(farmer_id),
-        "recorded_at": recorded_at_iso,
-        "temperature_celsius": f"{temperature:.2f}" if temperature is not None else None,
-        "soil_moisture_percentage": f"{soil_moisture:.2f}" if soil_moisture is not None else None,
-        "soil_ph": f"{soil_ph:.2f}" if soil_ph is not None else None,
-        "schema_version": schema_version
-    }
-    return json.dumps(canonical_dict, sort_keys=True, separators=(",", ":")).encode("utf-8")
-
-
-def construct_associated_data(farmer_id, recorded_at_iso: str, schema_version: int = 1) -> bytes:
-    """Binds stable metadata as authenticated associated data (AAD)."""
-    return f"farmer:{farmer_id}|recorded_at:{recorded_at_iso}|v:{schema_version}".encode("utf-8")
-
-
-def encrypt_telemetry_payload(farmer_id, recorded_at_iso: str, temperature, soil_moisture, soil_ph, key_bytes: bytes = None, schema_version: int = 1):
-    """
-    Encrypts canonical telemetry payload with AES-256-GCM using unique 96-bit random nonce.
-    Returns (ciphertext_b64, nonce_b64, auth_tag_b64, sha256_hex).
-    """
-    if key_bytes is None:
-        key_bytes = get_encryption_key()
-
-    canonical_bytes = serialize_canonical_plaintext(farmer_id, recorded_at_iso, temperature, soil_moisture, soil_ph, schema_version)
-    sha256_hex = hashlib.sha256(canonical_bytes).hexdigest()
-
-    nonce = os.urandom(12)
-    aad = construct_associated_data(farmer_id, recorded_at_iso, schema_version)
-
-    aesgcm = AESGCM(key_bytes)
-    ct_with_tag = aesgcm.encrypt(nonce, canonical_bytes, aad)
-
-    ciphertext = ct_with_tag[:-16]
-    auth_tag = ct_with_tag[-16:]
-
-    return (
-        base64.b64encode(ciphertext).decode('utf-8'),
-        base64.b64encode(nonce).decode('utf-8'),
-        base64.b64encode(auth_tag).decode('utf-8'),
-        sha256_hex
+def serialize_canonical_plaintext(
+    farmer_id,
+    recorded_at_iso,
+    temperature,
+    soil_moisture,
+    soil_ph,
+    schema_version=CURRENT_SCHEMA_VERSION,
+):
+    return canonical_telemetry_payload(
+        farmer_id,
+        recorded_at_iso,
+        temperature,
+        soil_moisture,
+        soil_ph,
+        schema_version=schema_version,
     )
 
 
-def decrypt_telemetry_payload(farmer_id, recorded_at_iso: str, ciphertext_b64: str, nonce_b64: str, auth_tag_b64: str, key_bytes: bytes = None, schema_version: int = 1, request_user=None):
-    """
-    Decrypts AES-256-GCM telemetry payload. Logs security audit event on tag/AAD failure.
-    Returns parsed dict: {temperature_celsius, soil_moisture_percentage, soil_ph}.
-    """
-    if key_bytes is None:
-        key_bytes = get_encryption_key()
+def construct_associated_data(farmer_id, recorded_at_iso, schema_version=CURRENT_SCHEMA_VERSION):
+    return json.dumps(
+        {
+            "farmer_id": str(farmer_id),
+            "recorded_at": recorded_at_iso,
+            "schema_version": schema_version,
+        },
+        sort_keys=True,
+        separators=(",", ":"),
+    ).encode("utf-8")
 
+
+def encrypt_telemetry_payload(
+    farmer_id,
+    recorded_at_iso,
+    temperature,
+    soil_moisture,
+    soil_ph,
+    key_bytes=None,
+    schema_version=CURRENT_SCHEMA_VERSION,
+    key_version=1,
+):
+    key = key_bytes or get_encryption_key(key_version)
+    if len(key) != 32:
+        raise ValueError("AES-256-GCM requires a 32-byte key")
+    canonical = serialize_canonical_plaintext(
+        farmer_id,
+        recorded_at_iso,
+        temperature,
+        soil_moisture,
+        soil_ph,
+        schema_version,
+    )
+    nonce = os.urandom(12)
+    sealed = AESGCM(key).encrypt(
+        nonce,
+        canonical,
+        construct_associated_data(farmer_id, recorded_at_iso, schema_version),
+    )
+    return (
+        base64.b64encode(sealed[:-16]).decode("ascii"),
+        base64.b64encode(nonce).decode("ascii"),
+        base64.b64encode(sealed[-16:]).decode("ascii"),
+        hashlib.sha256(canonical).hexdigest(),
+    )
+
+
+def decrypt_telemetry_payload(
+    farmer_id,
+    recorded_at_iso,
+    ciphertext_b64,
+    nonce_b64,
+    auth_tag_b64,
+    key_bytes=None,
+    schema_version=CURRENT_SCHEMA_VERSION,
+    key_version=1,
+    request_user=None,
+):
+    key = key_bytes or get_encryption_key(key_version)
     try:
-        ciphertext = base64.b64decode(ciphertext_b64)
-        nonce = base64.b64decode(nonce_b64)
-        auth_tag = base64.b64decode(auth_tag_b64)
-        ct_with_tag = ciphertext + auth_tag
-
-        aad = construct_associated_data(farmer_id, recorded_at_iso, schema_version)
-
-        aesgcm = AESGCM(key_bytes)
-        decrypted_bytes = aesgcm.decrypt(nonce, ct_with_tag, aad)
-
-        data = json.loads(decrypted_bytes.decode('utf-8'))
+        ciphertext = base64.b64decode(ciphertext_b64, validate=True)
+        nonce = base64.b64decode(nonce_b64, validate=True)
+        tag = base64.b64decode(auth_tag_b64, validate=True)
+        if len(nonce) != 12 or len(tag) != 16:
+            raise InvalidTag
+        plaintext = AESGCM(key).decrypt(
+            nonce,
+            ciphertext + tag,
+            construct_associated_data(farmer_id, recorded_at_iso, schema_version),
+        )
+        data = json.loads(plaintext.decode("utf-8"))
+        if (
+            str(data.get("farmer_id")) != str(farmer_id)
+            or data.get("recorded_at") != recorded_at_iso
+            or (
+                schema_version != 0
+                and data.get("schema_version") != schema_version
+            )
+        ):
+            raise InvalidTag
         return {
-            "temperature_celsius": float(data["temperature_celsius"]) if data.get("temperature_celsius") is not None else None,
-            "soil_moisture_percentage": float(data["soil_moisture_percentage"]) if data.get("soil_moisture_percentage") is not None else None,
+            "temperature_celsius": (
+                float(data["temperature_celsius"])
+                if data.get("temperature_celsius") is not None
+                else None
+            ),
+            "soil_moisture_percentage": (
+                float(data["soil_moisture_percentage"])
+                if data.get("soil_moisture_percentage") is not None
+                else None
+            ),
             "soil_ph": float(data["soil_ph"]) if data.get("soil_ph") is not None else None,
         }
-    except Exception as e:
+    except Exception as exc:
         AuditEvent.objects.create(
             event_type=AuditEvent.EventType.SECURITY_ALERT,
-            user=request_user if (request_user and request_user.is_authenticated) else None,
-            description=f"AES-256-GCM Decryption / Tag Verification Failed for farmer {farmer_id} at {recorded_at_iso}: {e}",
-            metadata={"farmer_id": str(farmer_id), "recorded_at": recorded_at_iso, "error": str(e)}
+            user=request_user if getattr(request_user, "is_authenticated", False) else None,
+            description="AES-256-GCM telemetry authentication failed",
+            metadata={
+                "farmer_id": str(farmer_id),
+                "recorded_at": recorded_at_iso,
+                "failure_type": type(exc).__name__,
+                "schema_version": schema_version,
+                "key_version": key_version,
+            },
         )
-        raise ValueError(f"AES-256-GCM authentication failure or corrupted payload: {e}")
+        raise ValueError("Telemetry decryption failed closed") from exc
+
+
+def read_telemetry_values(record, request_user=None, enforce_authorization=True):
+    if enforce_authorization:
+        allowed = (
+            getattr(request_user, "is_authenticated", False)
+            and (
+                request_user.pk == record.farmer_id
+                or request_user.role == request_user.Role.ADMIN
+            )
+        )
+        if not allowed:
+            raise PermissionDenied("Not authorized to decrypt this telemetry record")
+
+    if record.encrypted_payload_b64:
+        values = decrypt_telemetry_payload(
+            farmer_id=record.farmer_id,
+            recorded_at_iso=record.recorded_at.isoformat(),
+            ciphertext_b64=record.encrypted_payload_b64,
+            nonce_b64=record.nonce_b64,
+            auth_tag_b64=record.auth_tag_b64,
+            schema_version=record.schema_version,
+            key_version=record.key_version,
+            request_user=request_user,
+        )
+    else:
+        values = {
+            "temperature_celsius": record.temperature_celsius,
+            "soil_moisture_percentage": record.soil_moisture_percentage,
+            "soil_ph": record.soil_ph,
+        }
+    canonical = serialize_canonical_plaintext(
+        record.farmer_id,
+        record.recorded_at.isoformat(),
+        values["temperature_celsius"],
+        values["soil_moisture_percentage"],
+        values["soil_ph"],
+        record.schema_version,
+    )
+    if hashlib.sha256(canonical).hexdigest() != record.payload_sha256:
+        AuditEvent.objects.create(
+            event_type=AuditEvent.EventType.INTEGRITY_CHECK_FAIL,
+            user=request_user if getattr(request_user, "is_authenticated", False) else None,
+            description="Telemetry canonical hash verification failed",
+            metadata={"telemetry_id": str(record.pk)},
+        )
+        raise ValueError("Telemetry integrity verification failed closed")
+    return values
+
+
+def encrypted_storage_fields(
+    farmer_id,
+    recorded_at,
+    temperature,
+    soil_moisture,
+    soil_ph,
+    schema_version=CURRENT_SCHEMA_VERSION,
+    key_version=1,
+):
+    ciphertext, nonce, tag, payload_hash = encrypt_telemetry_payload(
+        farmer_id,
+        recorded_at.isoformat(),
+        temperature,
+        soil_moisture,
+        soil_ph,
+        schema_version=schema_version,
+        key_version=key_version,
+    )
+    return {
+        "encrypted_payload_b64": ciphertext,
+        "nonce_b64": nonce,
+        "auth_tag_b64": tag,
+        "payload_sha256": payload_hash,
+        "schema_version": schema_version,
+        "key_version": key_version,
+        "encrypted_at": timezone.now(),
+    }

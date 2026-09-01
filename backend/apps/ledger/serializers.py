@@ -7,9 +7,35 @@ class BatchPrepareSerializer(serializers.ModelSerializer):
         fields = ('id', 'origin_telemetry', 'crop_type', 'weight_kg', 'status', 'data_integrity_hash', 'created_at')
         read_only_fields = ('id', 'status', 'data_integrity_hash', 'created_at')
 
+    def validate_weight_kg(self, value):
+        if value.as_tuple().exponent < -3:
+            raise serializers.ValidationError("Weight must use at most three decimal places (one gram precision).")
+        if value <= 0:
+            raise serializers.ValidationError("Weight must be greater than zero.")
+        return value
+
 class BatchConfirmSerializer(serializers.Serializer):
-    sui_object_id = serializers.CharField(max_length=66, required=True)
-    sui_tx_digest = serializers.CharField(max_length=66, required=False, allow_blank=True)
+    sui_tx_digest = serializers.CharField(max_length=100, required=True, allow_blank=False, trim_whitespace=True)
+
+    def validate_sui_tx_digest(self, value):
+        if "SIMULATED" in value.upper():
+            raise serializers.ValidationError("Simulated transaction digests are not accepted.")
+        return value
+
+
+class BatchTransferInputSerializer(serializers.Serializer):
+    to_user_id = serializers.UUIDField(required=True)
+    sui_tx_digest = serializers.CharField(max_length=100, required=True, allow_blank=False, trim_whitespace=True)
+    status = serializers.ChoiceField(
+        choices=(ProduceBatch.Status.IN_TRANSIT, ProduceBatch.Status.DELIVERED),
+        default=ProduceBatch.Status.IN_TRANSIT,
+    )
+    metadata = serializers.JSONField(required=False, default=dict)
+
+    def validate_sui_tx_digest(self, value):
+        if "SIMULATED" in value.upper():
+            raise serializers.ValidationError("Simulated transaction digests are not accepted.")
+        return value
 
 class CustodyTransferSerializer(serializers.ModelSerializer):
     from_user = serializers.UUIDField(read_only=True, source='from_user_id')
