@@ -55,7 +55,9 @@ venv/
 
 # Runtime evidence
 frontend/playwright-report/
+frontend/playwright-report-live/
 frontend/test-results/
 .env.compose
 contracts/build/
+.tools/
 

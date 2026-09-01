@@ -42,9 +42,15 @@ apiClient.interceptors.response.use(
       _retry?: boolean;
     };
 
+    // Never trigger refresh/logout redirect for login/wallet-login attempts
+    if (
+      originalRequest?.url?.includes("/auth/login/") ||
+      originalRequest?.url?.includes("/auth/wallet-login/")
+    ) {
+      return Promise.reject(error);
+    }
+
     if (error.response?.status !== 401 || !originalRequest || originalRequest._retry) {
-      // For non-401 errors, or if the failed request is the refresh endpoint itself,
-      // just reject and let upstream AuthContext clean up local state.
       if (error.response?.status === 401 && originalRequest?.url?.includes(REFRESH_URL)) {
         localStorage.removeItem("terranode_access");
         localStorage.removeItem("terranode_refresh");

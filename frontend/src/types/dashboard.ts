@@ -68,9 +68,3 @@ export interface SystemMetricPoint {
   disk: number;
   network: number;
 }
-
-/** Result wrapper so dashboards can show a "demo data" pill when the API is unreachable */
-export interface Sourced<T> {
-  data: T;
-  source: 'api' | 'demo';
-}

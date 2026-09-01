@@ -170,7 +170,7 @@ export default function RegisterPage() {
             <p style={{
               fontSize: 14.5, lineHeight: 1.65, color: "rgba(148,163,184,0.78)", maxWidth: 300,
             }}>
-              Register as a farmer, logistics provider, or auditor and start building provable provenance records.
+              Register as a farmer or logistics provider. Administrator accounts are created through controlled administration.
             </p>
           </div>
 

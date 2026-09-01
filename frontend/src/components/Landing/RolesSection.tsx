@@ -55,22 +55,22 @@ const ROLES = [
     cls: "role-farmer" as const,
     icon: "M12 3v1m0 16v1m8.66-13.66l-.71.71M4.05 19.95l-.71.71M21 12h-1M4 12H3m14.95 7.95l.71-.71M4.76 4.76l.71-.71M16 12a4 4 0 11-8 0 4 4 0 018 0z",
     title: "Farmer",
-    desc: "Log telemetry, mint harvest batches, and track your crops end-to-end.",
-    items: ["Submit environmental readings", "Mint NFT batch tokens", "View yield predictions", "Monitor batch status"],
+    desc: "Record environmental observations, prepare batches, and track their verified status.",
+    items: ["Submit environmental observations", "Create traceability records", "View WMA estimates", "Monitor batch status"],
   },
   {
     cls: "role-logistics" as const,
     icon: "M13 10V3L4 14h7v7l9-11h-7z",
     title: "Logistics",
-    desc: "Accept transfer requests and move produce across the supply chain.",
-    items: ["View open transfer requests", "Accept & execute transfers", "Scan QR batch codes", "Update shipment status"],
+    desc: "View batches in custody and sign verified handoffs to the next stakeholder.",
+    items: ["View batches in custody", "Transfer object custody", "Track verified handoffs", "Open explorer evidence"],
   },
   {
     cls: "role-admin" as const,
     icon: "M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z",
     title: "Admin",
     desc: "Oversee platform integrity, manage users, and run ledger verifications.",
-    items: ["Manage all user accounts", "Run hash verification", "View system health", "Access full audit logs"],
+    items: ["Manage user accounts", "Review integrity audit events", "View dependency health", "Inspect operational statistics"],
   },
 ];
 

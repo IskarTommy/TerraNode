@@ -12,6 +12,17 @@ from apps.users.models import AuditEvent
 from .services import CURRENT_SCHEMA_VERSION, canonical_telemetry_payload
 
 
+SYSTEM_DECRYPTION_PURPOSES = frozenset(
+    {
+        "encryption_migration",
+        "integrity_audit",
+        "ledger_integrity",
+        "public_verification",
+        "yield_estimation",
+    }
+)
+
+
 def get_encryption_key(key_version=1):
     variable = f"TELEMETRY_ENCRYPTION_KEY_V{key_version}"
     encoded = os.environ.get(variable)
@@ -157,7 +168,12 @@ def decrypt_telemetry_payload(
         raise ValueError("Telemetry decryption failed closed") from exc
 
 
-def read_telemetry_values(record, request_user=None, enforce_authorization=True):
+def read_telemetry_values(
+    record,
+    request_user=None,
+    enforce_authorization=True,
+    system_purpose=None,
+):
     if enforce_authorization:
         allowed = (
             getattr(request_user, "is_authenticated", False)
@@ -168,6 +184,10 @@ def read_telemetry_values(record, request_user=None, enforce_authorization=True)
         )
         if not allowed:
             raise PermissionDenied("Not authorized to decrypt this telemetry record")
+    elif system_purpose not in SYSTEM_DECRYPTION_PURPOSES:
+        raise PermissionDenied(
+            "An approved system purpose is required for privileged telemetry decryption"
+        )
 
     if record.encrypted_payload_b64:
         values = decrypt_telemetry_payload(

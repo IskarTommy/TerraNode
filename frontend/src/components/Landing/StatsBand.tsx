@@ -9,10 +9,10 @@ interface Stat {
 }
 
 const STATS: Stat[] = [
-  { value: 12_480, suffix: "+", label: "Batches Minted", gradient: "emerald" },
-  { value: 847, suffix: "", label: "Active Farmers", gradient: "cyan" },
-  { value: 99_97, suffix: "%", label: "Data Integrity", decimals: 2, gradient: "gold" },
-  { value: 3_291, suffix: "", label: "Daily Transfers", gradient: "emerald" },
+  { value: 256, suffix: "", label: "AES-GCM key bits", gradient: "emerald" },
+  { value: 96, suffix: "", label: "Unique nonce bits", gradient: "cyan" },
+  { value: 4, suffix: "", label: "Custody states", gradient: "gold" },
+  { value: 600, suffix: "s", label: "Prediction cache TTL", gradient: "emerald" },
 ];
 
 function StatCell({ stat, inView, reducedMotion }: { stat: Stat; inView: boolean; reducedMotion: boolean }) {
@@ -44,7 +44,7 @@ export function StatsBand() {
   const [inView, ref] = useInView({ threshold: 0.3 });
 
   return (
-    <section ref={ref} className="stats-band" aria-label="Platform statistics">
+    <section ref={ref} className="stats-band" aria-label="Security and data design facts">
       <div className={`stats-band-grid${inView ? " in-view" : ""}`}>
         {STATS.map((s, i) => (
           <StatCell key={i} stat={s} inView={inView} reducedMotion={reducedMotion} />

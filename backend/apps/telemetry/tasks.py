@@ -16,7 +16,11 @@ def run_telemetry_integrity_audit_task():
     for record in EnvironmentalTelemetry.objects.all().iterator():
         total += 1
         try:
-            read_telemetry_values(record, enforce_authorization=False)
+            read_telemetry_values(
+                record,
+                enforce_authorization=False,
+                system_purpose="integrity_audit",
+            )
             passed += 1
         except Exception as exc:
             failed += 1

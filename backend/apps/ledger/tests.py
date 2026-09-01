@@ -192,6 +192,37 @@ class StrictLedgerWorkflowTests(TestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertFalse(response.data["verified"])
         self.assertFalse(response.data["sui_tx_verified"])
+        self.assertNotIn("farmer", response.data)
+        self.assertNotIn("current_custodian", response.data)
+        self.assertEqual(response.data["farmer_address"], FARMER_WALLET)
+        self.assertEqual(response.data["current_custodian_address"], FARMER_WALLET)
+        self.assertFalse(response.data["local_integrity"])
+        self.assertFalse(response.data["batch_hash_match"])
+
+    def test_batch_only_prepare_hash_is_recomputed_and_tampering_fails_closed(self):
+        prepared = self.client.post(
+            reverse("batch_prepare"),
+            {"crop_type": "MAIZE", "weight_kg": "12.345"},
+            format="json",
+        )
+        self.assertEqual(prepared.status_code, status.HTTP_201_CREATED)
+        verification_url = reverse(
+            "public_batch_verify",
+            kwargs={"identifier": prepared.data["id"]},
+        )
+        valid = self.client.get(verification_url)
+        self.assertEqual(valid.status_code, status.HTTP_200_OK)
+        self.assertTrue(valid.data["local_integrity"])
+        self.assertTrue(valid.data["batch_hash_match"])
+        self.assertFalse(valid.data["overall_verification"])
+
+        ProduceBatch.objects.filter(pk=prepared.data["id"]).update(
+            data_integrity_hash="00" * 32
+        )
+        tampered = self.client.get(verification_url)
+        self.assertFalse(tampered.data["local_integrity"])
+        self.assertFalse(tampered.data["batch_hash_match"])
+        self.assertFalse(tampered.data["overall_verification"])
 
     def test_public_verification_rechecks_each_custody_digest(self):
         self.batch.status = ProduceBatch.Status.IN_TRANSIT

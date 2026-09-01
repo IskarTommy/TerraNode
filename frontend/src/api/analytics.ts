@@ -2,7 +2,7 @@ import apiClient from './client';
 import type { PredictionResult, TelemetrySummary, SystemHealth, AdminStats } from '../types/analytics';
 
 export const analyticsApi = {
-  /** Get AI yield prediction */
+  /** Get the transparent rule-based WMA yield estimate. */
   predictYield: async (cropType = 'MAIZE'): Promise<PredictionResult> => {
     const response = await apiClient.get<PredictionResult>('/analytics/predict/', {
       params: { crop_type: cropType },

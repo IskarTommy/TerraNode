@@ -61,7 +61,7 @@ module terranode::agri_ledger {
     ) {
         let sender = tx_context::sender(ctx);
         assert!(weight_grams > 0, EInvalidWeight);
-        assert!(vector::length(&integrity_hash) == 32, EInvalidIntegrityHash);
+        assert!(integrity_hash.length() == 32, EInvalidIntegrityHash);
         let batch = ProduceBatch {
             id: object::new(ctx),
             crop_type: crop_type,

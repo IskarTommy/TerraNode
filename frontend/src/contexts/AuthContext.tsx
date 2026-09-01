@@ -1,6 +1,7 @@
 import { createContext, useContext, useState, useEffect, type ReactNode, useCallback } from 'react';
 import { login, register as registerApi, logout as logoutApi, walletLogin as walletLoginApi } from '../api/auth';
 import type { User } from '../api/auth';
+import apiClient from '../api/client';
 
 // ─── storage keys ─────────────────────────────────────────
 const STORAGE_KEYS = {
@@ -56,6 +57,20 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     localStorage.setItem(STORAGE_KEYS.ACCESS, token);
     setAccessTokenState(token);
   }, []);
+
+  // Sync latest user profile on mount / token change
+  useEffect(() => {
+    if (accessToken) {
+      apiClient.get<User>('/auth/profile/')
+        .then((res) => {
+          setUser(res.data);
+          localStorage.setItem(STORAGE_KEYS.USER, JSON.stringify(res.data));
+        })
+        .catch((err) => {
+          console.warn('Failed to refresh profile:', err);
+        });
+    }
+  }, [accessToken]);
 
   const loginUser = async (email: string, password: string) => {
     const response = await login({ email, password });

@@ -54,29 +54,10 @@ def _safe_cache_set(key, value):
         logger.warning("Prediction cache unavailable; result was not cached", exc_info=True)
 
 
-def predict_yield(farmer_id, crop_type=None, simulated_params=None):
+def predict_yield(farmer_id, crop_type=None):
     """Produce a transparent rule-based WMA estimate from genuine observations."""
     crop_key = (crop_type or "DEFAULT").upper()
     profile = CROP_PROFILES.get(crop_key, CROP_PROFILES["DEFAULT"])
-
-    if simulated_params is not None:
-        if any(simulated_params.get(name) is None for name in ("temp", "moisture", "ph")):
-            return {
-                "error": "Simulation requires temp, moisture, and ph.",
-                "model_type": "WMA Yield Estimate (Rule-Based Forecast)",
-            }
-        temperature = float(simulated_params["temp"])
-        moisture = float(simulated_params["moisture"])
-        ph = float(simulated_params["ph"])
-        return _estimate(
-            crop_key,
-            profile,
-            temperature,
-            moisture,
-            ph,
-            counts={"temperature": 1, "soil_moisture": 1, "soil_ph": 1},
-            is_simulation=True,
-        )
 
     cache_key = prediction_cache_key(farmer_id, crop_key)
     cached = _safe_cache_get(cache_key)
@@ -92,7 +73,11 @@ def predict_yield(farmer_id, crop_type=None, simulated_params=None):
     )[:90]
     for record in records:
         try:
-            values = read_telemetry_values(record, enforce_authorization=False)
+            values = read_telemetry_values(
+                record,
+                enforce_authorization=False,
+                system_purpose="yield_estimation",
+            )
         except Exception:
             integrity_failures += 1
             continue
@@ -133,14 +118,13 @@ def predict_yield(farmer_id, crop_type=None, simulated_params=None):
         _weighted_average(moistures),
         _weighted_average(ph_values) if ph_values else None,
         counts=counts,
-        is_simulation=False,
     )
     result["integrity_failures_excluded"] = integrity_failures
     _safe_cache_set(cache_key, result)
     return result
 
 
-def _estimate(crop_key, profile, temperature, moisture, ph, counts, is_simulation):
+def _estimate(crop_key, profile, temperature, moisture, ph, counts):
     predicted = (
         profile["base_yield"]
         + moisture * profile["moisture_coeff"]
@@ -153,10 +137,10 @@ def _estimate(crop_key, profile, temperature, moisture, ph, counts, is_simulatio
             predicted -= (ph - 7.5) * 5
     confidence_basis = min(counts["temperature"], counts["soil_moisture"])
     return {
-        "is_simulation": is_simulation,
+        "is_simulation": False,
         "crop_type": crop_key,
         "model_type": "WMA Yield Estimate (Rule-Based Forecast)",
-        "confidence_score": 0.0 if is_simulation else round(min(0.95, confidence_basis / 90), 3),
+        "confidence_score": round(min(0.95, confidence_basis / 90), 3),
         "predicted_yield_metric_tons": max(0.0, round(predicted, 2)),
         "data_points_analyzed": counts,
         "contributing_observations": [

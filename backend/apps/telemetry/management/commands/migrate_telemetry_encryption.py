@@ -37,7 +37,11 @@ class Command(BaseCommand):
         for record in EnvironmentalTelemetry.objects.all().iterator(chunk_size=batch_size):
             try:
                 if record.encrypted_payload_b64:
-                    read_telemetry_values(record, enforce_authorization=False)
+                    read_telemetry_values(
+                        record,
+                        enforce_authorization=False,
+                        system_purpose="encryption_migration",
+                    )
                     verified += 1
                     skipped += 1
                     continue
@@ -112,7 +116,11 @@ class Command(BaseCommand):
             # prevents clearing any plaintext in this run.
             for record in EnvironmentalTelemetry.objects.all().iterator(chunk_size=batch_size):
                 try:
-                    read_telemetry_values(record, enforce_authorization=False)
+                    read_telemetry_values(
+                        record,
+                        enforce_authorization=False,
+                        system_purpose="encryption_migration",
+                    )
                 except Exception as exc:
                     errors += 1
                     self.stderr.write(f"{record.pk}: final verification failed: {exc}")

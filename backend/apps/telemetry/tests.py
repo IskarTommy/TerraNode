@@ -4,6 +4,7 @@ from datetime import timedelta
 from unittest import mock
 
 from django.contrib.auth import get_user_model
+from django.core.exceptions import PermissionDenied
 from django.test import TestCase
 from django.urls import reverse
 from django.utils import timezone
@@ -50,8 +51,15 @@ class TelemetrySerializerAndHashTests(TestCase):
 
 class EncryptedTelemetryAPITests(TestCase):
     def setUp(self):
-        self.previous_key = os.environ.get("TELEMETRY_ENCRYPTION_KEY")
-        os.environ["TELEMETRY_ENCRYPTION_KEY"] = TEST_KEY
+        self.key_environment = mock.patch.dict(
+            os.environ,
+            {
+                "TELEMETRY_ENCRYPTION_KEY_V1": TEST_KEY,
+                "TELEMETRY_ENCRYPTION_KEY": TEST_KEY,
+            },
+        )
+        self.key_environment.start()
+        self.addCleanup(self.key_environment.stop)
         self.client = APIClient()
         self.farmer = User.objects.create_user(
             email="farmer@example.com",
@@ -71,12 +79,6 @@ class EncryptedTelemetryAPITests(TestCase):
             full_name="Logistics",
             role=User.Role.LOGISTICS,
         )
-
-    def tearDown(self):
-        if self.previous_key is None:
-            os.environ.pop("TELEMETRY_ENCRYPTION_KEY", None)
-        else:
-            os.environ["TELEMETRY_ENCRYPTION_KEY"] = self.previous_key
 
     def test_submission_encrypts_at_rest_and_authorized_output_decrypts(self):
         self.client.force_authenticate(self.farmer)
@@ -102,6 +104,7 @@ class EncryptedTelemetryAPITests(TestCase):
         )
 
     def test_missing_key_fails_without_storing_plaintext(self):
+        os.environ.pop("TELEMETRY_ENCRYPTION_KEY_V1", None)
         os.environ.pop("TELEMETRY_ENCRYPTION_KEY", None)
         self.client.force_authenticate(self.farmer)
         response = self.client.post(
@@ -111,6 +114,22 @@ class EncryptedTelemetryAPITests(TestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_503_SERVICE_UNAVAILABLE)
         self.assertFalse(EnvironmentalTelemetry.objects.exists())
+
+    def test_privileged_decryption_requires_an_approved_system_purpose(self):
+        recorded_at = timezone.now()
+        record = EnvironmentalTelemetry.objects.create(
+            farmer=self.farmer,
+            recorded_at=recorded_at,
+            **encrypted_storage_fields(self.farmer.pk, recorded_at, 24.0, 55.0, None),
+        )
+        with self.assertRaises(PermissionDenied):
+            read_telemetry_values(record, enforce_authorization=False)
+        values = read_telemetry_values(
+            record,
+            enforce_authorization=False,
+            system_purpose="integrity_audit",
+        )
+        self.assertEqual(values["temperature_celsius"], 24.0)
 
     def test_history_is_scoped_and_decrypted_for_authorized_farmer(self):
         recorded_at = timezone.now()

@@ -58,7 +58,7 @@ class GenuineDataIngestionTests(TestCase):
         self.assertEqual(len(records), 2)
         self.assertTrue(all(record.encrypted_payload_b64 for record in records))
         self.assertTrue(all(record.temperature_celsius is None for record in records))
-        values = read_telemetry_values(records[0], enforce_authorization=False)
+        values = read_telemetry_values(records[0], request_user=records[0].farmer)
         self.assertEqual(values["temperature_celsius"], 28.5)
         self.assertEqual(values["soil_moisture_percentage"], 55.0)
         self.assertIsNone(values["soil_ph"])

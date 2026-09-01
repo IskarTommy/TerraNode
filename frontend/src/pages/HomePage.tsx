@@ -48,32 +48,32 @@ interface StatItem {
 // ── Data ──────────────────────────────────────────────────────────────────────
 
 const FEATURES: FeatureItem[] = [
-  { title: "Crop Provenance", desc: "Every harvest batch stamped with origin data — variety, soil health, and yield — tied to an on-chain NFT.", icon: Sprout, tag: "100% traceable", color: "#10b981" },
-  { title: "Custody Transfers", desc: "Handoffs happen in one on-chain transaction. Every ownership change is timestamped and auditable.", icon: Handshake, tag: "Sub-second finality", color: "#06b6d4" },
-  { title: "IoT Telemetry", desc: "Temperature, humidity, and pH streamed live from LoRa sensors with SHA-256-hashed payloads.", icon: Cpu, tag: "Live monitoring", color: "#22d3ee" },
-  { title: "Sui Blockchain", desc: "Built on Sui object-centric model. Each batch is a unique dynamic object with ownership and events.", icon: Network, tag: "L1 performance", color: "#6366f1" },
-  { title: "AI Yield Forecast", desc: "Weighted moving averages over 90 days of sensor data produce confidence-weighted harvest forecasts.", icon: Brain, tag: "ML-powered", color: "#f59e0b" },
-  { title: "ZK Privacy", desc: "Zero-knowledge proofs let logistics partners verify cargo condition without revealing sensitive data.", icon: ShieldCheck, tag: "Privacy-first", color: "#8b5cf6" },
+  { title: "Crop Provenance", desc: "Prepare produce batches from authorized telemetry or canonical batch data, then anchor the integrity hash to a Sui traceability object.", icon: Sprout, tag: "Hash-linked", color: "#10b981" },
+  { title: "Custody Transfers", desc: "The current custodian signs each ownership transfer; backend verification rejects unauthorized or mismatched handoffs.", icon: Handshake, tag: "Fail-closed", color: "#06b6d4" },
+  { title: "Genuine Data Inputs", desc: "Record manual observations and import NASA POWER weather data with provenance, checksums, and honest nulls.", icon: Cpu, tag: "Source-labelled", color: "#22d3ee" },
+  { title: "Sui Traceability", desc: "ProduceBatch objects store crop, integer gram weight, custodian addresses, and a 32-byte integrity hash.", icon: Network, tag: "No coins or payments", color: "#6366f1" },
+  { title: "WMA Yield Estimate", desc: "A transparent weighted moving average uses sufficient genuine observations and reports when data is insufficient.", icon: Brain, tag: "Rule-based", color: "#f59e0b" },
+  { title: "Encrypted Telemetry", desc: "AES-256-GCM protects telemetry at rest, while canonical SHA-256 hashes expose tampering during authorized verification.", icon: ShieldCheck, tag: "Versioned encryption", color: "#8b5cf6" },
 ];
 
 const STEPS: StepItem[] = [
-  { n: "01", title: "Register", desc: "Create a TerraNode account and link your Sui wallet. Choose your role." },
-  { n: "02", title: "Submit", desc: "Log soil readings, temperature, and pH. Each record is SHA-256 hashed and stored immutably." },
-  { n: "03", title: "Mint", desc: "Bundle your harvest into a batch, sign on-chain, and receive a verifiable NFT proof-of-origin." },
-  { n: "04", title: "Verify", desc: "Every custodian handoff and admin audit re-validates the hash against the Sui ledger end-to-end." },
+  { n: "01", title: "Register", desc: "Create a farmer or logistics account and optionally bind a Sui wallet through a single-use signed challenge." },
+  { n: "02", title: "Submit", desc: "Store source-labelled observations with AES-256-GCM encryption and a canonical SHA-256 integrity hash." },
+  { n: "03", title: "Anchor", desc: "Prepare a produce batch, sign a Testnet transaction, and verify the resulting Sui traceability object." },
+  { n: "04", title: "Verify", desc: "Recheck local integrity, the batch hash, mint transaction, custody events, and current on-chain owner." },
 ];
 
 const ROLES: RoleItem[] = [
-  { role: "Farmer", color: "#10b981", items: ["Submit environmental readings", "Mint NFT batch tokens", "View yield predictions", "Monitor batch status"] },
-  { role: "Logistics", color: "#06b6d4", items: ["View open transfer requests", "Accept & execute transfers", "Scan QR batch codes", "Update shipment status"] },
-  { role: "Admin", color: "#8b5cf6", items: ["Manage all user accounts", "Run hash verification", "View system health", "Access full audit logs"] },
+  { role: "Farmer", color: "#10b981", items: ["Submit environmental observations", "Create batch traceability records", "View WMA yield estimates", "Monitor batch status"] },
+  { role: "Logistics", color: "#06b6d4", items: ["View batches in custody", "Transfer object custody", "Track verified handoffs", "Open Testnet explorer evidence"] },
+  { role: "Admin", color: "#8b5cf6", items: ["Manage user accounts", "Review integrity audit events", "View dependency health", "Inspect operational statistics"] },
 ];
 
 const STATS: StatItem[] = [
-  { value: 12480, suffix: "", label: "Total Batches" },
-  { value: 847, suffix: "", label: "Farmers Online" },
-  { value: 3291, suffix: "", label: "Transfers Today" },
-  { value: 99.97, suffix: "%", label: "Uptime" },
+  { value: 256, suffix: "", label: "AES-GCM key bits" },
+  { value: 96, suffix: "", label: "Unique nonce bits" },
+  { value: 4, suffix: "", label: "Custody lifecycle states" },
+  { value: 600, suffix: "s", label: "Prediction cache TTL" },
 ];
 
 // ── Animation Components ──────────────────────────────────────────────────────
@@ -215,6 +215,13 @@ export default function HomePage(): React.ReactElement {
               </a>
             ))}
             <Link
+              to="/verify"
+              className="transition-colors duration-200"
+              style={{ fontSize: 14, fontWeight: 500, color: "rgba(203,213,225,0.7)", textDecoration: "none" }}
+            >
+              Verify batch
+            </Link>
+            <Link
               to="/login"
               className="rounded-lg transition-all duration-200"
               style={{ padding: "8px 16px", fontSize: 14, fontWeight: 600, color: "#f1f5f9", background: "rgba(16,185,129,0.12)", border: "1px solid rgba(16,185,129,0.25)", textDecoration: "none" }}
@@ -251,7 +258,7 @@ export default function HomePage(): React.ReactElement {
               style={{ padding: "6px 16px", background: "rgba(16,185,129,0.08)", border: "1px solid rgba(16,185,129,0.18)", fontSize: "0.72rem", fontFamily: "'JetBrains Mono', monospace", color: "#34d399", letterSpacing: "0.05em" }}
             >
               <span className="inline-block rounded-full" aria-hidden="true" style={{ width: 7, height: 7, background: "#34d399", boxShadow: "0 0 8px rgba(52,211,153,0.5)", animation: "tn-pulse-dot 2s ease-in-out infinite" }} />
-              LIVE ON SUI TESTNET · Block #14,832,561
+              SUI TESTNET TRACEABILITY DEMO
             </span>
           </div>
 
@@ -273,14 +280,14 @@ export default function HomePage(): React.ReactElement {
             className="text-center mx-auto max-w-2xl leading-relaxed"
             style={{ fontSize: "clamp(0.95rem, 1.8vw, 1.1rem)", color: "rgba(203,213,225,0.85)", marginBottom: "2.25rem" }}
           >
-            TerraNode links every harvest batch to an immutable Sui ledger. From IoT telemetry to yield predictions to custody handoffs — the whole supply chain, verified.
+            TerraNode links source-labelled environmental observations to encrypted telemetry, transparent WMA estimates, and verifiable Sui batch-custody records.
           </p>
 
           {/* CTA buttons */}
           <div className="flex flex-wrap justify-center gap-4">
             <Link to="/register">
               <Button variant="primary" size="lg" style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 600 }}>
-                Start minting batches →
+                Create a traceability record
               </Button>
             </Link>
             <a href="#features" className="no-underline">
@@ -292,7 +299,7 @@ export default function HomePage(): React.ReactElement {
 
           {/* Trust indicators */}
           <div className="flex flex-wrap items-center justify-center gap-6 mt-10" style={{ fontSize: "0.78rem", color: "rgba(148,163,184,0.7)" }} aria-label="Platform guarantees">
-            {["SHA-256 Hashed", "Non-custodial", "~200ms finality", "Testnet · Free"].map((t) => (
+            {["AES-256-GCM at rest", "Canonical SHA-256", "Fail-closed verification", "No coins or payments"].map((t) => (
               <span key={t} className="inline-flex items-center gap-1.5">
                 <svg width={13} height={13} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                   <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
@@ -334,7 +341,7 @@ export default function HomePage(): React.ReactElement {
                 </span>
               </h2>
               <p className="mx-auto max-w-130 leading-relaxed" style={{ fontSize: 15, color: "rgba(203,213,225,0.8)" }}>
-                Built on Sui for speed and security. Every feature serves farmers, logistics providers, and auditors.
+                Designed for farmers, logistics providers, and administrators, with explicit evidence for every verification claim.
               </p>
             </div>
           </FadeIn>
@@ -551,7 +558,7 @@ export default function HomePage(): React.ReactElement {
           borderBottom: "1px solid rgba(51,65,85,0.25)",
           background: "rgba(4,13,28,0.4)",
         }}
-        aria-label="Platform statistics"
+        aria-label="Security and data design facts"
       >
         <div className="mx-auto grid gap-8" style={{ maxWidth: 960, gridTemplateColumns: "repeat(4, 1fr)" }}>
           {STATS.map((s) => (
@@ -591,12 +598,12 @@ export default function HomePage(): React.ReactElement {
               Ready to go <span style={{ color: "#34d399" }}>on-chain?</span>
             </h2>
             <p className="mx-auto mb-8 leading-relaxed" style={{ fontSize: 15, color: "rgba(203,213,225,0.8)", maxWidth: 480 }}>
-              Join hundreds of farmers and logistics partners already proving provenance with TerraNode.
+              Use the demo to submit genuine observations, prepare traceability records, and inspect fail-closed verification evidence.
             </p>
             <div className="flex flex-wrap justify-center gap-4">
               <Link to="/register">
                 <Button variant="primary" size="lg" style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 600 }}>
-                  Start minting batches →
+                Create a traceability record
                 </Button>
               </Link>
               <a href="#how-it-works" className="no-underline">
@@ -623,18 +630,9 @@ export default function HomePage(): React.ReactElement {
           </p>
           <nav aria-label="Footer navigation">
             <div className="flex items-center gap-5">
-              {["Stack", "Docs", "GitHub"].map((link) => (
-                <a
-                  key={link}
-                  href="#"
-                  className="transition-colors duration-200"
-                  style={{ fontSize: 13, color: "rgba(203,213,225,0.5)", textDecoration: "none" }}
-                  onMouseEnter={(e) => (e.currentTarget.style.color = "#e2e8f0")}
-                  onMouseLeave={(e) => (e.currentTarget.style.color = "rgba(203,213,225,0.5)")}
-                >
-                  {link}
-                </a>
-              ))}
+              <Link to="/verify" className="transition-colors duration-200" style={{ fontSize: 13, color: "rgba(203,213,225,0.5)", textDecoration: "none" }}>Verify</Link>
+              <a href="https://docs.sui.io/" target="_blank" rel="noreferrer" className="transition-colors duration-200" style={{ fontSize: 13, color: "rgba(203,213,225,0.5)", textDecoration: "none" }}>Sui docs</a>
+              <a href="https://github.com/IskarTommy/TerraNode" target="_blank" rel="noreferrer" className="transition-colors duration-200" style={{ fontSize: 13, color: "rgba(203,213,225,0.5)", textDecoration: "none" }}>GitHub</a>
             </div>
           </nav>
         </div>

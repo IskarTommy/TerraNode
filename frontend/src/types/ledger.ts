@@ -64,6 +64,39 @@ export interface BatchListResponse {
   previous: string | null;
 }
 
+export interface PublicBatchVerification {
+  verified: boolean;
+  error?: string;
+  batch_id?: string;
+  crop_type?: string;
+  weight_kg?: number;
+  weight_grams?: number;
+  status?: BatchStatus;
+  farmer_address?: string | null;
+  current_custodian_address?: string | null;
+  sui_object_id?: string | null;
+  sui_tx_digest?: string | null;
+  data_integrity_hash?: string;
+  local_integrity: boolean;
+  batch_hash_match: boolean;
+  sui_tx_verified: boolean;
+  custody_chain_verified?: boolean;
+  overall_verification: boolean;
+  sui_verification?: {
+    verified?: boolean;
+    reason_code?: string;
+    error?: string;
+  };
+  transfer_verifications?: Array<{
+    transfer_id: string;
+    tx_digest: string;
+    verified: boolean;
+    reason_code: string;
+  }>;
+  created_at?: string;
+  sui_explorer_url?: string | null;
+}
+
 export const BATCH_STATUS_CONFIG: Record<BatchStatus, { label: string; color: string; bg: string }> = {
   PENDING: { label: 'Pending', color: 'var(--color-warning-fg)', bg: 'var(--color-warning-bg)' },
   MINTED: { label: 'Minted', color: 'var(--color-success-fg)', bg: 'var(--color-success-bg)' },

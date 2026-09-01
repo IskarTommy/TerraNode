@@ -58,12 +58,12 @@ export function useBatchById(batchId: string | undefined) {
   });
 }
 
-/** Fetch AI yield prediction */
-export function useYieldPrediction(userId?: string) {
+/** Fetch the rule-based WMA estimate for a crop. */
+export function useYieldPrediction(cropType = 'MAIZE') {
   return useQuery({
-    queryKey: ['yield-prediction', userId],
-    queryFn: () => analyticsApi.predictYield(userId),
-    staleTime: 5 * 60_000, // 5min — model doesn't change often
+    queryKey: ['yield-prediction', cropType],
+    queryFn: () => analyticsApi.predictYield(cropType),
+    staleTime: 5 * 60_000,
   });
 }
 

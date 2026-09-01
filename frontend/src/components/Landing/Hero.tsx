@@ -111,7 +111,7 @@ export function Hero() {
         <div className="hero-inner">
           <div className="hero-badge">
             <span className="hero-badge-dot" />
-            LIVE ON SUI TESTNET · Block #14,832,561
+            SUI TESTNET TRACEABILITY DEMO
           </div>
           <h1 id="hero-heading">
             Farm-to-table <br />
@@ -119,12 +119,12 @@ export function Hero() {
             <span className="text-gradient-emerald">on-chain.</span>
           </h1>
           <p className="hero-sub">
-            TerraNode links every harvest batch to an immutable Sui ledger. From IoT
-            telemetry to yield predictions to custody handoffs — the whole supply
-            chain, verified.
+            TerraNode links source-labelled observations to encrypted telemetry,
+            transparent WMA estimates, and verifiable Sui batch-custody
+            records.
           </p>
           <div className="hero-actions">
-            <a href="/register"><Button variant="primary" size="lg">Start minting batches →</Button></a>
+            <a href="/register"><Button variant="primary" size="lg">Create a traceability record</Button></a>
             <a href="#how-it-works"><Button variant="outline" size="lg">See how it works</Button></a>
           </div>
           <div className="hero-trust" aria-label="Trust indicators">
@@ -138,11 +138,11 @@ export function Hero() {
             </div>
             <div className="hero-trust-item">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-              ~200ms finality
+              Fail-closed verification
             </div>
             <div className="hero-trust-item">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064"/></svg>
-              Testnet · Free
+              No coins or payments
             </div>
           </div>
           <div className="hero-scroll" aria-hidden="true">

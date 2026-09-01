@@ -218,6 +218,7 @@ interface DashboardLayoutProps {
   user: User | null;
   onConnectWallet: () => void;
   onDisconnectWallet: () => void;
+  onLogout?: () => void;
   isConnecting: boolean;
   children: React.ReactNode;
 }
@@ -226,6 +227,7 @@ export function DashboardLayout({
   user,
   onConnectWallet,
   onDisconnectWallet,
+  onLogout,
   isConnecting,
   children,
 }: DashboardLayoutProps) {
@@ -297,9 +299,9 @@ export function DashboardLayout({
               </div>
               <button
                 className="sidebar-logout-btn"
-                onClick={onDisconnectWallet}
-                aria-label="Disconnect"
-                title="Disconnect wallet"
+                onClick={onLogout}
+                aria-label="Log out"
+                title="Log out of TerraNode"
               >
                 <LogoutIcon />
               </button>

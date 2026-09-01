@@ -123,7 +123,7 @@ class EncryptionAndMigrationTests(TestCase):
         record.refresh_from_db()
         self.assertIsNone(record.temperature_celsius)
         self.assertEqual(
-            read_telemetry_values(record, enforce_authorization=False)[
+            read_telemetry_values(record, request_user=record.farmer)[
                 "soil_moisture_percentage"
             ],
             60.0,

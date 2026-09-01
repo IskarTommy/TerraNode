@@ -12,7 +12,7 @@ TerraNode is an agricultural telemetry, yield-estimation, and produce-traceabili
 4. The analytics service uses sufficient real temperature and soil-moisture observations to produce a labelled WMA rule-based yield estimate. It returns an insufficient-data response when the evidence is inadequate.
 5. A farmer prepares a produce batch in PostgreSQL, signs a mint transaction with the wallet bound to that account, and submits the transaction to Sui Testnet.
 6. The backend verifies the transaction, event, created object, sender, package, function, weight in grams, crop, integrity hash, owner, and current object fields before changing PENDING to MINTED.
-7. Only the current custodian can transfer the on-chain object. The backend verifies each transfer and records an immutable local CustodyTransfer audit row before progressing through IN_TRANSIT and DELIVERED.
+7. Only the current custodian can transfer the on-chain object. The backend verifies each transfer and records a persistent CustodyTransfer audit row before progressing through IN_TRANSIT and DELIVERED.
 8. Public verification rechecks the local hash, mint digest, every transfer digest, custody sequence, and current on-chain object. Any missing or inconsistent proof produces verified=false.
 
 ## Why PostgreSQL and Redis are both present

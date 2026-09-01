@@ -1,3 +1,4 @@
+import hashlib
 import json
 import os
 import urllib.error
@@ -223,11 +224,32 @@ def _valid_testnet_chain(actual, configured):
     )
 
 
-def verify_integrity(batch):
+def generate_batch_integrity_hash(farmer_id, crop_type, weight_grams):
+    canonical_batch = json.dumps(
+        {
+            "crop_type": crop_type,
+            "farmer_id": str(farmer_id),
+            "weight_grams": int(weight_grams),
+        },
+        sort_keys=True,
+        separators=(",", ":"),
+    ).encode("utf-8")
+    return hashlib.sha256(canonical_batch).hexdigest()
+
+
+def compute_expected_integrity_hash(batch):
     telemetry = batch.origin_telemetry
     if not telemetry:
-        return None
-    values = read_telemetry_values(telemetry, enforce_authorization=False)
+        return generate_batch_integrity_hash(
+            batch.farmer_id,
+            batch.crop_type,
+            batch.weight_grams,
+        )
+    values = read_telemetry_values(
+        telemetry,
+        enforce_authorization=False,
+        system_purpose="ledger_integrity",
+    )
     return generate_telemetry_hash(
         farmer_id=telemetry.farmer_id,
         recorded_at=telemetry.recorded_at,

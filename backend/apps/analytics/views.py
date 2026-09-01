@@ -18,20 +18,13 @@ class PredictYieldView(APIView):
     def get(self, request):
         crop_type = request.query_params.get("crop_type", "MAIZE")
 
-        simulated = None
         if "sim_temp" in request.query_params or "sim_moisture" in request.query_params or "sim_ph" in request.query_params:
-            if not getattr(settings, "ALLOW_ANALYTICS_SIMULATION", False):
-                return Response(
-                    {"error": "Simulation mode is disabled."},
-                    status=400,
-                )
-            simulated = {
-                "temp": request.query_params.get("sim_temp"),
-                "moisture": request.query_params.get("sim_moisture"),
-                "ph": request.query_params.get("sim_ph")
-            }
+            return Response(
+                {"error": "Simulation mode is disabled."},
+                status=400,
+            )
 
-        result = predict_yield(request.user.id, crop_type=crop_type, simulated_params=simulated)
+        result = predict_yield(request.user.id, crop_type=crop_type)
         if "error" in result:
             return Response(result, status=400)
         return Response(result)

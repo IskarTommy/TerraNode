@@ -48,10 +48,10 @@ export function CtaBanner() {
             Ready to go <span className="text-gradient-emerald">on-chain?</span>
           </h2>
           <p className="text-body-lg text-fg-secondary" style={{ maxWidth: "34rem", margin: "0.75rem auto 0" }}>
-            Join hundreds of farmers and logistics partners already proving provenance with TerraNode.
+            Use the demo to submit genuine observations, prepare traceability records, and inspect verification evidence.
           </p>
           <div className="cta-actions">
-            <a href="/register"><Button variant="primary" size="lg">Start minting batches →</Button></a>
+            <a href="/register"><Button variant="primary" size="lg">Create a traceability record</Button></a>
             <a href="#how-it-works"><Button variant="outline" size="lg">See how it works</Button></a>
           </div>
         </div>

@@ -27,9 +27,10 @@ import { SettingsPage } from "./pages/common/SettingsPage";
 import HomePage from "./pages/HomePage";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
+import { PublicVerifyPage } from "./pages/PublicVerifyPage";
 
 function AppRoutes() {
- const { user: apiUser } = useAuth();
+ const { user: apiUser, logout } = useAuth();
  const { connect: connectWallet, disconnect: disconnectWallet, connecting } = useWallet();
 
  const user = apiUser ? {
@@ -46,11 +47,12 @@ function AppRoutes() {
  <Route path="/" element={<HomePage />} />
  <Route path="/login" element={<LoginPage />} />
  <Route path="/register" element={<RegisterPage />} />
+ <Route path="/verify" element={<PublicVerifyPage />} />
 
  {/* Farmer routes */}
  <Route path="/farmer/*" element={
  <RoleGuard allowedRoles={[Role.FARMER]}>
- <DashboardLayout user={user} onConnectWallet={connectWallet} onDisconnectWallet={disconnectWallet} isConnecting={connecting}>
+ <DashboardLayout user={user} onConnectWallet={connectWallet} onDisconnectWallet={disconnectWallet} onLogout={logout} isConnecting={connecting}>
  <Routes>
  <Route path="dashboard" element={<FarmerDashboard />} />
  <Route path="telemetry" element={<TelemetryPage />} />
@@ -69,7 +71,7 @@ function AppRoutes() {
  {/* Logistics routes */}
  <Route path="/logistics/*" element={
  <RoleGuard allowedRoles={[Role.LOGISTICS]}>
- <DashboardLayout user={user} onConnectWallet={connectWallet} onDisconnectWallet={disconnectWallet} isConnecting={connecting}>
+ <DashboardLayout user={user} onConnectWallet={connectWallet} onDisconnectWallet={disconnectWallet} onLogout={logout} isConnecting={connecting}>
  <Routes>
  <Route path="dashboard" element={<LogisticsDashboard />} />
  <Route path="transfer" element={<TransferPage />} />
@@ -85,7 +87,7 @@ function AppRoutes() {
  {/* Admin routes */}
  <Route path="/admin/*" element={
  <RoleGuard allowedRoles={[Role.ADMIN]}>
- <DashboardLayout user={user} onConnectWallet={connectWallet} onDisconnectWallet={disconnectWallet} isConnecting={connecting}>
+ <DashboardLayout user={user} onConnectWallet={connectWallet} onDisconnectWallet={disconnectWallet} onLogout={logout} isConnecting={connecting}>
  <Routes>
  <Route path="dashboard" element={<AdminDashboard />} />
  <Route path="users" element={<UsersPage />} />

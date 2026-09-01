@@ -2,10 +2,10 @@ import { useInView } from "../../hooks";
 import { TerminalMockup } from "./TerminalMockup";
 
 const STEPS = [
-  { n: "01", title: "Register", desc: "Create a TerraNode account and link your Sui wallet. Choose your role — Farmer, Logistics, or Admin." },
-  { n: "02", title: "Submit", desc: "Log soil readings, temperature, and pH. Each record is SHA-256 hashed and stored immutably." },
-  { n: "03", title: "Mint", desc: "Bundle your harvest into a batch, sign on-chain, and receive a verifiable NFT proof-of-origin." },
-  { n: "04", title: "Verify", desc: "Every custodian handoff and admin audit re-validates the hash against the Sui ledger end-to-end." },
+  { n: "01", title: "Register", desc: "Create a farmer or logistics account and optionally bind a Sui wallet with a single-use challenge." },
+  { n: "02", title: "Submit", desc: "Store source-labelled observations with AES-256-GCM encryption and a canonical SHA-256 hash." },
+  { n: "03", title: "Anchor", desc: "Prepare a produce batch, sign on Testnet, and verify the resulting Sui traceability object." },
+  { n: "04", title: "Verify", desc: "Recheck local integrity, the batch hash, custody events, and current on-chain owner." },
 ];
 
 export function HowItWorksSection() {

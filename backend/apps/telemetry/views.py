@@ -6,6 +6,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from django.db import transaction, IntegrityError
 from django.core.exceptions import ImproperlyConfigured
+from django.http import Http404
 from django.shortcuts import get_object_or_404
 from django.utils import timezone
 from django.utils.dateparse import parse_date, parse_datetime
@@ -120,7 +121,10 @@ class TelemetryLatestView(generics.RetrieveAPIView):
             queryset = EnvironmentalTelemetry.objects.all()
         else:
             queryset = EnvironmentalTelemetry.objects.filter(farmer=user)
-        return get_object_or_404(queryset.order_by("-recorded_at"))
+        obj = queryset.order_by("-recorded_at").first()
+        if not obj:
+            raise Http404("No telemetry records found.")
+        return obj
 
 class TelemetryAuditLogView(APIView):
     """Administrator cryptographic audit trail to verify hash integrity across all stored telemetry."""

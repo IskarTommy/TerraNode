@@ -54,15 +54,15 @@ interface TickerItem {
 }
 const ITEMS: TickerItem[] = [
   { label: "Network", value: "Sui Testnet" },
-  { label: "Block Height", value: "#14,832,561" },
-  { label: "TPS", value: "2,847" },
-  { label: "Total Batches", value: "12,480" },
-  { label: "Avg Gas", value: "0.0021 SUI" },
-  { label: "Validators", value: "1,024" },
-  { label: "Epoch", value: "#4891" },
-  { label: "Farmers Online", value: "847" },
-  { label: "Transfers Today", value: "3,291" },
-  { label: "Uptime", value: "99.97%" },
+  { label: "On-chain weight", value: "grams (u64)" },
+  { label: "Integrity", value: "SHA-256" },
+  { label: "Telemetry", value: "AES-256-GCM" },
+  { label: "Nonce", value: "96-bit unique" },
+  { label: "Wallet challenge", value: "single use" },
+  { label: "Cache TTL", value: "600 seconds" },
+  { label: "Lifecycle", value: "4 explicit states" },
+  { label: "Verification", value: "fail closed" },
+  { label: "Asset model", value: "traceability only" },
 ];
 
 function Row() {
@@ -87,9 +87,8 @@ export function ChainTicker() {
         ref={ref}
         className={`chain-ticker${inView ? " in-view" : ""}`}
         style={inView ? {} : { opacity: 0 }}
-        role="status"
-        aria-live="polite"
-        aria-label="Live chain statistics"
+        role="region"
+        aria-label="TerraNode design facts"
       >
         <div className="chain-ticker-track">
           <Row />

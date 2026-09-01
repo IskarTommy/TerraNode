@@ -1,0 +1,131 @@
+name: Verification
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: verification-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  backend-postgres-redis:
+    name: Backend / PostgreSQL / Redis
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_DB: terranode
+          POSTGRES_USER: terranode
+          POSTGRES_PASSWORD: ci-postgres-password
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U terranode -d terranode"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+      redis:
+        image: redis:7-alpine
+        ports:
+          - 6379:6379
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+    env:
+      PIPENV_DONT_LOAD_ENV: "1"
+      DJANGO_SETTINGS_MODULE: config.settings.docker
+      DJANGO_SECRET_KEY: ci-only-secret-key-with-more-than-fifty-random-looking-characters
+      DJANGO_ALLOWED_HOSTS: localhost,127.0.0.1
+      DATABASE_URL: postgresql://terranode:ci-postgres-password@127.0.0.1:5432/terranode
+      REDIS_URL: redis://127.0.0.1:6379/0
+      TELEMETRY_ENCRYPTION_KEY_V1: MDEyMzQ1Njc4OTAxMjM0NTY3ODkwMTIzNDU2Nzg5MDE=
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install backend dependencies
+        working-directory: backend
+        run: |
+          python -m pip install --upgrade pip pipenv
+          pipenv sync --dev
+      - name: Verify production service bindings
+        working-directory: backend
+        run: |
+          pipenv run python manage.py shell -c "from django.conf import settings; from django.core.cache import cache; from django.db import connection; assert connection.vendor == 'postgresql'; assert 'redis' in settings.CACHES['default']['BACKEND'].lower(); cache.set('ci-service-check', 'ok', 30); assert cache.get('ci-service-check') == 'ok'; print('PostgreSQL and Redis bindings verified')"
+      - name: Check and migrate schema
+        working-directory: backend
+        run: |
+          pipenv run python manage.py check
+          pipenv run python manage.py makemigrations --check --dry-run
+          pipenv run python manage.py migrate --noinput
+      - name: Run Django suite on PostgreSQL and Redis
+        working-directory: backend
+        run: pipenv run python manage.py test --verbosity=2
+
+  frontend-and-live-e2e:
+    name: Frontend / live Django browser flow
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Enable pnpm
+        run: corepack enable
+      - name: Install backend dependencies for live E2E
+        working-directory: backend
+        env:
+          PIPENV_DONT_LOAD_ENV: "1"
+        run: |
+          python -m pip install --upgrade pip pipenv
+          pipenv sync --dev
+      - name: Install frontend dependencies and Chromium
+        working-directory: frontend
+        run: |
+          pnpm install --frozen-lockfile
+          pnpm exec playwright install --with-deps chromium
+      - name: Lint and build
+        working-directory: frontend
+        run: |
+          pnpm run lint
+          pnpm run build
+      - name: Run mocked API-contract browser tests
+        working-directory: frontend
+        run: pnpm run test:e2e
+      - name: Run live Django browser test
+        working-directory: frontend
+        run: pnpm run test:e2e:live
+
+  move:
+    name: Sui Move build and tests
+    runs-on: ubuntu-latest
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      SUIUP_INSTALL_DIR: /home/runner/.local/bin
+      SUIUP_DEFAULT_BIN_DIR: /home/runner/.local/bin
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install current Sui Testnet CLI
+        run: |
+          curl -sSfL https://raw.githubusercontent.com/MystenLabs/suiup/main/install.sh | sh
+          echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+          /home/runner/.local/bin/suiup install sui@testnet-1.78.1 -y
+          /home/runner/.local/bin/sui --version
+      - name: Build Move package
+        working-directory: contracts
+        run: sui move build
+      - name: Run Move unit tests
+        working-directory: contracts
+        run: sui move test

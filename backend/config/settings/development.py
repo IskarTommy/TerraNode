@@ -15,3 +15,13 @@ CACHES = {
 # Disable Celery broker for development (use eager mode)
 CELERY_TASK_ALWAYS_EAGER = True
 CELERY_TASK_EAGER_PROPAGATES = True
+
+# Relax rate limiting for local development testing
+REST_FRAMEWORK = {
+    **REST_FRAMEWORK,
+    "DEFAULT_THROTTLE_RATES": {
+        "anon": "1000/minute",
+        "user": "5000/minute",
+        "login": "100/minute",
+    },
+}

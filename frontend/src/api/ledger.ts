@@ -6,7 +6,8 @@ import type {
   BatchConfirmRequest,
   BatchTransferRequest,
   BatchListResponse,
-  BatchStatus
+  BatchStatus,
+  PublicBatchVerification,
 } from '../types/ledger';
 
 export const ledgerApi = {
@@ -64,6 +65,14 @@ export const ledgerApi = {
   /** Get transfer history for a batch */
   getTransferHistory: async (batchId: string): Promise<ProduceBatch['transfers']> => {
     const response = await apiClient.get(`/ledger/${batchId}/transfers/`);
+    return response.data;
+  },
+
+  /** Public, fail-closed verification by TerraNode UUID or Sui object ID. */
+  verifyPublic: async (identifier: string): Promise<PublicBatchVerification> => {
+    const response = await apiClient.get<PublicBatchVerification>(
+      '/ledger/verify/' + encodeURIComponent(identifier) + '/',
+    );
     return response.data;
   },
 };
