@@ -31,7 +31,15 @@ export const login = async (data: { email: string; password: string }) => {
   return response.data;
 };
 
-export const walletLogin = async (data: { sui_public_key: string; message: string; signature: string }) => {
+export const requestWalletChallenge = async (wallet_address: string) => {
+  const response = await apiClient.post<{ challenge_id: string; message: string; expires_at: string }>(
+    "/auth/wallet-challenge/",
+    { wallet_address },
+  );
+  return response.data;
+};
+
+export const walletLogin = async (data: { challenge_id: string; signature: string }) => {
   const response = await apiClient.post<LoginResponse>("/auth/wallet-login/", data);
   return response.data;
 };
@@ -47,7 +55,7 @@ export const logout = async (refreshToken: string): Promise<boolean> => {
   try {
     await apiClient.post("/auth/logout/", { refresh: refreshToken });
     return true;
-  } catch (e) {
+  } catch {
     return false;
   }
 };

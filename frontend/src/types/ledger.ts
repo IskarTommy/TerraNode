@@ -2,8 +2,8 @@
 export type BatchStatus = 'PENDING' | 'MINTED' | 'IN_TRANSIT' | 'DELIVERED';
 
 export interface ProduceBatch {
-  batch_id: string;
-  farmer_id: string;
+  id: string;
+  farmer: string;
   farmer_name?: string;
   crop_type: string;
   weight_kg: number;
@@ -11,9 +11,9 @@ export interface ProduceBatch {
   status: BatchStatus;
   sui_object_id?: string;
   sui_tx_digest?: string;
-  current_custodian_id?: string;
+  current_custodian: string;
   current_custodian_name?: string;
-  origin_telemetry_id?: string;
+  origin_telemetry?: string;
   created_at: string;
   updated_at: string;
 }
@@ -21,7 +21,7 @@ export interface ProduceBatch {
 export interface BatchPrepareRequest {
   crop_type: string;
   weight_kg: number;
-  origin_telemetry_id?: string;
+  origin_telemetry?: string;
 }
 
 export interface BatchPrepareResponse {
@@ -39,8 +39,10 @@ export interface BatchConfirmRequest {
 }
 
 export interface BatchTransferRequest {
-  batch_id: string;
-  new_custodian_id: string;
+  to_user_id?: string;
+  to_wallet?: string;
+  status?: 'IN_TRANSIT' | 'DELIVERED';
+  sui_tx_digest?: string;
 }
 
 export interface BatchListResponse {
@@ -51,13 +53,11 @@ export interface BatchListResponse {
 }
 
 export interface TransferLogEntry {
-  transfer_id: string;
-  batch_id: string;
-  from_custodian_id: string;
-  from_custodian_name: string;
-  to_custodian_id: string;
-  to_custodian_name: string;
-  sui_tx_digest: string;
+  id: string;
+  batch: string;
+  from_user: string;
+  to_user: string;
+  tx_digest: string;
   transferred_at: string;
 }
 

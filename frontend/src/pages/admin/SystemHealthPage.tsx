@@ -1,56 +1,7 @@
 import { Card } from '../../components/Common/Card';
-import { Button } from '../../components/Common/Button';
-import { cn } from '../../utils/cn';
-
-const SYSTEM_METRICS = [
-  { name: 'CPU Usage', value: 65, status: 'warning' as const },
-  { name: 'Memory Usage', value: 78, status: 'error' as const },
-  { name: 'Disk Space', value: 45, status: 'normal' as const },
-  { name: 'Network Latency', value: 34, status: 'normal' as const },
-];
+import { useSystemHealth } from '../../hooks/useDashboardQueries';
 
 export function SystemHealthPage() {
-  return (
-    <div className="space-y-6" data-role="admin">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-display-lg font-bold text-fg-primary">System Health</h1>
-          <p className="text-body text-fg-muted mt-1">Monitor system performance and health</p>
-        </div>
-        <Button variant="outline" onClick={() => window.location.reload()}>
-          Refresh
-        </Button>
-      </div>
-
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        {SYSTEM_METRICS.map((metric, index) => (
-          <Card key={index} variant="glass" padding="md">
-            <p className="text-body-xs text-fg-muted font-medium">{metric.name}</p>
-            <p className="text-display-md font-bold text-fg-primary mt-1">{metric.value}%</p>
-            <span className={cn(
-              'inline-block px-2 py-0.5 rounded-full text-body-xs font-medium mt-1',
-              metric.status === 'normal' && 'bg-emerald-500/10 text-emerald-500',
-              metric.status === 'warning' && 'bg-amber-500/10 text-amber-500',
-              metric.status === 'error' && 'bg-red-500/10 text-red-500'
-            )}>
-              {metric.status}
-            </span>
-          </Card>
-        ))}
-      </div>
-
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <Card variant="glass" padding="md">
-          <h3 className="text-body font-semibold text-fg-primary mb-4">Uptime</h3>
-          <p className="text-display-md font-bold text-fg-primary">99.98%</p>
-          <p className="text-body-xs text-fg-muted mt-1">Last 30 days</p>
-        </Card>
-        <Card variant="glass" padding="md">
-          <h3 className="text-body font-semibold text-fg-primary mb-4">Active Connections</h3>
-          <p className="text-display-md font-bold text-fg-primary">1,247</p>
-          <p className="text-body-xs text-fg-muted mt-1">Current WebSocket connections</p>
-        </Card>
-      </div>
-    </div>
-  );
+  const { data, isLoading, isError, refetch, isFetching } = useSystemHealth();
+  return <div className="space-y-6" data-role="admin"><div className="flex items-end justify-between"><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-violet-400">Infrastructure</p><h1 className="text-3xl font-bold text-fg-primary">System health</h1><p className="mt-1 text-sm text-fg-muted">A live readiness check for the API, database, cache, and blockchain configuration.</p></div><button className="rounded-xl border border-border-primary px-4 py-2.5 text-sm text-fg-primary hover:border-violet-500 disabled:opacity-50" disabled={isFetching} onClick={() => refetch()}>{isFetching ? 'Checking…' : 'Refresh'}</button></div>{isLoading && <p className="py-10 text-center text-fg-muted">Checking services…</p>}{isError && <Card variant="glass" padding="md"><p className="text-red-400">Health data could not be loaded. Confirm that the backend is running.</p></Card>}<div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">{Object.entries(data ?? {}).map(([service, state]) => { const good = state === 'healthy' || state === 'configured'; return <Card key={service} variant="glass" padding="md"><div className="flex items-center justify-between"><p className="font-medium capitalize text-fg-primary">{service}</p><span className={`h-2.5 w-2.5 rounded-full ${good ? 'bg-emerald-400' : 'bg-amber-400'}`} /></div><p className={`mt-4 text-sm font-semibold capitalize ${good ? 'text-emerald-400' : 'text-amber-400'}`}>{String(state).replace('_', ' ')}</p></Card>; })}</div></div>;
 }

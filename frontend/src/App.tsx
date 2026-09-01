@@ -13,11 +13,8 @@ import { TelemetryPage } from "./pages/farmer/TelemetryPage";
 import { MintBatchPage } from "./pages/farmer/MintBatchPage";
 import { YieldPredictionPage } from "./pages/farmer/YieldPredictionPage";
 import { BatchesPage } from "./pages/farmer/BatchesPage";
-import { AlertsPage } from "./pages/farmer/AlertsPage";
 import { LogisticsDashboard } from "./pages/logistics/LogisticsDashboard";
 import { TransferPage } from "./pages/logistics/TransferPage";
-import { ShipmentsPage } from "./pages/logistics/ShipmentsPage";
-import { TrackingPage } from "./pages/logistics/TrackingPage";
 import { AdminDashboard } from "./pages/admin/AdminDashboard";
 import { UsersPage } from "./pages/admin/UsersPage";
 import { AuditLogsPage } from "./pages/admin/AuditLogsPage";
@@ -29,7 +26,7 @@ import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 
 function AppRoutes() {
- const { user: apiUser, isAuthenticated } = useAuth();
+ const { user: apiUser } = useAuth();
  const { connect: connectWallet, disconnect: disconnectWallet, connecting } = useWallet();
 
  const user = apiUser ? {
@@ -58,7 +55,6 @@ function AppRoutes() {
  <Route path="yield-prediction" element={<YieldPredictionPage />} />
  <Route path="batches" element={<BatchesPage />} />
  <Route path="batches/:id" element={<BatchesPage />} />
- <Route path="alerts" element={<AlertsPage />} />
  <Route path="settings" element={<SettingsPage />} />
  <Route path="*" element={<Navigate to="dashboard" replace />} />
  </Routes>
@@ -73,8 +69,6 @@ function AppRoutes() {
  <Routes>
  <Route path="dashboard" element={<LogisticsDashboard />} />
  <Route path="transfer" element={<TransferPage />} />
- <Route path="shipments" element={<ShipmentsPage />} />
- <Route path="tracking" element={<TrackingPage />} />
  <Route path="settings" element={<SettingsPage />} />
  <Route path="*" element={<Navigate to="dashboard" replace />} />
  </Routes>

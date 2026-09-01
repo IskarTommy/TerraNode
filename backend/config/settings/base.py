@@ -80,10 +80,11 @@ DATABASES = {
 }
 
 # ─── Redis Cache ──────────────────────────────────────
+REDIS_URL = env("REDIS_URL", default="redis://localhost:6379/0")
 CACHES = {
     "default": {
         "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": env("REDIS_URL"),
+        "LOCATION": REDIS_URL,
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
         }
@@ -130,8 +131,8 @@ SIMPLE_JWT = {
 CORS_ALLOWED_ORIGINS = env.list("CORS_ALLOWED_ORIGINS", default=[])
 
 # ─── Celery ───────────────────────────────────────────
-CELERY_BROKER_URL = env("REDIS_URL")
-CELERY_RESULT_BACKEND = env("REDIS_URL")
+CELERY_BROKER_URL = REDIS_URL
+CELERY_RESULT_BACKEND = REDIS_URL
 CELERY_ACCEPT_CONTENT = ["json"]
 CELERY_TASK_SERIALIZER = "json"
 

@@ -7,6 +7,12 @@ class BatchPrepareSerializer(serializers.ModelSerializer):
         fields = ('id', 'origin_telemetry', 'crop_type', 'weight_kg', 'status', 'data_integrity_hash', 'created_at')
         read_only_fields = ('id', 'status', 'data_integrity_hash', 'created_at')
 
+    def validate_origin_telemetry(self, telemetry):
+        request = self.context.get('request')
+        if request and telemetry and telemetry.farmer != request.user:
+            raise serializers.ValidationError("Telemetry must belong to the farmer creating the batch.")
+        return telemetry
+
 class BatchConfirmSerializer(serializers.Serializer):
     sui_object_id = serializers.CharField(max_length=66, required=True)
     sui_tx_digest = serializers.CharField(max_length=66, required=False, allow_blank=True)

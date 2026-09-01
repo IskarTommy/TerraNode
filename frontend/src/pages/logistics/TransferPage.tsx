@@ -78,8 +78,11 @@ export function TransferPage() {
       }
 
       await ledgerApi.transfer(formData.batchId, {
-        batch_id: formData.batchId,
-        new_custodian_id: formData.toParty || '123e4567-e89b-12d3-a456-426614174000',
+        ...(formData.toParty.startsWith('0x')
+          ? { to_wallet: formData.toParty }
+          : { to_user_id: formData.toParty }),
+        status: formData.custodyType === 'delivery' ? 'DELIVERED' : 'IN_TRANSIT',
+        sui_tx_digest: suiTxDigest,
       });
 
       setTransferId('TXF-' + Math.random().toString(36).substring(2, 9).toUpperCase());

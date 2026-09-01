@@ -1,6 +1,6 @@
 export interface TelemetryRecord {
-  log_id: string;
-  farmer_id: string;
+  id: string;
+  farmer: string;
   recorded_at: string;
   temperature_celsius: number;
   soil_moisture_percentage: number;

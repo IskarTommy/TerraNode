@@ -42,3 +42,13 @@ class ProfileSerializer(serializers.ModelSerializer):
         model = User
         fields = ('id', 'email', 'full_name', 'role', 'sui_public_key')
         read_only_fields = ('id', 'email', 'role')
+
+
+class AdminUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = (
+            'id', 'email', 'full_name', 'role', 'sui_public_key',
+            'is_active', 'date_joined', 'last_login'
+        )
+        read_only_fields = ('id', 'email', 'date_joined', 'last_login')

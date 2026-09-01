@@ -21,8 +21,8 @@ export interface TelemetrySummary {
 export interface SystemHealth {
   database: 'healthy' | 'degraded' | 'down';
   redis: 'healthy' | 'degraded' | 'down';
-  celery_workers: 'healthy' | 'degraded' | 'down';
-  blockchain: 'healthy' | 'degraded' | 'down';
+  blockchain: 'configured' | 'not_configured';
+  api: 'healthy' | 'degraded' | 'down';
 }
 
 export interface AdminStats {
@@ -35,19 +35,20 @@ export interface AdminStats {
   minted_batches: number;
   in_transit_batches: number;
   delivered_batches: number;
+  telemetry_records: number;
   flagged_anomalies: number;
 }
 
 export interface AuditLogEntry {
   id: string;
   user_id: string;
-  user_email: string;
-  user_role: string;
+  user: string | null;
+  description: string;
   action: string;
   resource_type: string;
   resource_id: string;
-  details: Record<string, unknown>;
-  ip_address: string;
+  metadata: Record<string, unknown>;
+  ip_address: string | null;
   timestamp: string;
 }
 

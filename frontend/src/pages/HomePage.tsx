@@ -1,10 +1,9 @@
 import { useEffect, useRef, type ReactNode } from "react";
 import { Link } from "react-router-dom";
-import { useAuth } from "../contexts/AuthContext";
 import { Button } from "../components/Common/Button";
 import { Logo } from "../components/Logo";
 import { CanvasBackground } from "../components/CanvasBackground";
-import { Sprout, Cpu, Network, Handshake, Brain, ShieldCheck } from "lucide-react";
+import { Sprout, Cpu, Network, Handshake, Brain } from "lucide-react";
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
@@ -49,32 +48,31 @@ interface StatItem {
 // ── Data ──────────────────────────────────────────────────────────────────────
 
 const FEATURES: FeatureItem[] = [
-  { title: "Crop Provenance", desc: "Every harvest batch stamped with origin data — variety, soil health, and yield — tied to an on-chain NFT.", icon: Sprout, tag: "100% traceable", color: "#10b981" },
+  { title: "Crop Provenance", desc: "Every produce batch links its origin telemetry hash to a uniquely owned object on the Sui ledger.", icon: Sprout, tag: "Verifiable origin", color: "#10b981" },
   { title: "Custody Transfers", desc: "Handoffs happen in one on-chain transaction. Every ownership change is timestamped and auditable.", icon: Handshake, tag: "Sub-second finality", color: "#06b6d4" },
-  { title: "IoT Telemetry", desc: "Temperature, humidity, and pH streamed live from LoRa sensors with SHA-256-hashed payloads.", icon: Cpu, tag: "Live monitoring", color: "#22d3ee" },
+  { title: "Environmental Telemetry", desc: "Temperature, soil moisture, and soil pH readings are validated and protected with deterministic SHA-256 hashes.", icon: Cpu, tag: "Integrity protected", color: "#22d3ee" },
   { title: "Sui Blockchain", desc: "Built on Sui object-centric model. Each batch is a unique dynamic object with ownership and events.", icon: Network, tag: "L1 performance", color: "#6366f1" },
-  { title: "AI Yield Forecast", desc: "Weighted moving averages over 90 days of sensor data produce confidence-weighted harvest forecasts.", icon: Brain, tag: "ML-powered", color: "#f59e0b" },
-  { title: "ZK Privacy", desc: "Zero-knowledge proofs let logistics partners verify cargo condition without revealing sensitive data.", icon: ShieldCheck, tag: "Privacy-first", color: "#8b5cf6" },
+  { title: "Yield Forecast", desc: "The thesis model analyses up to 90 recent readings to produce a deterministic yield estimate and confidence score.", icon: Brain, tag: "Decision support", color: "#f59e0b" },
 ];
 
 const STEPS: StepItem[] = [
   { n: "01", title: "Register", desc: "Create a TerraNode account and link your Sui wallet. Choose your role." },
   { n: "02", title: "Submit", desc: "Log soil readings, temperature, and pH. Each record is SHA-256 hashed and stored immutably." },
-  { n: "03", title: "Mint", desc: "Bundle your harvest into a batch, sign on-chain, and receive a verifiable NFT proof-of-origin." },
+  { n: "03", title: "Mint", desc: "Bundle your harvest into a produce batch, sign on-chain, and receive a verifiable Sui object." },
   { n: "04", title: "Verify", desc: "Every custodian handoff and admin audit re-validates the hash against the Sui ledger end-to-end." },
 ];
 
 const ROLES: RoleItem[] = [
-  { role: "Farmer", color: "#10b981", items: ["Submit environmental readings", "Mint NFT batch tokens", "View yield predictions", "Monitor batch status"] },
-  { role: "Logistics", color: "#06b6d4", items: ["View open transfer requests", "Accept & execute transfers", "Scan QR batch codes", "Update shipment status"] },
+  { role: "Farmer", color: "#10b981", items: ["Submit environmental readings", "Mint produce batch objects", "View yield predictions", "Monitor batch status"] },
+  { role: "Logistics", color: "#06b6d4", items: ["View custody batches", "Execute custody transfers", "Track batch lifecycle", "Confirm delivery status"] },
   { role: "Admin", color: "#8b5cf6", items: ["Manage all user accounts", "Run hash verification", "View system health", "Access full audit logs"] },
 ];
 
 const STATS: StatItem[] = [
-  { value: 12480, suffix: "", label: "Total Batches" },
-  { value: 847, suffix: "", label: "Farmers Online" },
-  { value: 3291, suffix: "", label: "Transfers Today" },
-  { value: 99.97, suffix: "%", label: "Uptime" },
+  { value: 3, suffix: "", label: "Role-specific workspaces" },
+  { value: 10, suffix: "", label: "Functional requirements" },
+  { value: 90, suffix: "", label: "Reading forecast window" },
+  { value: 600, suffix: "s", label: "Prediction cache" },
 ];
 
 // ── Animation Components ──────────────────────────────────────────────────────
@@ -149,8 +147,6 @@ function AnimatedNum({ target, suffix = "", dur = 2200 }: AnimatedNumProps): Rea
 // ── Landing Page ──────────────────────────────────────────────────────────────
 
 export default function HomePage(): React.ReactElement {
-  const { user } = useAuth();
-
   return (
     <div
       className="relative min-h-screen overflow-hidden"
@@ -254,7 +250,7 @@ export default function HomePage(): React.ReactElement {
               style={{ padding: "6px 16px", background: "rgba(16,185,129,0.08)", border: "1px solid rgba(16,185,129,0.18)", fontSize: "0.72rem", fontFamily: "'JetBrains Mono', monospace", color: "#34d399", letterSpacing: "0.05em" }}
             >
               <span className="inline-block rounded-full" aria-hidden="true" style={{ width: 7, height: 7, background: "#34d399", boxShadow: "0 0 8px rgba(52,211,153,0.5)", animation: "tn-pulse-dot 2s ease-in-out infinite" }} />
-              LIVE ON SUI TESTNET · Block #14,832,561
+              SUI TESTNET · ROLE-SECURED ACCESS
             </span>
           </div>
 
@@ -295,7 +291,7 @@ export default function HomePage(): React.ReactElement {
 
           {/* Trust indicators */}
           <div className="flex flex-wrap items-center justify-center gap-6 mt-10" style={{ fontSize: "0.78rem", color: "rgba(148,163,184,0.7)" }} aria-label="Platform guarantees">
-            {["SHA-256 Hashed", "Non-custodial", "~200ms finality", "Testnet · Free"].map((t) => (
+            {["SHA-256 Hashed", "JWT Protected", "Role-specific", "Sui Testnet"].map((t) => (
               <span key={t} className="inline-flex items-center gap-1.5">
                 <svg width={13} height={13} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                   <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
@@ -594,7 +590,7 @@ export default function HomePage(): React.ReactElement {
               Ready to go <span style={{ color: "#34d399" }}>on-chain?</span>
             </h2>
             <p className="mx-auto mb-8 leading-relaxed" style={{ fontSize: 15, color: "rgba(203,213,225,0.8)", maxWidth: 480 }}>
-              Join hundreds of farmers and logistics partners already proving provenance with TerraNode.
+              Create a role-based account and begin recording verifiable agricultural data with TerraNode.
             </p>
             <div className="flex flex-wrap justify-center gap-4">
               <Link to="/register">
@@ -626,10 +622,10 @@ export default function HomePage(): React.ReactElement {
           </p>
           <nav aria-label="Footer navigation">
             <div className="flex items-center gap-5">
-              {["Stack", "Docs", "GitHub"].map((link) => (
+              {[["Capabilities", "#features"], ["Workflow", "#how-it-works"], ["Roles", "#roles"]].map(([link, href]) => (
                 <a
                   key={link}
-                  href="#"
+                  href={href}
                   className="transition-colors duration-200"
                   style={{ fontSize: 13, color: "rgba(203,213,225,0.5)", textDecoration: "none" }}
                   onMouseEnter={(e) => (e.currentTarget.style.color = "#e2e8f0")}

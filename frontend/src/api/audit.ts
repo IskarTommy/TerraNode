@@ -19,7 +19,7 @@ export const auditApi = {
     start_date?: string;
     end_date?: string;
   }): Promise<AuditLogListResponse> => {
-    const response = await apiClient.get<AuditLogListResponse>('/analytics/audit-logs/', { params });
+    const response = await apiClient.get<AuditLogListResponse>('/auth/audit-logs/', { params });
     return response.data;
   },
 };

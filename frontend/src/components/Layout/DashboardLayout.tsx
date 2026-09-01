@@ -188,14 +188,11 @@ const NAV_ITEMS: Record<UserRole, Array<{ path: string; label: string; icon: Rea
     { path: '/farmer/mint-batch',        label: 'Mint Batch',    icon: <MintIcon /> },
     { path: '/farmer/yield-prediction',  label: 'Yield Forecast',icon: <YieldIcon /> },
     { path: '/farmer/batches',           label: 'My Batches',    icon: <BatchIcon /> },
-    { path: '/farmer/alerts',            label: 'Alerts',        icon: <AlertIcon /> },
     { path: '/farmer/settings',          label: 'Settings',      icon: <SettingsIcon /> },
   ],
   logistics: [
     { path: '/logistics/dashboard', label: 'Dashboard',       icon: <DashboardIcon /> },
     { path: '/logistics/transfer',  label: 'Transfer Custody',icon: <TransferIcon /> },
-    { path: '/logistics/shipments', label: 'Shipments',       icon: <ShipmentIcon /> },
-    { path: '/logistics/tracking',  label: 'Tracking',        icon: <TrackingIcon /> },
     { path: '/logistics/settings',  label: 'Settings',        icon: <SettingsIcon /> },
   ],
   admin: [

@@ -9,7 +9,10 @@ from apps.users.permissions import IsFarmer, IsLogistics, IsFarmerOrAdmin
 from apps.telemetry.services import generate_telemetry_hash
 from apps.users.models import AuditEvent
 from .models import ProduceBatch, CustodyTransfer
-from .serializers import BatchPrepareSerializer, BatchConfirmSerializer, BatchOutputSerializer
+from .serializers import (
+    BatchConfirmSerializer, BatchOutputSerializer, BatchPrepareSerializer,
+    CustodyTransferSerializer
+)
 from .services import verify_integrity, verify_sui_transaction_on_rpc
 
 User = get_user_model()
@@ -195,6 +198,18 @@ class BatchDetailView(generics.RetrieveAPIView):
         if user.role == "ADMIN":
             return ProduceBatch.objects.all()
         return ProduceBatch.objects.filter(Q(current_custodian=user) | Q(farmer=user)).distinct()
+
+
+class BatchTransferHistoryView(generics.ListAPIView):
+    permission_classes = (IsAuthenticated,)
+    serializer_class = CustodyTransferSerializer
+
+    def get_queryset(self):
+        batch = get_object_or_404(ProduceBatch, pk=self.kwargs['pk'])
+        user = self.request.user
+        if user.role != 'ADMIN' and user not in (batch.farmer, batch.current_custodian):
+            return CustodyTransfer.objects.none()
+        return batch.transfers.select_related('from_user', 'to_user').all()
 
 class PublicBatchVerifyView(APIView):
     """

@@ -3,14 +3,12 @@ import apiClient from './client';
 export interface UserRecord {
   id: string;
   email: string;
+  full_name: string;
   role: string;
+  sui_public_key: string | null;
   is_active: boolean;
   date_joined: string;
   last_login: string | null;
-  profile?: {
-    full_name: string;
-    wallet_address: string | null;
-  };
 }
 
 export interface UserListResponse {

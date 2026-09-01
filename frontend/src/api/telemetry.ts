@@ -1,5 +1,5 @@
 import apiClient from './client';
-import type { TelemetryRecord, TelemetrySubmission, TelemetryHistoryResponse, LatestTelemetryResponse } from '../types/telemetry';
+import type { TelemetryRecord, TelemetryHistoryResponse, LatestTelemetryResponse } from '../types/telemetry';
 
 export const telemetryApi = {
   /** Submit a new telemetry reading */

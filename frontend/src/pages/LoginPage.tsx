@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 import { Logo } from "../components/Logo";
 import { ConnectModal, useCurrentAccount, useSignPersonalMessage } from '@mysten/dapp-kit';
+import { requestWalletChallenge } from '../api/auth';
 
 /* ═══════════════════════════════════════════════════════════════════════════════
    KEYFRAMES & GLOBAL STYLES
@@ -511,13 +512,13 @@ function SuiWalletButton() {
 
     try {
       setLoading(true);
-      const message = `Login to TerraNode with ${currentAccount.address}`;
+      const challenge = await requestWalletChallenge(currentAccount.address);
       const signatureResult = await signPersonalMessage({
-        message: new TextEncoder().encode(message),
+        message: new TextEncoder().encode(challenge.message),
       });
       
-      await walletLogin(currentAccount.address, message, signatureResult.signature);
-      navigate("/farmer/dashboard");
+      const user = await walletLogin(challenge.challenge_id, signatureResult.signature);
+      navigate(`/${user.role.toLowerCase()}/dashboard`);
     } catch (err: any) {
       console.error(err);
       if (err.response?.status === 404) {

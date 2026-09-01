@@ -4,6 +4,7 @@ import secrets
 from datetime import timedelta
 from django.utils import timezone
 from django.contrib.auth import get_user_model
+from django.db.models import Q
 from rest_framework import generics, status
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny, IsAuthenticated
@@ -12,8 +13,12 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.views import TokenObtainPairView
 from nacl.signing import VerifyKey
 
-from .models import WalletChallenge
-from .serializers import RegisterSerializer, ProfileSerializer, CustomTokenObtainPairSerializer
+from .models import AuditEvent, WalletChallenge
+from .permissions import IsAdmin
+from .serializers import (
+    AdminUserSerializer, CustomTokenObtainPairSerializer,
+    ProfileSerializer, RegisterSerializer
+)
 from core.throttling import LoginRateThrottle
 
 User = get_user_model()
@@ -196,4 +201,59 @@ class WalletLoginView(APIView):
                 'full_name': user.full_name,
                 'sui_public_key': user.sui_public_key
             }
+        })
+
+
+class AdminUserListView(generics.ListAPIView):
+    permission_classes = (IsAdmin,)
+    serializer_class = AdminUserSerializer
+
+    def get_queryset(self):
+        queryset = User.objects.all().order_by('-date_joined')
+        role = self.request.query_params.get('role')
+        search = self.request.query_params.get('search')
+        is_active = self.request.query_params.get('is_active')
+        if role:
+            queryset = queryset.filter(role=role.upper())
+        if search:
+            queryset = queryset.filter(Q(email__icontains=search) | Q(full_name__icontains=search))
+        if is_active in ('true', 'false'):
+            queryset = queryset.filter(is_active=is_active == 'true')
+        return queryset
+
+
+class AdminUserDetailView(generics.RetrieveUpdateAPIView):
+    permission_classes = (IsAdmin,)
+    serializer_class = AdminUserSerializer
+    queryset = User.objects.all()
+
+    def perform_update(self, serializer):
+        user = serializer.save()
+        AuditEvent.objects.create(
+            event_type=AuditEvent.EventType.ADMIN_ACTION,
+            user=self.request.user,
+            description=f"Administrator updated user {user.email}",
+            metadata={"target_user_id": str(user.id), "role": user.role, "is_active": user.is_active},
+        )
+
+
+class AuditEventListView(generics.ListAPIView):
+    permission_classes = (IsAdmin,)
+
+    def get(self, request, *args, **kwargs):
+        events = AuditEvent.objects.select_related('user').all()[:200]
+        return Response({
+            "count": AuditEvent.objects.count(),
+            "next": None,
+            "previous": None,
+            "results": [{
+                "id": str(event.id),
+                "action": event.event_type,
+                "description": event.description,
+                "user": event.user.email if event.user else None,
+                "user_id": str(event.user_id) if event.user_id else None,
+                "timestamp": event.timestamp,
+                "ip_address": event.ip_address,
+                "metadata": event.metadata,
+            } for event in events],
         })
