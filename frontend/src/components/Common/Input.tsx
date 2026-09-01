@@ -2,7 +2,6 @@ import {
   forwardRef,
   useId,
   useState,
-  useRef,
   useEffect,
   useCallback,
   type InputHTMLAttributes,
@@ -522,11 +521,10 @@ Select.displayName = 'Select';
 export interface CheckboxProps extends InputHTMLAttributes<HTMLInputElement> {
   label?: string;
   description?: string;
-  indeterminate?: boolean;
 }
 
 export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
-  ({ label, description, indeterminate, className, id: providedId, disabled, required, ...props }, ref) => {
+  ({ label, description, className, id: providedId, disabled, required, ...props }, ref) => {
     const generatedId = useId();
     const id = providedId || generatedId;
     const descId = `${id}-desc`;

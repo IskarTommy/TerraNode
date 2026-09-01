@@ -12,6 +12,7 @@ from rest_framework.test import APIClient
 
 from apps.telemetry.encryption_service import encrypted_storage_fields
 from apps.telemetry.models import EnvironmentalTelemetry
+from apps.users.models import AuditEvent
 from .services import predict_yield, prediction_cache_key
 
 
@@ -123,3 +124,55 @@ class AnalyticsViewTests(AnalyticsMixin, TestCase):
         self.client.force_authenticate(self.farmer)
         response = self.client.get("/api/v1/analytics/summary/")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+
+class AdminOperationalViewTests(AnalyticsMixin, TestCase):
+    def setUp(self):
+        super().setUp()
+        self.client = APIClient()
+        self.admin = User.objects.create_superuser(
+            email="admin@example.com",
+            password="AdminPass123!",
+            full_name="Administrator",
+            role=User.Role.ADMIN,
+        )
+
+    def test_non_admin_cannot_access_operational_endpoints(self):
+        self.client.force_authenticate(self.farmer)
+        for url in (
+            "/api/v1/analytics/admin-stats/",
+            "/api/v1/analytics/audit-logs/",
+            "/api/v1/analytics/health/",
+        ):
+            with self.subTest(url=url):
+                self.assertEqual(
+                    self.client.get(url).status_code,
+                    status.HTTP_403_FORBIDDEN,
+                )
+
+    def test_admin_stats_and_audit_logs_return_persisted_data(self):
+        AuditEvent.objects.create(
+            event_type=AuditEvent.EventType.SECURITY_ALERT,
+            user=self.farmer,
+            description="Test integrity alert",
+        )
+        self.client.force_authenticate(self.admin)
+        stats_response = self.client.get("/api/v1/analytics/admin-stats/")
+        self.assertEqual(stats_response.status_code, status.HTTP_200_OK)
+        self.assertEqual(stats_response.data["total_users"], 2)
+        self.assertEqual(stats_response.data["flagged_anomalies"], 1)
+
+        audit_response = self.client.get("/api/v1/analytics/audit-logs/")
+        self.assertEqual(audit_response.status_code, status.HTTP_200_OK)
+        self.assertEqual(audit_response.data["count"], 1)
+        self.assertEqual(
+            audit_response.data["results"][0]["description"],
+            "Test integrity alert",
+        )
+
+    def test_health_does_not_report_locmem_as_redis(self):
+        self.client.force_authenticate(self.admin)
+        response = self.client.get("/api/v1/analytics/health/")
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data["database"], "healthy")
+        self.assertEqual(response.data["redis"], "degraded")

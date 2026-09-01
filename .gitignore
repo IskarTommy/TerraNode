@@ -49,4 +49,13 @@ venv/
 
 # Docs
 *.md
+!docs/
+!docs/**/*.md
+!/README.md
+
+# Runtime evidence
+frontend/playwright-report/
+frontend/test-results/
+.env.compose
+contracts/build/
 

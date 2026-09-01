@@ -1,0 +1,8 @@
+category,metric,status,sample_size,mean_ms,median_ms,p95_ms,min_ms,max_ms,operations_per_second,reason
+cryptography,sha256,measured,200,0.004669,0.0044,0.0056,0.0021,0.064,214178.62,
+cryptography,aes_256_gcm_encrypt,measured,200,0.097164,0.07465,0.0875,0.0629,4.6435,10291.88,
+cryptography,aes_256_gcm_decrypt_and_parse,measured,200,0.043993,0.0339,0.0729,0.0329,0.1205,22730.89,
+cache_backend_roundtrip,cache_get,measured,200,0.01738,0.0185,0.0291,0.0112,0.0466,57537.4,
+api_latency,deployed_endpoint,skipped,,,,,,,,Pass --api-benchmark-url to measure a deployed endpoint.
+sui_testnet,chain_identifier_graphql,measured,3,512.159667,487.7642,487.7642,485.4049,563.3099,1.95,
+sui_testnet,transaction_lookup_graphql,skipped,,,,,,,,Pass --tx-digest to measure a real transaction lookup.

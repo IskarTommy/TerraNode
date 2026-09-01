@@ -1,10 +1,14 @@
+from datetime import datetime, time
+
 from rest_framework import generics, status
+from rest_framework.exceptions import ValidationError
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from django.db import transaction, IntegrityError
 from django.core.exceptions import ImproperlyConfigured
 from django.shortcuts import get_object_or_404
 from django.utils import timezone
+from django.utils.dateparse import parse_date, parse_datetime
 from rest_framework.permissions import IsAuthenticated
 from apps.users.permissions import IsFarmer, IsFarmerOrAdmin, IsAdmin
 from .models import EnvironmentalTelemetry
@@ -76,8 +80,35 @@ class TelemetryHistoryView(generics.ListAPIView):
     def get_queryset(self):
         user = self.request.user
         if user.role == "ADMIN":
-            return EnvironmentalTelemetry.objects.all()
-        return EnvironmentalTelemetry.objects.filter(farmer=user)
+            queryset = EnvironmentalTelemetry.objects.all()
+        else:
+            queryset = EnvironmentalTelemetry.objects.filter(farmer=user)
+
+        start = self._parse_boundary(self.request.query_params.get("start"), end=False)
+        end = self._parse_boundary(self.request.query_params.get("end"), end=True)
+        if start and end and start > end:
+            raise ValidationError({"end": "End must not be earlier than start."})
+        if start:
+            queryset = queryset.filter(recorded_at__gte=start)
+        if end:
+            queryset = queryset.filter(recorded_at__lte=end)
+        return queryset.select_related("farmer", "provenance")
+
+    @staticmethod
+    def _parse_boundary(value, *, end):
+        if not value:
+            return None
+        parsed = parse_datetime(value)
+        if parsed is None:
+            parsed_date = parse_date(value)
+            if parsed_date is None:
+                raise ValidationError(
+                    {"end" if end else "start": "Use an ISO-8601 date or timestamp."}
+                )
+            parsed = datetime.combine(parsed_date, time.max if end else time.min)
+        if timezone.is_naive(parsed):
+            parsed = timezone.make_aware(parsed, timezone.get_current_timezone())
+        return parsed
 
 class TelemetryLatestView(generics.RetrieveAPIView):
     permission_classes = (IsFarmerOrAdmin,)

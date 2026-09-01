@@ -152,6 +152,33 @@ class UserAuthTests(TestCase):
         request.user = admin
         self.assertTrue(permission.has_permission(request, None))
 
+    def test_admin_user_list_enforces_role_and_filters_real_users(self):
+        farmer = User.objects.create_user(
+            email='listed-farmer@example.com',
+            password='Pass1234!',
+            full_name='Listed Farmer',
+            role='FARMER',
+        )
+        admin = User.objects.create_superuser(
+            email='listed-admin@example.com',
+            password='AdminPass123!',
+            full_name='Listed Admin',
+            role='ADMIN',
+        )
+        url = reverse('admin_user_list')
+
+        self.client.force_authenticate(farmer)
+        self.assertEqual(
+            self.client.get(url).status_code,
+            403,
+        )
+
+        self.client.force_authenticate(admin)
+        response = self.client.get(url, {'role': 'FARMER', 'search': 'listed-'})
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.data['count'], 1)
+        self.assertEqual(response.data['results'][0]['email'], farmer.email)
+
     def test_rate_limiting_login(self):
         # Create a user
         User.objects.create_user(

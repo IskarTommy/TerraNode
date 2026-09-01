@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { ConnectButton } from '@mysten/dapp-kit';
+import { ConnectButton } from '@mysten/dapp-kit-react/ui';
 import { Transaction } from '@mysten/sui/transactions';
 
 import { ledgerApi } from '../../api/ledger';
@@ -8,6 +8,7 @@ import { Button } from '../../components/Common/Button';
 import { Card } from '../../components/Common/Card';
 import { Input, Select } from '../../components/Common/Input';
 import { useWallet } from '../../contexts/WalletContext';
+import { isUsableSuiPackageId } from '../../utils/constants';
 
 
 export function TransferPage() {
@@ -38,8 +39,8 @@ export function TransferPage() {
       setError('Connect the Sui wallet bound to the current custodian account.');
       return;
     }
-    if (!packageId || !/^0x[0-9a-f]{64}$/i.test(packageId)) {
-      setError('VITE_SUI_PACKAGE_ID is not configured.');
+    if (!isUsableSuiPackageId(packageId)) {
+      setError('VITE_SUI_PACKAGE_ID must identify the current weight_grams Testnet package.');
       return;
     }
     if (!target) {

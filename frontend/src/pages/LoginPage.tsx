@@ -1,8 +1,11 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 import { Logo } from "../components/Logo";
-import { ConnectModal, useCurrentAccount, useSignPersonalMessage } from '@mysten/dapp-kit';
+import { useCurrentAccount, useDAppKit } from '@mysten/dapp-kit-react';
+import { ConnectModal } from '@mysten/dapp-kit-react/ui';
+import type { DAppKitConnectModal } from '@mysten/dapp-kit-core/web';
+import { requestWalletChallenge } from '../api/auth';
 
 /* ═══════════════════════════════════════════════════════════════════════════════
    KEYFRAMES & GLOBAL STYLES
@@ -228,7 +231,7 @@ export default function LoginPage() {
                   { label: "Hub", on: true },
                   { label: "Cold Storage", on: true },
                   { label: "Retail", on: false },
-                ].map((s, i) => (
+                ].map((s) => (
                   <div key={s.label} style={{
                     display: "flex", flexDirection: "column", alignItems: "center",
                     position: "relative", zIndex: 2, width: "100%",
@@ -257,8 +260,8 @@ export default function LoginPage() {
             {/* Stats */}
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20 }}>
               {[
-                { value: "12.4K", suffix: "batches", accent: "#22d3ee" },
-                { value: "99.98%", suffix: "uptime", accent: "#fbbf24" },
+                { value: "Testnet", suffix: "network", accent: "#22d3ee" },
+                { value: "Fail-closed", suffix: "verification", accent: "#fbbf24" },
               ].map(({ value, suffix, accent }) => (
                 <div key={suffix}>
                   <span style={{
@@ -446,14 +449,12 @@ export default function LoginPage() {
               <span style={{
                 fontSize: 12, color: "rgba(100,116,139,0.45)",
                 fontFamily: "'Space Grotesk', sans-serif", whiteSpace: "nowrap",
-              }}>or continue with</span>
+              }}>or use a verified wallet</span>
               <div style={{ flex: 1, height: 1, background: "rgba(51,65,85,0.5)" }} />
             </div>
 
-            {/* Social buttons */}
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+            <div>
               <SuiWalletButton />
-              <GoogleButton label="Google" />
             </div>
 
             {/* Sign up */}
@@ -496,48 +497,54 @@ function brandBtnBase(extra: Record<string, string> = {}) {
 }
 
 function SuiWalletButton() {
-  const [open, setOpen] = useState(false);
+  const connectModal = useRef<DAppKitConnectModal>(null);
+  const loginAfterConnect = useRef(false);
   const currentAccount = useCurrentAccount();
-  const { mutateAsync: signPersonalMessage } = useSignPersonalMessage();
+  const dAppKit = useDAppKit();
   const { walletLogin } = useAuth();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
 
-  const handleWalletLogin = async () => {
+  const handleWalletLogin = useCallback(async () => {
     if (!currentAccount) {
-      setOpen(true);
+      loginAfterConnect.current = true;
+      await connectModal.current?.show();
       return;
     }
 
     try {
       setLoading(true);
-      const message = `Login to TerraNode with ${currentAccount.address}`;
-      const signatureResult = await signPersonalMessage({
-        message: new TextEncoder().encode(message),
+      const challenge = await requestWalletChallenge(currentAccount.address);
+      const signatureResult = await dAppKit.signPersonalMessage({
+        message: new TextEncoder().encode(challenge.message),
       });
       
-      await walletLogin(currentAccount.address, message, signatureResult.signature);
-      navigate("/farmer/dashboard");
+      const user = await walletLogin(challenge.challenge_id, signatureResult.signature);
+      const dashboard = user.role === 'ADMIN'
+        ? '/admin/dashboard'
+        : user.role === 'LOGISTICS'
+          ? '/logistics/dashboard'
+          : '/farmer/dashboard';
+      navigate(dashboard);
     } catch (err: any) {
       console.error(err);
       if (err.response?.status === 404) {
-        // Wallet not registered, redirect to register
-        navigate("/register", { state: { sui_public_key: currentAccount.address } });
+        navigate("/register", { state: { wallet_notice: 'Create an account, sign in with its password, then prove this wallet from your profile.' } });
       } else {
         alert("Wallet login failed: " + (err.response?.data?.error || err.message));
       }
     } finally {
       setLoading(false);
     }
-  };
+  }, [currentAccount, dAppKit, navigate, walletLogin]);
 
   useEffect(() => {
     // If the modal was opened and the user connected, automatically trigger login
-    if (currentAccount && open) {
-      setOpen(false);
+    if (currentAccount && loginAfterConnect.current) {
+      loginAfterConnect.current = false;
       handleWalletLogin();
     }
-  }, [currentAccount, open]);
+  }, [currentAccount, handleWalletLogin]);
 
   return (
     <>
@@ -569,16 +576,12 @@ function SuiWalletButton() {
         </svg>
         {loading ? "Signing..." : "Sui Wallet"}
       </button>
-      <ConnectModal
-        trigger={<span style={{ display: 'none' }} />}
-        open={open}
-        onOpenChange={(isOpen) => setOpen(isOpen)}
-      />
+      <ConnectModal ref={connectModal} />
     </>
   );
 }
 
-function GoogleButton({ label }: { label: string }) {
+function _GoogleButton({ label }: { label: string }) {
   return (
     <button
       type="button"

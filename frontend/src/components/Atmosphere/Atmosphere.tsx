@@ -159,7 +159,7 @@ export function Atmosphere({
     <div
       ref={containerRef}
       data-atmosphere
-      className={`atm ${className}`}
+      className={`atm atm--${variant} ${className}`}
       aria-hidden="true"
     >
       <div className="atm-layer atm-glow" />

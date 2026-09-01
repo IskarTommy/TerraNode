@@ -305,8 +305,25 @@ class BatchListView(generics.ListAPIView):
     def get_queryset(self):
         user = self.request.user
         if user.role == "ADMIN":
-            return ProduceBatch.objects.all()
-        return ProduceBatch.objects.filter(Q(current_custodian=user) | Q(farmer=user)).distinct()
+            queryset = ProduceBatch.objects.all()
+        else:
+            queryset = ProduceBatch.objects.filter(
+                Q(current_custodian=user) | Q(farmer=user)
+            ).distinct()
+
+        status_filter = self.request.query_params.get("status")
+        crop_type = self.request.query_params.get("crop_type")
+        farmer_id = self.request.query_params.get("farmer")
+        custodian_id = self.request.query_params.get("current_custodian")
+        if status_filter:
+            queryset = queryset.filter(status=status_filter)
+        if crop_type:
+            queryset = queryset.filter(crop_type__icontains=crop_type)
+        if farmer_id:
+            queryset = queryset.filter(farmer_id=farmer_id)
+        if custodian_id:
+            queryset = queryset.filter(current_custodian_id=custodian_id)
+        return queryset.select_related("farmer", "current_custodian")
 
 class BatchDetailView(generics.RetrieveAPIView):
     """Retrieve batch details restricted by ownership/custody/admin permissions."""
@@ -403,9 +420,54 @@ class PublicBatchVerifyView(APIView):
             sui_tx_verified = rpc_res.get("verified", False)
             sui_details = rpc_res
 
-        custody_chain_verified = all(
-            transfer.verified_on_chain and transfer.tx_digest
-            for transfer in batch.transfers.all()
+        transfers = list(
+            batch.transfers.select_related("from_user", "to_user")
+            .order_by("transferred_at", "id")
+        )
+        custody_chain_verified = True
+        transfer_verifications = []
+        expected_user_id = batch.farmer_id
+        expected_wallet = (batch.farmer.sui_public_key or "").lower()
+        for transfer in transfers:
+            local_chain_match = (
+                transfer.verified_on_chain
+                and bool(transfer.tx_digest)
+                and transfer.from_user_id == expected_user_id
+                and transfer.from_wallet.lower() == expected_wallet
+                and bool(transfer.to_wallet)
+                and transfer.to_user.sui_public_key is not None
+                and transfer.to_wallet.lower() == transfer.to_user.sui_public_key.lower()
+            )
+            transfer_rpc = {"verified": False, "reason_code": "local_chain_mismatch"}
+            if local_chain_match:
+                transfer_rpc = verify_sui_transaction_on_rpc(
+                    tx_digest=transfer.tx_digest,
+                    expected_sender=transfer.from_wallet,
+                    expected_function="transfer_custody",
+                    expected_batch=batch,
+                    expected_object_id=batch.sui_object_id,
+                    expected_recipient=transfer.to_wallet,
+                    verify_current_state=False,
+                )
+            transfer_verified = local_chain_match and transfer_rpc.get("verified", False)
+            custody_chain_verified = custody_chain_verified and transfer_verified
+            transfer_verifications.append(
+                {
+                    "transfer_id": str(transfer.id),
+                    "tx_digest": transfer.tx_digest,
+                    "verified": transfer_verified,
+                    "reason_code": transfer_rpc.get("reason_code", "verification_failed"),
+                }
+            )
+            expected_user_id = transfer.to_user_id
+            expected_wallet = transfer.to_wallet.lower()
+
+        if batch.status in {ProduceBatch.Status.IN_TRANSIT, ProduceBatch.Status.DELIVERED}:
+            custody_chain_verified = custody_chain_verified and bool(transfers)
+        custody_chain_verified = (
+            custody_chain_verified
+            and expected_user_id == batch.current_custodian_id
+            and expected_wallet == (batch.current_custodian.sui_public_key or "").lower()
         )
         overall_verification = (
             local_integrity
@@ -429,7 +491,9 @@ class PublicBatchVerifyView(APIView):
             "local_integrity": local_integrity,
             "batch_hash_match": batch_hash_match,
             "sui_tx_verified": sui_tx_verified,
+            "sui_verification": sui_details,
             "custody_chain_verified": custody_chain_verified,
+            "transfer_verifications": transfer_verifications,
             "overall_verification": overall_verification,
             "created_at": batch.created_at,
             "sui_explorer_url": f"https://suiscan.xyz/testnet/object/{batch.sui_object_id}" if batch.sui_object_id else None

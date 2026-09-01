@@ -6,7 +6,7 @@ import './DashboardLayout.css';
 export type UserRole = 'farmer' | 'logistics' | 'admin';
 
 export interface User {
-  address: string;
+  address: string | null;
   name: string;
   role: UserRole;
   avatar?: string;
@@ -290,7 +290,9 @@ export function DashboardLayout({
               <div className="sidebar-user-info">
                 <div className="sidebar-user-name">{user.name}</div>
                 <div className="sidebar-user-address">
-                  {user.address.slice(0, 6)}…{user.address.slice(-4)}
+                  {user.address
+                    ? `${user.address.slice(0, 6)}…${user.address.slice(-4)}`
+                    : 'No wallet bound'}
                 </div>
               </div>
               <button

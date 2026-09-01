@@ -36,7 +36,17 @@ export const ledgerApi = {
     farmer_id?: string;
     custodian_id?: string;
   }): Promise<BatchListResponse> => {
-    const response = await apiClient.get<BatchListResponse>('/ledger/list/', { params });
+    const response = await apiClient.get<BatchListResponse>('/ledger/list/', {
+      params: params
+        ? {
+            page: params.page,
+            page_size: params.page_size,
+            status: params.status,
+            farmer: params.farmer_id,
+            current_custodian: params.custodian_id,
+          }
+        : undefined,
+    });
     return response.data;
   },
 

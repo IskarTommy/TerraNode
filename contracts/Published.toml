@@ -3,6 +3,9 @@
 # This file SHOULD be committed to source control
 
 [published.testnet]
+# LEGACY ONLY: this v1 package uses the obsolete weight_kg/borrowed-transfer ABI.
+# Do not configure TerraNode with this package ID. Publish the current source as
+# a new Testnet package and replace this metadata before enabling chain writes.
 chain-id = "4c78adac"
 published-at = "0x12d791039ab75e08f41140ccb9be4ce80b917f3eb2b52dab150831bc29afb92f"
 original-id = "0x12d791039ab75e08f41140ccb9be4ce80b917f3eb2b52dab150831bc29afb92f"

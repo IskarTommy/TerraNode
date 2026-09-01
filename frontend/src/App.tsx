@@ -29,11 +29,11 @@ import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 
 function AppRoutes() {
- const { user: apiUser, isAuthenticated } = useAuth();
+ const { user: apiUser } = useAuth();
  const { connect: connectWallet, disconnect: disconnectWallet, connecting } = useWallet();
 
  const user = apiUser ? {
- address: apiUser.sui_public_key || "0x0000000000000000000000000000000000000000",
+ address: apiUser.sui_public_key,
  name: apiUser.full_name || apiUser.email?.split("@")[0] || "User",
  role: apiUser.role?.toLowerCase() as "farmer" | "logistics" | "admin" || "farmer",
  avatar: undefined,

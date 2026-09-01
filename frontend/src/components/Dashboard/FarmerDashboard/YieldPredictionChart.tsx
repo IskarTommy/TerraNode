@@ -1,4 +1,3 @@
-import { cn } from '../../../utils/cn';
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid,
   Tooltip, Legend, ResponsiveContainer, Cell,
@@ -22,9 +21,7 @@ export interface YieldPredictionChartProps {
   className?: string;
 }
 
-const PREDICTED_COLOR = 'var(--chart-palette-5)';
 const PREDICTED_COLOR_RESOLVED = '#06b6d4';
-const ACTUAL_COLOR = 'var(--chart-palette-1)';
 const ACTUAL_COLOR_RESOLVED = '#10b981';
 
 function YieldTooltip({ active, payload, label }: {

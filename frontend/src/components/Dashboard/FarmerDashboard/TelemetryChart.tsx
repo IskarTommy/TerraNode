@@ -215,7 +215,7 @@ export function TelemetryChart({
               const cfg = METRIC_CONFIG[metric];
               const color = resolveChartColor(metric);
               return (
-                <Area key={metric} type="monotone" dataKey={metric} name={metric}
+                <Area key={metric} type="monotone" dataKey={metric} name={cfg.label}
                   stroke={color} fill={color} fillOpacity={0.08}
                   strokeWidth={2.5} dot={false}
                   activeDot={{ r: 5, strokeWidth: 2, fill: color, stroke: 'var(--color-bg-primary)' }}

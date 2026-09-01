@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ConnectButton } from '@mysten/dapp-kit';
+import { ConnectButton } from '@mysten/dapp-kit-react/ui';
 import { Transaction } from '@mysten/sui/transactions';
 
 import { ledgerApi } from '../../api/ledger';
@@ -7,6 +7,7 @@ import { Button } from '../../components/Common/Button';
 import { Card } from '../../components/Common/Card';
 import { Input, Select } from '../../components/Common/Input';
 import { useWallet } from '../../contexts/WalletContext';
+import { isUsableSuiPackageId } from '../../utils/constants';
 
 
 const CROPS = ['MAIZE', 'RICE', 'SOYBEAN', 'TOMATO', 'CASSAVA'].map((value) => ({
@@ -49,8 +50,8 @@ export function MintBatchPage() {
       setError('Connect the Sui wallet bound to your TerraNode account first.');
       return;
     }
-    if (!packageId || !/^0x[0-9a-f]{64}$/i.test(packageId)) {
-      setError('VITE_SUI_PACKAGE_ID is not configured with the deployed Testnet package.');
+    if (!isUsableSuiPackageId(packageId)) {
+      setError('VITE_SUI_PACKAGE_ID must identify the current weight_grams Testnet package.');
       return;
     }
     if (!Number.isFinite(weight) || weight <= 0 || Math.abs(weight * 1000 - grams) > 1e-9) {

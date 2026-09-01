@@ -1,4 +1,3 @@
-import styles from "../../pages/Landing/LandingPage.css?inline";
 import { useInView } from "../../hooks";
 
 const tickerCSS = `

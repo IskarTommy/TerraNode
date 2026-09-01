@@ -1,5 +1,6 @@
 import base64
 import os
+from datetime import timedelta
 from unittest import mock
 
 from django.contrib.auth import get_user_model
@@ -130,6 +131,32 @@ class EncryptedTelemetryAPITests(TestCase):
         self.assertEqual(len(response.data["results"]), 1)
         self.assertEqual(response.data["results"][0]["id"], str(record.pk))
         self.assertEqual(response.data["results"][0]["temperature_celsius"], 24.0)
+
+    def test_history_validates_and_applies_iso_date_filters(self):
+        older_time = timezone.now() - timedelta(days=3)
+        newer_time = timezone.now()
+        older = EnvironmentalTelemetry.objects.create(
+            farmer=self.farmer,
+            recorded_at=older_time,
+            **encrypted_storage_fields(self.farmer.pk, older_time, 20.0, 50.0, None),
+        )
+        newer = EnvironmentalTelemetry.objects.create(
+            farmer=self.farmer,
+            recorded_at=newer_time,
+            **encrypted_storage_fields(self.farmer.pk, newer_time, 25.0, 60.0, None),
+        )
+        self.client.force_authenticate(self.farmer)
+        response = self.client.get(
+            reverse("telemetry_history"),
+            {"start": (timezone.now() - timedelta(days=1)).date().isoformat()},
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        ids = {item["id"] for item in response.data["results"]}
+        self.assertEqual(ids, {str(newer.pk)})
+        self.assertNotIn(str(older.pk), ids)
+
+        invalid = self.client.get(reverse("telemetry_history"), {"start": "not-a-date"})
+        self.assertEqual(invalid.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_non_farmer_cannot_submit_or_read_history(self):
         self.client.force_authenticate(self.logistics)

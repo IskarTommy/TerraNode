@@ -27,13 +27,12 @@ interface AuthContextType {
   isAuthenticated: boolean;
   isInitialized: boolean;
   login: (email: string, password: string) => Promise<User>;
-  walletLogin: (sui_public_key: string, message: string, signature: string) => Promise<User>;
+  walletLogin: (challengeId: string, signature: string) => Promise<User>;
   register: (data: {
     email: string;
     password: string;
     full_name: string;
-    role: User['role'];
-    sui_public_key?: string;
+    role: 'FARMER' | 'LOGISTICS';
   }) => Promise<void>;
   logout: () => Promise<void>;
   setAccessToken: (token: string) => void;
@@ -68,8 +67,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     return response.user;
   };
 
-  const walletLoginUser = async (sui_public_key: string, message: string, signature: string) => {
-    const response = await walletLoginApi({ sui_public_key, message, signature });
+  const walletLoginUser = async (challengeId: string, signature: string) => {
+    const response = await walletLoginApi({ challenge_id: challengeId, signature });
     setAccessToken(response.access);
     localStorage.setItem(STORAGE_KEYS.REFRESH, response.refresh);
     setRefreshToken(response.refresh);

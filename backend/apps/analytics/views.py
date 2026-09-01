@@ -122,9 +122,11 @@ class SystemHealthView(APIView):
         except Exception:
             pass
         try:
-            cache.set("healthcheck", "ok", 5)
-            if cache.get("healthcheck") == "ok":
-                health["redis"] = "healthy"
+            cache_backend = settings.CACHES["default"].get("BACKEND", "")
+            if "redis" in cache_backend.lower():
+                cache.set("healthcheck", "ok", 5)
+                if cache.get("healthcheck") == "ok":
+                    health["redis"] = "healthy"
         except Exception:
             pass
         return Response(health)

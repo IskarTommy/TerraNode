@@ -1,7 +1,6 @@
 import { createContext, useContext, useState, useCallback, useEffect, type ReactNode } from 'react';
-import { useSuiClient, useSignAndExecuteTransaction, useCurrentAccount } from '@mysten/dapp-kit';
+import { useCurrentAccount, useCurrentClient, useDAppKit } from '@mysten/dapp-kit-react';
 import { Transaction } from '@mysten/sui/transactions';
-import type { SuiJsonRpcClient } from '@mysten/sui/jsonRpc';
 
 interface WalletState {
   address: string | null;
@@ -29,17 +28,17 @@ export function WalletProvider({ children }: { children: ReactNode }) {
     network: 'testnet',
   });
 
-  const client = useSuiClient() as SuiJsonRpcClient;
+  const client = useCurrentClient();
+  const dAppKit = useDAppKit();
   const currentAccount = useCurrentAccount();
-  const { mutateAsync: signAndExecute } = useSignAndExecuteTransaction();
 
   const refreshBalance = useCallback(async () => {
     if (!currentAccount?.address) return;
     try {
-      const balance = await client.getBalance({ owner: currentAccount.address });
+      const { balance } = await client.getBalance({ owner: currentAccount.address });
       setWallet((prev) => ({
         ...prev,
-        balance: (Number(balance.totalBalance) / 1_000_000_000).toFixed(4),
+        balance: (Number(balance.balance) / 1_000_000_000).toFixed(4),
       }));
     } catch (error) {
       console.error('Failed to fetch balance:', error);
@@ -78,22 +77,24 @@ export function WalletProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const disconnect = useCallback(() => {
-    setWallet({
-      address: null,
-      balance: null,
-      connected: false,
-      connecting: false,
-      network: 'testnet',
+    void dAppKit.disconnectWallet().catch((error) => {
+      console.error('Failed to disconnect wallet:', error);
     });
-  }, []);
+  }, [dAppKit]);
 
   const executeTransaction = useCallback(
     async (tx: Transaction) => {
-      const result = await signAndExecute({ transaction: tx });
+      const result = await dAppKit.signAndExecuteTransaction({ transaction: tx });
+      if (result.$kind !== 'Transaction') {
+        throw new Error(
+          result.FailedTransaction.status.error?.message
+          || 'Sui rejected the transaction.',
+        );
+      }
       await refreshBalance();
-      return { digest: result.digest };
+      return { digest: result.Transaction.digest };
     },
-    [signAndExecute, refreshBalance]
+    [dAppKit, refreshBalance]
   );
 
   return (

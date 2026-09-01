@@ -7,7 +7,7 @@ export interface User {
   email: string;
   full_name: string;
   role: "FARMER" | "LOGISTICS" | "ADMIN";
-  sui_public_key?: string;
+  sui_public_key: string | null;
 }
 
 export interface LoginResponse {
@@ -20,8 +20,7 @@ export interface RegisterPayload {
   email: string;
   password: string;
   full_name: string;
-  role: "FARMER" | "LOGISTICS" | "ADMIN";
-  sui_public_key?: string;
+  role: "FARMER" | "LOGISTICS";
 }
 
 // ─── API Calls ────────────────────────────────────
@@ -31,7 +30,21 @@ export const login = async (data: { email: string; password: string }) => {
   return response.data;
 };
 
-export const walletLogin = async (data: { sui_public_key: string; message: string; signature: string }) => {
+export interface WalletChallengeResponse {
+  challenge_id: string;
+  nonce: string;
+  message: string;
+  expires_at: string;
+}
+
+export const requestWalletChallenge = async (wallet_address: string) => {
+  const response = await apiClient.post<WalletChallengeResponse>("/auth/wallet-challenge/", {
+    wallet_address,
+  });
+  return response.data;
+};
+
+export const walletLogin = async (data: { challenge_id: string; signature: string }) => {
   const response = await apiClient.post<LoginResponse>("/auth/wallet-login/", data);
   return response.data;
 };
@@ -47,7 +60,7 @@ export const logout = async (refreshToken: string): Promise<boolean> => {
   try {
     await apiClient.post("/auth/logout/", { refresh: refreshToken });
     return true;
-  } catch (e) {
+  } catch {
     return false;
   }
 };

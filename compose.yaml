@@ -34,7 +34,7 @@ services:
     env_file: .env.compose
     environment:
       DJANGO_SETTINGS_MODULE: config.settings.docker
-      DATABASE_URL: postgresql://${POSTGRES_USER:-terranode}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB:-terranode}
+      DATABASE_URL: ${DATABASE_URL:?Set DATABASE_URL in .env.compose}
       REDIS_URL: redis://redis:6379/0
     command: >
       sh -c "python manage.py migrate --noinput &&
@@ -57,9 +57,25 @@ services:
     env_file: .env.compose
     environment:
       DJANGO_SETTINGS_MODULE: config.settings.docker
-      DATABASE_URL: postgresql://${POSTGRES_USER:-terranode}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB:-terranode}
+      DATABASE_URL: ${DATABASE_URL:?Set DATABASE_URL in .env.compose}
       REDIS_URL: redis://redis:6379/0
     command: celery -A config worker --loglevel=INFO
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    restart: unless-stopped
+
+  celery-beat:
+    build:
+      context: ./backend
+    env_file: .env.compose
+    environment:
+      DJANGO_SETTINGS_MODULE: config.settings.docker
+      DATABASE_URL: ${DATABASE_URL:?Set DATABASE_URL in .env.compose}
+      REDIS_URL: redis://redis:6379/0
+    command: celery -A config beat --loglevel=INFO
     depends_on:
       postgres:
         condition: service_healthy
@@ -73,6 +89,7 @@ services:
       args:
         VITE_API_BASE_URL: /api/v1
         VITE_SUI_PACKAGE_ID: ${SUI_PACKAGE_ID}
+        VITE_SUI_GRPC_URL: ${VITE_SUI_GRPC_URL:-https://fullnode.testnet.sui.io:443}
         VITE_DEMO_MODE: ${VITE_DEMO_MODE:-false}
     ports:
       - "8080:80"

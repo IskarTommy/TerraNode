@@ -1,4 +1,4 @@
-import { Fragment, isValidElement, cloneElement, useCallback, useEffect, useRef, useState, type HTMLAttributes, type ReactNode, createElement } from 'react';
+import { Fragment, isValidElement, cloneElement, useCallback, useEffect, useRef, useState, type HTMLAttributes, type ReactNode } from 'react';
 import { createPortal } from 'react-dom';
 import { cn } from '../../utils/cn';
 import './Dialog.css';
@@ -120,7 +120,8 @@ export const Dialog = ({
                 className={cn(
                     'dialog-content',
                     `dialog-content--${size}`,
-                    `dialog-content--${variant}`
+                    `dialog-content--${variant}`,
+                    className
                 )}
                 role="dialog"
                 aria-modal="true"

@@ -15,7 +15,16 @@ export const telemetryApi = {
     start_date?: string;
     end_date?: string;
   }): Promise<TelemetryHistoryResponse> => {
-    const response = await apiClient.get<TelemetryHistoryResponse>('/telemetry/history/', { params });
+    const response = await apiClient.get<TelemetryHistoryResponse>('/telemetry/history/', {
+      params: params
+        ? {
+            page: params.page,
+            page_size: params.page_size,
+            start: params.start_date,
+            end: params.end_date,
+          }
+        : undefined,
+    });
     return response.data;
   },
 

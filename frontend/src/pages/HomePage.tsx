@@ -1,6 +1,5 @@
 import { useEffect, useRef, type ReactNode } from "react";
 import { Link } from "react-router-dom";
-import { useAuth } from "../contexts/AuthContext";
 import { Button } from "../components/Common/Button";
 import { Logo } from "../components/Logo";
 import { CanvasBackground } from "../components/CanvasBackground";
@@ -149,8 +148,6 @@ function AnimatedNum({ target, suffix = "", dur = 2200 }: AnimatedNumProps): Rea
 // ── Landing Page ──────────────────────────────────────────────────────────────
 
 export default function HomePage(): React.ReactElement {
-  const { user } = useAuth();
-
   return (
     <div
       className="relative min-h-screen overflow-hidden"

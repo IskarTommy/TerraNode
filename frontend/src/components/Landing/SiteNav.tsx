@@ -1,6 +1,5 @@
 import { useState, useEffect, type FC, type ReactNode } from "react";
 import { Link } from "react-router-dom";
-import styles from "../../pages/Landing/LandingPage.css?inline";
 
 /* floating header — no full-width bar, just a transparent pill that lives on top */
 const navCSS = `
