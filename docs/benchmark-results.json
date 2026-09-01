@@ -1,0 +1,23 @@
+{
+  "timestamp": "2026-09-01T02:09:20.198142Z",
+  "environment": {
+    "python_version": "3.12.13",
+    "system": "Linux",
+    "machine": "x86_64",
+    "processor": "x86_64"
+  },
+  "crypto_operations": {
+    "sample_size": 500,
+    "mean_ms": 0.0473,
+    "stdev_ms": 0.0738,
+    "min_ms": 0.0329,
+    "max_ms": 1.6505
+  },
+  "sui_testnet_rpc": {
+    "rpc_url": "https://fullnode.testnet.sui.io:443",
+    "sample_size": 5,
+    "mean_ms": 67.57,
+    "min_ms": 39.1,
+    "max_ms": 168.87
+  }
+}

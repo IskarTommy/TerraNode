@@ -1,65 +1,52 @@
+import base64
+import hashlib
+import secrets
+from datetime import timedelta
+from django.utils import timezone
+from django.contrib.auth import get_user_model
 from rest_framework import generics, status
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.views import TokenObtainPairView
-from django.contrib.auth import get_user_model
+from nacl.signing import VerifyKey
 
+from .models import WalletChallenge
 from .serializers import RegisterSerializer, ProfileSerializer, CustomTokenObtainPairSerializer
 from core.throttling import LoginRateThrottle
 
 User = get_user_model()
 
-class CustomTokenObtainPairView(TokenObtainPairView):
-    serializer_class = CustomTokenObtainPairSerializer
-    throttle_classes = [LoginRateThrottle]
 
-class RegisterView(generics.CreateAPIView):
-    queryset = User.objects.all()
-    permission_classes = (AllowAny,)
-    serializer_class = RegisterSerializer
+def derive_sui_address_from_pubkey(pubkey_bytes: bytes, flag: int = 0) -> str:
+    """Derives a standard Sui address (0x...) from Ed25519 public key bytes and scheme flag."""
+    flag_byte = bytes([flag])
+    data = flag_byte + pubkey_bytes
+    digest = hashlib.blake2b(data, digest_size=32).hexdigest()
+    return f"0x{digest}"
 
-class ProfileView(generics.RetrieveUpdateAPIView):
-    permission_classes = (IsAuthenticated,)
-    serializer_class = ProfileSerializer
 
-    def get_object(self):
-        return self.request.user
-
-class LogoutView(APIView):
-    permission_classes = (IsAuthenticated,)
-
-    def post(self, request):
-        try:
-            refresh_token = request.data.get("refresh")
-            if not refresh_token:
-                return Response({"error": "Refresh token is required"}, status=status.HTTP_400_BAD_REQUEST)
-            
-            token = RefreshToken(refresh_token)
-            token.blacklist()
-            return Response({"success": True}, status=status.HTTP_205_RESET_CONTENT)
-        except Exception as e:
-            return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
-
-import base64
-import hashlib
-from nacl.signing import VerifyKey
-from nacl.exceptions import BadSignatureError
-
-def verify_sui_personal_message(message_str, signature_b64):
+def verify_sui_personal_message_signature(message_str: str, signature_b64: str):
+    """
+    Verifies an Ed25519 Sui personal message signature.
+    Returns (is_valid, derived_address, pubkey_hex).
+    """
     try:
         sig_bytes = base64.b64decode(signature_b64)
+        if len(sig_bytes) < 97:
+            return False, None, None
+
         flag = sig_bytes[0]
         if flag != 0:
-            return False # Only Ed25519
-        
+            return False, None, None
+
         signature = sig_bytes[1:65]
-        pubkey = sig_bytes[65:]
-        
+        pubkey = sig_bytes[65:97]
+
         intent_prefix = bytes([3, 0, 0])
         msg_bytes = message_str.encode('utf-8')
-        
+
         def to_uleb128(n):
             result = bytearray()
             while True:
@@ -71,51 +58,142 @@ def verify_sui_personal_message(message_str, signature_b64):
                 if n == 0:
                     break
             return bytes(result)
-            
+
         bcs_msg = to_uleb128(len(msg_bytes)) + msg_bytes
         intent_message = intent_prefix + bcs_msg
-        
+
         hashed_msg = hashlib.blake2b(intent_message, digest_size=32).digest()
-        
+
         verify_key = VerifyKey(pubkey)
         verify_key.verify(hashed_msg, signature)
-        return True
+
+        derived_address = derive_sui_address_from_pubkey(pubkey, flag=0)
+        pubkey_hex = pubkey.hex()
+        return True, derived_address, pubkey_hex
     except Exception:
-        return False
+        return False, None, None
+
+
+class CustomTokenObtainPairView(TokenObtainPairView):
+    serializer_class = CustomTokenObtainPairSerializer
+    throttle_classes = [LoginRateThrottle]
+
+
+class RegisterView(generics.CreateAPIView):
+    queryset = User.objects.all()
+    permission_classes = (AllowAny,)
+    serializer_class = RegisterSerializer
+
+
+class ProfileView(generics.RetrieveUpdateAPIView):
+    permission_classes = (IsAuthenticated,)
+    serializer_class = ProfileSerializer
+
+    def get_object(self):
+        return self.request.user
+
+
+class LogoutView(APIView):
+    permission_classes = (IsAuthenticated,)
+
+    def post(self, request):
+        try:
+            refresh_token = request.data.get("refresh")
+            if not refresh_token:
+                return Response({"error": "Refresh token is required"}, status=status.HTTP_400_BAD_REQUEST)
+
+            token = RefreshToken(refresh_token)
+            token.blacklist()
+            return Response({"success": True}, status=status.HTTP_205_RESET_CONTENT)
+        except Exception as e:
+            return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+
+class RequestWalletChallengeView(APIView):
+    permission_classes = (AllowAny,)
+    throttle_classes = [LoginRateThrottle]
+
+    def post(self, request):
+        wallet_address = request.data.get('wallet_address')
+        if not wallet_address or not wallet_address.startswith('0x'):
+            return Response({"error": "Valid wallet_address starting with 0x is required"}, status=status.HTTP_400_BAD_REQUEST)
+
+        wallet_address = wallet_address.lower()
+        nonce = secrets.token_hex(32)
+        domain = "TerraNode Auth"
+        now = timezone.now()
+        expires_at = now + timedelta(minutes=5)
+
+        message = (
+            f"TerraNode Authentication Challenge\n"
+            f"Domain: {domain}\n"
+            f"Wallet: {wallet_address}\n"
+            f"Nonce: {nonce}\n"
+            f"Issued: {now.isoformat()}\n"
+            f"Expires: {expires_at.isoformat()}"
+        )
+
+        user = User.objects.filter(sui_public_key__iexact=wallet_address).first()
+
+        challenge = WalletChallenge.objects.create(
+            wallet_address=wallet_address,
+            nonce=nonce,
+            domain=domain,
+            message=message,
+            expires_at=expires_at,
+            user=user
+        )
+
+        return Response({
+            "challenge_id": str(challenge.id),
+            "nonce": challenge.nonce,
+            "message": challenge.message,
+            "expires_at": challenge.expires_at.isoformat()
+        })
+
 
 class WalletLoginView(APIView):
     permission_classes = (AllowAny,)
-    
+    throttle_classes = [LoginRateThrottle]
+
     def post(self, request):
-        sui_public_key = request.data.get('sui_public_key')
-        message = request.data.get('message')
+        challenge_id = request.data.get('challenge_id')
         signature = request.data.get('signature')
 
-        if not sui_public_key or not message or not signature:
-            return Response({"error": "Missing parameters"}, status=status.HTTP_400_BAD_REQUEST)
-
-        # Verify signature
-        if not verify_sui_personal_message(message, signature):
-            return Response({"error": "Invalid signature"}, status=status.HTTP_401_UNAUTHORIZED)
-
-        # Ensure the message is what we expect for login
-        if message != f"Login to TerraNode with {sui_public_key}":
-            return Response({"error": "Invalid message context"}, status=status.HTTP_401_UNAUTHORIZED)
+        if not challenge_id or not signature:
+            return Response({"error": "challenge_id and signature are required"}, status=status.HTTP_400_BAD_REQUEST)
 
         try:
-            user = User.objects.get(sui_public_key=sui_public_key)
-        except User.DoesNotExist:
-            return Response({"error": "Wallet not registered"}, status=status.HTTP_404_NOT_FOUND)
+            challenge = WalletChallenge.objects.get(id=challenge_id)
+        except (WalletChallenge.DoesNotExist, ValueError):
+            return Response({"error": "Invalid challenge identifier"}, status=status.HTTP_401_UNAUTHORIZED)
+
+        if not challenge.is_valid():
+            return Response({"error": "Challenge expired or already consumed"}, status=status.HTTP_401_UNAUTHORIZED)
+
+        is_valid, derived_address, pubkey_hex = verify_sui_personal_message_signature(challenge.message, signature)
+        if not is_valid or not derived_address:
+            return Response({"error": "Invalid cryptographic signature"}, status=status.HTTP_401_UNAUTHORIZED)
+
+        if derived_address.lower() != challenge.wallet_address.lower():
+            return Response({"error": "Derived signer address does not match challenged wallet address"}, status=status.HTTP_401_UNAUTHORIZED)
+
+        challenge.used_at = timezone.now()
+        challenge.save()
+
+        user = User.objects.filter(sui_public_key__iexact=challenge.wallet_address).first()
+        if not user:
+            return Response({"error": "Wallet address not registered to any TerraNode account"}, status=status.HTTP_404_NOT_FOUND)
 
         refresh = RefreshToken.for_user(user)
         return Response({
             'refresh': str(refresh),
             'access': str(refresh.access_token),
             'user': {
-                'id': user.id,
+                'id': str(user.id),
                 'email': user.email,
                 'role': user.role,
-                'sui_public_key': user.sui_public_key,
-                'company_name': user.company_name
+                'full_name': user.full_name,
+                'sui_public_key': user.sui_public_key
             }
         })

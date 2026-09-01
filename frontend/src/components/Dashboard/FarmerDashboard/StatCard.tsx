@@ -13,11 +13,8 @@ export interface StatCardProps {
   icon?: React.ReactNode;
   variant?: 'primary' | 'success' | 'warning' | 'error' | 'neutral' | 'info';
   loading?: boolean;
-  /** Layout style: 'left' (default — icon right, value left) or 'centered' (icon top-right, value centered) */
   layout?: 'left' | 'centered';
-  /** Animate the numeric value on mount (only works when value is a finite number) */
   animate?: boolean;
-  /** Unit label displayed next to the value (e.g. "t/ha", "ms") */
   unit?: string;
   className?: string;
 }
@@ -78,14 +75,20 @@ function CenteredTrendIndicator({ trend, value, label }: {
   );
 }
 
-/** Animated value display that counts up from 0 when it enters the viewport. */
 function AnimatedValue({ value, unit, animate }: { value: string | number; unit?: string; animate: boolean }) {
   const [inView, ref] = useInView();
   const reducedMotion = useReducedMotion();
   const numericValue = typeof value === 'number' ? value : parseFloat(value);
+  const targetVal = isFinite(numericValue) ? numericValue : 0;
+
+  const countUpDisplay = useCountUp(
+    { to: targetVal, decimals: targetVal % 1 !== 0 ? 1 : 0 },
+    inView,
+    reducedMotion
+  );
 
   const display = animate && isFinite(numericValue)
-    ? useCountUp({ to: numericValue, decimals: numericValue % 1 !== 0 ? 1 : 0 }, inView, reducedMotion)
+    ? countUpDisplay
     : typeof value === 'number' && numericValue % 1 !== 0
       ? numericValue.toFixed(1)
       : String(value);
@@ -166,7 +169,6 @@ export function StatCard({
         'border-l-2 border-l-red-500/40!': variant === 'error',
       }, className)}>
 
-      {/* Subtle gradient overlay */}
       <div className="absolute inset-0 rounded-[inherit] pointer-events-none"
         style={{ background: `linear-gradient(135deg, ${s.iconBg} 0%, transparent 60%)` }} />
 

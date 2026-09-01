@@ -8,8 +8,7 @@ class PredictYieldView(APIView):
 
     def get(self, request):
         crop_type = request.query_params.get("crop_type", "MAIZE")
-        
-        # Check for what-if simulation query params
+
         simulated = None
         if "sim_temp" in request.query_params or "sim_moisture" in request.query_params or "sim_ph" in request.query_params:
             simulated = {
@@ -28,6 +27,7 @@ class SummaryView(APIView):
 
     def get(self, request):
         return Response({
+            "message": "Analytics engine operational",
             "status": "OPERATIONAL",
             "available_crop_profiles": list(CROP_PROFILES.keys()),
             "cache_backend": "Active",
