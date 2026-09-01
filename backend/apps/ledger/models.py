@@ -17,7 +17,6 @@ class ProduceBatch(models.Model):
     data_integrity_hash = models.CharField(max_length=64, blank=True, default="")
     current_custodian = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.RESTRICT, related_name="custodial_batches")
 
-    # Blockchain fields
     sui_object_id = models.CharField(max_length=66, blank=True, null=True, unique=True)
     sui_tx_digest = models.CharField(max_length=66, blank=True, null=True)
     status = models.CharField(max_length=20, choices=Status.choices, default=Status.PENDING)
@@ -32,5 +31,31 @@ class ProduceBatch(models.Model):
             models.Index(fields=['farmer']),
         ]
 
+    @property
+    def weight_grams(self) -> int:
+        return int(self.weight_kg * 1000)
+
     def __str__(self):
         return f"Batch {self.id} ({self.status})"
+
+
+class CustodyTransfer(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    batch = models.ForeignKey(ProduceBatch, on_delete=models.CASCADE, related_name="transfers")
+    from_user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.RESTRICT, related_name="transfers_sent")
+    to_user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.RESTRICT, related_name="transfers_received")
+    from_wallet = models.CharField(max_length=66, blank=True, default="")
+    to_wallet = models.CharField(max_length=66, blank=True, default="")
+    tx_digest = models.CharField(max_length=66, blank=True, default="")
+    verified_on_chain = models.BooleanField(default=False)
+    transferred_at = models.DateTimeField(auto_now_add=True)
+    event_metadata = models.JSONField(default=dict, blank=True)
+
+    class Meta:
+        ordering = ['-transferred_at']
+        indexes = [
+            models.Index(fields=['batch', 'transferred_at']),
+        ]
+
+    def __str__(self):
+        return f"CustodyTransfer {self.id} for Batch {self.batch_id} ({self.from_user} -> {self.to_user})"
