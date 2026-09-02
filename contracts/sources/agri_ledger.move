@@ -1,7 +1,4 @@
 module terranode::agri_ledger {
-    use sui::object::{Self, UID};
-    use sui::transfer;
-    use sui::tx_context::{Self, TxContext};
     use std::string::String;
     use sui::event;
 
@@ -17,7 +14,7 @@ module terranode::agri_ledger {
 
     /// Traceability record representing a verifiable crop batch in transit.
     /// Weight is represented in canonical integer units (grams).
-    struct ProduceBatch has key, store {
+    public struct ProduceBatch has key, store {
         id: UID,
         crop_type: String,
         weight_grams: u64,
@@ -30,7 +27,7 @@ module terranode::agri_ledger {
     //  EVENTS
     // ══════════════════════════════════════════
 
-    struct BatchMinted has copy, drop {
+    public struct BatchMinted has copy, drop {
         batch_id: address,
         farmer: address,
         crop_type: String,
@@ -38,7 +35,7 @@ module terranode::agri_ledger {
         data_integrity_hash: vector<u8>,
     }
 
-    struct CustodyTransferred has copy, drop {
+    public struct CustodyTransferred has copy, drop {
         batch_id: address,
         from: address,
         to: address,
@@ -56,11 +53,11 @@ module terranode::agri_ledger {
         integrity_hash: vector<u8>,
         ctx: &mut TxContext
     ) {
-        let sender = tx_context::sender(ctx);
+        let sender = ctx.sender();
         let batch = ProduceBatch {
             id: object::new(ctx),
-            crop_type: crop_type,
-            weight_grams: weight_grams,
+            crop_type,
+            weight_grams,
             origin_farmer_address: sender,
             current_custodian_address: sender,
             data_integrity_hash: integrity_hash,
@@ -70,7 +67,7 @@ module terranode::agri_ledger {
             batch_id: object::uid_to_address(&batch.id),
             farmer: sender,
             crop_type: batch.crop_type,
-            weight_grams: weight_grams,
+            weight_grams,
             data_integrity_hash: batch.data_integrity_hash,
         });
 
@@ -85,7 +82,7 @@ module terranode::agri_ledger {
         new_custodian: address,
         ctx: &mut TxContext
     ) {
-        let sender = tx_context::sender(ctx);
+        let sender = ctx.sender();
         assert!(batch.current_custodian_address == sender, ENotCustodian);
         assert!(new_custodian != @0x0, EInvalidRecipient);
 

@@ -113,23 +113,27 @@ class BatchTransferView(APIView):
         batch = get_object_or_404(ProduceBatch, pk=pk)
         current_user = request.user
 
-        if batch.current_custodian != current_user:
-            return Response({"error": "Only the current custodian can initiate a custody transfer"}, status=status.HTTP_403_FORBIDDEN)
-
         target_user_id = request.data.get("to_user_id")
         target_wallet = request.data.get("to_wallet")
 
-        target_user = None
-        if target_user_id:
-            target_user = get_object_or_404(User, id=target_user_id)
-        elif target_wallet:
-            target_user = User.objects.filter(sui_public_key__iexact=target_wallet).first()
-            if not target_user:
-                return Response({"error": "Target wallet address is not registered to an authorized user"}, status=status.HTTP_400_BAD_REQUEST)
+        if batch.current_custodian == current_user:
+            # Current custodian transferring to new target
+            target_user = None
+            if target_user_id:
+                target_user = get_object_or_404(User, id=target_user_id)
+            elif target_wallet:
+                target_user = User.objects.filter(sui_public_key__iexact=target_wallet).first()
+                if not target_user:
+                    return Response({"error": "Target wallet address is not registered to an authorized user"}, status=status.HTTP_400_BAD_REQUEST)
+            else:
+                return Response({"error": "to_user_id or to_wallet is required"}, status=status.HTTP_400_BAD_REQUEST)
+        elif current_user.role == User.Role.LOGISTICS and batch.current_custodian == batch.farmer:
+            # Logistics picking up from farmer
+            target_user = current_user
         else:
-            return Response({"error": "to_user_id or to_wallet is required"}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"error": "Only the current custodian or authorized carrier can initiate a custody transfer"}, status=status.HTTP_403_FORBIDDEN)
 
-        if not target_user.sui_public_key:
+        if target_user_id and not target_user.sui_public_key:
             return Response({"error": "Target user must have a bound wallet address for on-chain custody"}, status=status.HTTP_400_BAD_REQUEST)
 
         target_status = request.data.get("status", ProduceBatch.Status.IN_TRANSIT)
@@ -179,7 +183,7 @@ class BatchTransferView(APIView):
 
 class BatchListView(generics.ListAPIView):
     """List batches based on user role and ownership/custody permissions."""
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (IsFarmerOrAdmin,)
     serializer_class = BatchOutputSerializer
 
     def get_queryset(self):

@@ -4,9 +4,10 @@ import { Card } from '../../components/Common/Card';
 import { Input, Select, Textarea } from '../../components/Common/Input';
 import { cn } from '../../utils/cn';
 import { Transaction } from '@mysten/sui/transactions';
+import { bcs } from '@mysten/sui/bcs';
 import { useWallet } from '../../contexts/WalletContext';
 import { ledgerApi } from '../../api/ledger';
-import { ConnectButton } from '@mysten/dapp-kit';
+import { ConnectButton, useSuiClient } from '@mysten/dapp-kit';
 
 const CROP_TYPES = [
   { value: 'maize', label: 'Maize (Corn)' },
@@ -108,7 +109,8 @@ export function MintBatchPage() {
   });
   const [calculationNote, setCalculationNote] = useState('');
   const [submitting, setSubmitting] = useState(false);
-  const { connected, signAndExecute } = useWallet();
+  const { connected, address, signAndExecute } = useWallet();
+  const suiClient = useSuiClient();
   const [txHash, setTxHash] = useState('');
 
   const currentCropVarieties = formData.cropType ? VARIETIES[formData.cropType] : [];
@@ -168,27 +170,46 @@ export function MintBatchPage() {
         weight_kg: Number(formData.quantity) || 0,
       });
 
-      let finalTxHash = 'SIMULATED_TX_' + Math.random().toString(36).substring(2, 10);
-      let suiObjectId = '0x' + Math.random().toString(36).substring(2, 15);
+      let finalTxHash = '';
+      let suiObjectId = '';
 
       if (connected) {
         // 2. Build Sui Transaction for live Sui blockchain minting
         const tx = new Transaction();
-        const PACKAGE_ID = "0x12d791039ab75e08f41140ccb9be4ce80b917f3eb2b52dab150831bc29afb92f";
+        tx.setGasBudget(10_000_000);
+
+        const PACKAGE_ID = import.meta.env.VITE_SUI_PACKAGE_ID || "0x72806395d9677780d633067dcbefd56bf67740d0e8d254700c790dae626e834c";
+
+        const weightGrams = BigInt(Math.max(1, Math.round((Number(formData.quantity) || 100) * 1000)));
+        const hashBytes = Array.from(new TextEncoder().encode(prepareRes.data_integrity_hash || "no-telemetry-hash"));
 
         tx.moveCall({
           target: `${PACKAGE_ID}::agri_ledger::mint_batch`,
           arguments: [
             tx.pure.string(formData.cropType),
-            tx.pure.u64(Number(formData.quantity) || 0),
-            tx.pure.vector('u8', Array.from(new TextEncoder().encode(prepareRes.data_integrity_hash || "no-telemetry-hash")))
+            tx.pure.u64(weightGrams),
+            tx.pure(bcs.vector(bcs.u8()).serialize(hashBytes)),
           ],
         });
 
-        // 3. Sign and execute on-chain
-        const { digest } = await signAndExecute(tx);
-        finalTxHash = digest;
-        suiObjectId = digest;
+        // 3. Sign and execute on-chain — wallet popup opens here
+        try {
+          const { digest } = await signAndExecute(tx);
+          finalTxHash = digest;
+          suiObjectId = digest;
+        } catch (walletErr: any) {
+          console.error('Wallet error details:', walletErr);
+          const errMsg = walletErr?.message || String(walletErr);
+          alert('Wallet signing failed: ' + errMsg);
+          setSubmitting(false);
+          return;
+        }
+      }
+
+      if (!finalTxHash) {
+        alert('No wallet connected. Please connect your Slush wallet first.');
+        setSubmitting(false);
+        return;
       }
 
       setTxHash(finalTxHash);
@@ -200,9 +221,18 @@ export function MintBatchPage() {
       });
 
       setStep(4);
-    } catch (err) {
-      console.error(err);
-      alert('Minting failed. Please check backend connection or wallet status.');
+    } catch (err: unknown) {
+      console.error('Minting error (full):', JSON.stringify(err, Object.getOwnPropertyNames(err as object)), err);
+      let message = 'Unknown error';
+      if (err instanceof Error) {
+        message = err.message;
+      } else if (typeof err === 'object' && err !== null) {
+        const e = err as any;
+        message = e?.response?.data?.error || e?.response?.data?.detail || e?.message || JSON.stringify(err);
+      } else {
+        message = String(err);
+      }
+      alert('Minting failed: ' + message);
     } finally {
       setSubmitting(false);
     }

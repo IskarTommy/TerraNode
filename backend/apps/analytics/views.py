@@ -9,8 +9,10 @@ from django.contrib.auth import get_user_model
 from django.core.cache import cache
 from .services import predict_yield
 
+from rest_framework.permissions import IsAuthenticated
+
 class PredictYieldView(APIView):
-    permission_classes = (IsFarmer,)
+    permission_classes = (IsAuthenticated,)
 
     def get(self, request):
         result = predict_yield(request.user.id)

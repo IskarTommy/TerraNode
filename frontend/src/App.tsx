@@ -26,76 +26,76 @@ import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 
 function AppRoutes() {
- const { user: apiUser } = useAuth();
- const { connect: connectWallet, disconnect: disconnectWallet, connecting } = useWallet();
+  const { user: apiUser, logout } = useAuth();
+  const { connect: connectWallet, disconnect: disconnectWallet, connecting } = useWallet();
 
- const user = apiUser ? {
- address: apiUser.sui_public_key || "0x0000000000000000000000000000000000000000",
- name: apiUser.full_name || apiUser.email?.split("@")[0] || "User",
- role: apiUser.role?.toLowerCase() as "farmer" | "logistics" | "admin" || "farmer",
- avatar: undefined,
- } : null;
+  const user = apiUser ? {
+    address: apiUser.sui_public_key || "0x0000000000000000000000000000000000000000",
+    name: apiUser.full_name || apiUser.email?.split("@")[0] || "User",
+    role: apiUser.role?.toLowerCase() as "farmer" | "logistics" | "admin" || "farmer",
+    avatar: undefined,
+  } : null;
 
- return (
- <BrowserRouter>
- <Routes>
- {/* Public pages */}
- <Route path="/" element={<HomePage />} />
- <Route path="/login" element={<LoginPage />} />
- <Route path="/register" element={<RegisterPage />} />
+  return (
+    <BrowserRouter>
+      <Routes>
+        {/* Public pages */}
+        <Route path="/" element={<HomePage />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/register" element={<RegisterPage />} />
 
- {/* Farmer routes */}
- <Route path="/farmer/*" element={
- <RoleGuard allowedRoles={[Role.FARMER]}>
- <DashboardLayout user={user} onConnectWallet={connectWallet} onDisconnectWallet={disconnectWallet} isConnecting={connecting}>
- <Routes>
- <Route path="dashboard" element={<FarmerDashboard />} />
- <Route path="telemetry" element={<TelemetryPage />} />
- <Route path="mint-batch" element={<MintBatchPage />} />
- <Route path="yield-prediction" element={<YieldPredictionPage />} />
- <Route path="batches" element={<BatchesPage />} />
- <Route path="batches/:id" element={<BatchesPage />} />
- <Route path="settings" element={<SettingsPage />} />
- <Route path="*" element={<Navigate to="dashboard" replace />} />
- </Routes>
- </DashboardLayout>
- </RoleGuard>
- } />
+        {/* Farmer routes */}
+        <Route path="/farmer/*" element={
+          <RoleGuard allowedRoles={[Role.FARMER]}>
+            <DashboardLayout user={user} onConnectWallet={connectWallet} onDisconnectWallet={disconnectWallet} onLogout={logout} isConnecting={connecting}>
+              <Routes>
+                <Route path="dashboard" element={<FarmerDashboard />} />
+                <Route path="telemetry" element={<TelemetryPage />} />
+                <Route path="mint-batch" element={<MintBatchPage />} />
+                <Route path="yield-prediction" element={<YieldPredictionPage />} />
+                <Route path="batches" element={<BatchesPage />} />
+                <Route path="batches/:id" element={<BatchesPage />} />
+                <Route path="settings" element={<SettingsPage />} />
+                <Route path="*" element={<Navigate to="dashboard" replace />} />
+              </Routes>
+            </DashboardLayout>
+          </RoleGuard>
+        } />
 
- {/* Logistics routes */}
- <Route path="/logistics/*" element={
- <RoleGuard allowedRoles={[Role.LOGISTICS]}>
- <DashboardLayout user={user} onConnectWallet={connectWallet} onDisconnectWallet={disconnectWallet} isConnecting={connecting}>
- <Routes>
- <Route path="dashboard" element={<LogisticsDashboard />} />
- <Route path="transfer" element={<TransferPage />} />
- <Route path="settings" element={<SettingsPage />} />
- <Route path="*" element={<Navigate to="dashboard" replace />} />
- </Routes>
- </DashboardLayout>
- </RoleGuard>
- } />
+        {/* Logistics routes */}
+        <Route path="/logistics/*" element={
+          <RoleGuard allowedRoles={[Role.LOGISTICS]}>
+            <DashboardLayout user={user} onConnectWallet={connectWallet} onDisconnectWallet={disconnectWallet} onLogout={logout} isConnecting={connecting}>
+              <Routes>
+                <Route path="dashboard" element={<LogisticsDashboard />} />
+                <Route path="transfer" element={<TransferPage />} />
+                <Route path="settings" element={<SettingsPage />} />
+                <Route path="*" element={<Navigate to="dashboard" replace />} />
+              </Routes>
+            </DashboardLayout>
+          </RoleGuard>
+        } />
 
- {/* Admin routes */}
- <Route path="/admin/*" element={
- <RoleGuard allowedRoles={[Role.ADMIN]}>
- <DashboardLayout user={user} onConnectWallet={connectWallet} onDisconnectWallet={disconnectWallet} isConnecting={connecting}>
- <Routes>
- <Route path="dashboard" element={<AdminDashboard />} />
- <Route path="users" element={<UsersPage />} />
- <Route path="audit-logs" element={<AuditLogsPage />} />
- <Route path="system-health" element={<SystemHealthPage />} />
- <Route path="settings" element={<SettingsPage />} />
- <Route path="*" element={<Navigate to="dashboard" replace />} />
- </Routes>
- </DashboardLayout>
- </RoleGuard>
- } />
+        {/* Admin routes */}
+        <Route path="/admin/*" element={
+          <RoleGuard allowedRoles={[Role.ADMIN]}>
+            <DashboardLayout user={user} onConnectWallet={connectWallet} onDisconnectWallet={disconnectWallet} onLogout={logout} isConnecting={connecting}>
+              <Routes>
+                <Route path="dashboard" element={<AdminDashboard />} />
+                <Route path="users" element={<UsersPage />} />
+                <Route path="audit-logs" element={<AuditLogsPage />} />
+                <Route path="system-health" element={<SystemHealthPage />} />
+                <Route path="settings" element={<SettingsPage />} />
+                <Route path="*" element={<Navigate to="dashboard" replace />} />
+              </Routes>
+            </DashboardLayout>
+          </RoleGuard>
+        } />
 
- <Route path="*" element={<Navigate to="/" replace />} />
- </Routes>
- </BrowserRouter>
- );
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
+    </BrowserRouter>
+  );
 }
 
 function App() {

@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
+import { ConnectButton } from '@mysten/dapp-kit';
 import { Atmosphere } from '../Atmosphere';
 import './DashboardLayout.css';
 
@@ -215,6 +216,7 @@ interface DashboardLayoutProps {
   user: User | null;
   onConnectWallet: () => void;
   onDisconnectWallet: () => void;
+  onLogout?: () => void;
   isConnecting: boolean;
   children: React.ReactNode;
 }
@@ -223,6 +225,7 @@ export function DashboardLayout({
   user,
   onConnectWallet,
   onDisconnectWallet,
+  onLogout,
   isConnecting,
   children,
 }: DashboardLayoutProps) {
@@ -278,8 +281,8 @@ export function DashboardLayout({
         </nav>
 
         {/* Footer / User info */}
-        <div className="sidebar-footer">
-          {user ? (
+        <div className="sidebar-footer space-y-2">
+          {user && (
             <div className="sidebar-user">
               <div className="sidebar-user-avatar">
                 {user.name.charAt(0).toUpperCase()}
@@ -292,23 +295,20 @@ export function DashboardLayout({
               </div>
               <button
                 className="sidebar-logout-btn"
-                onClick={onDisconnectWallet}
-                aria-label="Disconnect"
-                title="Disconnect wallet"
+                onClick={() => {
+                  if (onLogout) onLogout();
+                  else onDisconnectWallet();
+                }}
+                aria-label="Logout"
+                title="Logout from TerraNode"
               >
                 <LogoutIcon />
               </button>
             </div>
-          ) : (
-            <button
-              className="sidebar-connect-btn"
-              onClick={onConnectWallet}
-              disabled={isConnecting}
-            >
-              <WalletIcon />
-              {isConnecting ? 'Connecting…' : 'Connect Wallet'}
-            </button>
           )}
+          <div className="flex justify-center w-full">
+            <ConnectButton />
+          </div>
         </div>
       </aside>
 

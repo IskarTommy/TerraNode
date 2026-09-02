@@ -1,7 +1,6 @@
 import { createContext, useContext, useState, useCallback, useEffect, type ReactNode } from 'react';
-import { useSuiClient, useSignAndExecuteTransaction, useCurrentAccount } from '@mysten/dapp-kit';
+import { useSuiClient, useSignTransaction, useCurrentAccount } from '@mysten/dapp-kit';
 import { Transaction } from '@mysten/sui/transactions';
-import type { SuiJsonRpcClient } from '@mysten/sui/jsonRpc';
 
 interface WalletState {
   address: string | null;
@@ -29,9 +28,9 @@ export function WalletProvider({ children }: { children: ReactNode }) {
     network: 'testnet',
   });
 
-  const client = useSuiClient() as SuiJsonRpcClient;
+  const client = useSuiClient();
   const currentAccount = useCurrentAccount();
-  const { mutateAsync: signAndExecute } = useSignAndExecuteTransaction();
+  const { mutateAsync: signTransaction } = useSignTransaction();
 
   const refreshBalance = useCallback(async () => {
     if (!currentAccount?.address) return;
@@ -89,11 +88,20 @@ export function WalletProvider({ children }: { children: ReactNode }) {
 
   const executeTransaction = useCallback(
     async (tx: Transaction) => {
-      const result = await signAndExecute({ transaction: tx });
+      // Step 1: Sign only (wallet popup) — isolates the wallet from execution
+      const { bytes, signature } = await signTransaction({ transaction: tx });
+
+      // Step 2: Execute via RPC (no wallet involvement)
+      const result = await client.executeTransactionBlock({
+        transactionBlock: bytes,
+        signature,
+        options: { showEffects: true, showObjectChanges: true },
+      });
+
       await refreshBalance();
       return { digest: result.digest };
     },
-    [signAndExecute, refreshBalance]
+    [signTransaction, client, refreshBalance]
   );
 
   return (

@@ -9,8 +9,8 @@ import App from "./App";
 const queryClient = new QueryClient();
 
 const { networkConfig } = createNetworkConfig({
-  testnet: { url: "https://fullnode.testnet.sui.io:443", network: "testnet" as any },
-  mainnet: { url: "https://fullnode.mainnet.sui.io:443", network: "mainnet" as any },
+  testnet: { url: "https://testnet.sui.rpcpool.com", network: "testnet" as any },
+  mainnet: { url: "https://mainnet.sui.rpcpool.com", network: "mainnet" as any },
 });
 
 createRoot(document.getElementById("root")!).render(
