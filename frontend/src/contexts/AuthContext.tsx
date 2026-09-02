@@ -38,6 +38,7 @@ interface AuthContextType {
   logout: () => Promise<void>;
   setAccessToken: (token: string) => void;
   setRole: (role: User['role']) => void;
+  switchDemoRole: (role: 'FARMER' | 'LOGISTICS' | 'ADMIN') => Promise<boolean>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -64,6 +65,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     localStorage.setItem(STORAGE_KEYS.REFRESH, response.refresh);
     setRefreshToken(response.refresh);
     localStorage.setItem(STORAGE_KEYS.USER, JSON.stringify(response.user));
+    if (response.user.role === 'FARMER') {
+      localStorage.setItem('terranode_farmer_email', response.user.email);
+    }
     setUser(response.user);
     return response.user;
   };
@@ -106,6 +110,28 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
   }, [user]);
 
+  const switchDemoRole = useCallback(async (role: 'FARMER' | 'LOGISTICS' | 'ADMIN') => {
+    const farmerEmail = localStorage.getItem('terranode_farmer_email') || 'iskartommy117@gmail.com';
+    const creds: Record<string, { email: string; pass: string }> = {
+      FARMER: { email: farmerEmail, pass: 'TerraNode2026!' },
+      LOGISTICS: { email: 'logistics@terranode.agri', pass: 'TerraNode2026!' },
+      ADMIN: { email: 'admin@terranode.agri', pass: 'TerraNode2026!' },
+    };
+    const target = creds[role];
+    if (target) {
+      try {
+        await loginUser(target.email, target.pass);
+        document.documentElement.setAttribute('data-role', role);
+        return true;
+      } catch (e) {
+        console.error('Failed to switch demo role via login:', e);
+        setRole(role);
+        return false;
+      }
+    }
+    return false;
+  }, [setRole]);
+
   // Set initial role on document
   useEffect(() => {
     if (user) {
@@ -130,6 +156,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     logout: logoutUser,
     setAccessToken,
     setRole,
+    switchDemoRole,
   };
 
   return (

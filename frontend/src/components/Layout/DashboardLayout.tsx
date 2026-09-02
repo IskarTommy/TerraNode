@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import { ConnectButton } from '@mysten/dapp-kit';
 import { Atmosphere } from '../Atmosphere';
+import { useAuth } from '../../contexts/AuthContext';
 import './DashboardLayout.css';
 
 export type UserRole = 'farmer' | 'logistics' | 'admin';
@@ -230,6 +231,8 @@ export function DashboardLayout({
   children,
 }: DashboardLayoutProps) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const navigate = useNavigate();
+  const { switchDemoRole } = useAuth();
   const role: UserRole = user?.role || 'farmer';
 
   useEffect(() => {
@@ -281,7 +284,7 @@ export function DashboardLayout({
         </nav>
 
         {/* Footer / User info */}
-        <div className="sidebar-footer space-y-2">
+        <div className="sidebar-footer space-y-2.5">
           {user && (
             <div className="sidebar-user">
               <div className="sidebar-user-avatar">
@@ -306,7 +309,63 @@ export function DashboardLayout({
               </button>
             </div>
           )}
-          <div className="flex justify-center w-full">
+
+          {/* 1-Click Role Switcher */}
+          <div className="w-full px-0.5 pt-1">
+            <div className="flex items-center justify-between text-[10px] font-semibold text-fg-muted uppercase tracking-wider mb-1.5 px-1">
+              <span>Switch Portal</span>
+              <span className="text-emerald-400 font-bold capitalize">{role}</span>
+            </div>
+            <div className="grid grid-cols-3 gap-1 p-1 rounded-xl bg-bg-tertiary/70 border border-border-primary/80 text-[11px]">
+              <button
+                type="button"
+                onClick={async () => {
+                  await switchDemoRole('FARMER');
+                  navigate('/farmer/dashboard');
+                }}
+                className={`py-1 rounded-lg transition-all font-semibold text-center ${
+                  role === 'farmer'
+                    ? 'bg-emerald-500 text-slate-950 shadow-sm'
+                    : 'text-fg-secondary hover:text-fg-primary hover:bg-bg-secondary'
+                }`}
+                title="Switch to Farmer Portal"
+              >
+                Farmer
+              </button>
+              <button
+                type="button"
+                onClick={async () => {
+                  await switchDemoRole('LOGISTICS');
+                  navigate('/logistics/dashboard');
+                }}
+                className={`py-1 rounded-lg transition-all font-semibold text-center ${
+                  role === 'logistics'
+                    ? 'bg-cyan-500 text-slate-950 shadow-sm'
+                    : 'text-fg-secondary hover:text-fg-primary hover:bg-bg-secondary'
+                }`}
+                title="Switch to Logistics Carrier Portal"
+              >
+                Logistics
+              </button>
+              <button
+                type="button"
+                onClick={async () => {
+                  await switchDemoRole('ADMIN');
+                  navigate('/admin/dashboard');
+                }}
+                className={`py-1 rounded-lg transition-all font-semibold text-center ${
+                  role === 'admin'
+                    ? 'bg-purple-500 text-white shadow-sm'
+                    : 'text-fg-secondary hover:text-fg-primary hover:bg-bg-secondary'
+                }`}
+                title="Switch to Admin Portal"
+              >
+                Admin
+              </button>
+            </div>
+          </div>
+
+          <div className="flex justify-center w-full pt-1">
             <ConnectButton />
           </div>
         </div>

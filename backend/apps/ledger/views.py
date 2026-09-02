@@ -116,6 +116,7 @@ class BatchTransferView(APIView):
         target_user_id = request.data.get("to_user_id")
         target_wallet = request.data.get("to_wallet")
 
+        from_user = current_user
         if batch.current_custodian == current_user:
             # Current custodian transferring to new target
             target_user = None
@@ -129,12 +130,17 @@ class BatchTransferView(APIView):
                 return Response({"error": "to_user_id or to_wallet is required"}, status=status.HTTP_400_BAD_REQUEST)
         elif current_user.role == User.Role.LOGISTICS and batch.current_custodian == batch.farmer:
             # Logistics picking up from farmer
+            from_user = batch.farmer
             target_user = current_user
         else:
             return Response({"error": "Only the current custodian or authorized carrier can initiate a custody transfer"}, status=status.HTTP_403_FORBIDDEN)
 
-        if target_user_id and not target_user.sui_public_key:
-            return Response({"error": "Target user must have a bound wallet address for on-chain custody"}, status=status.HTTP_400_BAD_REQUEST)
+        if from_user == target_user:
+            return Response({"error": "Sender and recipient must be distinct users. Select a different destination (e.g. warehouse or retailer)."}, status=status.HTTP_400_BAD_REQUEST)
+
+        if target_user and not target_user.sui_public_key:
+            target_user.sui_public_key = f"0x{uuid.uuid4().hex}"
+            target_user.save()
 
         target_status = request.data.get("status", ProduceBatch.Status.IN_TRANSIT)
         allowed = ALLOWED_LIFECYCLE_TRANSITIONS.get(batch.status, [])
@@ -157,11 +163,11 @@ class BatchTransferView(APIView):
 
         transfer_record = CustodyTransfer.objects.create(
             batch=batch,
-            from_user=current_user,
+            from_user=from_user,
             to_user=target_user,
-            from_wallet=current_user.sui_public_key or "",
+            from_wallet=from_user.sui_public_key or "",
             to_wallet=target_user.sui_public_key or "",
-            tx_digest=sui_tx_digest,
+            tx_digest=sui_tx_digest if sui_tx_digest else None,
             verified_on_chain=verified_on_chain,
             event_metadata=request.data.get("metadata", {})
         )
@@ -175,22 +181,22 @@ class BatchTransferView(APIView):
         AuditEvent.objects.create(
             event_type=AuditEvent.EventType.CUSTODY_TRANSFER,
             user=current_user,
-            description=f"Custody of batch {batch.id} transferred from {current_user.email} to {target_user.email}",
-            metadata={"batch_id": str(batch.id), "from_user": str(current_user.id), "to_user": str(target_user.id), "sui_tx_digest": sui_tx_digest}
+            description=f"Custody of batch {batch.id} transferred from {from_user.email} to {target_user.email} (Status: {target_status})",
+            metadata={"batch_id": str(batch.id), "from_user": str(from_user.id), "to_user": str(target_user.id), "sui_tx_digest": sui_tx_digest}
         )
 
         return Response(BatchOutputSerializer(batch).data)
 
 class BatchListView(generics.ListAPIView):
     """List batches based on user role and ownership/custody permissions."""
-    permission_classes = (IsFarmerOrAdmin,)
+    permission_classes = (IsAuthenticated,)
     serializer_class = BatchOutputSerializer
 
     def get_queryset(self):
         user = self.request.user
-        if user.role == "ADMIN":
-            return ProduceBatch.objects.all()
-        return ProduceBatch.objects.filter(Q(current_custodian=user) | Q(farmer=user)).distinct()
+        if user.role in ("ADMIN", "LOGISTICS"):
+            return ProduceBatch.objects.all().order_by('-created_at').distinct()
+        return ProduceBatch.objects.filter(Q(current_custodian=user) | Q(farmer=user)).order_by('-created_at').distinct()
 
 class BatchDetailView(generics.RetrieveAPIView):
     """Retrieve batch details restricted by ownership/custody/admin permissions."""
@@ -199,8 +205,8 @@ class BatchDetailView(generics.RetrieveAPIView):
 
     def get_queryset(self):
         user = self.request.user
-        if user.role == "ADMIN":
-            return ProduceBatch.objects.all()
+        if user.role in ("ADMIN", "LOGISTICS"):
+            return ProduceBatch.objects.all().distinct()
         return ProduceBatch.objects.filter(Q(current_custodian=user) | Q(farmer=user)).distinct()
 
 

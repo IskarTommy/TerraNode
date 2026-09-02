@@ -191,7 +191,7 @@ export function FarmerDashboard() {
         {/* Yield Forecast */}
         <Card variant="glass" padding="md">
           <div className="flex items-center justify-between mb-2">
-            <h2 className="text-lg font-semibold text-fg-primary">AI Yield Forecast</h2>
+            <h2 className="text-lg font-semibold text-fg-primary">Agronomic Yield Forecast</h2>
             <Link className="text-xs font-semibold text-emerald-400 hover:underline" to="/farmer/yield-forecast">
               Full Projections →
             </Link>

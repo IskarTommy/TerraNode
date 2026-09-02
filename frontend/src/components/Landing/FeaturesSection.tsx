@@ -22,7 +22,7 @@ const FEATURES: Feature[] = [
   },
   {
     icon: "M7 17L17 7M17 7H7M17 7v10",
-    title: "AI Yield",
+    title: "Yield Forecasting",
     desc: "Weighted moving averages over 90 days of sensor data produce confidence-weighted harvest forecasts.",
     tag: "Analytics",
   },
