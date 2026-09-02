@@ -91,13 +91,15 @@ export function YieldPredictionChart({
 
       <div style={{ height }}>
         <ResponsiveContainer width="100%" height="100%">
-          <BarChart data={displayData} margin={{ top: 5, right: 16, left: 0, bottom: 0 }}>
+          <BarChart data={displayData} margin={{ top: 10, right: 20, left: 20, bottom: 0 }}>
             <CartesianGrid strokeDasharray="4 4" stroke="var(--chart-grid)" vertical={false} />
             <XAxis dataKey="year"
               tick={{ fill: 'var(--chart-axis)', fontSize: 12, fontFamily: 'var(--font-family-mono)' }}
               axisLine={{ stroke: 'var(--chart-grid)' }}
               tickLine={{ stroke: 'var(--chart-grid)' }} />
-            <YAxis tick={{ fill: 'var(--chart-axis)', fontSize: 12, fontFamily: 'var(--font-family-mono)' }}
+            <YAxis
+              width={65}
+              tick={{ fill: 'var(--chart-axis)', fontSize: 12, fontFamily: 'var(--font-family-mono)' }}
               axisLine={{ stroke: 'var(--chart-grid)' }}
               tickLine={{ stroke: 'var(--chart-grid)' }}
               tickFormatter={(v) => `${v.toFixed(1)} t/ha`} />

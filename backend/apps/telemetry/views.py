@@ -58,15 +58,19 @@ class TelemetryHistoryView(generics.ListAPIView):
             return EnvironmentalTelemetry.objects.all()
         return EnvironmentalTelemetry.objects.filter(farmer=user)
 
+from django.http import Http404
+
 class TelemetryLatestView(generics.RetrieveAPIView):
     permission_classes = (IsFarmerOrAdmin,)
     serializer_class = TelemetryOutputSerializer
 
     def get_object(self):
         user = self.request.user
-        if user.role == "ADMIN":
-            return EnvironmentalTelemetry.objects.latest('recorded_at')
-        return EnvironmentalTelemetry.objects.filter(farmer=user).latest('recorded_at')
+        qs = EnvironmentalTelemetry.objects.all() if user.role == "ADMIN" else EnvironmentalTelemetry.objects.filter(farmer=user)
+        try:
+            return qs.latest('recorded_at')
+        except EnvironmentalTelemetry.DoesNotExist:
+            raise Http404("No telemetry records found for this user.")
 
 class TelemetryAuditLogView(APIView):
     """Administrator cryptographic audit trail to verify hash integrity across all stored telemetry."""

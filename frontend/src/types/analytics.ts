@@ -5,6 +5,11 @@ export interface PredictionResult {
   historical_variance_index: number;
   data_points_analyzed: number;
   recommendation: string;
+  averages?: {
+    temp?: number | null;
+    moisture?: number | null;
+    ph?: number | null;
+  };
 }
 
 export interface TelemetrySummary {

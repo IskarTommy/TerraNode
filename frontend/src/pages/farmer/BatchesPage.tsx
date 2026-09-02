@@ -67,8 +67,8 @@ export function BatchesPage() {
           </Button>
         </div>
 
-        {isLoading && <p className="py-10 text-center text-fg-muted">Loading batches…</p>}
-        {isError && <p className="py-10 text-center text-red-400">Batches could not be loaded.</p>}
+        {isLoading && !data && <p className="py-10 text-center text-fg-muted">Loading batches…</p>}
+        {isError && !data && <p className="py-10 text-center text-red-400">Batches could not be loaded.</p>}
 
         <div className="space-y-3">
           {rows.map((batch) => (

@@ -53,6 +53,7 @@ function AppRoutes() {
                 <Route path="telemetry" element={<TelemetryPage />} />
                 <Route path="mint-batch" element={<MintBatchPage />} />
                 <Route path="yield-prediction" element={<YieldPredictionPage />} />
+                <Route path="yield-forecast" element={<YieldPredictionPage />} />
                 <Route path="batches" element={<BatchesPage />} />
                 <Route path="batches/:id" element={<BatchesPage />} />
                 <Route path="settings" element={<SettingsPage />} />

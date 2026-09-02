@@ -49,7 +49,7 @@ export function TelemetryPage() {
 
   const fetchTelemetry = useCallback(async () => {
     try {
-      const res = await telemetryApi.getHistory();
+      const res = await telemetryApi.getHistory({ page_size: 100 });
       if (res.results && res.results.length > 0) {
         setLiveRecords(res.results);
       }
