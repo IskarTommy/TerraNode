@@ -976,6 +976,12 @@ a:focus-visible {
   box-shadow: var(--shadow-focus);
   border-radius: var(--radius-sm);
 }
+a.bg-emerald-500,
+a[class*="bg-emerald-500"],
+a.bg-primary,
+.text-slate-950 {
+  color: #020617 !important;
+}
 
 /* Typography Utilities */
 .text-display {

@@ -38,8 +38,8 @@ export function BatchesPage() {
           <h1 className="text-3xl font-bold text-fg-primary">My Batches</h1>
           <p className="mt-1 text-sm text-fg-muted">Verifiable agricultural lots anchored to the Sui distributed ledger.</p>
         </div>
-        <Link className="rounded-xl bg-emerald-500 px-4 py-2.5 text-sm font-semibold text-slate-950 hover:bg-emerald-400 transition" to="/farmer/mint-batch">
-          + Mint New Batch
+        <Link className="rounded-xl bg-emerald-500 px-4 py-2.5 text-sm font-bold text-slate-950 hover:bg-emerald-400 transition-colors shadow-sm inline-flex items-center gap-1.5" to="/farmer/mint-batch">
+          <span>+</span> Mint New Batch
         </Link>
       </div>
 

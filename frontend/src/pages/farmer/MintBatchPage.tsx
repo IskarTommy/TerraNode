@@ -88,6 +88,13 @@ const SOIL_YIELD_MULTIPLIERS: Record<string, number> = {
   chalky: 0.80,
 };
 
+const UNIT_TO_KG: Record<string, number> = {
+  kg: 1,
+  tonnes: 1000,
+  pounds: 0.45359237,
+  bushels: 25.4,
+};
+
 export function MintBatchPage() {
   const [step, setStep] = useState(1);
   const [formData, setFormData] = useState({
@@ -123,6 +130,23 @@ export function MintBatchPage() {
     }));
   };
 
+  // Handle unit selection with automatic quantity conversion
+  const handleUnitChange = (newUnit: string) => {
+    const oldUnit = formData.unit;
+    if (oldUnit === newUnit) return;
+    const oldFactor = UNIT_TO_KG[oldUnit] || 1;
+    const newFactor = UNIT_TO_KG[newUnit] || 1;
+    const currentVal = parseFloat(formData.quantity);
+    if (!isNaN(currentVal) && currentVal > 0) {
+      const weightInKg = currentVal * oldFactor;
+      const convertedVal = weightInKg / newFactor;
+      const rounded = convertedVal >= 100 ? Math.round(convertedVal) : Math.round(convertedVal * 100) / 100;
+      setFormData(prev => ({ ...prev, unit: newUnit, quantity: rounded.toString() }));
+    } else {
+      setFormData(prev => ({ ...prev, unit: newUnit }));
+    }
+  };
+
   // Auto-calculation effect when cropType, plantedDate, area, or soilType change
   useEffect(() => {
     const params = GHANA_CROP_PARAMS[formData.cropType];
@@ -143,8 +167,11 @@ export function MintBatchPage() {
     if (areaNum > 0) {
       const soilMult = SOIL_YIELD_MULTIPLIERS[formData.soilType] || 1.0;
       const calculatedKg = Math.round(areaNum * params.baseYieldKgPerHa * soilMult);
-      autoYield = calculatedKg.toString();
-      note = `Auto-calculated: ~${calculatedKg.toLocaleString()} kg for ${areaNum} ha of ${formData.cropType.toUpperCase()} on ${formData.soilType ? formData.soilType.toUpperCase() : 'standard'} soil in Ghana.`;
+      const unitFactor = UNIT_TO_KG[formData.unit] || 1;
+      const displayQty = (calculatedKg / unitFactor);
+      const roundedDisplay = displayQty >= 100 ? Math.round(displayQty) : Math.round(displayQty * 100) / 100;
+      autoYield = roundedDisplay.toString();
+      note = `Total harvest estimate: ~${calculatedKg.toLocaleString()} kg for ${areaNum} ha of ${formData.cropType.toUpperCase()} on ${formData.soilType ? formData.soilType.toUpperCase() : 'standard'} soil in Ghana. You can adjust the batch quantity below.`;
     }
 
     setFormData(prev => ({
@@ -156,7 +183,11 @@ export function MintBatchPage() {
   }, [formData.cropType, formData.plantedDate, formData.area, formData.soilType]);
 
   const handleSelectChange = (field: string) => (newValue: string) => {
-    setFormData(prev => ({ ...prev, [field]: newValue }));
+    if (field === 'unit') {
+      handleUnitChange(newValue);
+    } else {
+      setFormData(prev => ({ ...prev, [field]: newValue }));
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -164,10 +195,16 @@ export function MintBatchPage() {
     setSubmitting(true);
     
     try {
+      // Calculate normalized weight in kg and grams
+      const rawQuantity = Number(formData.quantity) || 0;
+      const unitFactor = UNIT_TO_KG[formData.unit] || 1;
+      const weightInKg = Math.round(rawQuantity * unitFactor * 100) / 100;
+      const weightGrams = BigInt(Math.max(1, Math.round(weightInKg * 1000)));
+
       // 1. Prepare batch on backend
       const prepareRes = await ledgerApi.prepare({
         crop_type: formData.cropType,
-        weight_kg: Number(formData.quantity) || 0,
+        weight_kg: weightInKg,
       });
 
       let finalTxHash = '';
@@ -179,8 +216,6 @@ export function MintBatchPage() {
         tx.setGasBudget(10_000_000);
 
         const PACKAGE_ID = import.meta.env.VITE_SUI_PACKAGE_ID || "0x72806395d9677780d633067dcbefd56bf67740d0e8d254700c790dae626e834c";
-
-        const weightGrams = BigInt(Math.max(1, Math.round((Number(formData.quantity) || 100) * 1000)));
         const hashBytes = Array.from(new TextEncoder().encode(prepareRes.data_integrity_hash || "no-telemetry-hash"));
 
         tx.moveCall({
