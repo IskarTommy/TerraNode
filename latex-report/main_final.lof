@@ -10,18 +10,11 @@
 \contentsline {figure}{\numberline {3.6}{\ignorespaces Batch Lifecycle Sequence Diagram}}{26}{figure.caption.15}%
 \contentsline {figure}{\numberline {3.7}{\ignorespaces Authentication Flow Diagram}}{29}{figure.caption.16}%
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {4.1}{\ignorespaces TerraNode Public Landing Page}}{34}{figure.caption.19}%
-\contentsline {figure}{\numberline {4.2}{\ignorespaces User Registration Interface with Role Selection}}{34}{figure.caption.20}%
-\contentsline {figure}{\numberline {4.3}{\ignorespaces Authentication Interface Supporting Email and Sui Wallet Login}}{35}{figure.caption.21}%
-\contentsline {figure}{\numberline {4.4}{\ignorespaces Farmer Dashboard Displaying Telemetry Summaries and Batch Status}}{35}{figure.caption.22}%
-\contentsline {figure}{\numberline {4.5}{\ignorespaces Environmental Telemetry Submission and Hash Verification Interface}}{36}{figure.caption.23}%
-\contentsline {figure}{\numberline {4.6}{\ignorespaces Produce Batch On-Chain Minting Interface}}{36}{figure.caption.24}%
-\contentsline {figure}{\numberline {4.7}{\ignorespaces Logistics Handler Dashboard for Supply Chain Custody}}{37}{figure.caption.25}%
-\contentsline {figure}{\numberline {4.8}{\ignorespaces Produce Custody Transfer and Blockchain Verification Interface}}{37}{figure.caption.26}%
-\contentsline {figure}{\numberline {4.9}{\ignorespaces Administrator System Monitoring Dashboard}}{38}{figure.caption.27}%
-\contentsline {figure}{\numberline {4.10}{\ignorespaces Chronological Audit Log and System Activity Interface}}{38}{figure.caption.28}%
-\contentsline {figure}{\numberline {4.11}{\ignorespaces Predictive Analytics Engine Architecture and Decision Workflow}}{40}{figure.caption.29}%
-\contentsline {figure}{\numberline {4.12}{\ignorespaces Yield Prediction and Decision Support Interface}}{40}{figure.caption.30}%
-\contentsline {figure}{\numberline {4.13}{\ignorespaces TerraNode Cryptographic Processing and Blockchain Anchoring Pipeline}}{42}{figure.caption.31}%
-\contentsline {figure}{\numberline {4.14}{\ignorespaces Comparative Performance Analysis of Agricultural Blockchain Deployments}}{44}{figure.caption.35}%
+\contentsline {figure}{\numberline {4.1}{\ignorespaces Farmer Operational Dashboard Displaying Real-Time Micro-Climate Telemetry and Produce Batches}}{34}{figure.caption.19}%
+\contentsline {figure}{\numberline {4.2}{\ignorespaces Produce Custody Transfer and Blockchain Verification Interface}}{35}{figure.caption.20}%
+\contentsline {figure}{\numberline {4.3}{\ignorespaces Chronological Cryptographic Audit Log and System Activity Interface}}{35}{figure.caption.21}%
+\contentsline {figure}{\numberline {4.4}{\ignorespaces Predictive Analytics Engine Architecture and Decision Workflow}}{37}{figure.caption.22}%
+\contentsline {figure}{\numberline {4.5}{\ignorespaces Yield Forecast, Soil Suitability Matrix, and Decision Support Interface}}{37}{figure.caption.23}%
+\contentsline {figure}{\numberline {4.6}{\ignorespaces TerraNode Cryptographic Processing and Blockchain Anchoring Pipeline}}{39}{figure.caption.24}%
+\contentsline {figure}{\numberline {4.7}{\ignorespaces Comparative Performance Analysis of Agricultural Blockchain Deployments}}{41}{figure.caption.28}%
 \addvspace {10\p@ }

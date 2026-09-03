@@ -72,3 +72,8 @@ export const getProfile = async () => {
   const response = await apiClient.get<User>("/auth/profile/");
   return response.data;
 };
+
+export const updateProfile = async (data: Partial<Pick<User, 'full_name' | 'sui_public_key'>>) => {
+  const response = await apiClient.patch<User>("/auth/profile/", data);
+  return response.data;
+};

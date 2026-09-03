@@ -1,3 +1,4 @@
+import uuid
 from rest_framework import generics, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -121,11 +122,18 @@ class BatchTransferView(APIView):
             # Current custodian transferring to new target
             target_user = None
             if target_user_id:
-                target_user = get_object_or_404(User, id=target_user_id)
+                try:
+                    target_user = User.objects.filter(id=target_user_id).first()
+                except (ValueError, Exception):
+                    target_user = None
+                if not target_user and target_wallet:
+                    target_user = User.objects.filter(sui_public_key__iexact=target_wallet).first()
+                if not target_user:
+                    target_user = User.objects.filter(role=User.Role.ADMIN).first()
             elif target_wallet:
                 target_user = User.objects.filter(sui_public_key__iexact=target_wallet).first()
                 if not target_user:
-                    return Response({"error": "Target wallet address is not registered to an authorized user"}, status=status.HTTP_400_BAD_REQUEST)
+                    target_user = User.objects.filter(role=User.Role.ADMIN).first()
             else:
                 return Response({"error": "to_user_id or to_wallet is required"}, status=status.HTTP_400_BAD_REQUEST)
         elif current_user.role == User.Role.LOGISTICS and batch.current_custodian == batch.farmer:
@@ -138,9 +146,16 @@ class BatchTransferView(APIView):
         if from_user == target_user:
             return Response({"error": "Sender and recipient must be distinct users. Select a different destination (e.g. warehouse or retailer)."}, status=status.HTTP_400_BAD_REQUEST)
 
-        if target_user and not target_user.sui_public_key:
-            target_user.sui_public_key = f"0x{uuid.uuid4().hex}"
-            target_user.save()
+        if target_user:
+            if target_wallet and target_wallet.startswith("0x"):
+                target_user.sui_public_key = target_wallet
+                target_user.save()
+            elif not target_user.sui_public_key:
+                if current_user.role == User.Role.LOGISTICS and target_user == current_user:
+                    target_user.sui_public_key = f"0x{uuid.uuid4().hex}"
+                    target_user.save()
+                else:
+                    return Response({"error": "Target user has no registered Sui wallet address."}, status=status.HTTP_400_BAD_REQUEST)
 
         target_status = request.data.get("status", ProduceBatch.Status.IN_TRANSIT)
         allowed = ALLOWED_LIFECYCLE_TRANSITIONS.get(batch.status, [])
@@ -151,9 +166,10 @@ class BatchTransferView(APIView):
 
         verified_on_chain = False
         if sui_tx_digest:
+            signer_key = current_user.sui_public_key or from_user.sui_public_key
             rpc_res = verify_sui_transaction_on_rpc(
                 tx_digest=sui_tx_digest,
-                expected_sender=current_user.sui_public_key,
+                expected_sender=signer_key,
                 expected_function="transfer_custody"
             )
             if rpc_res["verified"]:
@@ -166,8 +182,8 @@ class BatchTransferView(APIView):
             from_user=from_user,
             to_user=target_user,
             from_wallet=from_user.sui_public_key or "",
-            to_wallet=target_user.sui_public_key or "",
-            tx_digest=sui_tx_digest if sui_tx_digest else None,
+            to_wallet=target_wallet if (target_wallet and target_wallet.startswith("0x")) else (target_user.sui_public_key or ""),
+            tx_digest=sui_tx_digest or "",
             verified_on_chain=verified_on_chain,
             event_metadata=request.data.get("metadata", {})
         )
@@ -194,9 +210,18 @@ class BatchListView(generics.ListAPIView):
 
     def get_queryset(self):
         user = self.request.user
-        if user.role in ("ADMIN", "LOGISTICS"):
+        farmer_id = self.request.query_params.get("farmer_id")
+
+        if user.role == "LOGISTICS":
             return ProduceBatch.objects.all().order_by('-created_at').distinct()
-        return ProduceBatch.objects.filter(Q(current_custodian=user) | Q(farmer=user)).order_by('-created_at').distinct()
+
+        if user.role == "ADMIN":
+            if farmer_id:
+                return ProduceBatch.objects.filter(farmer_id=farmer_id).order_by('-created_at').distinct()
+            return ProduceBatch.objects.all().order_by('-created_at').distinct()
+
+        # For FARMER role: strictly ONLY return crops where this farmer is the origin creator
+        return ProduceBatch.objects.filter(farmer=user).order_by('-created_at').distinct()
 
 class BatchDetailView(generics.RetrieveAPIView):
     """Retrieve batch details restricted by ownership/custody/admin permissions."""
@@ -207,7 +232,7 @@ class BatchDetailView(generics.RetrieveAPIView):
         user = self.request.user
         if user.role in ("ADMIN", "LOGISTICS"):
             return ProduceBatch.objects.all().distinct()
-        return ProduceBatch.objects.filter(Q(current_custodian=user) | Q(farmer=user)).distinct()
+        return ProduceBatch.objects.filter(farmer=user).distinct()
 
 
 class BatchTransferHistoryView(generics.ListAPIView):
@@ -217,7 +242,7 @@ class BatchTransferHistoryView(generics.ListAPIView):
     def get_queryset(self):
         batch = get_object_or_404(ProduceBatch, pk=self.kwargs['pk'])
         user = self.request.user
-        if user.role != 'ADMIN' and user not in (batch.farmer, batch.current_custodian):
+        if user.role not in ('ADMIN', 'LOGISTICS') and user not in (batch.farmer, batch.current_custodian):
             return CustodyTransfer.objects.none()
         return batch.transfers.select_related('from_user', 'to_user').all()
 

@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider } from "./contexts/AuthContext";
 import { WalletProvider } from "./contexts/WalletContext";
@@ -26,11 +27,17 @@ import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 
 function AppRoutes() {
-  const { user: apiUser, logout } = useAuth();
-  const { connect: connectWallet, disconnect: disconnectWallet, connecting } = useWallet();
+  const { user: apiUser, logout, updateUserWallet } = useAuth();
+  const { connect: connectWallet, disconnect: disconnectWallet, connecting, address: walletAddress } = useWallet();
+
+  useEffect(() => {
+    if (apiUser && walletAddress && apiUser.sui_public_key !== walletAddress) {
+      updateUserWallet(walletAddress);
+    }
+  }, [apiUser, walletAddress, updateUserWallet]);
 
   const user = apiUser ? {
-    address: apiUser.sui_public_key || "0x0000000000000000000000000000000000000000",
+    address: walletAddress || apiUser.sui_public_key || "0x0000000000000000000000000000000000000000",
     name: apiUser.full_name || apiUser.email?.split("@")[0] || "User",
     role: apiUser.role?.toLowerCase() as "farmer" | "logistics" | "admin" || "farmer",
     avatar: undefined,

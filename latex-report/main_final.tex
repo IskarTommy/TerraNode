@@ -23,7 +23,11 @@
 \usepackage{listings}       % Code listings
 \usepackage{xcolor}         % Colour definitions for listings
 \usepackage{algorithm2e}    % Algorithm pseudocode
-\usepackage[hidelinks]{hyperref} % Clickable cross-refs (no coloured boxes)
+\usepackage[hidelinks]{hyperref}
+\hypersetup{
+    linktoc=all
+}
+\newcommand{\figref}[1]{\hyperref[#1]{Figure~\ref*{#1}}}
 \usepackage{amsmath}        % Mathematical formulae
 \usepackage{enumitem}       % List customisation
 \setlist[enumerate,1]{label=(\roman*),leftmargin=2em}
@@ -183,7 +187,7 @@
     
     \vspace{1.5cm}
     
-    {\fontsize{12pt}{18pt}\selectfont in partial fulfillment for the award of the degree of\par}
+    {\fontsize{12pt}{18pt}\selectfont\textit{in partial fulfillment for the award of the degree of}\par}
     
     \vspace{0.4cm}
     
@@ -191,7 +195,7 @@
     
     \vspace{0.4cm}
     
-    {\fontsize{12pt}{18pt}\selectfont in\par}
+    {\fontsize{12pt}{18pt}\selectfont\textit{in}\par}
     
     \vspace{0.4cm}
     
@@ -214,39 +218,63 @@
 
 % ─────────────────── Declaration ──────────────────────────────
 \chapter*{DECLARATION}
-\addcontentsline{toc}{chapter}{DECLARATION}
+\addcontentsline{toc}{chapter}{Declaration}
+
 \doublespacing
 
-I, KASSIM ISKANDA DEISHINI (20230404113), hereby declare that this project report titled ``\textit{TERRANODE: A BLOCKCHAIN-BASED SMART FARM SECURITY FRAMEWORK}'' is my original research work. It has not been presented to any other university or institution of higher learning for the award of any degree. All works and publications by other authors cited herein have been fully referenced.
+I, KASSIM ISKANDA DEISHINI, hereby state that this research report titled ``\textit{TERRANODE: A BLOCKCHAIN-BASED SMART FARM SECURITY FRAMEWORK}'' is my original research work. It has not been presented to any other University or higher learning institution for any award. Works by other authors have been clearly referenced.
 
-\vspace{2.0cm}
+\vspace{2cm}
 
 \noindent
-\begin{tabular}{@{}p{0.45\textwidth}@{\hspace{0.1\textwidth}}p{0.45\textwidth}@{}}
-Signature: \dotfill & Date: \dotfill \\[0.6cm]
-\multicolumn{2}{@{}l}{KASSIM ISKANDA DEISHINI} \\
-\multicolumn{2}{@{}l}{(20230404113)} \\
-\end{tabular}
+Signature: \makebox[2in]{\dotfill} \hspace{1cm} Date: \makebox[2in]{\dotfill}
+
+\vspace{0.6cm}
+
+\noindent
+KASSIM ISKANDA DEISHINI\\
+(20230404113)
 
 % ─────────────────── Certification ────────────────────────────
 \newpage
 \chapter*{CERTIFICATION}
-\addcontentsline{toc}{chapter}{CERTIFICATION}
-\doublespacing
+\addcontentsline{toc}{chapter}{Certification}
 
-Certified that this project report ``\textit{TERRANODE: A BLOCKCHAIN-BASED SMART FARM SECURITY FRAMEWORK}'' is the bonafide work of KASSIM ISKANDA DEISHINI (20230404113) carried out under my supervision in the Department of Computer Science, School of Computing and Information Sciences, University of Technology and Applied Sciences.
+\onehalfspacing
 
-\vspace{1.8cm}
+Certified that this project report ``\textit{TERRANODE: A BLOCKCHAIN-BASED SMART FARM SECURITY FRAMEWORK}'' is the authentic work of KASSIM ISKANDA DEISHINI (20230404113) who carried out the project work under my supervision.
+
+\vspace{1.2cm}
 
 \noindent
-\begin{tabular}{@{}p{0.45\textwidth}@{\hspace{0.1\textwidth}}p{0.45\textwidth}@{}}
-Signature: \dotfill & Signature: \dotfill \\[0.4cm]
-Date: \dotfill & Date: \dotfill \\[0.6cm]
-PROF. EDWARD Y. BAAGYERE & DR. MOSES A. AGEBURE \\
-SUPERVISOR & HEAD OF DEPARTMENT \\[0.2cm]
-Dean, School of Computing and Information Sciences & Department of Computer Science \\
-University of Technology and Applied Sciences & University of Technology and Applied Sciences \\
-\end{tabular}
+SUPERVISOR
+
+\vspace{0.6cm}
+
+\noindent
+Signature: \makebox[2in]{\dotfill} \hspace{1cm} Date: \makebox[2in]{\dotfill}
+
+\vspace{0.3cm}
+
+\noindent
+PROF. EDWARD YELLAKUOR BAAGYERE\\
+(Dean, School of Computing and Information Sciences)
+
+\vspace{1.2cm}
+
+\noindent
+HEAD OF DEPARTMENT
+
+\vspace{0.6cm}
+
+\noindent
+Signature: \makebox[2in]{\dotfill} \hspace{1cm} Date: \makebox[2in]{\dotfill}
+
+\vspace{0.3cm}
+
+\noindent
+DR. MOSES APAMBILA AGEBURE\\
+(Computer Science Department)
 
 % ─────────────────── Acknowledgment ───────────────────────────
 \newpage

@@ -1,5 +1,5 @@
-\contentsline {chapter}{DECLARATION}{ii}{chapter*.1}%
-\contentsline {chapter}{CERTIFICATION}{iii}{chapter*.2}%
+\contentsline {chapter}{Declaration}{ii}{chapter*.1}%
+\contentsline {chapter}{Certification}{iii}{chapter*.2}%
 \contentsline {chapter}{ACKNOWLEDGMENT}{iv}{chapter*.3}%
 \contentsline {chapter}{DEDICATION}{v}{chapter*.4}%
 \contentsline {chapter}{ABSTRACT}{vi}{chapter*.5}%
@@ -62,18 +62,18 @@
 \contentsline {section}{\numberline {4.1}Introduction}{32}{section.4.1}%
 \contentsline {section}{\numberline {4.2}Research Results}{32}{section.4.2}%
 \contentsline {subsection}{\numberline {4.2.1}Research Objective One (1): Web-Based Agricultural Data Management Platform}{32}{subsection.4.2.1}%
-\contentsline {subsection}{\numberline {4.2.2}Research Objective Two (2): Predictive Analytics Module for Crop Yield Forecasting}{38}{subsection.4.2.2}%
-\contentsline {subsection}{\numberline {4.2.3}Research Objective Three (3): Blockchain-Based Security and Cryptographic Integrity Mechanisms}{41}{subsection.4.2.3}%
-\contentsline {subsection}{\numberline {4.2.4}Research Objective Four (4): System Performance and Comprehensive Evaluation}{45}{subsection.4.2.4}%
-\contentsline {section}{\numberline {4.3}Discussion of Research Findings}{49}{section.4.3}%
-\contentsline {section}{\numberline {4.4}Chapter Summary}{49}{section.4.4}%
-\contentsline {chapter}{\numberline {5}SUMMARY, CONCLUSION, AND RECOMMENDATIONS}{50}{chapter.5}%
-\contentsline {section}{\numberline {5.1}Introduction}{50}{section.5.1}%
-\contentsline {section}{\numberline {5.2}Summary of Findings}{50}{section.5.2}%
-\contentsline {section}{\numberline {5.3}Conclusion}{51}{section.5.3}%
-\contentsline {section}{\numberline {5.4}Recommendations for Future Work}{52}{section.5.4}%
-\contentsline {chapter}{REFERENCES}{54}{chapter*.40}%
-\contentsline {chapter}{APPENDIX A:\hskip 1em\relax CODE LISTINGS}{56}{appendix*.41}%
-\contentsline {section}{\numberline {A.1}SHA-256 Data Integrity Hash Generation}{56}{appendix.Alph0.1}%
-\contentsline {section}{\numberline {A.2}Sui Ed25519 Signature Verification}{56}{appendix.Alph0.2}%
-\contentsline {section}{\numberline {A.3}Crop Yield Prediction Service}{57}{appendix.Alph0.3}%
+\contentsline {subsection}{\numberline {4.2.2}Research Objective Two (2): Predictive Analytics Module for Crop Yield Forecasting}{35}{subsection.4.2.2}%
+\contentsline {subsection}{\numberline {4.2.3}Research Objective Three (3): Blockchain-Based Security and Cryptographic Integrity Mechanisms}{38}{subsection.4.2.3}%
+\contentsline {subsection}{\numberline {4.2.4}Research Objective Four (4): System Performance and Comprehensive Evaluation}{42}{subsection.4.2.4}%
+\contentsline {section}{\numberline {4.3}Discussion of Research Findings}{46}{section.4.3}%
+\contentsline {section}{\numberline {4.4}Chapter Summary}{46}{section.4.4}%
+\contentsline {chapter}{\numberline {5}SUMMARY, CONCLUSION, AND RECOMMENDATIONS}{47}{chapter.5}%
+\contentsline {section}{\numberline {5.1}Introduction}{47}{section.5.1}%
+\contentsline {section}{\numberline {5.2}Summary of Findings}{47}{section.5.2}%
+\contentsline {section}{\numberline {5.3}Conclusion}{48}{section.5.3}%
+\contentsline {section}{\numberline {5.4}Recommendations for Future Work}{49}{section.5.4}%
+\contentsline {chapter}{REFERENCES}{51}{chapter*.33}%
+\contentsline {chapter}{APPENDIX A:\hskip 1em\relax CODE LISTINGS}{53}{appendix*.34}%
+\contentsline {section}{\numberline {A.1}SHA-256 Data Integrity Hash Generation}{53}{appendix.Alph0.1}%
+\contentsline {section}{\numberline {A.2}Sui Ed25519 Signature Verification}{53}{appendix.Alph0.2}%
+\contentsline {section}{\numberline {A.3}Crop Yield Prediction Service}{54}{appendix.Alph0.3}%

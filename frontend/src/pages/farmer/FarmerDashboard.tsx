@@ -1,10 +1,12 @@
 import { Link } from 'react-router-dom';
 import { Card } from '../../components/Common/Card';
 import { useBatches, useLatestTelemetry, useYieldPrediction } from '../../hooks/useDashboardQueries';
+import { useAuth } from '../../contexts/AuthContext';
 
 export function FarmerDashboard() {
+  const { user } = useAuth();
   const telemetry = useLatestTelemetry();
-  const batches = useBatches({ page_size: 5 });
+  const batches = useBatches({ page_size: 5, ...(user?.id ? { farmer_id: user.id } : {}) });
   const prediction = useYieldPrediction();
   const latest = telemetry.data;
 

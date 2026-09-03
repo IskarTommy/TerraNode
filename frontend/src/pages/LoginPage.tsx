@@ -78,8 +78,14 @@ export default function LoginPage() {
     setError("");
     setLoading(true);
     try {
-      await login(email, password);
-      navigate("/farmer/dashboard");
+      const loggedUser = await login(email, password);
+      if (loggedUser?.role === "LOGISTICS") {
+        navigate("/logistics/dashboard");
+      } else if (loggedUser?.role === "ADMIN") {
+        navigate("/admin/dashboard");
+      } else {
+        navigate("/farmer/dashboard");
+      }
     } catch (err) {
       setError(err instanceof Error ? err.message : "Login failed. Please try again.");
     } finally {

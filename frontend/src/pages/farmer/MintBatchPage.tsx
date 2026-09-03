@@ -229,9 +229,10 @@ export function MintBatchPage() {
 
         // 3. Sign and execute on-chain — wallet popup opens here
         try {
-          const { digest } = await signAndExecute(tx);
-          finalTxHash = digest;
-          suiObjectId = digest;
+          const res = await signAndExecute(tx);
+          finalTxHash = res.digest;
+          const createdChange = res.objectChanges?.find((c: any) => c.type === 'created' && (c.objectType?.includes('ProduceBatch') || c.objectType?.includes('agri_ledger')));
+          suiObjectId = (createdChange as any)?.objectId || res.effects?.created?.[0]?.reference?.objectId || '';
         } catch (walletErr: any) {
           console.error('Wallet error details:', walletErr);
           const errMsg = walletErr?.message || String(walletErr);
@@ -564,13 +565,18 @@ export function MintBatchPage() {
                 </div>
                 <h3 className="text-heading-sm font-semibold text-fg-primary mb-2">Batch Minted Successfully!</h3>
                 <p className="text-body text-fg-muted mb-4">Your crop batch has been recorded on the Sui blockchain.</p>
-                <div className="bg-bg-tertiary/50 border border-border-primary rounded-xl p-4 text-left max-w-md mx-auto">
-                  <p className="text-body-xs text-fg-muted mb-1">Transaction Hash</p>
-                  <p className="font-mono text-body-sm text-fg-primary break-all">{txHash}</p>
-                  <div className="flex items-center gap-2 mt-3">
-                    <Button variant="ghost" size="icon" leftIcon={<svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>} />
-                    <Button variant="ghost" size="icon" leftIcon={<svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.766 15.225a.75.75 0 01.044 1.052l-4.5 4.5a.75.75 0 01-1.06-.052l-2.25-2.25a.75.75 0 011.06-1.06l1.72 1.72 3.5-3.5a.75.75 0 111.06 1.06l-2.25 2.25z" /></svg>} />
-                    <Button variant="ghost" size="icon" leftIcon={<svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" /></svg>} />
+                <div className="bg-bg-tertiary/50 border border-border-primary rounded-xl p-4 text-left max-w-md mx-auto space-y-2">
+                  <div>
+                    <p className="text-body-xs text-fg-muted mb-0.5">Sui Transaction Digest</p>
+                    <a
+                      href={`https://suiscan.xyz/testnet/tx/${txHash}`}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="font-mono text-body-sm text-cyan-400 hover:underline break-all inline-flex items-center gap-1"
+                    >
+                      <span>{txHash}</span>
+                      <span>↗</span>
+                    </a>
                   </div>
                 </div>
                 <div className="flex justify-center gap-3 mt-6">

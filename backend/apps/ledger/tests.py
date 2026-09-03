@@ -295,10 +295,10 @@ class BatchViewTests(TestCase):
         list_resp = self.client.get(self.list_url, format='json')
         self.assertEqual(list_resp.status_code, status.HTTP_200_OK)
         self.assertEqual(len(list_resp.data['results']), 1)
-        # Logistics cannot list (IsFarmerOrAdmin)
+        # Logistics can list shipments
         self._authenticate(self.logistics)
         list_resp = self.client.get(self.list_url, format='json')
-        self.assertEqual(list_resp.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(list_resp.status_code, status.HTTP_200_OK)
 
 class BatchServiceTests(TestCase):
     def setUp(self):

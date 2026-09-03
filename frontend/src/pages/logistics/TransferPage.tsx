@@ -3,12 +3,13 @@ import { Button } from '../../components/Common/Button';
 import { Input } from '../../components/Common/Input';
 import { Select } from '../../components/Common/Input';
 import { cn } from '../../utils/cn';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Transaction } from '@mysten/sui/transactions';
 import { useWallet } from '../../contexts/WalletContext';
+import { useAuth } from '../../contexts/AuthContext';
 import { ledgerApi } from '../../api/ledger';
 import { useBatches } from '../../hooks/useDashboardQueries';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 
 const CUSTODY_TYPES = [
   { value: 'transport', label: 'In Transit (Transport)' },
@@ -19,19 +20,23 @@ const CUSTODY_TYPES = [
 
 export function TransferPage() {
   const [step, setStep] = useState(1);
+  const [searchParams] = useSearchParams();
+  const queryBatchId = searchParams.get('batch');
   const { data: batchesData, refetch } = useBatches({ page_size: 100 });
   const batches = batchesData?.results ?? [];
+  const { user } = useAuth();
+  const { connected, address: walletAddress, signAndExecute } = useWallet();
 
   const [formData, setFormData] = useState({
     batchId: '',
-    custodyType: 'transport',
-    fromParty: 'Farmer Tommy (iskartommy117@gmail.com)',
-    toParty: '18cde67b-31e1-46ac-ae2a-d487c54103f9', // AgriTransit Logistics ID
-    pickupLocation: 'Farm Gate / Field Hub',
-    deliveryLocation: 'Kumasi Central Grain Silos',
+    custodyType: 'delivery',
+    fromParty: user?.full_name || 'AgriTransit Global Logistics',
+    toParty: 'b48c494a-0022-4fa3-a53a-7b6b7ed3dd2c', // Kumasi Central Agro-Silos
+    pickupLocation: 'AgriTransit Transit Fleet',
+    deliveryLocation: 'Kumasi Central Grain Silos & Processing Facility',
     pickupDate: new Date().toISOString().split('T')[0],
     deliveryDate: new Date(Date.now() + 86400000 * 2).toISOString().split('T')[0],
-    specialInstructions: 'Refrigerated transit required',
+    specialInstructions: 'Standard climate-controlled transit',
     temperatureReq: '18°C',
     quantity: '',
     unit: 'kg',
@@ -55,15 +60,22 @@ export function TransferPage() {
       quantity: b ? String(b.weight_kg) : prev.quantity,
       custodyType: isInTransit ? 'delivery' : 'transport',
       fromParty: isInTransit
-        ? 'AgriTransit Global Logistics'
-        : (b?.farmer_name ? `${b.farmer_name} (${b.crop_type})` : (b ? `Tommy (${b.crop_type})` : prev.fromParty)),
+        ? (user?.full_name || 'AgriTransit Global Logistics')
+        : (b?.farmer_name ? `${b.farmer_name} (${b.crop_type})` : (b ? `Farmer Origin (${b.crop_type})` : prev.fromParty)),
       toParty: isInTransit
         ? 'b48c494a-0022-4fa3-a53a-7b6b7ed3dd2c'
-        : '18cde67b-31e1-46ac-ae2a-d487c54103f9',
+        : '87ced07c-ef36-4f45-961e-5b731399c1c6',
       pickupLocation: isInTransit ? 'AgriTransit Transit Fleet' : 'Farm Gate / Field Hub',
       deliveryLocation: 'Kumasi Central Grain Silos & Processing Facility',
     }));
   };
+
+  // Auto-select batch from URL query parameter
+  useEffect(() => {
+    if (queryBatchId && batches.length > 0) {
+      handleBatchSelect(queryBatchId);
+    }
+  }, [queryBatchId, batches]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     const { name, value, type } = e.target;
@@ -73,8 +85,6 @@ export function TransferPage() {
     }));
   };
 
-  const { connected, signAndExecute } = useWallet();
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setSubmitting(true);
@@ -82,10 +92,10 @@ export function TransferPage() {
 
     try {
       let suiTxDigest = '';
-      const PACKAGE_ID = "0x72806395d9677780d633067dcbefd56bf67740d0e8d254700c790dae626e834c";
       const targetWallet = formData.toParty.startsWith('0x')
         ? formData.toParty
-        : '0x5b6241a78240dc9213ef512808c1097230491023941092304192039120399999';
+        : '0x7a39b4912091c824102941092841029481029410924810294810294810294810';
+      const PACKAGE_ID = "0x72806395d9677780d633067dcbefd56bf67740d0e8d254700c790dae626e834c";
 
       if (connected && selectedBatch?.sui_object_id && selectedBatch.sui_object_id.startsWith('0x')) {
         try {
@@ -112,9 +122,16 @@ export function TransferPage() {
 
       await ledgerApi.transfer(formData.batchId, {
         to_user_id: formData.toParty.startsWith('0x') ? undefined : formData.toParty,
-        to_wallet: formData.toParty.startsWith('0x') ? formData.toParty : undefined,
+        to_wallet: formData.toParty.startsWith('0x') ? formData.toParty : targetWallet,
         status: targetStatus,
         sui_tx_digest: suiTxDigest || undefined,
+        metadata: {
+          pickup_location: formData.pickupLocation,
+          delivery_location: formData.deliveryLocation,
+          pickup_date: formData.pickupDate,
+          delivery_date: formData.deliveryDate,
+          special_instructions: formData.specialInstructions,
+        },
       });
 
       setTransferId('TXF-' + Math.random().toString(36).substring(2, 9).toUpperCase());
@@ -122,7 +139,19 @@ export function TransferPage() {
       setStep(3);
     } catch (err: any) {
       console.error(err);
-      setTransferError(err?.response?.data?.error || err?.message || 'Custody transfer failed. Check batch ID or backend connection.');
+      const dataErr = err?.response?.data?.error;
+      const dataMsg = err?.response?.data?.message || err?.response?.data?.detail;
+      let displayError = 'Custody transfer failed. Check batch ID or backend connection.';
+      if (typeof dataErr === 'string') {
+        displayError = dataErr;
+      } else if (dataErr && typeof dataErr === 'object') {
+        displayError = dataErr.message || dataErr.details || JSON.stringify(dataErr);
+      } else if (typeof dataMsg === 'string') {
+        displayError = dataMsg;
+      } else if (err?.message) {
+        displayError = err.message;
+      }
+      setTransferError(String(displayError));
     } finally {
       setSubmitting(false);
     }
@@ -280,9 +309,9 @@ export function TransferPage() {
                 onChange={(val) => setFormData(prev => ({ ...prev, toParty: val }))}
                 options={[
                   { value: 'b48c494a-0022-4fa3-a53a-7b6b7ed3dd2c', label: 'Kumasi Central Agro-Silos & Processing Facility' },
-                  { value: '18cde67b-31e1-46ac-ae2a-d487c54103f9', label: 'AgriTransit Global Logistics Fleet' },
-                  { value: '76fadd12-58e6-4740-8b5d-148a78f81fcf', label: 'Tommy (Farmer Origin Return)' },
                   { value: '73100393-38a9-4135-9bc2-0c4e967f4f0e', label: 'Ghana Commodity Exchange (GCX) Terminal' },
+                  { value: '87ced07c-ef36-4f45-961e-5b731399c1c6', label: 'AgriTransit Global Logistics Fleet' },
+                  { value: '9ff443dc-6e7b-4464-af7e-7d18be4ed865', label: 'Tommy (Farmer Origin Return)' },
                 ]}
                 required
               />

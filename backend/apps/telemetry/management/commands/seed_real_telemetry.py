@@ -20,7 +20,7 @@ class Command(BaseCommand):
             defaults={
                 "full_name": "Kassim Iskanda (Lead Farmer)",
                 "role": CustomUser.Role.FARMER,
-                "sui_public_key": "0x7a89b431e54911d739e830e32b842918a520bf60b299e52e259b36987f2ab72e"
+                "sui_public_key": None
             }
         )
         farmer.set_password("TerraNode2026!")
@@ -31,7 +31,7 @@ class Command(BaseCommand):
             defaults={
                 "full_name": "AgriTransit Global Logistics",
                 "role": CustomUser.Role.LOGISTICS,
-                "sui_public_key": "0x3f1248b98240dc9213ef512808c1097230491023941092304192039120391203"
+                "sui_public_key": None
             }
         )
         logistics.set_password("TerraNode2026!")
@@ -129,9 +129,9 @@ class Command(BaseCommand):
             sui_tx = None
             custodian = farmer
 
-            if status in [ProduceBatch.Status.MINTED, ProduceBatch.Status.IN_TRANSIT, ProduceBatch.Status.DELIVERED]:
-                sui_obj = f"0x{random.randint(10**60, 10**61):064x}"[:66]
-                sui_tx = f"0x{random.randint(10**60, 10**61):064x}"[:66]
+            # Keep seeded demo batches with off-chain status until confirmed on-chain
+            sui_obj = None
+            sui_tx = None
 
             if status in [ProduceBatch.Status.IN_TRANSIT, ProduceBatch.Status.DELIVERED]:
                 custodian = logistics

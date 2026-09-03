@@ -48,93 +48,32 @@ Table~\ref{tab:api_endpoints} outlines the primary version-prefixed RESTful API 
 
 The frontend is implemented as a Single Page Application using React 19, TypeScript, and Vite. The system architecture enforces client-side role guards, preventing unauthorized navigation across role boundaries. Global state is managed using React Context API (\texttt{AuthContext} for JWT lifecycle and session persistence, and \texttt{WalletContext} leveraging Mysten Labs dApp Kit for Sui wallet interactions).
 
-The platform provides dedicated, role-specific user interfaces designed for intuitive interaction across different user roles. Figure~\ref{fig:landing_page} is the public landing page which introduces the platform and its core agricultural features.
+The platform provides role-specific user interfaces designed for intuitive interaction across agricultural stakeholders, supporting both credential authentication and Web3 Sui wallet integration. This section presents the core operational interfaces that realize the system's security, blockchain anchoring, and custody transfer functions.
+
+\figref{fig:farmer_dashboard} presents the Farmer Dashboard, which serves as the primary operational monitoring interface for agricultural producers. The interface displays real-time micro-climate telemetry metric cards (soil temperature, soil moisture, and soil pH) alongside active produce batches anchored to the Sui blockchain and dynamic yield forecast summaries.
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.85\textwidth]{figures/ui-screenshots/fig_landing_page.png}
-    \caption{TerraNode Public Landing Page}
-    \label{fig:landing_page}
-\end{figure}
-
-Figure~\ref{fig:register_page} is the unified registration interface where users select their role and create an account.
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.85\textwidth]{figures/ui-screenshots/fig_register_page.png}
-    \caption{User Registration Interface with Role Selection}
-    \label{fig:register_page}
-\end{figure}
-
-Figure~\ref{fig:login_page} is the authentication interface, which securely supports both traditional email and Sui Wallet login.
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.85\textwidth]{figures/ui-screenshots/fig_login_page.png}
-    \caption{Authentication Interface Supporting Email and Sui Wallet Login}
-    \label{fig:login_page}
-\end{figure}
-
-Once authenticated, users are routed to their respective dashboards. Figure~\ref{fig:farmer_dashboard} is the Farmer Dashboard, which serves as the primary interface for agricultural producers, displaying telemetry summaries and providing quick access to batch minting tools.
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.85\textwidth]{figures/ui-screenshots/fig_farmer_dashboard.png}
-    \caption{Farmer Dashboard Displaying Telemetry Summaries and Batch Status}
+    \includegraphics[width=0.88\textwidth]{figures/ui-screenshots/fig_farmer_dashboard.png}
+    \caption{Farmer Operational Dashboard Displaying Real-Time Micro-Climate Telemetry and Produce Batches}
     \label{fig:farmer_dashboard}
 \end{figure}
 
-Figure~\ref{fig:telemetry_page} is the Telemetry Submission interface where farmers can securely log environmental conditions.
+\figref{fig:transfer_page} illustrates the Custody Transfer interface utilized by logistics handlers to record physical produce handoffs. The interface captures transit metadata (vehicle fleet registration, driver identity, and destination terminal) and executes \texttt{agri\_ledger::transfer\_custody} on-chain to reassign custody to the carrier's wallet address, ensuring transparent multi-hop traceability.
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.85\textwidth]{figures/ui-screenshots/fig_telemetry_page.png}
-    \caption{Environmental Telemetry Submission and Hash Verification Interface}
-    \label{fig:telemetry_page}
-\end{figure}
-
-Figure~\ref{fig:mint_batch_page} is the Mint Batch interface utilized to anchor produce records immutably on the Sui ledger.
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.85\textwidth]{figures/ui-screenshots/fig_mint_batch_page.png}
-    \caption{Produce Batch On-Chain Minting Interface}
-    \label{fig:mint_batch_page}
-\end{figure}
-
-Figure~\ref{fig:logistics_dashboard} is the Logistics Handler Dashboard, which enables supply chain workers to manage custody transfers efficiently by providing a clear overview of pending and completed deliveries.
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.85\textwidth]{figures/ui-screenshots/fig_logistics_dashboard.png}
-    \caption{Logistics Handler Dashboard for Supply Chain Custody}
-    \label{fig:logistics_dashboard}
-\end{figure}
-
-Figure~\ref{fig:transfer_page} is the dedicated Custody Transfer interface that facilitates the physical handover of agricultural batches using blockchain validation.
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.85\textwidth]{figures/ui-screenshots/fig_transfer_page.png}
+    \includegraphics[width=0.88\textwidth]{figures/ui-screenshots/fig_transfer_page.png}
     \caption{Produce Custody Transfer and Blockchain Verification Interface}
     \label{fig:transfer_page}
 \end{figure}
 
-Figure~\ref{fig:admin_dashboard} is the Administrator Dashboard, which offers a comprehensive, system-wide monitoring interface for global activity metrics.
+\figref{fig:audit_logs_page} depicts the Administrator Audit Log interface, providing a chronological, tamper-evident record of all system events, authentication attempts, and blockchain transactions. Each entry is cryptographically bound to an originating user UUID, IP address, timestamp, and SHA-256 digest for regulatory compliance and audit verification.
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.85\textwidth]{figures/ui-screenshots/fig_admin_dashboard.png}
-    \caption{Administrator System Monitoring Dashboard}
-    \label{fig:admin_dashboard}
-\end{figure}
-
-Figure~\ref{fig:audit_logs_page} is the detailed Audit Logs interface used for strict security compliance and tracking system events.
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.75\textwidth]{figures/ui-screenshots/fig_audit_logs_page.png}
-    \caption{Chronological Audit Log and System Activity Interface}
+    \includegraphics[width=0.80\textwidth]{figures/ui-screenshots/fig_audit_logs_page.png}
+    \caption{Chronological Cryptographic Audit Log and System Activity Interface}
     \label{fig:audit_logs_page}
 \end{figure}
 
@@ -170,7 +109,7 @@ C = \min\left(95.0, \; \max\left(50.0, \; 95.0 - 0.05 \cdot V\right)\right) \tim
 \label{eq:conf_score}
 \end{equation}
 
-Figure~\ref{fig:prediction_analytics} illustrates the end-to-end architecture and decision workflow of the predictive analytics engine.
+\figref{fig:prediction_analytics} illustrates the end-to-end architecture and decision workflow of the predictive analytics engine.
 
 \begin{figure}[H]
     \centering
@@ -181,12 +120,12 @@ Figure~\ref{fig:prediction_analytics} illustrates the end-to-end architecture an
 
 \subsubsection*{Analytics User Interface and Decision Support Presentation}
 
-Figure~\ref{fig:yield_prediction_page} presents the operational yield prediction interface accessible to farmers. The page displays the computed yield estimate in metric tons alongside the confidence score percentage, calculated variance index, the total number of telemetry data points analyzed, and actionable contextual recommendations (e.g., ``Optimal conditions detected; maintain current regime'' or ``Moisture deficit detected; increase irrigation schedule'').
+\figref{fig:yield_prediction_page} presents the operational yield prediction and decision support interface. The interface operationalizes the mathematical modeling formulation described in Equations~\ref{eq:mean_calc}--\ref{eq:conf_score}, displaying the estimated crop yield in metric tons, the computed confidence score, the micro-climate variance index, and multi-year projection curves with dynamic uncertainty bounds and actionable agronomic recommendations.
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.85\textwidth]{figures/ui-screenshots/fig_yield_prediction_page.png}
-    \caption{Yield Prediction and Decision Support Interface}
+    \includegraphics[width=0.88\textwidth]{figures/ui-screenshots/fig_yield_prediction_page.png}
+    \caption{Yield Forecast, Soil Suitability Matrix, and Decision Support Interface}
     \label{fig:yield_prediction_page}
 \end{figure}
 
@@ -205,7 +144,7 @@ The cryptographic pipeline operates across five structured stages:
     \item \textbf{Sui Move Smart Contract State Anchoring:} The \texttt{ProduceBatch} object is minted on the Sui distributed ledger, permanently binding the batch metadata and SHA-256 hash to the farmer's on-chain address.
 \end{enumerate}
 
-Figure~\ref{fig:crypto_pipeline} visualizes the multi-layered cryptographic and blockchain anchoring pipeline.
+\figref{fig:crypto_pipeline} visualizes the multi-layered cryptographic and blockchain anchoring pipeline.
 
 \begin{figure}[H]
     \centering
@@ -295,7 +234,7 @@ Secured Agri-Triad & Private Network & SHA-256 & ML Integrated (No Web UI) \\
 \end{tabularx}
 \end{table}
 
-Figure~\ref{fig:blockchain_comparison} provides a visual bar chart comparing the transaction confirmation latency and architectural trade-offs across these deployments.
+\figref{fig:blockchain_comparison} provides a visual bar chart comparing the transaction confirmation latency and architectural trade-offs across these deployments.
 
 \begin{figure}[H]
     \centering

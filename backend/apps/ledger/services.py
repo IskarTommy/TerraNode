@@ -30,7 +30,7 @@ def verify_integrity(batch):
     return recomputed_hash
 
 
-def verify_sui_transaction_on_rpc(tx_digest: str, expected_sender: str = None, expected_function: str = None, rpc_url: str = None) -> dict:
+def verify_sui_transaction_on_rpc(tx_digest: str, expected_sender: str = None, expected_function: str = None, rpc_url: str = DEFAULT_SUI_RPC_URL) -> dict:
     """
     Queries configured Sui RPC fullnode for transaction block details and verifies status, sender, and object changes.
     """

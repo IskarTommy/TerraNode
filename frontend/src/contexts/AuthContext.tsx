@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, useEffect, type ReactNode, useCallback } from 'react';
-import { login, register as registerApi, logout as logoutApi, walletLogin as walletLoginApi } from '../api/auth';
+import { login, register as registerApi, logout as logoutApi, walletLogin as walletLoginApi, updateProfile } from '../api/auth';
 import type { User } from '../api/auth';
 
 // ─── storage keys ─────────────────────────────────────────
@@ -38,6 +38,7 @@ interface AuthContextType {
   logout: () => Promise<void>;
   setAccessToken: (token: string) => void;
   setRole: (role: User['role']) => void;
+  updateUserWallet: (walletAddress: string) => Promise<void>;
   switchDemoRole: (role: 'FARMER' | 'LOGISTICS' | 'ADMIN') => Promise<boolean>;
 }
 
@@ -110,10 +111,31 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
   }, [user]);
 
+  const updateUserWallet = useCallback(async (walletAddress: string) => {
+    if (!walletAddress) return;
+    try {
+      await updateProfile({ sui_public_key: walletAddress });
+      setUser((prev) => {
+        if (!prev) return prev;
+        const next = { ...prev, sui_public_key: walletAddress };
+        localStorage.setItem(STORAGE_KEYS.USER, JSON.stringify(next));
+        return next;
+      });
+    } catch (e) {
+      console.warn('Failed to persist wallet address to profile:', e);
+      setUser((prev) => {
+        if (!prev) return prev;
+        const next = { ...prev, sui_public_key: walletAddress };
+        localStorage.setItem(STORAGE_KEYS.USER, JSON.stringify(next));
+        return next;
+      });
+    }
+  }, []);
+
   const switchDemoRole = useCallback(async (role: 'FARMER' | 'LOGISTICS' | 'ADMIN') => {
     const farmerEmail = localStorage.getItem('terranode_farmer_email') || 'iskartommy117@gmail.com';
-    const creds: Record<string, { email: string; pass: string }> = {
-      FARMER: { email: farmerEmail, pass: 'TerraNode2026!' },
+    const creds: Record<string, { email: string; pass: string; fallbackEmail?: string }> = {
+      FARMER: { email: farmerEmail, pass: 'TerraNode2026!', fallbackEmail: 'farmer@terranode.agri' },
       LOGISTICS: { email: 'logistics@terranode.agri', pass: 'TerraNode2026!' },
       ADMIN: { email: 'admin@terranode.agri', pass: 'TerraNode2026!' },
     };
@@ -124,6 +146,15 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         document.documentElement.setAttribute('data-role', role);
         return true;
       } catch (e) {
+        if (target.fallbackEmail) {
+          try {
+            await loginUser(target.fallbackEmail, target.pass);
+            document.documentElement.setAttribute('data-role', role);
+            return true;
+          } catch (e2) {
+            console.error('Failed to switch demo role via fallback login:', e2);
+          }
+        }
         console.error('Failed to switch demo role via login:', e);
         setRole(role);
         return false;
@@ -156,6 +187,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     logout: logoutUser,
     setAccessToken,
     setRole,
+    updateUserWallet,
     switchDemoRole,
   };
 

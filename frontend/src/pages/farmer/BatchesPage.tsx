@@ -5,15 +5,19 @@ import { Button } from '../../components/Common/Button';
 import { useBatches } from '../../hooks/useDashboardQueries';
 import { ledgerApi } from '../../api/ledger';
 import { useWallet } from '../../contexts/WalletContext';
+import { useAuth } from '../../contexts/AuthContext';
 import { Transaction } from '@mysten/sui/transactions';
+import { CustodyFlowModal } from '../../components/Common/CustodyFlowModal';
 import type { BatchStatus, ProduceBatch } from '../../types/ledger';
 
 export function BatchesPage() {
+  const { user } = useAuth();
   const [search, setSearch] = useState('');
   const [status, setStatus] = useState<'ALL' | BatchStatus>('ALL');
-  const { data, isLoading, isError, refetch } = useBatches({ page_size: 100 });
+  const { data, isLoading, isError, refetch } = useBatches({ page_size: 100, ...(user?.id ? { farmer_id: user.id } : {}) });
   const { connected, signAndExecute } = useWallet();
 
+  const [viewFlowBatch, setViewFlowBatch] = useState<ProduceBatch | null>(null);
   const [transferTarget, setTransferTarget] = useState<ProduceBatch | null>(null);
   const [transferring, setTransferring] = useState(false);
   const [transferError, setTransferError] = useState<string | null>(null);
@@ -164,13 +168,22 @@ export function BatchesPage() {
                       <span>→</span>
                     </button>
                   )}
+                  <button
+                    type="button"
+                    onClick={() => setViewFlowBatch(batch)}
+                    className="rounded-lg bg-bg-tertiary border border-border-primary/80 px-2.5 py-1 text-xs font-semibold text-fg-secondary hover:text-cyan-300 hover:border-cyan-500/40 transition-colors inline-flex items-center gap-1"
+                    title="View complete chain of custody and user flow on SuiScan"
+                  >
+                    <span className="text-cyan-400">🔗</span>
+                    <span>Custody Flow</span>
+                  </button>
                 </div>
               </div>
 
               <div className="min-w-0 flex flex-col md:items-end gap-1">
                 <p className="text-xs uppercase text-fg-muted">Sui Blockchain Record</p>
                 <div className="truncate font-mono text-xs text-cyan-300">
-                  {batch.sui_object_id ? (
+                  {batch.sui_object_id && batch.sui_object_id.startsWith('0x') ? (
                     <a
                       href={`https://suiscan.xyz/testnet/object/${batch.sui_object_id}`}
                       target="_blank"
@@ -180,12 +193,22 @@ export function BatchesPage() {
                       <span>Object: {batch.sui_object_id.slice(0, 8)}…{batch.sui_object_id.slice(-6)}</span>
                       <span>↗</span>
                     </a>
+                  ) : (batch.sui_tx_digest || batch.sui_object_id) ? (
+                    <a
+                      href={`https://suiscan.xyz/testnet/tx/${batch.sui_tx_digest || batch.sui_object_id}`}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="hover:underline flex items-center gap-1 text-emerald-400"
+                    >
+                      <span>Tx: {(batch.sui_tx_digest || batch.sui_object_id || '').slice(0, 8)}…</span>
+                      <span>↗</span>
+                    </a>
                   ) : (
                     <span className="text-fg-muted font-normal">Awaiting confirmation</span>
                   )}
                 </div>
 
-                {batch.sui_tx_digest && (
+                {batch.sui_tx_digest && batch.sui_object_id && batch.sui_object_id.startsWith('0x') && (
                   <a
                     href={`https://suiscan.xyz/testnet/tx/${batch.sui_tx_digest}`}
                     target="_blank"
@@ -310,6 +333,14 @@ export function BatchesPage() {
             </div>
           </div>
         </div>
+      )}
+
+      {/* Custody Flow & User Provenance Modal */}
+      {viewFlowBatch && (
+        <CustodyFlowModal
+          batch={viewFlowBatch}
+          onClose={() => setViewFlowBatch(null)}
+        />
       )}
     </div>
   );

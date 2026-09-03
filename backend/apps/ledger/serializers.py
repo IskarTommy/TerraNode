@@ -20,6 +20,12 @@ class BatchConfirmSerializer(serializers.Serializer):
 class CustodyTransferSerializer(serializers.ModelSerializer):
     from_user = serializers.UUIDField(read_only=True, source='from_user_id')
     to_user = serializers.UUIDField(read_only=True, source='to_user_id')
+    from_user_name = serializers.CharField(read_only=True, source='from_user.full_name')
+    from_user_email = serializers.CharField(read_only=True, source='from_user.email')
+    from_user_role = serializers.CharField(read_only=True, source='from_user.role')
+    to_user_name = serializers.CharField(read_only=True, source='to_user.full_name')
+    to_user_email = serializers.CharField(read_only=True, source='to_user.email')
+    to_user_role = serializers.CharField(read_only=True, source='to_user.role')
 
     class Meta:
         model = CustodyTransfer
@@ -27,7 +33,13 @@ class CustodyTransferSerializer(serializers.ModelSerializer):
 
 class BatchOutputSerializer(serializers.ModelSerializer):
     farmer = serializers.UUIDField(read_only=True, source='farmer_id')
+    farmer_name = serializers.CharField(read_only=True, source='farmer.full_name')
+    farmer_email = serializers.CharField(read_only=True, source='farmer.email')
+    farmer_wallet = serializers.CharField(read_only=True, source='farmer.sui_public_key')
     current_custodian = serializers.UUIDField(read_only=True, source='current_custodian_id')
+    current_custodian_name = serializers.CharField(read_only=True, source='current_custodian.full_name')
+    current_custodian_email = serializers.CharField(read_only=True, source='current_custodian.email')
+    current_custodian_wallet = serializers.CharField(read_only=True, source='current_custodian.sui_public_key')
     origin_telemetry = serializers.UUIDField(read_only=True, source='origin_telemetry_id')
     weight_grams = serializers.IntegerField(read_only=True)
     transfers = CustodyTransferSerializer(many=True, read_only=True)

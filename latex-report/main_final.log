@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.29 (MiKTeX 26.5) (preloaded format=pdflatex 2026.8.25)  3 SEP 2026 00:41
+This is pdfTeX, Version 3.141592653-2.6-1.40.29 (MiKTeX 26.5) (preloaded format=pdflatex 2026.8.25)  3 SEP 2026 11:19
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -913,7 +913,7 @@ LaTeX Info: Redefining \microtypesetup on input line 3065.
 \@quotelevel=\count487
 \@quotereset=\count488
 LaTeX Font Info:    Trying to load font information for OT1+ptm on input line 1
-37.
+41.
  (C:\Users\Iskanda\AppData\Local\Programs\MiKTeX\tex/latex/psnfss\ot1ptm.fd
 File: ot1ptm.fd 2001/06/04 font definitions for OT1/ptm.
 ) (main_final.aux (chapters/chapter1_rev.aux) (chapters/chapter2_rev.aux)
@@ -921,24 +921,24 @@ File: ot1ptm.fd 2001/06/04 font definitions for OT1/ptm.
 (chapters/chapter5_rev.aux) (chapters/appendix.aux))
 \openout1 = `main_final.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 137.
-LaTeX Font Info:    ... okay on input line 137.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 137.
-LaTeX Font Info:    ... okay on input line 137.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 137.
-LaTeX Font Info:    ... okay on input line 137.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 137.
-LaTeX Font Info:    ... okay on input line 137.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 137.
-LaTeX Font Info:    ... okay on input line 137.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 137.
-LaTeX Font Info:    ... okay on input line 137.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 137.
-LaTeX Font Info:    ... okay on input line 137.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 137.
-LaTeX Font Info:    ... okay on input line 137.
-LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 137.
-LaTeX Font Info:    ... okay on input line 137.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 141.
+LaTeX Font Info:    ... okay on input line 141.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 141.
+LaTeX Font Info:    ... okay on input line 141.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 141.
+LaTeX Font Info:    ... okay on input line 141.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 141.
+LaTeX Font Info:    ... okay on input line 141.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 141.
+LaTeX Font Info:    ... okay on input line 141.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 141.
+LaTeX Font Info:    ... okay on input line 141.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 141.
+LaTeX Font Info:    ... okay on input line 141.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 141.
+LaTeX Font Info:    ... okay on input line 141.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 141.
+LaTeX Font Info:    ... okay on input line 141.
 Package biblatex Info: Trying to load language 'english' -> 'english-apa'...
 Package biblatex Info: ... file 'english-apa.lbx' found.
 
@@ -979,8 +979,8 @@ Package biblatex Info: Automatic encoding selection.
 Package biblatex Info: Trying to load bibliographic data...
 Package biblatex Info: ... file 'main_final.bbl' found.
  (main_final.bbl)
-Package biblatex Info: Reference section=0 on input line 137.
-Package biblatex Info: Reference segment=0 on input line 137.
+Package biblatex Info: Reference section=0 on input line 141.
+Package biblatex Info: Reference segment=0 on input line 141.
 
 (C:\Users\Iskanda\AppData\Local\Programs\MiKTeX\tex/context/base/mkii\supp-pdf.
 mkii
@@ -1068,18 +1068,18 @@ Package: lscape 2020/05/28 v3.02 Landscape Pages (DPC)
 Package pdflscape Info: Auto-detected driver: pdftex on input line 81.
 ))
 \c@lstlisting=\count495
-Package hyperref Info: Link coloring OFF on input line 137.
+Package hyperref Info: Link coloring OFF on input line 141.
  (main_final.out) (main_final.out)
 \@outlinefile=\write4
 \openout4 = `main_final.out'.
 
-LaTeX Info: Redefining \microtypecontext on input line 137.
-Package microtype Info: Applying patch `item' on input line 137.
-Package microtype Info: Applying patch `toc' on input line 137.
-Package microtype Info: Applying patch `eqnum' on input line 137.
-Package microtype Info: Applying patch `footnote' on input line 137.
-Package microtype Info: Applying patch `verbatim' on input line 137.
-LaTeX Info: Redefining \microtypesetup on input line 137.
+LaTeX Info: Redefining \microtypecontext on input line 141.
+Package microtype Info: Applying patch `item' on input line 141.
+Package microtype Info: Applying patch `toc' on input line 141.
+Package microtype Info: Applying patch `eqnum' on input line 141.
+Package microtype Info: Applying patch `footnote' on input line 141.
+Package microtype Info: Applying patch `verbatim' on input line 141.
+LaTeX Info: Redefining \microtypesetup on input line 141.
 Package microtype Info: Generating PDF output.
 Package microtype Info: Character protrusion enabled (level 2).
 Package microtype Info: Using default protrusion set `alltext'.
@@ -1101,44 +1101,8 @@ pdfTeX warning (ext4): destination with the same identifier (name{page.1}) has
 been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.210 \end{titlepage}
-                      [1]
-LaTeX Font Info:    Trying to load font information for OT1+ztmcm on input line
- 225.
-
-(C:\Users\Iskanda\AppData\Local\Programs\MiKTeX\tex/latex/psnfss\ot1ztmcm.fd
-File: ot1ztmcm.fd 2000/01/03 Fontinst v1.801 font definitions for OT1/ztmcm.
-)
-Package microtype Info: Loading generic protrusion settings for font family
-(microtype)             `ztmcm' (encoding: OT1).
-(microtype)             For optimal results, create family-specific settings.
-(microtype)             See the microtype manual for details.
-LaTeX Font Info:    Trying to load font information for OML+ztmcm on input line
- 225.
-
-(C:\Users\Iskanda\AppData\Local\Programs\MiKTeX\tex/latex/psnfss\omlztmcm.fd
-File: omlztmcm.fd 2000/01/03 Fontinst v1.801 font definitions for OML/ztmcm.
-)
-LaTeX Font Info:    Trying to load font information for OMS+ztmcm on input line
- 225.
-
-(C:\Users\Iskanda\AppData\Local\Programs\MiKTeX\tex/latex/psnfss\omsztmcm.fd
-File: omsztmcm.fd 2000/01/03 Fontinst v1.801 font definitions for OMS/ztmcm.
-)
-LaTeX Font Info:    Trying to load font information for OMX+ztmcm on input line
- 225.
-
-(C:\Users\Iskanda\AppData\Local\Programs\MiKTeX\tex/latex/psnfss\omxztmcm.fd
-File: omxztmcm.fd 2000/01/03 Fontinst v1.801 font definitions for OMX/ztmcm.
-)
-LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <12> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 225.
-LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <9> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 225.
-LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <7> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 225.
-
-[2
+l.214 \end{titlepage}
+                      [1] [2
 
 ] [3
 
@@ -1148,7 +1112,43 @@ LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <7> not available
 
 ] [6
 
-] (main_final.toc [7] [8])
+] (main_final.toc
+LaTeX Font Info:    Trying to load font information for OT1+ztmcm on input line
+ 1.
+
+(C:\Users\Iskanda\AppData\Local\Programs\MiKTeX\tex/latex/psnfss\ot1ztmcm.fd
+File: ot1ztmcm.fd 2000/01/03 Fontinst v1.801 font definitions for OT1/ztmcm.
+)
+Package microtype Info: Loading generic protrusion settings for font family
+(microtype)             `ztmcm' (encoding: OT1).
+(microtype)             For optimal results, create family-specific settings.
+(microtype)             See the microtype manual for details.
+LaTeX Font Info:    Trying to load font information for OML+ztmcm on input line
+ 1.
+
+(C:\Users\Iskanda\AppData\Local\Programs\MiKTeX\tex/latex/psnfss\omlztmcm.fd
+File: omlztmcm.fd 2000/01/03 Fontinst v1.801 font definitions for OML/ztmcm.
+)
+LaTeX Font Info:    Trying to load font information for OMS+ztmcm on input line
+ 1.
+
+(C:\Users\Iskanda\AppData\Local\Programs\MiKTeX\tex/latex/psnfss\omsztmcm.fd
+File: omsztmcm.fd 2000/01/03 Fontinst v1.801 font definitions for OMS/ztmcm.
+)
+LaTeX Font Info:    Trying to load font information for OMX+ztmcm on input line
+ 1.
+
+(C:\Users\Iskanda\AppData\Local\Programs\MiKTeX\tex/latex/psnfss\omxztmcm.fd
+File: omxztmcm.fd 2000/01/03 Fontinst v1.801 font definitions for OMX/ztmcm.
+)
+LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <12> not available
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 1.
+LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <9> not available
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 1.
+LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <7> not available
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 1.
+
+[7] [8])
 \tf@toc=\write5
 \openout5 = `main_final.toc'.
 
@@ -1156,15 +1156,15 @@ LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <7> not available
 \tf@lot=\write6
 \openout6 = `main_final.lot'.
 
- [10]
-(main_final.lof)
+ [10] (main_final.lof)
 \tf@lof=\write7
 \openout7 = `main_final.lof'.
 
  [11]
 \openout2 = `chapters/chapter1_rev.aux'.
 
- (chapters/chapter1_rev.tex
+
+(chapters/chapter1_rev.tex
 CHAPTER 1.
 
 pdfTeX warning (ext4): destination with the same identifier (name{page.1}) has 
@@ -1196,7 +1196,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 115--115
  []
 
 [13] [14]
-<figures/fig_conceptual_framework.png, id=667, 2489.3pt x 1345.025pt>
+<figures/fig_conceptual_framework.png, id=760, 2489.3pt x 1345.025pt>
 File: figures/fig_conceptual_framework.png Graphic file (type png)
 <use figures/fig_conceptual_framework.png>
 Package pdftex.def Info: figures/fig_conceptual_framework.png  used on input li
@@ -1214,39 +1214,39 @@ CHAPTER 3.
 
 
 ] [18]
-<figures/fig_system_architecture.png, id=692, 2208.25pt x 1726.45pt>
+<figures/fig_system_architecture.png, id=785, 2208.25pt x 1726.45pt>
 File: figures/fig_system_architecture.png Graphic file (type png)
 <use figures/fig_system_architecture.png>
 Package pdftex.def Info: figures/fig_system_architecture.png  used on input lin
 e 98.
 (pdftex.def)             Requested size: 416.83289pt x 325.86874pt.
  [19]
-<figures/fig_dfd_level0.png, id=702, 2208.25pt x 1405.25pt>
+<figures/fig_dfd_level0.png, id=795, 2208.25pt x 1405.25pt>
 File: figures/fig_dfd_level0.png Graphic file (type png)
 <use figures/fig_dfd_level0.png>
 Package pdftex.def Info: figures/fig_dfd_level0.png  used on input line 111.
 (pdftex.def)             Requested size: 416.83289pt x 265.242pt.
  [20 <./figures/fig_system_architecture.png (PNG copy)>]
-<figures/fig_dfd_level1.png, id=708, 2208.25pt x 1565.85pt>
+<figures/fig_dfd_level1.png, id=801, 2208.25pt x 1565.85pt>
 File: figures/fig_dfd_level1.png Graphic file (type png)
 <use figures/fig_dfd_level1.png>
 Package pdftex.def Info: figures/fig_dfd_level1.png  used on input line 129.
 (pdftex.def)             Requested size: 416.83289pt x 295.55537pt.
  [21 <./figures/fig_dfd_level0.png (PNG copy)>]
-<figures/fig_er_diagram.png, id=718, 2208.25pt x 1485.55pt>
+<figures/fig_er_diagram.png, id=811, 2208.25pt x 1485.55pt>
 File: figures/fig_er_diagram.png Graphic file (type png)
 <use figures/fig_er_diagram.png>
 Package pdftex.def Info: figures/fig_er_diagram.png  used on input line 140.
 (pdftex.def)             Requested size: 416.83289pt x 280.39868pt.
  [22 <./figures/fig_dfd_level1.png (PNG copy)>]
-<figures/fig_use_case.png, id=724, 2208.25pt x 1525.7pt>
+<figures/fig_use_case.png, id=817, 2208.25pt x 1525.7pt>
 File: figures/fig_use_case.png Graphic file (type png)
 <use figures/fig_use_case.png>
 Package pdftex.def Info: figures/fig_use_case.png  used on input line 157.
 (pdftex.def)             Requested size: 416.83289pt x 287.97704pt.
  [23 <./figures/fig_er_diagram.png (PNG copy)>] [24 <./figures/fig_use_case.png
  (PNG copy)>]
-<figures/fig_batch_lifecycle.png, id=733, 2208.25pt x 1445.4pt>
+<figures/fig_batch_lifecycle.png, id=826, 2208.25pt x 1445.4pt>
 File: figures/fig_batch_lifecycle.png Graphic file (type png)
 <use figures/fig_batch_lifecycle.png>
 Package pdftex.def Info: figures/fig_batch_lifecycle.png  used on input line 20
@@ -1263,7 +1263,7 @@ LaTeX Font Warning: Font shape `OMS/cmtt/m/n' undefined
 (Font)              for symbol `textbraceleft' on input line 245.
 
 [27]
-<figures/fig_auth_flow.png, id=765, 2208.25pt x 1485.55pt>
+<figures/fig_auth_flow.png, id=858, 2208.25pt x 1485.55pt>
 File: figures/fig_auth_flow.png Graphic file (type png)
 <use figures/fig_auth_flow.png>
 Package pdftex.def Info: figures/fig_auth_flow.png  used on input line 287.
@@ -1290,352 +1290,307 @@ Underfull \hbox (badness 10000) in paragraph at lines 44--44
 /\OT1/ptm/m/n/12 (+20) , \OT1/cmtt/m/n/12 register/\OT1/ptm/m/n/12 (+20) ,
  []
 
-<figures/ui-screenshots/fig_landing_page.png, id=802, 1284.8pt x 803.0pt>
-File: figures/ui-screenshots/fig_landing_page.png Graphic file (type png)
-<use figures/ui-screenshots/fig_landing_page.png>
-Package pdftex.def Info: figures/ui-screenshots/fig_landing_page.png  used on i
-nput line 55.
-(pdftex.def)             Requested size: 354.31049pt x 221.44444pt.
 [33]
-<figures/ui-screenshots/fig_register_page.png, id=808, 1284.8pt x 803.0pt>
-File: figures/ui-screenshots/fig_register_page.png Graphic file (type png)
-<use figures/ui-screenshots/fig_register_page.png>
-Package pdftex.def Info: figures/ui-screenshots/fig_register_page.png  used on 
-input line 64.
-(pdftex.def)             Requested size: 354.31049pt x 221.44444pt.
-<figures/ui-screenshots/fig_login_page.png, id=810, 1284.8pt x 803.0pt>
-File: figures/ui-screenshots/fig_login_page.png Graphic file (type png)
-<use figures/ui-screenshots/fig_login_page.png>
-Package pdftex.def Info: figures/ui-screenshots/fig_login_page.png  used on inp
-ut line 73.
-(pdftex.def)             Requested size: 354.31049pt x 221.44444pt.
- [34 <./figures/ui-screenshots/fig_landing_page.png (PNG copy)> <./figures/ui-s
-creenshots/fig_register_page.png (PNG copy)>]
-<figures/ui-screenshots/fig_farmer_dashboard.png, id=816, 1284.8pt x 803.0pt>
+<figures/ui-screenshots/fig_farmer_dashboard.png, id=900, 1284.8pt x 803.0pt>
 File: figures/ui-screenshots/fig_farmer_dashboard.png Graphic file (type png)
 <use figures/ui-screenshots/fig_farmer_dashboard.png>
 Package pdftex.def Info: figures/ui-screenshots/fig_farmer_dashboard.png  used 
-on input line 82.
-(pdftex.def)             Requested size: 354.31049pt x 221.44444pt.
-<figures/ui-screenshots/fig_telemetry_page.png, id=818, 1284.8pt x 803.0pt>
-File: figures/ui-screenshots/fig_telemetry_page.png Graphic file (type png)
-<use figures/ui-screenshots/fig_telemetry_page.png>
-Package pdftex.def Info: figures/ui-screenshots/fig_telemetry_page.png  used on
- input line 91.
-(pdftex.def)             Requested size: 354.31049pt x 221.44444pt.
- [35 <./figures/ui-screenshots/fig_login_page.png (PNG copy)> <./figures/ui-scr
-eenshots/fig_farmer_dashboard.png (PNG copy)>]
-<figures/ui-screenshots/fig_mint_batch_page.png, id=824, 1284.8pt x 803.0pt>
-File: figures/ui-screenshots/fig_mint_batch_page.png Graphic file (type png)
-<use figures/ui-screenshots/fig_mint_batch_page.png>
-Package pdftex.def Info: figures/ui-screenshots/fig_mint_batch_page.png  used o
-n input line 100.
-(pdftex.def)             Requested size: 354.31049pt x 221.44444pt.
-<figures/ui-screenshots/fig_logistics_dashboard.png, id=826, 1284.8pt x 803.0pt
->
-File: figures/ui-screenshots/fig_logistics_dashboard.png Graphic file (type png
-)
-<use figures/ui-screenshots/fig_logistics_dashboard.png>
-Package pdftex.def Info: figures/ui-screenshots/fig_logistics_dashboard.png  us
-ed on input line 109.
-(pdftex.def)             Requested size: 354.31049pt x 221.44444pt.
- [36 <./figures/ui-screenshots/fig_telemetry_page.png (PNG copy)> <./figures/ui
--screenshots/fig_mint_batch_page.png (PNG copy)>]
-<figures/ui-screenshots/fig_transfer_page.png, id=832, 1284.8pt x 803.0pt>
+on input line 57.
+(pdftex.def)             Requested size: 366.81497pt x 229.26172pt.
+
+Underfull \hbox (badness 1194) in paragraph at lines 62--63
+\OT1/ptm/m/n/12 (+20) to record phys-i-cal pro-duce hand-offs. The in-ter-face 
+cap-tures tran-sit meta-data
+ []
+
+<figures/ui-screenshots/fig_transfer_page.png, id=902, 1284.8pt x 803.0pt>
 File: figures/ui-screenshots/fig_transfer_page.png Graphic file (type png)
 <use figures/ui-screenshots/fig_transfer_page.png>
 Package pdftex.def Info: figures/ui-screenshots/fig_transfer_page.png  used on 
-input line 118.
-(pdftex.def)             Requested size: 354.31049pt x 221.44444pt.
-<figures/ui-screenshots/fig_admin_dashboard.png, id=834, 1284.8pt x 803.0pt>
-File: figures/ui-screenshots/fig_admin_dashboard.png Graphic file (type png)
-<use figures/ui-screenshots/fig_admin_dashboard.png>
-Package pdftex.def Info: figures/ui-screenshots/fig_admin_dashboard.png  used o
-n input line 127.
-(pdftex.def)             Requested size: 354.31049pt x 221.44444pt.
- [37 <./figures/ui-screenshots/fig_logistics_dashboard.png (PNG copy)> <./figur
-es/ui-screenshots/fig_transfer_page.png (PNG copy)>]
-<figures/ui-screenshots/fig_audit_logs_page.png, id=841, 1284.8pt x 803.0pt>
+input line 66.
+(pdftex.def)             Requested size: 366.81497pt x 229.26172pt.
+[34 <./figures/ui-screenshots/fig_farmer_dashboard.png (PNG copy)>]
+<figures/ui-screenshots/fig_audit_logs_page.png, id=908, 1284.8pt x 803.0pt>
 File: figures/ui-screenshots/fig_audit_logs_page.png Graphic file (type png)
 <use figures/ui-screenshots/fig_audit_logs_page.png>
 Package pdftex.def Info: figures/ui-screenshots/fig_audit_logs_page.png  used o
-n input line 136.
-(pdftex.def)             Requested size: 312.62466pt x 195.38278pt.
- [38 <./figures/ui-screenshots/fig_admin_dashboard.png (PNG copy)> <./figures/u
-i-screenshots/fig_audit_logs_page.png (PNG copy)>]
-<figures/fig_prediction_analytics.png, id=850, 2208.25pt x 1365.1pt>
+n input line 75.
+(pdftex.def)             Requested size: 333.46758pt x 208.41974pt.
+ [35 <./figures/ui-screenshots/fig_transfer_page.png (PNG copy)> <./figures/ui-
+screenshots/fig_audit_logs_page.png (PNG copy)>]
+<figures/fig_prediction_analytics.png, id=917, 2208.25pt x 1365.1pt>
 File: figures/fig_prediction_analytics.png Graphic file (type png)
 <use figures/fig_prediction_analytics.png>
 Package pdftex.def Info: figures/fig_prediction_analytics.png  used on input li
-ne 177.
+ne 116.
 (pdftex.def)             Requested size: 395.98996pt x 244.7909pt.
- [39]
-<figures/ui-screenshots/fig_yield_prediction_page.png, id=861, 1284.8pt x 803.0
+ [36]
+<figures/ui-screenshots/fig_yield_prediction_page.png, id=930, 1284.8pt x 803.0
 pt>
 File: figures/ui-screenshots/fig_yield_prediction_page.png Graphic file (type p
 ng)
 <use figures/ui-screenshots/fig_yield_prediction_page.png>
 Package pdftex.def Info: figures/ui-screenshots/fig_yield_prediction_page.png  
-used on input line 188.
-(pdftex.def)             Requested size: 354.31049pt x 221.44444pt.
- [40 <./figures/fig_prediction_analytics.png (PNG copy)> <./figures/ui-screensh
+used on input line 127.
+(pdftex.def)             Requested size: 366.81497pt x 229.26172pt.
+ [37 <./figures/fig_prediction_analytics.png (PNG copy)> <./figures/ui-screensh
 ots/fig_yield_prediction_page.png (PNG copy)>]
-<figures/fig_crypto_pipeline.png, id=867, 2208.25pt x 1284.8pt>
+<figures/fig_crypto_pipeline.png, id=937, 2208.25pt x 1284.8pt>
 File: figures/fig_crypto_pipeline.png Graphic file (type png)
 <use figures/fig_crypto_pipeline.png>
-Package pdftex.def Info: figures/fig_crypto_pipeline.png  used on input line 21
-2.
+Package pdftex.def Info: figures/fig_crypto_pipeline.png  used on input line 15
+1.
 (pdftex.def)             Requested size: 395.98996pt x 230.39142pt.
- [41] [42 <./figures/fig_crypto_pipeline.png (PNG copy)>]
+ [38] [39 <./figures/fig_crypto_pipeline.png (PNG copy)>]
 (C:\Users\Iskanda\AppData\Local\Programs\MiKTeX\tex/latex/psnfss\ts1ptm.fd)
-Underfull \hbox (badness 10000) in paragraph at lines 272--272
+Underfull \hbox (badness 10000) in paragraph at lines 211--211
 []|\OT1/ptm/m/n/12 (+20) AgriBlockIoT ---
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 272--272
+Underfull \hbox (badness 10000) in paragraph at lines 211--211
 \OT1/ptm/m/n/12 (+20) Ethereum (Caro
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 272--272
+Underfull \hbox (badness 10000) in paragraph at lines 211--211
 []|\OT1/ptm/m/n/12 (+20) AgriBlockIoT ---
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 272--272
+Underfull \hbox (badness 10000) in paragraph at lines 211--211
 \OT1/ptm/m/n/12 (+20) Saw-tooth (Caro
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 272--272
+Underfull \hbox (badness 10000) in paragraph at lines 211--211
 []|\OT1/ptm/m/n/12 (+20) Lightweight Agri-
  []
 
 
-Underfull \hbox (badness 2573) in paragraph at lines 272--272
+Underfull \hbox (badness 2573) in paragraph at lines 211--211
 \OT1/ptm/m/n/12 (+20) DLT (Ktari et al.,
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 272--272
+Underfull \hbox (badness 10000) in paragraph at lines 211--211
 []|\OT1/ptm/m/n/12 (+20) IoT Smart
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 272--272
+Underfull \hbox (badness 10000) in paragraph at lines 211--211
 \OT1/ptm/m/n/12 (+20) Farm (Aliyu &
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 272--272
+Underfull \hbox (badness 10000) in paragraph at lines 211--211
 []|\OT1/ptm/m/n/12 (+20) Secured Agri-
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 272--272
+Underfull \hbox (badness 10000) in paragraph at lines 211--211
 \OT1/ptm/m/n/12 (+20) Triad (Al Layek
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 272--272
+Underfull \hbox (badness 10000) in paragraph at lines 211--211
 []|\OT1/ptm/b/n/12 (+20) TerraNode (This
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 295--295
+Underfull \hbox (badness 10000) in paragraph at lines 234--234
 []|\OT1/ptm/m/n/12 (+20) AgriBlockIoT
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 295--295
+Underfull \hbox (badness 10000) in paragraph at lines 234--234
 []|\OT1/ptm/m/n/12 (+20) ECDSA
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 295--295
+Underfull \hbox (badness 10000) in paragraph at lines 234--234
 []|\OT1/ptm/m/n/12 (+20) None (46.8%
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 295--295
+Underfull \hbox (badness 10000) in paragraph at lines 234--234
 []|\OT1/ptm/m/n/12 (+20) AgriBlockIoT (Saw-
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 295--295
+Underfull \hbox (badness 10000) in paragraph at lines 234--234
 []|\OT1/ptm/m/n/12 (+20) Private Con-sor-
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 295--295
+Underfull \hbox (badness 10000) in paragraph at lines 234--234
 []|\OT1/ptm/m/n/12 (+20) Private Sim-u-la-
  []
 
 
-Underfull \hbox (badness 3713) in paragraph at lines 295--295
+Underfull \hbox (badness 3713) in paragraph at lines 234--234
 []|\OT1/ptm/m/n/12 (+20) None (290k tx
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 295--295
+Underfull \hbox (badness 10000) in paragraph at lines 234--234
 []|\OT1/ptm/m/n/12 (+20) ML In-te-grated
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 295--295
+Underfull \hbox (badness 10000) in paragraph at lines 234--234
 []|\OT1/ptm/b/n/12 (+20) TerraNode (This
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 295--295
+Underfull \hbox (badness 10000) in paragraph at lines 234--234
 []|\OT1/ptm/b/n/12 (+20) Public Ledger
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 295--295
+Underfull \hbox (badness 10000) in paragraph at lines 234--234
 []|\OT1/ptm/b/n/12 (+20) SHA-256, AES,
  []
 
-[43]
-<figures/fig_blockchain_comparison.png, id=912, 2208.25pt x 1204.5pt>
+[40]
+<figures/fig_blockchain_comparison.png, id=981, 2208.25pt x 1204.5pt>
 File: figures/fig_blockchain_comparison.png Graphic file (type png)
 <use figures/fig_blockchain_comparison.png>
 Package pdftex.def Info: figures/fig_blockchain_comparison.png  used on input l
-ine 302.
+ine 241.
 (pdftex.def)             Requested size: 395.98996pt x 215.99196pt.
- [44 <./figures/fig_blockchain_comparison.png (PNG copy)>]
-Overfull \hbox (0.75697pt too wide) in paragraph at lines 313--314
+ [41 <./figures/fig_blockchain_comparison.png (PNG copy)>]
+Overfull \hbox (0.75697pt too wide) in paragraph at lines 252--253
 []\OT1/ptm/b/n/12 (-20) Object-Centric Move Safety: \OT1/ptm/m/n/12 (-20) The M
 ove ob-ject model as-signs each \OT1/cmtt/m/n/12 ProduceBatch
  []
 
 
-Underfull \hbox (badness 1371) in paragraph at lines 362--362
+Underfull \hbox (badness 1371) in paragraph at lines 301--301
 []|\OT1/ptm/b/n/12 (+20) Test Case De-scrip-
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 362--362
+Underfull \hbox (badness 10000) in paragraph at lines 301--301
 \OT1/ptm/m/n/12 (+20) ac-cess-ing farmer
  []
 
 
-Underfull \hbox (badness 1968) in paragraph at lines 362--362
+Underfull \hbox (badness 1968) in paragraph at lines 301--301
 \OT1/ptm/m/n/12 (+20) ron-men-tal teleme-try
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 362--362
+Underfull \hbox (badness 10000) in paragraph at lines 301--301
 \OT1/ptm/m/n/12 (+20) with out-of-bounds
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 362--362
+Underfull \hbox (badness 10000) in paragraph at lines 301--301
 []|\OT1/ptm/m/n/12 (+20) Produce cus-tody
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 362--362
+Underfull \hbox (badness 10000) in paragraph at lines 301--301
 \OT1/ptm/m/n/12 (+20) trans-fer be-tween
  []
 
 
-Underfull \hbox (badness 5431) in paragraph at lines 362--362
+Underfull \hbox (badness 5431) in paragraph at lines 301--301
 \OT1/ptm/m/n/12 (+20) pu-ta-tion with $\OMS/ztmcm/m/n/12 ^^U \OT1/ztmcm/m/n/12 
 5$
  []
 
 
-Underfull \hbox (badness 1852) in paragraph at lines 362--362
+Underfull \hbox (badness 1852) in paragraph at lines 301--301
 []|\OT1/ptm/m/n/12 (+20) Yield pre-dic-tion in-
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 362--362
+Underfull \hbox (badness 10000) in paragraph at lines 301--301
 []|\OT1/ptm/m/n/12 (+20) Farmer dash-board
  []
 
-[45]
+[42]
 Overfull \vbox (212.52136pt too high) has occurred while \output is active []
 
 
-[46]
-Underfull \hbox (badness 10000) in paragraph at lines 395--395
+[43]
+Underfull \hbox (badness 10000) in paragraph at lines 334--334
 []|\OT1/ptm/b/n/12 (+20) Blockchain
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 395--395
+Underfull \hbox (badness 10000) in paragraph at lines 334--334
 []|\OT1/ptm/m/n/12 (+20) Produce
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 395--395
+Underfull \hbox (badness 10000) in paragraph at lines 334--334
 \OT1/ptm/m/n/12 (+20) Batch
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 395--395
+Underfull \hbox (badness 10000) in paragraph at lines 334--334
 \OT1/ptm/m/n/12 (+20) Mint-ing
  []
 
 
-Overfull \hbox (6.70541pt too wide) in paragraph at lines 395--395
+Overfull \hbox (6.70541pt too wide) in paragraph at lines 334--334
 \OT1/ptm/m/n/12 (-20) (\OT1/cmtt/m/n/12 mint[]batch\OT1/ptm/m/n/12 (-20) )| 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 395--395
+Underfull \hbox (badness 10000) in paragraph at lines 334--334
 []|\OT1/ptm/m/n/12 (+20) Custody
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 395--395
+Underfull \hbox (badness 10000) in paragraph at lines 334--334
 \OT1/ptm/m/n/12 (+20) Trans-fer
  []
 
 
-Overfull \hbox (43.75543pt too wide) in paragraph at lines 395--395
+Overfull \hbox (43.75543pt too wide) in paragraph at lines 334--334
 \OT1/ptm/m/n/12 (-20) (\OT1/cmtt/m/n/12 transfer[]custody\OT1/ptm/m/n/12 (-20) 
 )| 
  []
 
 
-Overfull \hbox (3.26866pt too wide) in paragraph at lines 395--395
+Overfull \hbox (3.26866pt too wide) in paragraph at lines 334--334
 []|\OT1/ptm/m/n/12 (-20) Deterministic
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 395--395
+Underfull \hbox (badness 10000) in paragraph at lines 334--334
 \OT1/ptm/m/n/12 (+20) Trans-ac-tion
  []
 
-[47]
-Underfull \hbox (badness 10000) in paragraph at lines 451--451
+[44]
+Underfull \hbox (badness 10000) in paragraph at lines 390--390
 []|\OT1/cmtt/m/n/12 /api/v1/analytics/predict/
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 451--451
+Underfull \hbox (badness 10000) in paragraph at lines 390--390
 []|\OT1/cmtt/m/n/12 /api/v1/analytics/predict/
  []
 
-[48]) [49]
+[45]) [46]
 \openout2 = `chapters/chapter5_rev.aux'.
 
  (chapters/chapter5_rev.tex
 CHAPTER 5.
-[50
+[47
 
 
 
 
-] [51]) [52] [53] [54
+] [48]) [49] [50] [51
 
 
 
-] [55]
+] [52]
 \openout2 = `chapters/appendix.aux'.
 
  (chapters/appendix.tex
@@ -1652,10 +1607,10 @@ Package hyperref Info: bookmark level for unknown lstlisting defaults to 0 on i
 nput line 17.
 LaTeX Font Info:    Font shape `OT1/cmtt/bx/n' in size <10> not available
 (Font)              Font shape `OT1/cmtt/m/n' tried instead on input line 18.
- [56
+ [53
 
 
-]) [57] [58] (main_final.aux (chapters/chapter1_rev.aux)
+]) [54] [55] (main_final.aux (chapters/chapter1_rev.aux)
 (chapters/chapter2_rev.aux) (chapters/chapter3_rev.aux)
 (chapters/chapter4_rev.aux) (chapters/chapter5_rev.aux) (chapters/appendix.aux)
 )
@@ -1667,37 +1622,44 @@ L3 programming layer <2026-07-20>
 
 LaTeX Font Warning: Some font shapes were not available, defaults substituted.
 
+
+LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
+
 Package rerunfilecheck Info: File `main_final.out' has not changed.
-(rerunfilecheck)             Checksum: BBF6CCA555DBC42FFBD26FE4A9AECAF9;15172.
+(rerunfilecheck)             Checksum: F085F9A5EE1D17D3F05BBAB72F1A8466;15172.
 Package logreq Info: Writing requests to 'main_final.run.xml'.
 \openout1 = `main_final.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
- 27913 strings out of 467501
- 491957 string characters out of 5407578
- 1778132 words of memory out of 5000000
- 56185 multiletter control sequences out of 15000+600000
- 660587 words of font info for 243 fonts, out of 8000000 for 9000
+ 27847 strings out of 467501
+ 489096 string characters out of 5407578
+ 1778287 words of memory out of 5000000
+ 56128 multiletter control sequences out of 15000+600000
+ 661106 words of font info for 244 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  67i,12n,90p,1992b,5050s stack positions out of 10000i,1000n,20000p,200000b,200000s
-<C:/Users/Iskanda/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/c
-m/cmex10.pfb><C:/Users/Iskanda/AppData/Local/Programs/MiKTeX/fonts/type1/public
-/amsfonts/cm/cmitt10.pfb><C:/Users/Iskanda/AppData/Local/Programs/MiKTeX/fonts/
-type1/public/amsfonts/cm/cmmi10.pfb><C:/Users/Iskanda/AppData/Local/Programs/Mi
-KTeX/fonts/type1/public/amsfonts/cm/cmr10.pfb><C:/Users/Iskanda/AppData/Local/P
-rograms/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Users/Iskanda/AppD
-ata/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmtt10.pfb><C:/Users/I
-skanda/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmtt12.pfb>
-<C:/Users/Iskanda/AppData/Local/Programs/MiKTeX/fonts/type1/urw/symbol/usyr.pfb
-><C:/Users/Iskanda/AppData/Local/Programs/MiKTeX/fonts/type1/urw/symbol/usyr.pf
-b><C:/Users/Iskanda/AppData/Local/Programs/MiKTeX/fonts/type1/urw/times/utmb8a.
-pfb><C:/Users/Iskanda/AppData/Local/Programs/MiKTeX/fonts/type1/urw/times/utmr8
-a.pfb><C:/Users/Iskanda/AppData/Local/Programs/MiKTeX/fonts/type1/urw/times/utm
-ri8a.pfb>
-Output written on main_final.pdf (70 pages, 6114937 bytes).
+
+pdfTeX warning (dest): name{appendix*.33} has been referenced but does not exis
+t, replaced by a fixed one
+
+<C:/Users/Iskanda/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/
+cmex10.pfb><C:/Users/Iskanda/AppData/Local/Programs/MiKTeX/fonts/type1/public/a
+msfonts/cm/cmitt10.pfb><C:/Users/Iskanda/AppData/Local/Programs/MiKTeX/fonts/ty
+pe1/public/amsfonts/cm/cmmi10.pfb><C:/Users/Iskanda/AppData/Local/Programs/MiKT
+eX/fonts/type1/public/amsfonts/cm/cmr10.pfb><C:/Users/Iskanda/AppData/Local/Pro
+grams/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Users/Iskanda/AppDat
+a/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmtt10.pfb><C:/Users/Isk
+anda/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmtt12.pfb><C
+:/Users/Iskanda/AppData/Local/Programs/MiKTeX/fonts/type1/urw/symbol/usyr.pfb><
+C:/Users/Iskanda/AppData/Local/Programs/MiKTeX/fonts/type1/urw/symbol/usyr.pfb>
+<C:/Users/Iskanda/AppData/Local/Programs/MiKTeX/fonts/type1/urw/times/utmb8a.pf
+b><C:/Users/Iskanda/AppData/Local/Programs/MiKTeX/fonts/type1/urw/times/utmr8a.
+pfb><C:/Users/Iskanda/AppData/Local/Programs/MiKTeX/fonts/type1/urw/times/utmri
+8a.pfb>
+Output written on main_final.pdf (67 pages, 4533067 bytes).
 PDF statistics:
- 1252 PDF objects out of 1440 (max. 8388607)
- 362 named destinations out of 1000 (max. 500000)
- 36583 words of extra memory for PDF output out of 42996 (max. 10000000)
+ 1319 PDF objects out of 1440 (max. 8388607)
+ 353 named destinations out of 1000 (max. 500000)
+ 38596 words of extra memory for PDF output out of 42996 (max. 10000000)
 

@@ -321,7 +321,7 @@ export function DashboardLayout({
                 type="button"
                 onClick={async () => {
                   await switchDemoRole('FARMER');
-                  navigate('/farmer/dashboard');
+                  window.location.href = '/farmer/dashboard';
                 }}
                 className={`py-1 rounded-lg transition-all font-semibold text-center ${
                   role === 'farmer'
@@ -336,7 +336,7 @@ export function DashboardLayout({
                 type="button"
                 onClick={async () => {
                   await switchDemoRole('LOGISTICS');
-                  navigate('/logistics/dashboard');
+                  window.location.href = '/logistics/dashboard';
                 }}
                 className={`py-1 rounded-lg transition-all font-semibold text-center ${
                   role === 'logistics'
@@ -351,7 +351,7 @@ export function DashboardLayout({
                 type="button"
                 onClick={async () => {
                   await switchDemoRole('ADMIN');
-                  navigate('/admin/dashboard');
+                  window.location.href = '/admin/dashboard';
                 }}
                 className={`py-1 rounded-lg transition-all font-semibold text-center ${
                   role === 'admin'

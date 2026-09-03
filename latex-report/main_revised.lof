@@ -1,0 +1,20 @@
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {2.1}{\ignorespaces Conceptual Framework of the TerraNode System}}{15}{figure.caption.7}%
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {3.1}{\ignorespaces TerraNode System Architecture}}{19}{figure.caption.10}%
+\contentsline {figure}{\numberline {3.2}{\ignorespaces Context Diagram (DFD Level 0)}}{20}{figure.caption.11}%
+\contentsline {figure}{\numberline {3.3}{\ignorespaces Data Flow Diagram (Level 1)}}{21}{figure.caption.12}%
+\contentsline {figure}{\numberline {3.4}{\ignorespaces Entity-Relationship Diagram}}{22}{figure.caption.13}%
+\contentsline {figure}{\numberline {3.5}{\ignorespaces Use Case Diagram}}{23}{figure.caption.14}%
+\contentsline {figure}{\numberline {3.6}{\ignorespaces Batch Lifecycle Sequence Diagram}}{25}{figure.caption.15}%
+\contentsline {figure}{\numberline {3.7}{\ignorespaces Authentication Flow Diagram}}{28}{figure.caption.16}%
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {4.1}{\ignorespaces Farmer Operational Dashboard Displaying Real-Time Micro-Climate Telemetry and Produce Batches}}{32}{figure.caption.19}%
+\contentsline {figure}{\numberline {4.2}{\ignorespaces Produce Custody Transfer and Blockchain Verification Interface}}{33}{figure.caption.20}%
+\contentsline {figure}{\numberline {4.3}{\ignorespaces Chronological Cryptographic Audit Log and System Activity Interface}}{33}{figure.caption.21}%
+\contentsline {figure}{\numberline {4.4}{\ignorespaces Predictive Analytics Engine Architecture and Decision Workflow}}{35}{figure.caption.22}%
+\contentsline {figure}{\numberline {4.5}{\ignorespaces Yield Forecast, Soil Suitability Matrix, and Decision Support Interface}}{36}{figure.caption.23}%
+\contentsline {figure}{\numberline {4.6}{\ignorespaces TerraNode Cryptographic Processing and Blockchain Anchoring Pipeline}}{37}{figure.caption.24}%
+\contentsline {figure}{\numberline {4.7}{\ignorespaces Comparative Performance Analysis of Agricultural Blockchain Deployments}}{40}{figure.caption.28}%
+\addvspace {10\p@ }

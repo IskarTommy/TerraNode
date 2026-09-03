@@ -10,10 +10,16 @@ interface WalletState {
   network: string;
 }
 
+export interface WalletExecutionResult {
+  digest: string;
+  effects?: any;
+  objectChanges?: any[] | null;
+}
+
 interface WalletContextValue extends WalletState {
   connect: () => Promise<void>;
   disconnect: () => void;
-  signAndExecute: (tx: Transaction) => Promise<{ digest: string }>;
+  signAndExecute: (tx: Transaction) => Promise<WalletExecutionResult>;
   refreshBalance: () => Promise<void>;
 }
 
@@ -99,7 +105,11 @@ export function WalletProvider({ children }: { children: ReactNode }) {
       });
 
       await refreshBalance();
-      return { digest: result.digest };
+      return {
+        digest: result.digest,
+        effects: result.effects,
+        objectChanges: result.objectChanges,
+      };
     },
     [signTransaction, client, refreshBalance]
   );
