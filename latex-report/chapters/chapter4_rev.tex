@@ -48,74 +48,92 @@ Table~\ref{tab:api_endpoints} outlines the primary version-prefixed RESTful API 
 
 The frontend is implemented as a Single Page Application using React 19, TypeScript, and Vite. The system architecture enforces client-side role guards, preventing unauthorized navigation across role boundaries. Global state is managed using React Context API (\texttt{AuthContext} for JWT lifecycle and session persistence, and \texttt{WalletContext} leveraging Mysten Labs dApp Kit for Sui wallet interactions).
 
-The platform provides dedicated, role-specific user interfaces for administrators, farmers, and logistics handlers, as illustrated in Figures~\ref{fig:landing_page} through~\ref{fig:audit_logs_page}.
+The platform provides dedicated, role-specific user interfaces designed for intuitive interaction across different user roles. Figure~\ref{fig:landing_page} is the public landing page which introduces the platform and its core agricultural features.
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.85\textwidth]{figures/fig_landing_page.png}
+    \includegraphics[width=0.85\textwidth]{figures/ui-screenshots/fig_landing_page.png}
     \caption{TerraNode Public Landing Page}
     \label{fig:landing_page}
 \end{figure}
 
+Figure~\ref{fig:register_page} is the unified registration interface where users select their role and create an account.
+
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.85\textwidth]{figures/fig_register_page.png}
+    \includegraphics[width=0.85\textwidth]{figures/ui-screenshots/fig_register_page.png}
     \caption{User Registration Interface with Role Selection}
     \label{fig:register_page}
 \end{figure}
 
+Figure~\ref{fig:login_page} is the authentication interface, which securely supports both traditional email and Sui Wallet login.
+
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.85\textwidth]{figures/fig_login_page.png}
+    \includegraphics[width=0.85\textwidth]{figures/ui-screenshots/fig_login_page.png}
     \caption{Authentication Interface Supporting Email and Sui Wallet Login}
     \label{fig:login_page}
 \end{figure}
 
+Once authenticated, users are routed to their respective dashboards. Figure~\ref{fig:farmer_dashboard} is the Farmer Dashboard, which serves as the primary interface for agricultural producers, displaying telemetry summaries and providing quick access to batch minting tools.
+
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.85\textwidth]{figures/fig_farmer_dashboard.png}
+    \includegraphics[width=0.85\textwidth]{figures/ui-screenshots/fig_farmer_dashboard.png}
     \caption{Farmer Dashboard Displaying Telemetry Summaries and Batch Status}
     \label{fig:farmer_dashboard}
 \end{figure}
 
+Figure~\ref{fig:telemetry_page} is the Telemetry Submission interface where farmers can securely log environmental conditions.
+
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.85\textwidth]{figures/fig_telemetry_page.png}
+    \includegraphics[width=0.85\textwidth]{figures/ui-screenshots/fig_telemetry_page.png}
     \caption{Environmental Telemetry Submission and Hash Verification Interface}
     \label{fig:telemetry_page}
 \end{figure}
 
+Figure~\ref{fig:mint_batch_page} is the Mint Batch interface utilized to anchor produce records immutably on the Sui ledger.
+
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.85\textwidth]{figures/fig_mint_batch_page.png}
+    \includegraphics[width=0.85\textwidth]{figures/ui-screenshots/fig_mint_batch_page.png}
     \caption{Produce Batch On-Chain Minting Interface}
     \label{fig:mint_batch_page}
 \end{figure}
 
+Figure~\ref{fig:logistics_dashboard} is the Logistics Handler Dashboard, which enables supply chain workers to manage custody transfers efficiently by providing a clear overview of pending and completed deliveries.
+
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.85\textwidth]{figures/fig_logistics_dashboard.png}
+    \includegraphics[width=0.85\textwidth]{figures/ui-screenshots/fig_logistics_dashboard.png}
     \caption{Logistics Handler Dashboard for Supply Chain Custody}
     \label{fig:logistics_dashboard}
 \end{figure}
 
+Figure~\ref{fig:transfer_page} is the dedicated Custody Transfer interface that facilitates the physical handover of agricultural batches using blockchain validation.
+
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.85\textwidth]{figures/fig_transfer_page.png}
+    \includegraphics[width=0.85\textwidth]{figures/ui-screenshots/fig_transfer_page.png}
     \caption{Produce Custody Transfer and Blockchain Verification Interface}
     \label{fig:transfer_page}
 \end{figure}
 
+Figure~\ref{fig:admin_dashboard} is the Administrator Dashboard, which offers a comprehensive, system-wide monitoring interface for global activity metrics.
+
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.85\textwidth]{figures/fig_admin_dashboard.png}
+    \includegraphics[width=0.85\textwidth]{figures/ui-screenshots/fig_admin_dashboard.png}
     \caption{Administrator System Monitoring Dashboard}
     \label{fig:admin_dashboard}
 \end{figure}
 
+Figure~\ref{fig:audit_logs_page} is the detailed Audit Logs interface used for strict security compliance and tracking system events.
+
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.75\textwidth]{figures/fig_audit_logs_page.png}
+    \includegraphics[width=0.75\textwidth]{figures/ui-screenshots/fig_audit_logs_page.png}
     \caption{Chronological Audit Log and System Activity Interface}
     \label{fig:audit_logs_page}
 \end{figure}
@@ -167,7 +185,7 @@ Figure~\ref{fig:yield_prediction_page} presents the operational yield prediction
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.85\textwidth]{figures/fig_yield_prediction_page.png}
+    \includegraphics[width=0.85\textwidth]{figures/ui-screenshots/fig_yield_prediction_page.png}
     \caption{Yield Prediction and Decision Support Interface}
     \label{fig:yield_prediction_page}
 \end{figure}
@@ -385,9 +403,9 @@ The behavior of the weighted moving average prediction engine was evaluated thro
 \centering
 \caption{Yield Prediction Sensitivity Analysis Under Varied Regimes}
 \label{tab:sensitivity}
-\begin{tabularx}{\textwidth}{|l|l|l|X|}
+\begin{tabularx}{\textwidth}{|>{\centering\arraybackslash}X|>{\centering\arraybackslash}X|>{\centering\arraybackslash}X|>{\raggedright\arraybackslash}p{6cm}|}
 \hline
-\textbf{Mean Temp ($\bar{T}$, $^\circ$C)} & \textbf{Mean Moisture ($\bar{M}$, \%)} & \textbf{Predicted Yield ($\hat{Y}$, MT)} & \textbf{Contextual Decision Recommendation} \\
+\textbf{Temp. ($\bar{T}$, $^\circ$C)} & \textbf{Moisture ($\bar{M}$, \%)} & \textbf{Yield ($\hat{Y}$, MT)} & \textbf{Contextual Decision Recommendation} \\
 \hline
 22.0 & 60.0 & 80.0 & Optimal conditions; maintain current regime \\
 \hline

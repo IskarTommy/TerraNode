@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.29 (MiKTeX 26.5) (preloaded format=pdflatex 2026.8.25)  31 AUG 2026 23:10
+This is pdfTeX, Version 3.141592653-2.6-1.40.29 (MiKTeX 26.5) (preloaded format=pdflatex 2026.8.25)  3 SEP 2026 00:41
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1026,14 +1026,14 @@ Package caption Info: End \AtBeginDocument code.
 * layout: <same size as paper>
 * layoutoffset:(h,v)=(0.0pt,0.0pt)
 * modes: 
-* h-part:(L,W,R)=(72.26999pt, 452.9679pt, 72.26999pt)
+* h-part:(L,W,R)=(108.405pt, 416.83289pt, 72.26999pt)
 * v-part:(T,H,B)=(72.26999pt, 700.50687pt, 72.26999pt)
 * \paperwidth=597.50787pt
 * \paperheight=845.04684pt
-* \textwidth=452.9679pt
+* \textwidth=416.83289pt
 * \textheight=700.50687pt
-* \oddsidemargin=0.0pt
-* \evensidemargin=0.0pt
+* \oddsidemargin=36.13501pt
+* \evensidemargin=36.13501pt
 * \topmargin=-37.0pt
 * \headheight=12.0pt
 * \headsep=25.0pt
@@ -1140,13 +1140,7 @@ LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <7> not available
 
 [2
 
-]
-Underfull \hbox (badness 1057) in paragraph at lines 237--238
-\OT1/ptm/m/it/12 (+20) SE-CU-RITY FRAME-WORK\OT1/ptm/m/n/12 (+20) '' is the bon
-afide work of KAS-SIM ISKANDA DEISHINI
- []
-
-[3
+] [3
 
 ] [4
 
@@ -1181,73 +1175,84 @@ l.12
       [1
 
 
-] [2] [3] [4]) [5]
+] [2] [3] [4]) [5] [6]
 \openout2 = `chapters/chapter2_rev.aux'.
 
  (chapters/chapter2_rev.tex
 CHAPTER 2.
-[6
+[7
 
 
 
 
-] [7] [8] [9] [10] [11] [12]
-<figures/fig_conceptual_framework.png, id=657, 2489.3pt x 1345.025pt>
+] [8] [9] [10] [11] [12]
+Underfull \hbox (badness 10000) in paragraph at lines 115--115
+[]|\OT1/ptm/m/n/12 (+20) IoT + ML +
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 115--115
+[]|\OT1/ptm/m/n/12 (+20) Embedded
+ []
+
+[13] [14]
+<figures/fig_conceptual_framework.png, id=667, 2489.3pt x 1345.025pt>
 File: figures/fig_conceptual_framework.png Graphic file (type png)
 <use figures/fig_conceptual_framework.png>
 Package pdftex.def Info: figures/fig_conceptual_framework.png  used on input li
 ne 140.
-(pdftex.def)             Requested size: 452.9679pt x 244.74156pt.
- [13]) [14 <./figures/fig_conceptual_framework.png (PNG copy)>]
+(pdftex.def)             Requested size: 416.83289pt x 225.22382pt.
+ [15]) [16 <./figures/fig_conceptual_framework.png (PNG copy)>]
 \openout2 = `chapters/chapter3_rev.aux'.
 
- (chapters/chapter3_rev.tex
+
+(chapters/chapter3_rev.tex
 CHAPTER 3.
-[15
+[17
 
 
 
 
-] [16]
-<figures/fig_system_architecture.png, id=683, 2208.25pt x 1726.45pt>
+] [18]
+<figures/fig_system_architecture.png, id=692, 2208.25pt x 1726.45pt>
 File: figures/fig_system_architecture.png Graphic file (type png)
 <use figures/fig_system_architecture.png>
 Package pdftex.def Info: figures/fig_system_architecture.png  used on input lin
 e 98.
-(pdftex.def)             Requested size: 452.9679pt x 354.13528pt.
- [17]
-<figures/fig_dfd_level0.png, id=692, 2208.25pt x 1405.25pt>
+(pdftex.def)             Requested size: 416.83289pt x 325.86874pt.
+ [19]
+<figures/fig_dfd_level0.png, id=702, 2208.25pt x 1405.25pt>
 File: figures/fig_dfd_level0.png Graphic file (type png)
 <use figures/fig_dfd_level0.png>
 Package pdftex.def Info: figures/fig_dfd_level0.png  used on input line 111.
-(pdftex.def)             Requested size: 452.9679pt x 288.24965pt.
- [18 <./figures/fig_system_architecture.png (PNG copy)>]
-<figures/fig_dfd_level1.png, id=698, 2208.25pt x 1565.85pt>
+(pdftex.def)             Requested size: 416.83289pt x 265.242pt.
+ [20 <./figures/fig_system_architecture.png (PNG copy)>]
+<figures/fig_dfd_level1.png, id=708, 2208.25pt x 1565.85pt>
 File: figures/fig_dfd_level1.png Graphic file (type png)
 <use figures/fig_dfd_level1.png>
 Package pdftex.def Info: figures/fig_dfd_level1.png  used on input line 129.
-(pdftex.def)             Requested size: 452.9679pt x 321.19247pt.
- [19 <./figures/fig_dfd_level0.png (PNG copy)>]
-<figures/fig_er_diagram.png, id=709, 2208.25pt x 1485.55pt>
+(pdftex.def)             Requested size: 416.83289pt x 295.55537pt.
+ [21 <./figures/fig_dfd_level0.png (PNG copy)>]
+<figures/fig_er_diagram.png, id=718, 2208.25pt x 1485.55pt>
 File: figures/fig_er_diagram.png Graphic file (type png)
 <use figures/fig_er_diagram.png>
 Package pdftex.def Info: figures/fig_er_diagram.png  used on input line 140.
-(pdftex.def)             Requested size: 452.9679pt x 304.72107pt.
- [20 <./figures/fig_dfd_level1.png (PNG copy)>]
-<figures/fig_use_case.png, id=715, 2208.25pt x 1525.7pt>
+(pdftex.def)             Requested size: 416.83289pt x 280.39868pt.
+ [22 <./figures/fig_dfd_level1.png (PNG copy)>]
+<figures/fig_use_case.png, id=724, 2208.25pt x 1525.7pt>
 File: figures/fig_use_case.png Graphic file (type png)
 <use figures/fig_use_case.png>
 Package pdftex.def Info: figures/fig_use_case.png  used on input line 157.
-(pdftex.def)             Requested size: 452.9679pt x 312.95677pt.
- [21 <./figures/fig_er_diagram.png (PNG copy)>] [22 <./figures/fig_use_case.png
+(pdftex.def)             Requested size: 416.83289pt x 287.97704pt.
+ [23 <./figures/fig_er_diagram.png (PNG copy)>] [24 <./figures/fig_use_case.png
  (PNG copy)>]
-<figures/fig_batch_lifecycle.png, id=724, 2208.25pt x 1445.4pt>
+<figures/fig_batch_lifecycle.png, id=733, 2208.25pt x 1445.4pt>
 File: figures/fig_batch_lifecycle.png Graphic file (type png)
 <use figures/fig_batch_lifecycle.png>
 Package pdftex.def Info: figures/fig_batch_lifecycle.png  used on input line 20
 1.
-(pdftex.def)             Requested size: 452.9679pt x 296.48535pt.
- [23] [24 <./figures/fig_batch_lifecycle.png (PNG copy)>]
+(pdftex.def)             Requested size: 416.83289pt x 272.82034pt.
+ [25] [26 <./figures/fig_batch_lifecycle.png (PNG copy)>]
 LaTeX Font Info:    Trying to load font information for OMS+cmtt on input line 
 245.
 LaTeX Font Info:    No file OMScmtt.fd. on input line 245.
@@ -1257,358 +1262,380 @@ LaTeX Font Warning: Font shape `OMS/cmtt/m/n' undefined
 (Font)              using `OMS/cmsy/m/n' instead
 (Font)              for symbol `textbraceleft' on input line 245.
 
-[25]
-<figures/fig_auth_flow.png, id=755, 2208.25pt x 1485.55pt>
+[27]
+<figures/fig_auth_flow.png, id=765, 2208.25pt x 1485.55pt>
 File: figures/fig_auth_flow.png Graphic file (type png)
 <use figures/fig_auth_flow.png>
 Package pdftex.def Info: figures/fig_auth_flow.png  used on input line 287.
-(pdftex.def)             Requested size: 452.9679pt x 304.72107pt.
- [26] [27 <./figures/fig_auth_flow.png (PNG copy)>]) [28]
+(pdftex.def)             Requested size: 416.83289pt x 280.39868pt.
+ [28]
+Underfull \hbox (badness 5862) in paragraph at lines 335--335
+[]|\OT1/ptm/m/n/12 (+20) Build tool and de-vel-op-ment
+ []
+
+[29 <./figures/fig_auth_flow.png (PNG copy)>]) [30] [31]
 \openout2 = `chapters/chapter4_rev.aux'.
 
 
 (chapters/chapter4_rev.tex
 CHAPTER 4.
-[29
+[32
 
 
 
 
 ]
 Underfull \hbox (badness 10000) in paragraph at lines 44--44
-[]|\OT1/cmtt/m/n/12 prepare/\OT1/ptm/m/n/12 (+20) , \OT1/cmtt/m/n/12 confirm/\O
-T1/ptm/m/n/12 (+20) , \OT1/cmtt/m/n/12 transfer/\OT1/ptm/m/n/12 (+20) , \OT1/cm
-tt/m/n/12 list/\OT1/ptm/m/n/12 (+20) ,
+[]|\OT1/cmtt/m/n/12 login/\OT1/ptm/m/n/12 (+20) , \OT1/cmtt/m/n/12 wallet-login
+/\OT1/ptm/m/n/12 (+20) , \OT1/cmtt/m/n/12 register/\OT1/ptm/m/n/12 (+20) ,
  []
 
-<figures/fig_landing_page.png, id=789, 1284.8pt x 803.0pt>
-File: figures/fig_landing_page.png Graphic file (type png)
-<use figures/fig_landing_page.png>
-Package pdftex.def Info: figures/fig_landing_page.png  used on input line 55.
-(pdftex.def)             Requested size: 385.02547pt x 240.6323pt.
-[30]
-<figures/fig_register_page.png, id=794, 1284.8pt x 803.0pt>
-File: figures/fig_register_page.png Graphic file (type png)
-<use figures/fig_register_page.png>
-Package pdftex.def Info: figures/fig_register_page.png  used on input line 62.
-(pdftex.def)             Requested size: 385.02547pt x 240.6323pt.
-<figures/fig_login_page.png, id=795, 1284.8pt x 803.0pt>
-File: figures/fig_login_page.png Graphic file (type png)
-<use figures/fig_login_page.png>
-Package pdftex.def Info: figures/fig_login_page.png  used on input line 69.
-(pdftex.def)             Requested size: 385.02547pt x 240.6323pt.
- [31 <./figures/fig_landing_page.png (PNG copy)> <./figures/fig_register_page.p
-ng (PNG copy)>]
-<figures/fig_farmer_dashboard.png, id=801, 1284.8pt x 803.0pt>
-File: figures/fig_farmer_dashboard.png Graphic file (type png)
-<use figures/fig_farmer_dashboard.png>
-Package pdftex.def Info: figures/fig_farmer_dashboard.png  used on input line 7
-6.
-(pdftex.def)             Requested size: 385.02547pt x 240.6323pt.
-<figures/fig_telemetry_page.png, id=802, 1284.8pt x 803.0pt>
-File: figures/fig_telemetry_page.png Graphic file (type png)
-<use figures/fig_telemetry_page.png>
-Package pdftex.def Info: figures/fig_telemetry_page.png  used on input line 83.
-
-(pdftex.def)             Requested size: 385.02547pt x 240.6323pt.
- [32 <./figures/fig_login_page.png (PNG copy)> <./figures/fig_farmer_dashboard.
-png (PNG copy)>]
-<figures/fig_mint_batch_page.png, id=807, 1284.8pt x 803.0pt>
-File: figures/fig_mint_batch_page.png Graphic file (type png)
-<use figures/fig_mint_batch_page.png>
-Package pdftex.def Info: figures/fig_mint_batch_page.png  used on input line 90
-.
-(pdftex.def)             Requested size: 385.02547pt x 240.6323pt.
-<figures/fig_logistics_dashboard.png, id=808, 1284.8pt x 803.0pt>
-File: figures/fig_logistics_dashboard.png Graphic file (type png)
-<use figures/fig_logistics_dashboard.png>
-Package pdftex.def Info: figures/fig_logistics_dashboard.png  used on input lin
-e 97.
-(pdftex.def)             Requested size: 385.02547pt x 240.6323pt.
- [33 <./figures/fig_telemetry_page.png (PNG copy)> <./figures/fig_mint_batch_pa
-ge.png (PNG copy)>]
-<figures/fig_transfer_page.png, id=813, 1284.8pt x 803.0pt>
-File: figures/fig_transfer_page.png Graphic file (type png)
-<use figures/fig_transfer_page.png>
-Package pdftex.def Info: figures/fig_transfer_page.png  used on input line 104.
-
-(pdftex.def)             Requested size: 385.02547pt x 240.6323pt.
-<figures/fig_admin_dashboard.png, id=814, 1284.8pt x 803.0pt>
-File: figures/fig_admin_dashboard.png Graphic file (type png)
-<use figures/fig_admin_dashboard.png>
-Package pdftex.def Info: figures/fig_admin_dashboard.png  used on input line 11
-1.
-(pdftex.def)             Requested size: 385.02547pt x 240.6323pt.
- [34 <./figures/fig_logistics_dashboard.png (PNG copy)> <./figures/fig_transfer
-_page.png (PNG copy)>]
-<figures/fig_audit_logs_page.png, id=819, 1284.8pt x 803.0pt>
-File: figures/fig_audit_logs_page.png Graphic file (type png)
-<use figures/fig_audit_logs_page.png>
-Package pdftex.def Info: figures/fig_audit_logs_page.png  used on input line 11
-8.
-(pdftex.def)             Requested size: 339.72592pt x 212.32838pt.
-
-[35 <./figures/fig_admin_dashboard.png (PNG copy)> <./figures/fig_audit_logs_pa
-ge.png (PNG copy)>]
-<figures/fig_prediction_analytics.png, id=828, 2208.25pt x 1365.1pt>
+<figures/ui-screenshots/fig_landing_page.png, id=802, 1284.8pt x 803.0pt>
+File: figures/ui-screenshots/fig_landing_page.png Graphic file (type png)
+<use figures/ui-screenshots/fig_landing_page.png>
+Package pdftex.def Info: figures/ui-screenshots/fig_landing_page.png  used on i
+nput line 55.
+(pdftex.def)             Requested size: 354.31049pt x 221.44444pt.
+[33]
+<figures/ui-screenshots/fig_register_page.png, id=808, 1284.8pt x 803.0pt>
+File: figures/ui-screenshots/fig_register_page.png Graphic file (type png)
+<use figures/ui-screenshots/fig_register_page.png>
+Package pdftex.def Info: figures/ui-screenshots/fig_register_page.png  used on 
+input line 64.
+(pdftex.def)             Requested size: 354.31049pt x 221.44444pt.
+<figures/ui-screenshots/fig_login_page.png, id=810, 1284.8pt x 803.0pt>
+File: figures/ui-screenshots/fig_login_page.png Graphic file (type png)
+<use figures/ui-screenshots/fig_login_page.png>
+Package pdftex.def Info: figures/ui-screenshots/fig_login_page.png  used on inp
+ut line 73.
+(pdftex.def)             Requested size: 354.31049pt x 221.44444pt.
+ [34 <./figures/ui-screenshots/fig_landing_page.png (PNG copy)> <./figures/ui-s
+creenshots/fig_register_page.png (PNG copy)>]
+<figures/ui-screenshots/fig_farmer_dashboard.png, id=816, 1284.8pt x 803.0pt>
+File: figures/ui-screenshots/fig_farmer_dashboard.png Graphic file (type png)
+<use figures/ui-screenshots/fig_farmer_dashboard.png>
+Package pdftex.def Info: figures/ui-screenshots/fig_farmer_dashboard.png  used 
+on input line 82.
+(pdftex.def)             Requested size: 354.31049pt x 221.44444pt.
+<figures/ui-screenshots/fig_telemetry_page.png, id=818, 1284.8pt x 803.0pt>
+File: figures/ui-screenshots/fig_telemetry_page.png Graphic file (type png)
+<use figures/ui-screenshots/fig_telemetry_page.png>
+Package pdftex.def Info: figures/ui-screenshots/fig_telemetry_page.png  used on
+ input line 91.
+(pdftex.def)             Requested size: 354.31049pt x 221.44444pt.
+ [35 <./figures/ui-screenshots/fig_login_page.png (PNG copy)> <./figures/ui-scr
+eenshots/fig_farmer_dashboard.png (PNG copy)>]
+<figures/ui-screenshots/fig_mint_batch_page.png, id=824, 1284.8pt x 803.0pt>
+File: figures/ui-screenshots/fig_mint_batch_page.png Graphic file (type png)
+<use figures/ui-screenshots/fig_mint_batch_page.png>
+Package pdftex.def Info: figures/ui-screenshots/fig_mint_batch_page.png  used o
+n input line 100.
+(pdftex.def)             Requested size: 354.31049pt x 221.44444pt.
+<figures/ui-screenshots/fig_logistics_dashboard.png, id=826, 1284.8pt x 803.0pt
+>
+File: figures/ui-screenshots/fig_logistics_dashboard.png Graphic file (type png
+)
+<use figures/ui-screenshots/fig_logistics_dashboard.png>
+Package pdftex.def Info: figures/ui-screenshots/fig_logistics_dashboard.png  us
+ed on input line 109.
+(pdftex.def)             Requested size: 354.31049pt x 221.44444pt.
+ [36 <./figures/ui-screenshots/fig_telemetry_page.png (PNG copy)> <./figures/ui
+-screenshots/fig_mint_batch_page.png (PNG copy)>]
+<figures/ui-screenshots/fig_transfer_page.png, id=832, 1284.8pt x 803.0pt>
+File: figures/ui-screenshots/fig_transfer_page.png Graphic file (type png)
+<use figures/ui-screenshots/fig_transfer_page.png>
+Package pdftex.def Info: figures/ui-screenshots/fig_transfer_page.png  used on 
+input line 118.
+(pdftex.def)             Requested size: 354.31049pt x 221.44444pt.
+<figures/ui-screenshots/fig_admin_dashboard.png, id=834, 1284.8pt x 803.0pt>
+File: figures/ui-screenshots/fig_admin_dashboard.png Graphic file (type png)
+<use figures/ui-screenshots/fig_admin_dashboard.png>
+Package pdftex.def Info: figures/ui-screenshots/fig_admin_dashboard.png  used o
+n input line 127.
+(pdftex.def)             Requested size: 354.31049pt x 221.44444pt.
+ [37 <./figures/ui-screenshots/fig_logistics_dashboard.png (PNG copy)> <./figur
+es/ui-screenshots/fig_transfer_page.png (PNG copy)>]
+<figures/ui-screenshots/fig_audit_logs_page.png, id=841, 1284.8pt x 803.0pt>
+File: figures/ui-screenshots/fig_audit_logs_page.png Graphic file (type png)
+<use figures/ui-screenshots/fig_audit_logs_page.png>
+Package pdftex.def Info: figures/ui-screenshots/fig_audit_logs_page.png  used o
+n input line 136.
+(pdftex.def)             Requested size: 312.62466pt x 195.38278pt.
+ [38 <./figures/ui-screenshots/fig_admin_dashboard.png (PNG copy)> <./figures/u
+i-screenshots/fig_audit_logs_page.png (PNG copy)>]
+<figures/fig_prediction_analytics.png, id=850, 2208.25pt x 1365.1pt>
 File: figures/fig_prediction_analytics.png Graphic file (type png)
 <use figures/fig_prediction_analytics.png>
 Package pdftex.def Info: figures/fig_prediction_analytics.png  used on input li
-ne 159.
-(pdftex.def)             Requested size: 430.31812pt x 266.01637pt.
- [36]
-<figures/fig_yield_prediction_page.png, id=839, 1284.8pt x 803.0pt>
-File: figures/fig_yield_prediction_page.png Graphic file (type png)
-<use figures/fig_yield_prediction_page.png>
-Package pdftex.def Info: figures/fig_yield_prediction_page.png  used on input l
-ine 170.
-(pdftex.def)             Requested size: 385.02547pt x 240.6323pt.
- [37 <./figures/fig_prediction_analytics.png (PNG copy)> <./figures/fig_yield_p
-rediction_page.png (PNG copy)>]
-<figures/fig_crypto_pipeline.png, id=846, 2208.25pt x 1284.8pt>
+ne 177.
+(pdftex.def)             Requested size: 395.98996pt x 244.7909pt.
+ [39]
+<figures/ui-screenshots/fig_yield_prediction_page.png, id=861, 1284.8pt x 803.0
+pt>
+File: figures/ui-screenshots/fig_yield_prediction_page.png Graphic file (type p
+ng)
+<use figures/ui-screenshots/fig_yield_prediction_page.png>
+Package pdftex.def Info: figures/ui-screenshots/fig_yield_prediction_page.png  
+used on input line 188.
+(pdftex.def)             Requested size: 354.31049pt x 221.44444pt.
+ [40 <./figures/fig_prediction_analytics.png (PNG copy)> <./figures/ui-screensh
+ots/fig_yield_prediction_page.png (PNG copy)>]
+<figures/fig_crypto_pipeline.png, id=867, 2208.25pt x 1284.8pt>
 File: figures/fig_crypto_pipeline.png Graphic file (type png)
 <use figures/fig_crypto_pipeline.png>
-Package pdftex.def Info: figures/fig_crypto_pipeline.png  used on input line 19
-4.
-(pdftex.def)             Requested size: 430.31812pt x 250.36835pt.
- [38] [39 <./figures/fig_crypto_pipeline.png (PNG copy)>]
+Package pdftex.def Info: figures/fig_crypto_pipeline.png  used on input line 21
+2.
+(pdftex.def)             Requested size: 395.98996pt x 230.39142pt.
+ [41] [42 <./figures/fig_crypto_pipeline.png (PNG copy)>]
 (C:\Users\Iskanda\AppData\Local\Programs\MiKTeX\tex/latex/psnfss\ts1ptm.fd)
-Underfull \hbox (badness 10000) in paragraph at lines 254--254
+Underfull \hbox (badness 10000) in paragraph at lines 272--272
 []|\OT1/ptm/m/n/12 (+20) AgriBlockIoT ---
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 254--254
-\OT1/ptm/m/n/12 (+20) Ethereum (Caro et al.,
+Underfull \hbox (badness 10000) in paragraph at lines 272--272
+\OT1/ptm/m/n/12 (+20) Ethereum (Caro
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 254--254
-[]|\OT1/ptm/m/n/12 (+20) AgriBlockIoT --- Saw-
+Underfull \hbox (badness 10000) in paragraph at lines 272--272
+[]|\OT1/ptm/m/n/12 (+20) AgriBlockIoT ---
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 254--254
+Underfull \hbox (badness 10000) in paragraph at lines 272--272
+\OT1/ptm/m/n/12 (+20) Saw-tooth (Caro
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 272--272
 []|\OT1/ptm/m/n/12 (+20) Lightweight Agri-
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 254--254
-[]|\OT1/ptm/m/n/12 (+20) Secured Agri-Triad (Al
+Underfull \hbox (badness 2573) in paragraph at lines 272--272
+\OT1/ptm/m/n/12 (+20) DLT (Ktari et al.,
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 277--277
-[]|\OT1/ptm/m/n/12 (+20) AgriBlockIoT
+Underfull \hbox (badness 10000) in paragraph at lines 272--272
+[]|\OT1/ptm/m/n/12 (+20) IoT Smart
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 277--277
-[]|\OT1/ptm/m/n/12 (+20) ECDSA
+Underfull \hbox (badness 10000) in paragraph at lines 272--272
+\OT1/ptm/m/n/12 (+20) Farm (Aliyu &
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 277--277
-[]|\OT1/ptm/m/n/12 (+20) AgriBlockIoT (Saw-
+Underfull \hbox (badness 10000) in paragraph at lines 272--272
+[]|\OT1/ptm/m/n/12 (+20) Secured Agri-
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 277--277
-[]|\OT1/ptm/m/n/12 (+20) Private Con-sor-
+Underfull \hbox (badness 10000) in paragraph at lines 272--272
+\OT1/ptm/m/n/12 (+20) Triad (Al Layek
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 277--277
-[]|\OT1/ptm/m/n/12 (+20) Private Sim-u-la-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 277--277
+Underfull \hbox (badness 10000) in paragraph at lines 272--272
 []|\OT1/ptm/b/n/12 (+20) TerraNode (This
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 277--277
+Underfull \hbox (badness 10000) in paragraph at lines 295--295
+[]|\OT1/ptm/m/n/12 (+20) AgriBlockIoT
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 295--295
+[]|\OT1/ptm/m/n/12 (+20) ECDSA
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 295--295
+[]|\OT1/ptm/m/n/12 (+20) None (46.8%
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 295--295
+[]|\OT1/ptm/m/n/12 (+20) AgriBlockIoT (Saw-
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 295--295
+[]|\OT1/ptm/m/n/12 (+20) Private Con-sor-
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 295--295
+[]|\OT1/ptm/m/n/12 (+20) Private Sim-u-la-
+ []
+
+
+Underfull \hbox (badness 3713) in paragraph at lines 295--295
+[]|\OT1/ptm/m/n/12 (+20) None (290k tx
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 295--295
+[]|\OT1/ptm/m/n/12 (+20) ML In-te-grated
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 295--295
+[]|\OT1/ptm/b/n/12 (+20) TerraNode (This
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 295--295
 []|\OT1/ptm/b/n/12 (+20) Public Ledger
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 277--277
+Underfull \hbox (badness 10000) in paragraph at lines 295--295
 []|\OT1/ptm/b/n/12 (+20) SHA-256, AES,
  []
 
-
-Underfull \hbox (badness 5771) in paragraph at lines 277--277
-[]|\OT1/ptm/b/n/12 (+20) WMA ML + Re-dis
- []
-
-[40]
-<figures/fig_blockchain_comparison.png, id=890, 2208.25pt x 1204.5pt>
+[43]
+<figures/fig_blockchain_comparison.png, id=912, 2208.25pt x 1204.5pt>
 File: figures/fig_blockchain_comparison.png Graphic file (type png)
 <use figures/fig_blockchain_comparison.png>
 Package pdftex.def Info: figures/fig_blockchain_comparison.png  used on input l
-ine 284.
-(pdftex.def)             Requested size: 430.31812pt x 234.72034pt.
- [41 <./figures/fig_blockchain_comparison.png (PNG copy)>]
-Underfull \hbox (badness 2582) in paragraph at lines 344--344
-[]|\OT1/ptm/m/n/12 (+20) Wallet au-then-ti-ca-tion with
+ine 302.
+(pdftex.def)             Requested size: 395.98996pt x 215.99196pt.
+ [44 <./figures/fig_blockchain_comparison.png (PNG copy)>]
+Overfull \hbox (0.75697pt too wide) in paragraph at lines 313--314
+[]\OT1/ptm/b/n/12 (-20) Object-Centric Move Safety: \OT1/ptm/m/n/12 (-20) The M
+ove ob-ject model as-signs each \OT1/cmtt/m/n/12 ProduceBatch
  []
 
 
-Underfull \hbox (badness 2582) in paragraph at lines 344--344
-[]|\OT1/ptm/m/n/12 (+20) Wallet au-then-ti-ca-tion with
+Underfull \hbox (badness 1371) in paragraph at lines 362--362
+[]|\OT1/ptm/b/n/12 (+20) Test Case De-scrip-
  []
 
 
-Underfull \hbox (badness 1527) in paragraph at lines 344--344
-\OT1/ptm/m/n/12 (+20) tion of SHA-256 in-tegrity
+Underfull \hbox (badness 10000) in paragraph at lines 362--362
+\OT1/ptm/m/n/12 (+20) ac-cess-ing farmer
  []
 
 
-Underfull \hbox (badness 6445) in paragraph at lines 344--344
-[]|\OT1/ptm/m/n/12 (+20) Batch cre-ation staged in
+Underfull \hbox (badness 1968) in paragraph at lines 362--362
+\OT1/ptm/m/n/12 (+20) ron-men-tal teleme-try
  []
 
 
-Underfull \hbox (badness 2065) in paragraph at lines 344--344
-\OT1/ptm/m/n/12 (+20) fir-ma-tion with Sui Ob-ject
+Underfull \hbox (badness 10000) in paragraph at lines 362--362
+\OT1/ptm/m/n/12 (+20) with out-of-bounds
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 344--344
-[]|\OT1/ptm/m/n/12 (+20) Administrator ac-cess to
- []
-
-[42]
-Overfull \vbox (14.58229pt too high) has occurred while \output is active []
-
-
-[43]
-Underfull \hbox (badness 10000) in paragraph at lines 377--377
-[]|\OT1/ptm/m/n/12 (+20) Custody Trans-fer
+Underfull \hbox (badness 10000) in paragraph at lines 362--362
+[]|\OT1/ptm/m/n/12 (+20) Produce cus-tody
  []
 
 
-Overfull \hbox (7.62042pt too wide) in paragraph at lines 377--377
+Underfull \hbox (badness 10000) in paragraph at lines 362--362
+\OT1/ptm/m/n/12 (+20) trans-fer be-tween
+ []
+
+
+Underfull \hbox (badness 5431) in paragraph at lines 362--362
+\OT1/ptm/m/n/12 (+20) pu-ta-tion with $\OMS/ztmcm/m/n/12 ^^U \OT1/ztmcm/m/n/12 
+5$
+ []
+
+
+Underfull \hbox (badness 1852) in paragraph at lines 362--362
+[]|\OT1/ptm/m/n/12 (+20) Yield pre-dic-tion in-
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 362--362
+[]|\OT1/ptm/m/n/12 (+20) Farmer dash-board
+ []
+
+[45]
+Overfull \vbox (212.52136pt too high) has occurred while \output is active []
+
+
+[46]
+Underfull \hbox (badness 10000) in paragraph at lines 395--395
+[]|\OT1/ptm/b/n/12 (+20) Blockchain
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 395--395
+[]|\OT1/ptm/m/n/12 (+20) Produce
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 395--395
+\OT1/ptm/m/n/12 (+20) Batch
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 395--395
+\OT1/ptm/m/n/12 (+20) Mint-ing
+ []
+
+
+Overfull \hbox (6.70541pt too wide) in paragraph at lines 395--395
+\OT1/ptm/m/n/12 (-20) (\OT1/cmtt/m/n/12 mint[]batch\OT1/ptm/m/n/12 (-20) )| 
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 395--395
+[]|\OT1/ptm/m/n/12 (+20) Custody
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 395--395
+\OT1/ptm/m/n/12 (+20) Trans-fer
+ []
+
+
+Overfull \hbox (43.75543pt too wide) in paragraph at lines 395--395
 \OT1/ptm/m/n/12 (-20) (\OT1/cmtt/m/n/12 transfer[]custody\OT1/ptm/m/n/12 (-20) 
 )| 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 402--402
-[]|\OT1/ptm/b/n/12 (+20) Contextual
+Overfull \hbox (3.26866pt too wide) in paragraph at lines 395--395
+[]|\OT1/ptm/m/n/12 (-20) Deterministic
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 402--402
-\OT1/ptm/b/n/12 (+20) De-ci-sion
+Underfull \hbox (badness 10000) in paragraph at lines 395--395
+\OT1/ptm/m/n/12 (+20) Trans-ac-tion
+ []
+
+[47]
+Underfull \hbox (badness 10000) in paragraph at lines 451--451
+[]|\OT1/cmtt/m/n/12 /api/v1/analytics/predict/
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 402--402
-\OT1/ptm/b/n/12 (+20) Rec-om-men-
+Underfull \hbox (badness 10000) in paragraph at lines 451--451
+[]|\OT1/cmtt/m/n/12 /api/v1/analytics/predict/
  []
 
-
-Underfull \hbox (badness 10000) in paragraph at lines 402--402
-[]|\OT1/ptm/m/n/12 (+20) Optimal
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 402--402
-\OT1/ptm/m/n/12 (+20) con-di-tions;
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 402--402
-[]|\OT1/ptm/m/n/12 (+20) Low soil
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 402--402
-\OT1/ptm/m/n/12 (+20) mois-ture;
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 402--402
-\OT1/ptm/m/n/12 (+20) in-crease
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 402--402
-\OT1/ptm/m/n/12 (+20) ir-ri-ga-tion
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 402--402
-[]|\OT1/ptm/m/n/12 (+20) High am-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 402--402
-\OT1/ptm/m/n/12 (+20) bi-ent heat
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 402--402
-\OT1/ptm/m/n/12 (+20) stress;
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 402--402
-[]|\OT1/ptm/m/n/12 (+20) Sub-optimal
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 402--402
-[]|\OT1/ptm/m/n/12 (+20) Critical
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 402--402
-\OT1/ptm/m/n/12 (+20) drought
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 402--402
-\OT1/ptm/m/n/12 (+20) and heat;
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 402--402
-\OT1/ptm/m/n/12 (+20) im-me-di-ate
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 402--402
-\OT1/ptm/m/n/12 (+20) ir-ri-ga-tion
- []
-
-[44]
-Underfull \hbox (badness 7326) in paragraph at lines 433--433
-[]|\OT1/cmtt/m/n/12 /api/v1/analytics/predict/ \OT1/ptm/m/n/12 (+20) (Re-dis
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 433--433
-[]|\OT1/cmtt/m/n/12 /api/v1/analytics/predict/ \OT1/ptm/m/n/12 (+20) (Un-
- []
-
-[45]) [46] [47]
+[48]) [49]
 \openout2 = `chapters/chapter5_rev.aux'.
 
  (chapters/chapter5_rev.tex
 CHAPTER 5.
-[48
+[50
 
 
 
 
-] [49]) [50] [51
+] [51]) [52] [53] [54
 
 
 
-] [52]
+] [55]
 \openout2 = `chapters/appendix.aux'.
 
  (chapters/appendix.tex
@@ -1625,10 +1652,10 @@ Package hyperref Info: bookmark level for unknown lstlisting defaults to 0 on i
 nput line 17.
 LaTeX Font Info:    Font shape `OT1/cmtt/bx/n' in size <10> not available
 (Font)              Font shape `OT1/cmtt/m/n' tried instead on input line 18.
- [53
+ [56
 
 
-]) [54] [55] (main_final.aux (chapters/chapter1_rev.aux)
+]) [57] [58] (main_final.aux (chapters/chapter1_rev.aux)
 (chapters/chapter2_rev.aux) (chapters/chapter3_rev.aux)
 (chapters/chapter4_rev.aux) (chapters/chapter5_rev.aux) (chapters/appendix.aux)
 )
@@ -1641,19 +1668,19 @@ L3 programming layer <2026-07-20>
 LaTeX Font Warning: Some font shapes were not available, defaults substituted.
 
 Package rerunfilecheck Info: File `main_final.out' has not changed.
-(rerunfilecheck)             Checksum: 0D0AFB68603786AF1947E88875884CF9;15159.
+(rerunfilecheck)             Checksum: BBF6CCA555DBC42FFBD26FE4A9AECAF9;15172.
 Package logreq Info: Writing requests to 'main_final.run.xml'.
 \openout1 = `main_final.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
- 27904 strings out of 467501
- 490718 string characters out of 5407578
- 1778136 words of memory out of 5000000
+ 27913 strings out of 467501
+ 491957 string characters out of 5407578
+ 1778132 words of memory out of 5000000
  56185 multiletter control sequences out of 15000+600000
- 660015 words of font info for 239 fonts, out of 8000000 for 9000
+ 660587 words of font info for 243 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 67i,11n,90p,1992b,5050s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 67i,12n,90p,1992b,5050s stack positions out of 10000i,1000n,20000p,200000b,200000s
 <C:/Users/Iskanda/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/c
 m/cmex10.pfb><C:/Users/Iskanda/AppData/Local/Programs/MiKTeX/fonts/type1/public
 /amsfonts/cm/cmitt10.pfb><C:/Users/Iskanda/AppData/Local/Programs/MiKTeX/fonts/
@@ -1668,9 +1695,9 @@ b><C:/Users/Iskanda/AppData/Local/Programs/MiKTeX/fonts/type1/urw/times/utmb8a.
 pfb><C:/Users/Iskanda/AppData/Local/Programs/MiKTeX/fonts/type1/urw/times/utmr8
 a.pfb><C:/Users/Iskanda/AppData/Local/Programs/MiKTeX/fonts/type1/urw/times/utm
 ri8a.pfb>
-Output written on main_final.pdf (67 pages, 6107981 bytes).
+Output written on main_final.pdf (70 pages, 6114937 bytes).
 PDF statistics:
- 1230 PDF objects out of 1440 (max. 8388607)
- 359 named destinations out of 1000 (max. 500000)
+ 1252 PDF objects out of 1440 (max. 8388607)
+ 362 named destinations out of 1000 (max. 500000)
  36583 words of extra memory for PDF output out of 42996 (max. 10000000)
 
