@@ -22,7 +22,7 @@ export function BatchesPage() {
   const [transferring, setTransferring] = useState(false);
   const [transferError, setTransferError] = useState<string | null>(null);
   const [transferSuccess, setTransferSuccess] = useState<string | null>(null);
-  const [carrierId, setCarrierId] = useState('18cde67b-31e1-46ac-ae2a-d487c54103f9');
+  const [carrierId, setCarrierId] = useState('logistics@terranode.agri');
   const [destination, setDestination] = useState('Kumasi Central Aggregation Hub');
 
   const rows = useMemo(() => (
@@ -272,7 +272,7 @@ export function BatchesPage() {
                   value={carrierId}
                   onChange={(e) => setCarrierId(e.target.value)}
                 >
-                  <option value="18cde67b-31e1-46ac-ae2a-d487c54103f9">
+                  <option value="logistics@terranode.agri">
                     AgriTransit Global Logistics (logistics@terranode.agri)
                   </option>
                 </select>

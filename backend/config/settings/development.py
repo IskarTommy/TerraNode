@@ -12,6 +12,15 @@ CACHES = {
     }
 }
 
+# Disable rate throttling in development so dashboard polling and navigation never hit 429
+REST_FRAMEWORK["DEFAULT_THROTTLE_CLASSES"] = []
+REST_FRAMEWORK["DEFAULT_THROTTLE_RATES"] = {
+    "anon": "100000/day",
+    "user": "100000/day",
+    "login": "1000/minute",
+}
+
 # Disable Celery broker for development (use eager mode)
 CELERY_TASK_ALWAYS_EAGER = True
 CELERY_TASK_EAGER_PROPAGATES = True
+

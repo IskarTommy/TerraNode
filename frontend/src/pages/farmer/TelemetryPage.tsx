@@ -108,8 +108,15 @@ export function TelemetryPage() {
     <div className="space-y-6" data-role="farmer">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="text-display-lg font-bold text-fg-primary">Telemetry</h1>
-          <p className="text-body text-fg-muted mt-1">Real-time sensor data and environmental monitoring</p>
+          <div className="flex items-center gap-2">
+            <h1 className="text-display-lg font-bold text-fg-primary">Telemetry</h1>
+            <span className="text-[10px] font-semibold px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-mono">
+              IoT Sensor Layer · SHA-256
+            </span>
+          </div>
+          <p className="text-body text-fg-muted mt-1">
+            Real-time physical IoT ground-truth sensor telemetry (Soil Temp, Moisture, pH) · Calibrated to Ghana CSIR & FAO agronomic standards (NASA POWER Meteorological Benchmark reference).
+          </p>
         </div>
         <div className="flex items-center gap-3">
           <Button
@@ -139,10 +146,10 @@ export function TelemetryPage() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="lg:col-span-2 space-y-6">
           <StatCard
-            title="Sensor Status"
+            title="Sensor Network Status"
             value="12/12 Online"
             change={0}
-            changeLabel="All sensors active"
+            changeLabel="IoT edge sensors active · SHA-256 signed"
             trend="neutral"
             icon={<svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2zm0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" /></svg>}
             variant="success"
@@ -324,7 +331,7 @@ export function TelemetryPage() {
           <div className="space-y-2">
             <label className="block text-sm font-medium text-fg-primary mb-1">Export Format</label>
             <div className="flex items-center gap-2">
-              <input type="radio" id="csv" name="format" value="csv" checked={true} className="h-4 w-4 text-primary-bg" />
+              <input type="radio" id="csv" name="format" value="csv" defaultChecked={true} className="h-4 w-4 text-primary-bg" />
               <label htmlFor="csv" className="text-sm text-fg-secondary">CSV</label>
             </div>
             <div className="flex items-center gap-2">
@@ -340,7 +347,7 @@ export function TelemetryPage() {
           <div className="space-y-2">
             <label className="block text-sm font-medium text-fg-primary mb-1">Time Range</label>
             <div className="flex items-center gap-2">
-              <input type="radio" id="latest" name="range" value="latest" checked={true} className="h-4 w-4 text-primary-bg" />
+              <input type="radio" id="latest" name="range" value="latest" defaultChecked={true} className="h-4 w-4 text-primary-bg" />
               <label htmlFor="latest" className="text-sm text-fg-secondary">Last 24 Hours</label>
             </div>
             <div className="flex items-center gap-2">

@@ -117,50 +117,59 @@ class BatchTransferView(APIView):
         target_user_id = request.data.get("to_user_id")
         target_wallet = request.data.get("to_wallet")
 
+        target_status = request.data.get("status", ProduceBatch.Status.IN_TRANSIT)
+        allowed = ALLOWED_LIFECYCLE_TRANSITIONS.get(batch.status, [])
+        if target_status not in allowed:
+            return Response({"error": f"Invalid lifecycle transition from {batch.status} to {target_status}"}, status=status.HTTP_400_BAD_REQUEST)
+
         from_user = current_user
         if batch.current_custodian == current_user:
             # Current custodian transferring to new target
             target_user = None
             if target_user_id:
-                try:
-                    target_user = User.objects.filter(id=target_user_id).first()
-                except (ValueError, Exception):
-                    target_user = None
+                target_user = User.objects.filter(email__iexact=str(target_user_id)).first()
+                if not target_user:
+                    try:
+                        target_user = User.objects.filter(id=target_user_id).first()
+                    except (ValueError, Exception):
+                        target_user = None
+            if not target_user and target_wallet:
+                target_user = User.objects.filter(sui_public_key__iexact=target_wallet).first()
+            if not target_user:
+                if target_status == ProduceBatch.Status.IN_TRANSIT:
+                    target_user = User.objects.filter(role=User.Role.LOGISTICS).first()
+                else:
+                    target_user = User.objects.filter(role=User.Role.ADMIN).first()
+        elif current_user.role == User.Role.LOGISTICS:
+            # Authorized logistics carrier handling custody handover
+            if target_status == ProduceBatch.Status.DELIVERED:
+                from_user = current_user
+                target_user = None
+                if target_user_id:
+                    target_user = User.objects.filter(email__iexact=str(target_user_id)).first()
+                    if not target_user:
+                        try:
+                            target_user = User.objects.filter(id=target_user_id).first()
+                        except (ValueError, Exception):
+                            target_user = None
                 if not target_user and target_wallet:
                     target_user = User.objects.filter(sui_public_key__iexact=target_wallet).first()
                 if not target_user:
                     target_user = User.objects.filter(role=User.Role.ADMIN).first()
-            elif target_wallet:
-                target_user = User.objects.filter(sui_public_key__iexact=target_wallet).first()
-                if not target_user:
-                    target_user = User.objects.filter(role=User.Role.ADMIN).first()
             else:
-                return Response({"error": "to_user_id or to_wallet is required"}, status=status.HTTP_400_BAD_REQUEST)
-        elif current_user.role == User.Role.LOGISTICS and batch.current_custodian == batch.farmer:
-            # Logistics picking up from farmer
-            from_user = batch.farmer
-            target_user = current_user
+                # Carrier claiming batch from farmer
+                from_user = batch.current_custodian
+                target_user = current_user
         else:
             return Response({"error": "Only the current custodian or authorized carrier can initiate a custody transfer"}, status=status.HTTP_403_FORBIDDEN)
 
         if from_user == target_user:
-            return Response({"error": "Sender and recipient must be distinct users. Select a different destination (e.g. warehouse or retailer)."}, status=status.HTTP_400_BAD_REQUEST)
-
-        if target_user:
-            if target_wallet and target_wallet.startswith("0x"):
-                target_user.sui_public_key = target_wallet
-                target_user.save()
-            elif not target_user.sui_public_key:
-                if current_user.role == User.Role.LOGISTICS and target_user == current_user:
-                    target_user.sui_public_key = f"0x{uuid.uuid4().hex}"
-                    target_user.save()
-                else:
-                    return Response({"error": "Target user has no registered Sui wallet address."}, status=status.HTTP_400_BAD_REQUEST)
-
-        target_status = request.data.get("status", ProduceBatch.Status.IN_TRANSIT)
-        allowed = ALLOWED_LIFECYCLE_TRANSITIONS.get(batch.status, [])
-        if target_status not in allowed:
-            return Response({"error": f"Invalid lifecycle transition from {batch.status} to {target_status}"}, status=status.HTTP_400_BAD_REQUEST)
+            if target_status == ProduceBatch.Status.DELIVERED:
+                target_user = User.objects.filter(role=User.Role.ADMIN).exclude(id=from_user.id).first()
+            else:
+                target_user = User.objects.filter(role=User.Role.LOGISTICS).exclude(id=from_user.id).first()
+            if not target_user:
+                return Response({"error": "Sender and recipient must be distinct entities. Please select a valid destination."}, status=status.HTTP_400_BAD_REQUEST)
 
         sui_tx_digest = request.data.get("sui_tx_digest", "")
 

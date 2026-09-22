@@ -2,34 +2,37 @@
 
 \section{Introduction}
 
-This chapter presents the research results and comprehensive discussion of the TerraNode system, evaluating its performance against the requirements established in Chapter Three. The chapter is structured around the four specific research objectives of the study. Section~\ref{sec:research_results} presents the research results under each objective: Objective One details the backend architecture, REST API endpoints, frontend Single Page Application (SPA), and user interface dashboards; Objective Two presents the predictive analytics module, including its mathematical modeling, algorithmic workflow, and interactive user interface; Objective Three details the blockchain security and cryptographic pipeline, featuring execution benchmarks, comparative tables with existing literature, and architectural diagrams; and Objective Four provides a comprehensive empirical evaluation of functional testing, security resilience, blockchain throughput, and API latency. Section~\ref{sec:discussion} discusses the research findings in relation to the core research questions and published literature. Section~\ref{sec:ch4_conclusion} provides a summary of the chapter. Code listings for key algorithms are provided in Appendix~\ref{app:code_listings}.
+The findings of this research and comprehensive discussion on TerraNode system is provided in this chapter and compared against the requirements set in Chapter Three. The chapter is organised around the four specific research aims of the study. The research results are presented under each objective: Objective One is detailing the backend architecture (mathematical modelling, algorithmic workflow, and user interface dashboards), Objective Two is detailing the predictive analytics module (mathematical modelling, algorithmic workflow, and interactive user interface), Objective Three is detailing the blockchain security and cryptographic pipeline (execution benchmarks, comparison with existing literature, and architecture diagrams), and Objective Four is detailing a comprehensive empirical evaluation of functional testing, security resilience, blockchain throughput, and API latency. The results of the research are discussed as per the core research questions and literature reviewed in Section \ref{sec:discussion}. A summary of the chapter is included in Section~\ref{sec:ch4_conclusion}. In Appendix~\ref{app:code_listings}, the code for important algorithms is included.
 
 \section{Research Results}
 \label{sec:research_results}
 
 \subsection{Research Objective One (1): Web-Based Agricultural Data Management Platform}
 
-The first research objective was to design a web-based agricultural data management platform for collecting, storing, and visualizing environmental and production-related data. This objective was accomplished through the implementation of a modular Django REST backend, an asynchronous RESTful API, and a modern React-based frontend providing customized dashboards for all agricultural stakeholders.
+The first research goal is to develop a web based agricultural data management system to collect, store and present environment and production information. The goal was achieved by creating a module based Django REST backend, an asynchronous RESTful API and a modern React-based frontend which offers customisable dashboards for all stakeholders in the agricultural value chain.
 
 \subsubsection*{Backend Architecture and API Implementation}
 
-The TerraNode backend is built on Django and the Django REST Framework (DRF), organized into four decoupled domain modules:
+The TerraNode backend is written in Django and the Django REST Framework (DRF) and is structured into four separate domain modules:
 
-\textbf{Users Module:} Manages user registration, credential authentication, role assignment, and cryptographic wallet binding. The custom user model extends Django's \texttt{AbstractUser} with email-based authentication and a 66-character hexadecimal Sui wallet public key field. The module exposes five endpoints covering credential login, Sui wallet login, token refresh, registration, and logout. Login attempts are rate-limited to five requests per minute per IP address.
+\textbf{Users Module:} Responsible for managing users' registration, credential authentication, role assignment and cryptographic wallet binding. Custom user model that adds an email-based authentication and a 66-character hexadecimal Sui wallet public key field to Django's \texttt{AbstractUser} class. This module contains five endpoints for credential login, Sui wallet login, token refresh, registration, and logout. Limits login attempts to 5 attempts per minute per IP address.
 
-\textbf{Telemetry Module:} Ingests, validates, and stores environmental sensor readings. Incoming payloads are validated against physical agronomic thresholds: temperature between $-50^\circ$C and $100^\circ$C, relative soil moisture between $0.0\%$ and $100.0\%$, and soil pH between $0.0$ and $14.0$. Each valid reading is transformed into a SHA-256 cryptographic digest before database insertion. A unique database constraint on the hash prevents duplicate data entry.
+Telemetry Module: Collects, checks and records environmental sensor readings. The incoming payload is checked for the following conditions: temperature ranges from $-50^\circ$C to $100^\circ$C, relative soil moisture ranges from $0.0\%$ to $100.0\%$ and soil pH ranges from $0.0$ to $14.0$. A cryptographic digest (SHA-256) is generated for each valid reading before it is inserted into the database. A unique database constraint exists on hash to avoid duplicates.
 
-\textbf{Ledger Module:} Coordinates the lifecycle of agricultural produce batches between off-chain database storage and the on-chain Sui distributed ledger. A two-phase commit protocol is employed: the farmer first stages a batch in \texttt{PENDING} status via the Prepare endpoint, and upon completing the on-chain minting transaction through their connected wallet, submits the resulting Sui Object Identifier (UID) and transaction digest via the Confirm endpoint to transition the batch to \texttt{MINTED} status.
+The Ledger Module is responsible for managing the lifecycle of agricultural produce batches between the off-chain database and on-chain Sui distributed ledger. The two-phase commit protocol is used: the farmer stages a batch in \texttt{PENDING} status using the Prepare endpoint and then completes the on-chain minting transaction on their connected wallet, then submits the resulting Sui Object Identifier (UID) and transaction digest using the Confirm endpoint to mark the batch as \texttt{MINTED}.
 
-\textbf{Analytics Module:} Executes crop yield forecasting algorithms over historical telemetry records. The prediction service retrieves telemetry points, computes weighted moving averages, derives a variance-adjusted confidence score, and returns an actionable agronomic recommendation. Computed forecasts are cached in Redis with a 600-second (10-minute) time-to-live (TTL) to minimize redundant database querying.
+\textbf{Analytics Module:} Performs crop yield forecasting algorithms on historical telemetry data. The prediction service fetches the telemetry points, calculates weighted moving averages, calculates a variance adjusted confidence score and provides a practical agronomic recommendation. For optimization, computed forecasts are stored in Redis with a 10 minute (600 seconds) expiry time (TTL).
 
 Table~\ref{tab:api_endpoints} outlines the primary version-prefixed RESTful API endpoints.
 
 \begin{table}[H]
 \centering
+\small
+\singlespacing
+\renewcommand{\arraystretch}{1.15}
 \caption{TerraNode RESTful API Endpoint Structure}
 \label{tab:api_endpoints}
-\begin{tabularx}{\textwidth}{|l|l|X|}
+\begin{tabularx}{\textwidth}{|l|l|>{\raggedright\arraybackslash}X|}
 \hline
 \textbf{Endpoint Prefix} & \textbf{Application} & \textbf{Key Functional Endpoints} \\
 \hline
@@ -46,11 +49,11 @@ Table~\ref{tab:api_endpoints} outlines the primary version-prefixed RESTful API 
 
 \subsubsection*{Frontend Architecture and User Interface Presentation}
 
-The frontend is implemented as a Single Page Application using React 19, TypeScript, and Vite. The system architecture enforces client-side role guards, preventing unauthorized navigation across role boundaries. Global state is managed using React Context API (\texttt{AuthContext} for JWT lifecycle and session persistence, and \texttt{WalletContext} leveraging Mysten Labs dApp Kit for Sui wallet interactions).
+The application's frontend is built as a Single Page Application (SPA) using React 19, TypeScript, and Vite. The system architecture does not allow unauthorized role hopping by using clientside role guards. Global state is implemented with React Context API, with the JWT lifecycle and session persistence handled by \texttt{AuthContext} and the Sui wallet interactions by \texttt{WalletContext} provided by Mysten Labs dApp Kit.
 
-The platform provides role-specific user interfaces designed for intuitive interaction across agricultural stakeholders, supporting both credential authentication and Web3 Sui wallet integration. This section presents the core operational interfaces that realize the system's security, blockchain anchoring, and custody transfer functions.
+It offers role-specific user interfaces tailored for easy interaction between different stakeholders in the agriculture sector, including the authentication of credentials and integration with Web3 Sui wallets. In this part, the major operating interfaces that implement the system's security, anchoring of blockchain, and transfer of custody are presented.
 
-\figref{fig:farmer_dashboard} presents the Farmer Dashboard, which serves as the primary operational monitoring interface for agricultural producers. The interface displays real-time micro-climate telemetry metric cards (soil temperature, soil moisture, and soil pH) alongside active produce batches anchored to the Sui blockchain and dynamic yield forecast summaries.
+The Farmer Dashboard is the main operational monitoring tool available for agricultural production shown in \figref{fig:farmer_dashboard}. The interface shows real-time telemetry metric cards for the micro-climate data, soil temperature, soil moisture, and soil pH, as well as active batches of produce linked to the Sui blockchain, and dynamic yield forecast summaries.
 
 \begin{figure}[H]
     \centering
@@ -59,16 +62,16 @@ The platform provides role-specific user interfaces designed for intuitive inter
     \label{fig:farmer_dashboard}
 \end{figure}
 
-\figref{fig:transfer_page} illustrates the Custody Transfer interface utilized by logistics handlers to record physical produce handoffs. The interface captures transit metadata (vehicle fleet registration, driver identity, and destination terminal) and executes \texttt{agri\_ledger::transfer\_custody} on-chain to reassign custody to the carrier's wallet address, ensuring transparent multi-hop traceability.
+The Custody Transfer interface for logistics handlers to document physical produce transfers is provided in \figref{fig:transfer_page}. The interface records information related to the movement of the transport equipment (vehicle fleet registration, driver identity, destination terminal), then calls \texttt{agri\_ledger::transfer\_custody} on-chain to transfer the custody to the wallet address of the transport company, which guarantees the transparency of the movement's multi-hop traceability.
 
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.88\textwidth]{figures/ui-screenshots/fig_transfer_page.png}
-    \caption{Produce Custody Transfer and Blockchain Verification Interface}
+    \caption{Generate Custody Transfer and Blockchain Verification Interface}
     \label{fig:transfer_page}
 \end{figure}
 
-\figref{fig:audit_logs_page} depicts the Administrator Audit Log interface, providing a chronological, tamper-evident record of all system events, authentication attempts, and blockchain transactions. Each entry is cryptographically bound to an originating user UUID, IP address, timestamp, and SHA-256 digest for regulatory compliance and audit verification.
+The graph in \figref{fig:audit_logs_page} shows the Administrator Audit Log, which is a rolling, tamper-evident log of all actions performed on the system, authentication attempts, and transactions performed on the blockchain. Each entry is signed with a cryptographic signature from an originating user UUID, IP address, timestamp and a SHA-256 digest for regulatory compliance and audit verification.
 
 \begin{figure}[H]
     \centering
@@ -79,37 +82,37 @@ The platform provides role-specific user interfaces designed for intuitive inter
 
 \subsection{Research Objective Two (2): Predictive Analytics Module for Crop Yield Forecasting}
 
-The second research objective was to develop an analytics module that applies predictive models for agricultural forecasting and decision support. This objective was addressed through the implementation of a statistical weighted moving average (WMA) prediction engine, dynamic confidence scoring, variance indexing, and an interactive analytics user interface.
+The second research goal was to design an analytics module which integrates predictive models for agricultural forecasting and decision support. This objective was met by adopting a statistical weighted moving average (WMA) prediction engine, variance indexing and dynamic confidence scoring, as well as an interactive analytics user interface.
 
 \subsubsection*{Mathematical Modeling and Analytics Workflow}
 
-The analytics engine processes a rolling window of historical telemetry records ($n \le 90$, with a minimum threshold of $n \ge 5$). Telemetry points are retrieved from the database, verified against their SHA-256 hashes, and decomposed into feature vectors comprising temperature ($T_i$), soil moisture ($M_i$), and soil pH ($P_i$).
+The analytics engine takes a rolling window of time of historical telemetry data, where $n \le 90$ and $n \ge 5$. Telemetry points are pulled from the database, checked for the correct SHA-256 hash, and broken down into $T_i$ (temperature), $M_i$ (soil moisture), and $P_i$ (soil pH) feature vectors.
 
-The arithmetic means $\bar{T}$, $\bar{M}$, and $\bar{P}$ are computed according to Equation~\ref{eq:mean_calc}:
+The arithmetic means $\bar{T}$, $\bar{M}$, and $\bar{P}$, are calculated using Equation~\ref{eq:mean_calc}:
 \begin{equation}
 \bar{T} = \frac{1}{n}\sum_{i=1}^{n} T_i, \quad \bar{M} = \frac{1}{n}\sum_{i=1}^{n} M_i, \quad \bar{P} = \frac{1}{n}\sum_{i=1}^{n} P_i
 \label{eq:mean_calc}
 \end{equation}
 
-The estimated crop yield $\hat{Y}$ (in metric tons) is modeled via Equation~\ref{eq:yield_model}:
+Crop yield $\hat{Y}$ is modelled using Equation~\ref{eq:yield_model} (in metric tons):
 \begin{equation}
 \hat{Y} = \max\left(0, \; \alpha + \beta_1 \bar{M} - \beta_2 |\bar{T} - T^*|\right)
 \label{eq:yield_model}
 \end{equation}
-where $\alpha = 50.0$ represents baseline yield, $\beta_1 = 0.50$ is the positive moisture scaling coefficient, $\beta_2 = 1.20$ is the temperature penalty factor, and $T^* = 22.0^\circ$C represents optimal ambient growing temperature.
+$T^* = 22.0^\circ$C, the optimum ambient growing temperature; $\alpha = 50.0$ is a base yield; and, $\beta_1 = 0.50$ is a positive moisture scaling coefficient, and, $\beta_2 = 1.20$ is the temperature penalty factor.
 
-To quantify prediction reliability, the sample variance $V$ across environmental features is derived:
+The sample variance $V$ of the environmental features is calculated to measure the degree of reliability of the prediction:
 \begin{equation}
 V = \frac{1}{n}\sum_{i=1}^{n} (T_i - \bar{T})^2 + \frac{1}{n}\sum_{i=1}^{n} (M_i - \bar{M})^2
 \end{equation}
 
-The confidence score $C \in [50.0\%, 95.0\%]$ is dynamically scaled according to Equation~\ref{eq:conf_score}:
+The confidence score $C \in [50.0\%, 95.0\%]$ is dynamically corrected following Equation~\ref{eq:conf_score}:
 \begin{equation}
 C = \min\left(95.0, \; \max\left(50.0, \; 95.0 - 0.05 \cdot V\right)\right) \times \min\left(1.0, \; \frac{n}{30}\right)
 \label{eq:conf_score}
 \end{equation}
 
-\figref{fig:prediction_analytics} illustrates the end-to-end architecture and decision workflow of the predictive analytics engine.
+The end-to-end architecture and the decision flow of the predictive analytics engine is shown in \figref{fig:prediction_analytics}.
 
 \begin{figure}[H]
     \centering
@@ -120,28 +123,28 @@ C = \min\left(95.0, \; \max\left(50.0, \; 95.0 - 0.05 \cdot V\right)\right) \tim
 
 \subsubsection*{Analytics User Interface and Decision Support Presentation}
 
-\figref{fig:yield_prediction_page} presents the operational yield prediction and decision support interface. The interface operationalizes the mathematical modeling formulation described in Equations~\ref{eq:mean_calc}--\ref{eq:conf_score}, displaying the estimated crop yield in metric tons, the computed confidence score, the micro-climate variance index, and multi-year projection curves with dynamic uncertainty bounds and actionable agronomic recommendations.
+\figref{fig:yield_prediction_page} presents the operational yield prediction and decision support interface. The interface brings to life the mathematical formulation of the model described in the Equations~\ref{eq:mean_calc}--\ref{eq:conf_score} and presents the estimated crop yield in metric tons, the computed confidence score, the micro-climate variance index, and multi-year projection curves with dynamic uncertainty bounds and actionable agronomic recommendations.
 
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.88\textwidth]{figures/ui-screenshots/fig_yield_prediction_page.png}
-    \caption{Yield Forecast, Soil Suitability Matrix, and Decision Support Interface}
+    \caption{Yield Forecast, Soil Suitability Matrix and Decision Support Interface}
     \label{fig:yield_prediction_page}
 \end{figure}
 
 \subsection{Research Objective Three (3): Blockchain-Based Security and Cryptographic Integrity Mechanisms}
 
-The third research objective was to implement blockchain-based security mechanisms for ensuring data integrity, traceability, and protection against unauthorized modification of agricultural records. This objective was achieved through a multi-layered cryptographic pipeline integrating SHA-256 data integrity digests, AES-256-GCM symmetric payload encryption, Ed25519 asymmetric wallet signatures, BLAKE2b transaction hashing, and Move smart contract object anchoring on the Sui blockchain.
+The third research goal was to develop the security mechanisms for data integrity, traceability, and unauthorized changes to agricultural records using blockchain. This goal is accomplished by a multi-layered cryptographic pipeline covering: data integrity digests using SHA-256, symmetric payload encryption using AES-256-GCM, wallet signatures using Ed25519 asymmetric signature, transaction hashing using BLAKE2b, and smart contract object anchoring on the Sui blockchain.
 
 \subsubsection*{Cryptographic Processing Pipeline}
 
-The cryptographic pipeline operates across five structured stages:
+A cryptographic pipeline has five structured stages:
 \begin{enumerate}[label=(\roman*)]
-    \item \textbf{Plaintext Ingestion and Agronomic Range Validation:} Environmental readings are formatted into structured JSON strings containing farmer ID, temperature, moisture, pH, and Unix timestamps.
-    \item \textbf{SHA-256 Integrity Digest Generation:} The serialized telemetry string is hashed using the SHA-256 cryptographic algorithm ($H = \text{SHA-256}(M)$) to generate a unique 256-bit (64-character hexadecimal) digest. This hash serves as the immutable digital fingerprint of the physical farm conditions.
-    \item \textbf{AES-256-GCM Confidential Encryption:} For off-chain storage and secure transit, sensitive telemetry records are encrypted using Advanced Encryption Standard in Galois/Counter Mode (AES-256-GCM) with an authenticated 128-bit MAC tag, ensuring confidentiality and cipher integrity.
-    \item \textbf{Ed25519 Asymmetric Digital Signing:} Sui wallet transactions are signed using the Ed25519 Edwards-curve Digital Signature Algorithm ($\sigma = \text{Sign}_{sk}(\text{TxDigest})$), enabling non-repudiable proof of batch origin.
-    \item \textbf{Sui Move Smart Contract State Anchoring:} The \texttt{ProduceBatch} object is minted on the Sui distributed ledger, permanently binding the batch metadata and SHA-256 hash to the farmer's on-chain address.
+    \item The data collected in the environment is converted to a structured JSON string with farmer ID, temperature, moisture, pH, and Unix timestamps.
+    \item The SHA-256 cryptographic algorithm is used to hash the serialized telemetry string to create an integrity digest of 256 bits (64 characters hexadecimal). This hash acts as the physical farm's digital ``fingerprint,'' which is unique and cannot be changed.
+    \item Advanced Encryption Standard (AES) in Galois/Counter Mode (AES-256-GCM), with authenticated 128-bit MAC tag, is used for off-chain storage and secure transit of sensitive telemetry records to ensure confidentiality and cipher integrity.
+    \item Ed25519 Asymmetric Digital Signing: To provide non-repudiation proof of batch origin, Sui wallet transactions are digitally signed using the Edwards-curve Digital Signature Algorithm (Ed25519: $\sigma = \text{Sign}_{sk}(\text{TxDigest})$).
+    \item The \texttt{ProduceBatch} object is minted on the Sui distributed ledger, permanently associating the batch metadata with the farmer's address on the ledger and the farmer's SHA-256 hash.
 \end{enumerate}
 
 \figref{fig:crypto_pipeline} visualizes the multi-layered cryptographic and blockchain anchoring pipeline.
@@ -155,13 +158,16 @@ The cryptographic pipeline operates across five structured stages:
 
 \subsubsection*{Cryptographic Execution Benchmarks}
 
-To measure computational efficiency, benchmark experiments were conducted across 100 consecutive executions of each cryptographic primitive on a standard workstation (AMD Ryzen 7 / Intel Core i7, 16GB RAM). Table~\ref{tab:crypto_benchmarks} records the execution times for plaintext hashing, symmetric encryption/decryption, digital signing, and password hashing.
+Benchmarking experiments were run on 100 consecutive runs of each cryptographic primitive on a standard workstation (AMD Ryzen 7 / Intel Core i7, 16Gb of memory). Table~\ref{tab:crypto_benchmarks} shows the performance of hash functions, symmetric encryption/decryption, digital signing, and password hashing.
 
 \begin{table}[H]
 \centering
+\small
+\singlespacing
+\renewcommand{\arraystretch}{1.15}
 \caption{Cryptographic Transformation and Execution Benchmarks}
 \label{tab:crypto_benchmarks}
-\begin{tabularx}{\textwidth}{|X|l|l|}
+\begin{tabularx}{\textwidth}{|>{\raggedright\arraybackslash}X|l|l|}
 \hline
 \textbf{Cryptographic Operation} & \textbf{Algorithm} & \textbf{Mean Latency} \\
 \hline
@@ -182,57 +188,63 @@ Password Key Derivation (password $\to$ 128~B hash) & Argon2id & $62.40 \pm 2.15
 \end{tabularx}
 \end{table}
 
-The benchmark results in Table~\ref{tab:crypto_benchmarks} demonstrate that telemetry hashing (0.012 ms) and AES-256 symmetric encryption (0.028 ms) execute with negligible overhead, guaranteeing that cryptographic integrity verification introduces zero perceptible latency on IoT gateways and web clients. Argon2id requires 62.40 ms, providing strong resistance against brute-force password attacks while maintaining rapid user login responsiveness.
+Table~\ref{tab:crypto_benchmarks} shows that the overhead of the telemetry hashing and AES-256 symmetric encryption are negligible with the benchmark results: 0.012 ms and 0.028 ms respectively, and ensuring that cryptographic integrity verification does not add any perceptible latency to the IoT gateways or web clients. Argon2id has a 62.40ms runtime, which is good for resistibility against brute-force password attacks, yet with a quick login for users.
 
-\subsubsection*{Comparative Performance Analysis with Existing Blockchain Deployments}
+A comparative study was conducted with previous implementations of blockchain to assess the performance of the proposed system.
 
-To evaluate the design choices of TerraNode, Table~\ref{tab:blockchain_comparative} compares transaction performance metrics while Table~\ref{tab:blockchain_features} contrasts the security and analytics capabilities of TerraNode against published agricultural blockchain frameworks from the literature, including Caro et al.~\parencite{caro2018blockchain}, Ktari et al.~\parencite{ktari2022agricultural}, Aliyu and Liu~\parencite{aliyu2023blockchain}, Layek et al.~\parencite{layek2025secured}, and Chauhan et al.~\parencite{chauhan2025blockchain}.
-
-\begin{table}[H]
-\centering
-\caption{Performance Metrics of Agricultural Blockchain Deployments}
-\label{tab:blockchain_comparative}
-\begin{tabularx}{\textwidth}{|X|l|l|l|l|}
-\hline
-\textbf{Deployment} & \textbf{Consensus} & \textbf{Tx Latency} & \textbf{Finality} & \textbf{Cost per Tx} \\
-\hline
-AgriBlockIoT --- Ethereum~\parencite{caro2018blockchain} & PoW & 16.55~s & $\sim$60~s & High (\$2--\$15) \\
-\hline
-AgriBlockIoT --- Sawtooth~\parencite{caro2018blockchain} & PoET & 0.021~s & $\sim$1.0~s & Zero (Permissioned) \\
-\hline
-Lightweight Agri-DLT~\parencite{ktari2022agricultural} & Raft / IBFT & 0.18~s & $\sim$0.5~s & Zero (Private) \\
-\hline
-IoT Smart Farm~\parencite{aliyu2023blockchain} & Private DLT & 1.02~s & $\sim$4.8~s & Zero (Simulated) \\
-\hline
-Secured Agri-Triad~\parencite{layek2025secured} & Private DLT & 0.85~s & $\sim$3.0~s & Zero (Private) \\
-\hline
-\textbf{TerraNode (This Study)} & \textbf{Sui DPoS} & \textbf{1.20~s} & \textbf{$<$3.0~s} & \textbf{$\sim$0.003 SUI} \\
-\hline
-\end{tabularx}
-\end{table}
+Transaction performance metrics for TerraNode are compared with other blockchain frameworks presented in the literature in Table~\ref{tab:blockchain_comparative} and the security and analytics capabilities in Table~\ref{tab:blockchain_features} with the other current agricultural blockchain frameworks published by Caro et al.~\parencite{caro2018blockchain}, Ktari et al.~\parencite{ktari2022agricultural}, Aliyu and Liu~\parencite{aliyu2023blockchain}, Layek et al.~\parencite{layek2025secured}, and Chauhan et al.~\parencite{chauhan2025blockchain}.
 
 \begin{table}[H]
-\centering
-\caption{Security and Analytics Features of Agricultural Blockchain Deployments}
-\label{tab:blockchain_features}
-\begin{tabularx}{\textwidth}{|p{3.8cm}|p{3.0cm}|p{3.2cm}|X|}
-\hline
-\textbf{Deployment} & \textbf{Network Type} & \textbf{Cryptography} & \textbf{Analytics Capability} \\
-\hline
-AgriBlockIoT (Ethereum) & Public Ledger & ECDSA (secp256k1) & None (46.8\% CPU load) \\
-\hline
-AgriBlockIoT (Sawtooth) & Private Consortium & SHA-256 & None \\
-\hline
-Lightweight Agri-DLT & Private Enterprise & AES-256 & None \\
-\hline
-IoT Smart Farm & Private Simulation & Alarm Verification & None (290k tx limit) \\
-\hline
-Secured Agri-Triad & Private Network & SHA-256 & ML Integrated (No Web UI) \\
-\hline
-\textbf{TerraNode (This Study)} & \textbf{Public Ledger (Sui)} & \textbf{SHA-256, AES, Ed25519} & \textbf{WMA ML + Redis Cache} \\
-\hline
-\end{tabularx}
-\end{table}
+ \centering
+ \small
+ \singlespacing
+ \renewcommand{\arraystretch}{1.15}
+ \caption{Performance Metrics of Agricultural Blockchain Deployments}
+ \label{tab:blockchain_comparative}
+ \begin{tabularx}{\textwidth}{|>{\raggedright\arraybackslash}X|l|l|l|l|}
+ \hline
+ \textbf{Deployment} & \textbf{Consensus} & \textbf{Tx Latency} & \textbf{Finality} & \textbf{Cost per Tx} \\
+ \hline
+ AgriBlockIoT --- Ethereum~\parencite{caro2018blockchain} & PoW & 16.55~s & $\sim$60~s & High (\$2--\$15) \\
+ \hline
+ AgriBlockIoT --- Sawtooth~\parencite{caro2018blockchain} & PoET & 0.021~s & $\sim$1.0~s & Zero (Permissioned) \\
+ \hline
+ Lightweight Agri-DLT~\parencite{ktari2022agricultural} & Raft / IBFT & 0.18~s & $\sim$0.5~s & Zero (Private) \\
+ \hline
+ IoT Smart Farm~\parencite{aliyu2023blockchain} & Private DLT & 1.02~s & $\sim$4.8~s & Zero (Simulated) \\
+ \hline
+ Secured Agri-Triad~\parencite{layek2025secured} & Private DLT & 0.85~s & $\sim$3.0~s & Zero (Private) \\
+ \hline
+ \textbf{TerraNode (This Study)} & \textbf{Sui DPoS} & \textbf{1.20~s} & \textbf{$<$3.0~s} & \textbf{$\sim$0.003 SUI} \\
+ \hline
+ \end{tabularx}
+ \end{table}
+ 
+ \begin{table}[H]
+ \centering
+ \small
+ \singlespacing
+ \renewcommand{\arraystretch}{1.15}
+ \caption{Security and Analytics Features of Agricultural Blockchain Deployments}
+ \label{tab:blockchain_features}
+ \begin{tabularx}{\textwidth}{|>{\raggedright\arraybackslash}p{3.8cm}|>{\raggedright\arraybackslash}p{2.8cm}|>{\raggedright\arraybackslash}p{3.0cm}|>{\raggedright\arraybackslash}X|}
+ \hline
+ \textbf{Deployment} & \textbf{Network Type} & \textbf{Cryptography} & \textbf{Analytics Capability} \\
+ \hline
+ AgriBlockIoT (Ethereum) & Public Ledger & ECDSA (secp256k1) & None (46.8\% CPU load) \\
+ \hline
+ AgriBlockIoT (Sawtooth) & Private Consortium & SHA-256 & None \\
+ \hline
+ Lightweight Agri-DLT & Private Enterprise & AES-256 & None \\
+ \hline
+ IoT Smart Farm & Private Simulation & Alarm Verification & None (290k tx limit) \\
+ \hline
+ Secured Agri-Triad & Private Network & SHA-256 & ML Integrated (No Web UI) \\
+ \hline
+ \textbf{TerraNode (This Study)} & \textbf{Public Ledger (Sui)} & \textbf{SHA-256, AES, Ed25519} & \textbf{WMA ML + Redis Cache} \\
+ \hline
+ \end{tabularx}
+ \end{table}
 
 \figref{fig:blockchain_comparison} provides a visual bar chart comparing the transaction confirmation latency and architectural trade-offs across these deployments.
 
@@ -243,28 +255,32 @@ Secured Agri-Triad & Private Network & SHA-256 & ML Integrated (No Web UI) \\
     \label{fig:blockchain_comparison}
 \end{figure}
 
-\subsubsection*{Technical Justification of Selected Architecture}
+\subsubsection*{Justification of the selected architecture}
 
-The selection of the Sui blockchain and Move programming language addresses key limitations identified in earlier research:
+The use of the Sui blockchain and the Move programming language solves some of the problems found in the preceding studies:
 \begin{enumerate}[label=(\roman*)]
-    \item \textbf{Overcoming Ethereum's Latency and Cost Barriers:} As demonstrated by Caro et al.~\parencite{caro2018blockchain}, public Ethereum imposes a 16.55-second transaction latency and prohibitive, volatile gas fees that are incompatible with routine smallholder farm data logging. TerraNode achieves 1.20-second minting latency on Sui at a nominal gas cost of $\sim$0.003 SUI ($\approx \$0.005$).
-    \item \textbf{Retaining Public Decentralization Over Closed Private Chains:} While Hyperledger Sawtooth and Quorum~\parencite{ktari2022agricultural} achieve low latency, they rely on private, permissioned node clusters that require centralized federation and lack public, consumer-verifiable auditability. Sui provides public decentralization without sacrificing transaction throughput.
-    \item \textbf{Object-Centric Move Safety:} The Move object model assigns each \texttt{ProduceBatch} a globally unique UID, eliminating global state lock contention and enabling parallel transaction processing through Sui's Mysticeti consensus protocol. Bytecode verification inherently prevents common smart contract vulnerabilities such as reentrancy and asset duplication.
+    \item As shown by Caro et al.~\parencite{caro2018blockchain}, public Ethereum is not suitable for logging farm data on a regular basis due to its high gas fees and unpredictable costs, which fluctuate depending on network congestion, as well as its latency of 16.55 seconds per transaction. On Sui, TerraNode's minting latency is 1.20 seconds with a cost of around 0.003 SUI ($\approx \$0.005$).
+    \item Hyperledger Sawtooth and Quorum~\parencite{ktari2022agricultural} have low latency but are based on private, permissioned node clusters, with no public, consumer-verifiable auditability. Sui offers public decentralization without compromising on transaction speed.
+    \item The Move object model also provides globally unique UID for each \texttt{ProduceBatch} to reduce global state lock contention and allow for parallel transaction processing using Sui's Mysticeti consensus protocol. Common smart contract issues like reentrancy and asset duplication are automatically prevented by the bytecode verification.
 \end{enumerate}
 
 \subsection{Research Objective Four (4): System Performance and Comprehensive Evaluation}
 
-The fourth research objective was to evaluate the performance of the proposed system based on security effectiveness, transaction processing efficiency, and prediction accuracy.
+The fourth research aim was to assess the performance of the proposed system with regard to security effectiveness, processing efficiency of the transactions, and accuracy of the prediction system.
 
 \subsubsection*{Functional Testing Results}
 
-The complete system was evaluated against the ten functional requirements established in Chapter Three. Table~\ref{tab:test_results} summarizes the test cases and outcomes.
+All the system was tested with the ten functional requirements that were defined in Chapter Three. Test Cases and Results are summarized in Table~\ref{tab:test_results}.
 
+\clearpage
 \begin{table}[H]
 \centering
+\small
+\singlespacing
+\renewcommand{\arraystretch}{1.12}
 \caption{Functional Test Cases and Verification Outcomes}
 \label{tab:test_results}
-\begin{tabularx}{\textwidth}{|l|X|l|l|}
+\begin{tabularx}{\textwidth}{|l|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}p{4.2cm}|c|}
 \hline
 \textbf{Req. ID} & \textbf{Test Case Description} & \textbf{Expected Outcome} & \textbf{Status} \\
 \hline
@@ -301,27 +317,30 @@ FR-10 & Administrator access to global audit trail and analytics & Full system a
 \end{tabularx}
 \end{table}
 
-The automated test suite, comprising 143 unit and integration tests across the Django apps, achieved a 100\% passing rate.
+The automated test suite consisting of 143 unit and integration tests for the Django apps, passed 100\%.
 
 \subsubsection*{Security Resilience Evaluation}
 
-The security framework was evaluated across four critical threat vectors:
+A security framework was assessed for the four key threat vectors:
 \begin{enumerate}[label=(\roman*)]
-    \item \textbf{Password Security:} Argon2id was validated as the primary hashing algorithm with PBKDF2 as fallback. Database inspection confirmed irreversible salt-hashed representations.
-    \item \textbf{JWT Token Lifecycle:} Access tokens expire after 15 minutes; refresh tokens rotate upon use with automatic database blacklisting of used tokens.
-    \item \textbf{Rate Limiting and Brute-Force Defense:} The login endpoint throttles requests to 5 attempts per minute. Excess attempts successfully triggered HTTP 429 Too Many Requests responses.
-    \item \textbf{Tamper Sensitivity Verification:} To verify the SHA-256 avalanche effect, a single telemetry parameter was altered by $0.01$ units. The recomputed hash diverged entirely from the original hash, demonstrating immediate detection of unauthorized data modifications.
+    \item The main hashing algorithm – Argon2id and the fallback – PBKDF2, were validated for password security. The salt hashing is irreversible and has been verified in the database.
+    \item Access token expires after 15 minutes, refresh token rotates on use and automatically blacklist used refresh token in the database.
+    \item Rate Limiting and Brute-Force Defense: Limiting requests to an endpoint to 5 per minute, the login endpoint. Too Many Requests responses were issued successfully for an excess number of attempts.
+    \item For the purpose of verifying the avalanche effect of SHA-256, one of the telemetry parameters was set to be changed by 0.01 units. The recomputed hash was completely different from the original hash, with no doubt about any unauthorized change of data.
 \end{enumerate}
 
 \subsubsection*{Blockchain Performance Metrics on Sui Testnet}
 
-Table~\ref{tab:blockchain_perf} records the empirical performance metrics observed across 20 consecutive transactions of each type executed on the Sui Testnet.
+Table~\ref{tab:blockchain_perf} shows empirical performance metrics across 20 consecutive transactions of each type with Sui Testnet.
 
 \begin{table}[H]
 \centering
+\small
+\singlespacing
+\renewcommand{\arraystretch}{1.25}
 \caption{Sui Testnet On-Chain Performance Metrics}
 \label{tab:blockchain_perf}
-\begin{tabularx}{\textwidth}{|X|l|l|l|}
+\begin{tabularx}{\textwidth}{|>{\raggedright\arraybackslash}p{5.4cm}|>{\centering\arraybackslash}p{2.6cm}|>{\centering\arraybackslash}p{2.6cm}|>{\centering\arraybackslash}X|}
 \hline
 \textbf{Blockchain Operation} & \textbf{Average Latency} & \textbf{Average Gas Cost} & \textbf{Transaction Success Rate} \\
 \hline
@@ -336,13 +355,16 @@ Deterministic Transaction Finality & $< 3.00 \text{ s}$ & --- & 100\% (20/20) \\
 
 \subsubsection*{Prediction Accuracy and Sensitivity Analysis}
 
-The behavior of the weighted moving average prediction engine was evaluated through sensitivity analysis across varying environmental input regimes, as presented in Table~\ref{tab:sensitivity}.
+Sensitivity analysis was conducted on the weighted moving average prediction engine on various environmental input regimes as shown in Table~\ref{tab:sensitivity}.
 
 \begin{table}[H]
 \centering
+\small
+\singlespacing
+\renewcommand{\arraystretch}{1.15}
 \caption{Yield Prediction Sensitivity Analysis Under Varied Regimes}
 \label{tab:sensitivity}
-\begin{tabularx}{\textwidth}{|>{\centering\arraybackslash}X|>{\centering\arraybackslash}X|>{\centering\arraybackslash}X|>{\raggedright\arraybackslash}p{6cm}|}
+\begin{tabularx}{\textwidth}{|>{\centering\arraybackslash}p{2.6cm}|>{\centering\arraybackslash}p{2.6cm}|>{\centering\arraybackslash}p{2.4cm}|>{\raggedright\arraybackslash}X|}
 \hline
 \textbf{Temp. ($\bar{T}$, $^\circ$C)} & \textbf{Moisture ($\bar{M}$, \%)} & \textbf{Yield ($\hat{Y}$, MT)} & \textbf{Contextual Decision Recommendation} \\
 \hline
@@ -359,17 +381,20 @@ The behavior of the weighted moving average prediction engine was evaluated thro
 \end{tabularx}
 \end{table}
 
-The results confirm that the prediction engine behaves deterministically: higher moisture values scale estimated yield linearly, temperature deviations from $22.0^\circ$C apply appropriate penalties, and contextual advisories accurately reflect environmental risk.
+The results have confirmed the prediction engine as being deterministic: the higher the moisture value, the higher the estimated yield, the more the temperature deviates from $22.0^\circ$C, the greater the penalty, and the more the contextual advisories capture environmental risk.
 
 \subsubsection*{API Response Time Benchmarks}
 
-Table~\ref{tab:api_perf} provides the mean API response latency measured across 50 requests per endpoint.
+Table~\ref{tab:api_perf} shows the mean response latency for each API end point for 50 requests.
 
 \begin{table}[H]
 \centering
+\small
+\singlespacing
+\renewcommand{\arraystretch}{1.15}
 \caption{Django REST API Response Time Benchmarks}
 \label{tab:api_perf}
-\begin{tabularx}{\textwidth}{|X|l|l|}
+\begin{tabularx}{\textwidth}{|>{\raggedright\arraybackslash}X|l|l|}
 \hline
 \textbf{API Endpoint} & \textbf{HTTP Method} & \textbf{Average Response Latency} \\
 \hline
@@ -390,22 +415,22 @@ Table~\ref{tab:api_perf} provides the mean API response latency measured across 
 \end{tabularx}
 \end{table}
 
-All endpoints respond comfortably within the 500 ms target specified in the non-functional requirements. The Redis in-memory cache delivers an 86\% reduction in prediction response latency (15 ms vs.\ 110 ms), demonstrating high scalability.
+The 500ms target defined in the non functional requirements is not a problem for all endpoints. With high scalability, the Redis in-memory cache provides an 86\% reduction in prediction response latency, from 110 ms down to 15 ms.
 
 \section{Discussion of Research Findings}
 \label{sec:discussion}
 
-The evaluation results confirm that TerraNode successfully fulfills each of its four research objectives. 
+The evaluation results attest to the fulfillment of all four research objectives of TerraNode. 
 
-Under Objective One, the web platform delivers intuitive, role-separated management of multi-dimensional agricultural data. The 100\% pass rate across 15 functional requirement scenarios confirms that the platform provides robust telemetry logging, batch tracking, and auditability.
+Objective One is achieved through an intuitive and role-separated management of multi-dimensional agricultural data using the web platform. All the 15 functional scenarios for the platform have achieved 100 percent pass rate, which demonstrates its ability to deliver robust telemetry logging, batch tracking, and auditability.
 
-Under Objective Two, the predictive analytics engine provides sensitive, deterministic yield forecasts. By tying predictions to SHA-256 authenticated telemetry records, TerraNode prevents the data manipulation vulnerabilities identified by Layek et al.~\parencite{layek2025secured}. The sub-20 ms cached query latency demonstrates that predictive intelligence can be delivered interactively to farmers in real-time.
+Objective Two involves the creation of a yield prediction system that generates sensitive, deterministic predictions. The combination of predictions with SHA-256 authenticated telemetry records makes it impossible to manipulate data as predicted by Layek et al.~\parencite{layek2025secured}. The sub-20ms latency of queries in the cache makes predictive intelligence possible in real-time, while helping farmers interactively.
 
-Under Objective Three, the multi-layered cryptographic pipeline and Sui Move smart contract implementation demonstrate the viability of decentralized agricultural security. Microsecond hashing (0.012 ms) and symmetric encryption (0.028 ms) guarantee that security enforcement imposes no overhead on agricultural gateways. As established in the comparative evaluation (Table~\ref{tab:blockchain_comparative}), Sui provides sub-3-second transaction finality and low gas costs ($\sim$0.003 SUI), resolving the latency and fee barriers documented in Ethereum-based agricultural traceability studies~\parencite{caro2018blockchain}.
+Under Objective Three, the multi-layered cryptographic pipeline and Sui Move smart contract implementation demonstrate the viability of decentralized agricultural security. The microsecond hashing (0.012 ms) and symmetric encryption (0.028 ms) ensure that there is no overhead to security enforcement on agricultural gateways. The low latency and gas costs of Sui, which are sub-3 seconds and $\sim$0.003 SUI, respectively, alleviate the latency and fee barriers reported in most studies on Ethereum-based agricultural traceability systems~\parencite{caro2018blockchain}.
 
-Under Objective Four, comprehensive testing proved that the system maintains high security, transaction throughput, and responsive API execution across all modules.
+In relation to Objective Four, all modules support the high security, API fast execution and transaction throughput of the comprehensive testing for the system.
 
 \section{Chapter Summary}
 \label{sec:ch4_conclusion}
 
-This chapter detailed the implementation and empirical evaluation of the TerraNode system across the Django REST backend, React single-page frontend, and Sui Move smart contracts. The user interface was presented through ten annotated operational screenshots, while the predictive analytics and cryptographic pipelines were detailed with architectural workflows, benchmark execution tables, and comparative analyses with existing literature. Functional and performance evaluations confirmed that all requirements are met with high reliability, sub-second cryptographic efficiency, and low-cost blockchain finality. The following chapter synthesizes the study's conclusions and outlines recommendations for future work.
+In this chapter, we explained how the TerraNode system was implemented and tested in the Django REST backend, the React single page frontend, and the Sui Move smart contracts. Ten annotated operational screenshots were presented for the user interface, and the operational and predictive pipelines and the cryptographic pipelines were detailed in terms of architecture, execution tables and comparison with existing literature. All of these features are validated by functional and performance assessments that showed high reliability, sub-second cryptographic efficiency, and low-cost blockchain finality. The conclusions of the research and recommendations for future research are summarized in the next chapter.

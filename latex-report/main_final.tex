@@ -222,7 +222,7 @@
 
 \doublespacing
 
-I, KASSIM ISKANDA DEISHINI, hereby state that this research report titled ``\textit{TERRANODE: A BLOCKCHAIN-BASED SMART FARM SECURITY FRAMEWORK}'' is my original research work. It has not been presented to any other University or higher learning institution for any award. Works by other authors have been clearly referenced.
+I, KASSIM ISKANDA DEISHINI, declare that this research paper entitled ``\textit{TERRANODE: DESIGN AND IMPLEMENTATION OF A SYSTEM FOR MANAGING AND PROTECTING AGRICULTURAL DATA}'' is my own original work. It has not been given to any other University or higher learning institution for any award. All works cited by other authors have been properly cited.
 
 \vspace{2cm}
 
@@ -242,7 +242,7 @@ KASSIM ISKANDA DEISHINI\\
 
 \onehalfspacing
 
-Certified that this project report ``\textit{TERRANODE: A BLOCKCHAIN-BASED SMART FARM SECURITY FRAMEWORK}'' is the authentic work of KASSIM ISKANDA DEISHINI (20230404113) who carried out the project work under my supervision.
+Certified that this project report ``\textit{TERRANODE: DESIGN AND IMPLEMENTATION OF A SYSTEM FOR MANAGING AND PROTECTING AGRICULTURAL DATA}'' is the authentic work of KASSIM ISKANDA DEISHINI (20230404113) who carried out the project work under my supervision.
 
 \vspace{1.2cm}
 
@@ -282,13 +282,13 @@ DR. MOSES APAMBILA AGEBURE\\
 \addcontentsline{toc}{chapter}{ACKNOWLEDGMENT}
 \doublespacing
 
-First and foremost, praise and gratitude are rendered to the Almighty God for His divine grace, wisdom, strength, and protection throughout the duration of this academic journey.
+First of all, honor and thanks are given to the Almighty God for His divine grace, wisdom, strength and protection throughout this academic journey.
 
-Sincere appreciation and profound gratitude are extended to my supervisor, Prof. Edward Yellakuor Baagyere, Dean of the School of Computing and Information Sciences, for his exceptional mentorship, constructive critique, and scholarly guidance from the inception of this research to its completion. His high academic standards and insightful feedback were pivotal to the success of this project.
+I would like to express my sincere appreciation and profound gratitude to my supervisor, Prof. Edward Yellakuor Baagyere, Dean of the School of Computing and Information Sciences, for his outstanding mentorship, constructive feedback and academic advice throughout the research. His academic rigor and valuable suggestions were key to the success of this project.
 
-Gratitude is also extended to Dr. Moses Apambila Agebure, Head of the Department of Computer Science, and to all faculty lecturers and staff in the School of Computing and Information Sciences for their dedication to academic excellence and invaluable instruction throughout my undergraduate studies.
+Thanks are also due to Dr. Moses Apambila Agebure, Head of Computer Science Department and to all of the faculty lecturers and staff members of the School of Computing and Information Sciences for their commitment to excellence in education and instruction during my undergraduate program.
 
-Finally, deepest love and heartfelt gratitude go to my parents, family members, and colleagues for their unwavering moral, financial, and emotional support, encouragement, and prayers throughout my academic journey.
+Last but not least, the deepest love and gratefulness to my parents, family, friends and colleagues for their constant moral, financial and emotional support, encouragement and prayers during my academic career.
 
 % ─────────────────── Dedication ───────────────────────────────
 \newpage
@@ -296,9 +296,9 @@ Finally, deepest love and heartfelt gratitude go to my parents, family members, 
 \addcontentsline{toc}{chapter}{DEDICATION}
 \doublespacing
 
-This project work is dedicated to my beloved family, whose unconditional love, continuous sacrifices, and steadfast encouragement have been my greatest pillar of strength and inspiration.
+This project work is dedicated to my dear family who gave me all their love, sacrificed all their time and kept encouraging me all the time through which I have come and reached to be what I am now.
 
-It is also dedicated to all hardworking smallholder farmers, whose relentless dedication feeds nations, with the hope that secure technological innovations will empower their livelihoods.
+It is also for all hard working smallholder farmers who relentlessly produce feed nations and hopes that secure technological innovations will enhance their livelihoods.
 
 % ─────────────────── Abstract ─────────────────────────────────
 \newpage
@@ -306,7 +306,7 @@ It is also dedicated to all hardworking smallholder farmers, whose relentless de
 \addcontentsline{toc}{chapter}{ABSTRACT}
 \doublespacing
 
-This project presents TerraNode, a secure analytics-driven agricultural data management system built on blockchain technology. The platform addresses the critical challenges of data vulnerability, lack of transparency, and unreliable predictive analytics that persist in conventional centralized agricultural information systems. TerraNode integrates a Django REST framework backend with a React-based web interface and anchors all agricultural records to the Sui blockchain through smart contracts written in the Move programming language. The system captures environmental telemetry data including temperature, soil moisture, and soil pH readings, generates SHA-256 integrity hashes for each record, and mints verifiable produce batch objects on the Sui distributed ledger. A predictive analytics engine processes historical telemetry data using a weighted moving average model to produce crop yield forecasts with computed confidence scores and variance indices. Role-based access control separates the platform into farmer, logistics handler, and administrator interfaces, each secured with JSON Web Token authentication and Argon2id password hashing. The Sui blockchain component employs Ed25519 digital signatures and BLAKE2b hashing to verify wallet-based login operations. Evaluation results demonstrate 100\% pass rates across 143 automated test cases and 15 functional requirement verification scenarios. On the Sui Testnet, blockchain produce batch minting achieved an average latency of 1.20 seconds, custody transfer transactions confirmed in 0.90 seconds with deterministic transaction finality under 3.00 seconds, and gas execution costs averaged 0.003 SUI per transaction. Furthermore, telemetry data integrity hashing executed in 0.012 ms, and the predictive analytics engine served cached yield forecasts within 15 ms (110 ms uncached), establishing a high-throughput, tamper-resistant framework for smallholder agricultural management.
+This project introduces TerraNode, a secure agricultural data management system that is built with a blockchain platform and supported by analytics. The platform tackles the major issues of data security, information transparency, and inaccurate predictive analytics in traditional, centralized agricultural information systems. TerraNode is a combination of a Django REST framework backend, a React-based web interface, and a backend of smart contracts implemented in Move programming language for the anchoring of all the agricultural records on the Sui blockchain. It collects environmental sensor information such as temperature, soil moisture, and soil pH readings, calculates the integrity hash of each record (SHA-256), and issues verifiable batch objects of produce on the Sui distributed ledger. The algorithm which reads into the historical telemetry data, uses a weighted moving average model to generate the yield predictions and includes computed confidence scores and variance indicators. The platform's UI is divided into farmer, logistics handler, and administrator interfaces, all of which have worker-based access control, JSON Web Token authentication, and Argon2id password hashing. The Sui blockchain part is verified with digital signatures based on Ed25519 and hashing of BLAKE2b, which are related to the wallet operations of login. Evaluation results show that 100\% of 143 automated test cases and 15 functional requirement verification scenarios have passed. On the Sui Testnet, the average latency for blockchain produce batch minting was 1.20 seconds, the average latency for custody transfer transactions was 0.90 seconds and the average gas execution cost was 0.003 SUI per transaction with deterministic transaction finality of less than 3.00 seconds. Moreover, the telemetry data integrity hashing was performed in 0.012ms, and the predictive analytics engine provided cached yield forecasts within 15ms (110ms when the forecast is not yet cached), creating a framework for agricultural management with high throughput and tamper proof capabilities to support smallholders.
 
 % ─────────────────── Table of Contents ────────────────────────
 \newpage

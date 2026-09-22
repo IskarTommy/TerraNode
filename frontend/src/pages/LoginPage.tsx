@@ -317,6 +317,48 @@ export default function LoginPage() {
               }}>{error}</div>
             )}
 
+            {/* Quick Demo Fill Buttons */}
+            <div style={{
+              marginBottom: 20, padding: "10px 14px", borderRadius: 12,
+              background: "rgba(34,211,238,0.06)", border: "1px solid rgba(34,211,238,0.18)",
+            }}>
+              <div style={{
+                fontSize: 11, fontWeight: 600, color: "#22d3ee",
+                textTransform: "uppercase", letterSpacing: "0.06em", marginBottom: 8,
+                fontFamily: "'Space Grotesk', sans-serif", display: "flex", justifyContent: "space-between"
+              }}>
+                <span>Demo Accounts</span>
+                <span style={{ color: "rgba(148,163,184,0.7)", fontWeight: 400, textTransform: "none" }}>Pass: TerraNode2026!</span>
+              </div>
+              <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
+                {[
+                  { label: "Farmer (Tommy)", email: "iskartommy117@gmail.com" },
+                  { label: "Logistics Handler", email: "logistics@terranode.agri" },
+                  { label: "System Administrator", email: "admin@terranode.agri" },
+                ].map((acc) => (
+                  <button
+                    key={acc.email}
+                    type="button"
+                    onClick={() => {
+                      setEmail(acc.email);
+                      setPassword("TerraNode2026!");
+                      setError("");
+                    }}
+                    style={{
+                      padding: "5px 10px", borderRadius: 8, fontSize: 12,
+                      background: email === acc.email ? "rgba(34,211,238,0.2)" : "rgba(15,23,42,0.6)",
+                      border: `1px solid ${email === acc.email ? "rgba(34,211,238,0.5)" : "rgba(51,65,85,0.6)"}`,
+                      color: email === acc.email ? "#67e8f9" : "#94a3b8",
+                      cursor: "pointer", fontFamily: "'Space Grotesk', sans-serif",
+                      transition: "all 0.2s ease",
+                    }}
+                  >
+                    {acc.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+
             <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: 18 }}>
               {/* Email */}
               <div>
@@ -328,7 +370,7 @@ export default function LoginPage() {
                 <input
                   type="email" id="email" value={email}
                   onChange={(e) => setEmail(e.target.value)} required
-                  autoComplete="email" placeholder="farmer@terranode.io"
+                  autoComplete="email" placeholder="iskartommy117@gmail.com"
                   style={{
                     width: "100%", height: 48, padding: "0 16px", borderRadius: 12,
                     background: "rgba(10,15,26,0.55)", border: "1px solid rgba(51,65,85,0.7)",

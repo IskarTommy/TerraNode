@@ -13,12 +13,12 @@
 \contentsline {section}{\numberline {1.5}Scope of the Study}{4}{section.1.5}%
 \contentsline {section}{\numberline {1.6}Limitations of the Study}{5}{section.1.6}%
 \contentsline {section}{\numberline {1.7}Organization of the Study}{5}{section.1.7}%
-\contentsline {section}{\numberline {1.8}Chapter Summary}{5}{section.1.8}%
+\contentsline {section}{\numberline {1.8}Chapter Summary}{6}{section.1.8}%
 \contentsline {chapter}{\numberline {2}LITERATURE REVIEW}{7}{chapter.2}%
 \contentsline {section}{\numberline {2.1}Introduction}{7}{section.2.1}%
 \contentsline {section}{\numberline {2.2}Overview of Precision Agriculture and Digital Farming}{7}{section.2.2}%
 \contentsline {section}{\numberline {2.3}Agricultural Data Management Systems}{8}{section.2.3}%
-\contentsline {section}{\numberline {2.4}Blockchain Technology Fundamentals}{8}{section.2.4}%
+\contentsline {section}{\numberline {2.4}Blockchain Technology Fundamentals}{9}{section.2.4}%
 \contentsline {section}{\numberline {2.5}Blockchain Applications in Agricultural Supply Chains}{9}{section.2.5}%
 \contentsline {section}{\numberline {2.6}Blockchain-Based Smart Farm Security Frameworks}{10}{section.2.6}%
 \contentsline {section}{\numberline {2.7}Predictive Analytics and Crop Yield Forecasting}{11}{section.2.7}%
@@ -33,16 +33,16 @@
 \contentsline {section}{\numberline {3.2}Research Design}{17}{section.3.2}%
 \contentsline {section}{\numberline {3.3}System Requirements}{18}{section.3.3}%
 \contentsline {subsection}{\numberline {3.3.1}Functional Requirements}{18}{subsection.3.3.1}%
-\contentsline {subsection}{\numberline {3.3.2}Non-Functional Requirements}{18}{subsection.3.3.2}%
+\contentsline {subsection}{\numberline {3.3.2}Non-Functional Requirements}{19}{subsection.3.3.2}%
 \contentsline {section}{\numberline {3.4}System Architecture}{19}{section.3.4}%
 \contentsline {section}{\numberline {3.5}Data Flow Design}{20}{section.3.5}%
 \contentsline {subsection}{\numberline {3.5.1}Context Diagram (Level 0)}{20}{subsection.3.5.1}%
 \contentsline {subsection}{\numberline {3.5.2}Level 1 Data Flow Diagram}{21}{subsection.3.5.2}%
 \contentsline {section}{\numberline {3.6}Entity-Relationship Model}{22}{section.3.6}%
-\contentsline {section}{\numberline {3.7}Use Case Modelling}{24}{section.3.7}%
+\contentsline {section}{\numberline {3.7}Use Case Modelling}{23}{section.3.7}%
 \contentsline {subsection}{\numberline {3.7.1}Actor Descriptions}{24}{subsection.3.7.1}%
 \contentsline {section}{\numberline {3.8}Smart Contract Design}{24}{section.3.8}%
-\contentsline {subsection}{\numberline {3.8.1}ProduceBatch Object Structure}{25}{subsection.3.8.1}%
+\contentsline {subsection}{\numberline {3.8.1}ProduceBatch Object Structure}{24}{subsection.3.8.1}%
 \contentsline {subsection}{\numberline {3.8.2}Entry Functions}{25}{subsection.3.8.2}%
 \contentsline {subsection}{\numberline {3.8.3}Event Emissions}{25}{subsection.3.8.3}%
 \contentsline {section}{\numberline {3.9}Predictive Analytics Engine}{26}{section.3.9}%
@@ -58,22 +58,23 @@
 \contentsline {section}{\numberline {3.11}Technology Stack}{29}{section.3.11}%
 \contentsline {section}{\numberline {3.12}Development Tools}{30}{section.3.12}%
 \contentsline {section}{\numberline {3.13}Chapter Summary}{30}{section.3.13}%
-\contentsline {chapter}{\numberline {4}RESULTS AND DISCUSSION}{32}{chapter.4}%
-\contentsline {section}{\numberline {4.1}Introduction}{32}{section.4.1}%
-\contentsline {section}{\numberline {4.2}Research Results}{32}{section.4.2}%
-\contentsline {subsection}{\numberline {4.2.1}Research Objective One (1): Web-Based Agricultural Data Management Platform}{32}{subsection.4.2.1}%
+\contentsline {chapter}{\numberline {4}RESULTS AND DISCUSSION}{31}{chapter.4}%
+\contentsline {section}{\numberline {4.1}Introduction}{31}{section.4.1}%
+\contentsline {section}{\numberline {4.2}Research Results}{31}{section.4.2}%
+\contentsline {subsection}{\numberline {4.2.1}Research Objective One (1): Web-Based Agricultural Data Management Platform}{31}{subsection.4.2.1}%
 \contentsline {subsection}{\numberline {4.2.2}Research Objective Two (2): Predictive Analytics Module for Crop Yield Forecasting}{35}{subsection.4.2.2}%
-\contentsline {subsection}{\numberline {4.2.3}Research Objective Three (3): Blockchain-Based Security and Cryptographic Integrity Mechanisms}{38}{subsection.4.2.3}%
-\contentsline {subsection}{\numberline {4.2.4}Research Objective Four (4): System Performance and Comprehensive Evaluation}{42}{subsection.4.2.4}%
-\contentsline {section}{\numberline {4.3}Discussion of Research Findings}{46}{section.4.3}%
-\contentsline {section}{\numberline {4.4}Chapter Summary}{46}{section.4.4}%
-\contentsline {chapter}{\numberline {5}SUMMARY, CONCLUSION, AND RECOMMENDATIONS}{47}{chapter.5}%
-\contentsline {section}{\numberline {5.1}Introduction}{47}{section.5.1}%
-\contentsline {section}{\numberline {5.2}Summary of Findings}{47}{section.5.2}%
-\contentsline {section}{\numberline {5.3}Conclusion}{48}{section.5.3}%
-\contentsline {section}{\numberline {5.4}Recommendations for Future Work}{49}{section.5.4}%
-\contentsline {chapter}{REFERENCES}{51}{chapter*.33}%
-\contentsline {chapter}{APPENDIX A:\hskip 1em\relax CODE LISTINGS}{53}{appendix*.34}%
-\contentsline {section}{\numberline {A.1}SHA-256 Data Integrity Hash Generation}{53}{appendix.Alph0.1}%
-\contentsline {section}{\numberline {A.2}Sui Ed25519 Signature Verification}{53}{appendix.Alph0.2}%
-\contentsline {section}{\numberline {A.3}Crop Yield Prediction Service}{54}{appendix.Alph0.3}%
+\contentsline {subsection}{\numberline {4.2.3}Research Objective Three (3): Blockchain-Based Security and Cryptographic Integrity Mechanisms}{37}{subsection.4.2.3}%
+\contentsline {subsection}{\numberline {4.2.4}Research Objective Four (4): System Performance and Comprehensive Evaluation}{41}{subsection.4.2.4}%
+\contentsline {section}{\numberline {4.3}Discussion of Research Findings}{44}{section.4.3}%
+\contentsline {section}{\numberline {4.4}Chapter Summary}{45}{section.4.4}%
+\contentsline {chapter}{\numberline {5}SUMMARY, CONCLUSION, AND RECOMMENDATIONS}{46}{chapter.5}%
+\contentsline {section}{\numberline {5.1}Introduction}{46}{section.5.1}%
+\contentsline {section}{\numberline {5.2}Summary of Findings}{46}{section.5.2}%
+\contentsline {section}{\numberline {5.3}Conclusion}{47}{section.5.3}%
+\contentsline {section}{\numberline {5.4}Recommendations for Future Work}{48}{section.5.4}%
+\contentsline {section}{\numberline {5.5}Chapter Summary}{49}{section.5.5}%
+\contentsline {chapter}{REFERENCES}{50}{chapter*.33}%
+\contentsline {chapter}{APPENDIX A:\hskip 1em\relax CODE LISTINGS}{52}{appendix*.34}%
+\contentsline {section}{\numberline {A.1}SHA-256 Data Integrity Hash Generation}{52}{appendix.Alph0.1}%
+\contentsline {section}{\numberline {A.2}Sui Ed25519 Signature Verification}{52}{appendix.Alph0.2}%
+\contentsline {section}{\numberline {A.3}Crop Yield Prediction Service}{53}{appendix.Alph0.3}%

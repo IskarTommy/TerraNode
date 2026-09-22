@@ -43,7 +43,10 @@ function CustomTooltip({ active, payload, label }: {
   active?: boolean; payload?: Array<{ value: number; name: string; color: string }>; label?: string;
 }) {
   if (!active || !payload || !label) return null;
-  const timeLabel = new Date(label).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  const dateObj = new Date(label);
+  const timeLabel = isNaN(dateObj.getTime())
+    ? label
+    : dateObj.toLocaleDateString([], { month: 'short', day: 'numeric', year: 'numeric' }) + ' · ' + dateObj.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
   return (
     <div className="telemetry-tooltip">
       <p className="telemetry-tooltip__time">{timeLabel}</p>
@@ -199,8 +202,15 @@ export function TelemetryChart({
             <CartesianGrid strokeDasharray="4 4" stroke="var(--chart-grid)" vertical={false} />
             <XAxis
               dataKey="timestamp"
-              tickFormatter={(v) => new Date(v).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-              tick={{ fill: 'var(--chart-axis)', fontSize: 12, fontFamily: 'var(--font-family-mono)' }}
+              tickFormatter={(v) => {
+                const d = new Date(v);
+                if (isNaN(d.getTime())) return v;
+                if (timeRange === '7d' || timeRange === '30d') {
+                  return d.toLocaleDateString([], { month: 'short', day: 'numeric' });
+                }
+                return d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+              }}
+              tick={{ fill: 'var(--chart-axis)', fontSize: 11, fontFamily: 'var(--font-family-mono)' }}
               axisLine={{ stroke: 'var(--chart-grid)' }}
               tickLine={{ stroke: 'var(--chart-grid)' }}
               interval="preserveStartEnd"

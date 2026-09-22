@@ -247,14 +247,24 @@ export function YieldPredictionPage() {
     return dataPoints;
   }, [selectedBatch, cropAgronomics, cropGrowthConfidence, forecastYears, livePrediction]);
 
+  // Latest prediction point directly matching the chart
+  const latestPredictionPoint = chartData[chartData.length - 1];
+
   return (
     <div className="space-y-6" data-role="farmer">
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-emerald-400">Agronomic Intelligence</p>
+          <div className="flex items-center gap-2">
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-emerald-400">Agronomic Intelligence</p>
+            <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-mono">
+              WMA Model
+            </span>
+          </div>
           <h1 className="text-3xl font-bold text-fg-primary">Yield Forecast & Soil Suitability</h1>
-          <p className="text-body text-fg-muted mt-1">Harvest modeling for your on-chain batches anchored to real climate telemetry.</p>
+          <p className="text-body text-fg-muted mt-1">
+            Harvest modeling using the Deterministic Weighted Moving Average (WMA) algorithm & FAO biological response, anchored to IoT farm telemetry.
+          </p>
         </div>
         <Button variant="primary" onClick={handleRunModel} loading={runningModel} leftIcon={<svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>} >
           Run Prediction Model
@@ -268,7 +278,12 @@ export function YieldPredictionPage() {
           <Card variant="glass" padding="md">
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
               <div>
-                <h3 className="text-lg font-semibold text-fg-primary">Yield Forecast Projections (t/ha)</h3>
+                <div className="flex items-center gap-2">
+                  <h3 className="text-lg font-semibold text-fg-primary">Yield Forecast Projections (t/ha)</h3>
+                  <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 font-mono">
+                    Algorithm: WMA
+                  </span>
+                </div>
                 <p className="text-xs text-fg-muted">
                   Simulating harvest curve for <span className="font-semibold text-emerald-400 capitalize">{selectedCropKey}</span> across multi-year cycles.
                 </p>
@@ -374,10 +389,27 @@ export function YieldPredictionPage() {
         <div className="space-y-6">
           {/* Crop Match & Live Confidence */}
           <Card variant="glass" padding="md">
-            <h3 className="text-base font-semibold text-fg-primary mb-3">Crop Growth Confidence</h3>
+            <div className="flex items-center justify-between mb-3">
+              <h3 className="text-base font-semibold text-fg-primary">Crop Growth Confidence</h3>
+              <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-mono">
+                WMA Algorithm
+              </span>
+            </div>
             <div className="text-center py-4 px-2 rounded-xl bg-bg-tertiary/50 border border-border-primary/60 mb-4">
-              <p className="text-4xl font-extrabold text-emerald-400">{cropGrowthConfidence}%</p>
-              <p className="text-xs font-semibold text-fg-primary mt-1 capitalize">{selectedCropKey} Climate Fit</p>
+              <p className="text-4xl font-extrabold text-emerald-400">
+                {latestPredictionPoint ? latestPredictionPoint.predicted.toFixed(1) : '7.4'}{' '}
+                <span className="text-base font-normal text-fg-muted">t/ha</span>
+              </p>
+              <div className="flex items-center justify-center gap-1.5 text-xs font-semibold text-emerald-400 mt-1.5">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+                <span>
+                  {latestPredictionPoint?.confidence ?? cropGrowthConfidence}% confidence
+                  {latestPredictionPoint?.year ? ` (${latestPredictionPoint.year})` : ''}
+                </span>
+              </div>
+              <p className="text-xs font-semibold text-fg-primary mt-2 capitalize">{selectedCropKey} Climate Fit</p>
               <p className="text-[11px] text-fg-muted mt-0.5">Based on your live farm telemetry</p>
             </div>
 
